@@ -62,7 +62,7 @@ OpenPLC tạo một PLC chạy
 | Quản lý Sự kiện | Sử dụng pick\_event để giám sát các yêu cầu đọc/ghi từ Master và ghi log |
 | Khởi động Server | Gắn kết với địa chỉ IP của card mạng và bắt đầu lắng nghe kết nối |
 
-Một điểm cần lưu ý đặc biệt khi triển khai trên hệ điều hành Linux là cổng 102 thuộc nhóm các cổng đặc quyền (privileged ports), do đó ứng dụng phải được chạy với quyền root hoặc được cấp quyền CAP\_NET\_BIND\_SERVICE để có thể mở cổng này thành công.18
+
 
 ### **Lập trình Master (Client) truy xuất dữ liệu**
 
@@ -75,3 +75,14 @@ Khi bạn kết nối tới PLC qua Ethernet, bạn thực ra kết nối tới 
 # Tài liệu tham khảo
 
 <a id="1">[1]</a> Available at: https://gitlab.fing.edu.uy/gsi/tectonic-ot/openplcmd/-/blob/main/documentation/S7-Protocol/Siemens%20Protocol%20driver%20for%20OpenPLC.pdf, accessed 12 April 2026.
+
+
+Siemens S7 Wiring: The Ultimate Guide to siemens diagram - PLC AI, truy cập vào tháng 3 17, 2026, https://plcai.app/plc-ai-blog/f/siemens-plc-wiring-the-ultimate-guide-to-s7-1200-and-s7-1500
+A Decade After Stuxnet: How Siemens S7 is Still an Attacker's Heaven - YouTube, truy cập vào tháng 3 17, 2026, https://www.youtube.com/watch?v=4-VoLm2SXao
+Siemens PLC & Python Snap7 Tutorial–Read & Write Integers in Siemens PLC (S7-1200/1500) #industry4_0 - YouTube, truy cập vào tháng 3 17, 2026, https://www.youtube.com/watch?v=Jyrbl9vCd8k
+Engineer Point - YouTube, truy cập vào tháng 3 17, 2026, https://www.youtube.com/@engineerpoint2658/videos
+Video Tutorial: Real-Time Collection for Siemens S7 Plus Ethernet - Blog, truy cập vào tháng 3 17, 2026, https://blog.softwaretoolbox.com/video-tutorial-siemens-s7-plus-ethernet-topserver
+S7 Protocol Overview and PROFINET Differences - ALLPCB, truy cập vào tháng 3 17, 2026, https://www.allpcb.com/allelectrohub/s7-protocol-overview-and-profinet-differences
+
+
+Thực hiện quét mạng và khai thác vào PLC, đọc file PDF
