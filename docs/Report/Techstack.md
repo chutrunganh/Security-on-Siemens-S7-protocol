@@ -72,6 +72,10 @@ Phần Master trong mô hình chịu trách nhiệm khởi tạo kết nối và
 
 Khi bạn kết nối tới PLC qua Ethernet, bạn thực ra kết nối tới Communication Processor (CP). Một CP có thể phục vụ nhiều service và module. Do đó cần `IP + Rack + Slot` để xác định được chính xác module mà ta cần sử dụng trong PLC.
 
+# Scada
+
+các phần mềm SCADA thương mại như WinCC (Siemens), iFIX (GE), hoặc CitectSCADA (Schneider) thường có chi phí bản quyền cao, từ vài chục đến vài trăm triệu đồng tùy theo số lượng thiết bị kết nối.  Free SCADA: ScadaBR,  OpenSCADA, Inductive Automation (Marker Edition),  AdvancedHMI 
+
 # Tài liệu tham khảo
 
 <a id="1">[1]</a> Available at: https://gitlab.fing.edu.uy/gsi/tectonic-ot/openplcmd/-/blob/main/documentation/S7-Protocol/Siemens%20Protocol%20driver%20for%20OpenPLC.pdf, accessed 12 April 2026.

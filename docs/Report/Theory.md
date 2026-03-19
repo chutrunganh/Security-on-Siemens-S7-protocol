@@ -1,4 +1,41 @@
-Phần này trình bày các khái niệm cơ bản về hệ thống điều khiển công nghiệp (ICS)
+## OT/ICS là gì ?
+
+Mọi công nghệ để vận hành nhà máy vật lý được gọi là OT (Operational Technology) bao gồm:
+
+- Công nghệ giám sát và quản lý phụ trợ như BMS (Building Management Systems) để điều khiển điều hòa (HVAC), chiếu sáng, phòng cháy chữa cháy, EMS (Energy Management Systems) để quản lý năng lượng tiêu thụ.
+
+- Công nghệ bảo trì như EAM (Enterprise Asset Management) để theo dõi tình trạng thiết bị.
+
+- Công nghệ giao thông và điều khiển vận hành hiện trường
+
+- Công nghệ điều khiển, tức **ICS (Industrial Control Systems)** là cách điều khiển và giám sát các quy trình công nghiệp. ICS bao gồm các hệ thống:
+
+    <div align="center">
+        <img src="image-3.png" width="400">
+    </div>
+
+    - Bộ điều khiển (Controller):
+
+        - **PLC (Programmable Logic Controllers)**
+
+        - **RTU (Remote Terminal Units)**: Một thiết bị điều khiển từ xa có chức năng giao tiếp với các thiết bị hiện trường để thu thập dữ liệu và truyền về trung tâm điều khiển hoặc nhận lệnh từ trung tâm điều khiển. Về mặt chức năng RTU cũng giống như một PLC nhưng chuyên biệt hóa cho các ứng dụng từ xa, hoạt động với nguồn năng lượng hạn chế và tích hợp sẵn các module truyền thông mạnh mẽ hơn.
+
+        - **DCS (Distributed Control Systems)** là một hệ thống điều khiển phân tán, trong đó các chức năng điều khiển được phân phối trên nhiều bộ điều khiển nhỏ hơn thay vì tập trung vào một bộ điều khiển lớn như PLC. DCS thường được sử dụng trong các nhà máy lớn và phức tạp, nơi có hàng ngàn thông số cần được phối hợp và điều khiển đồng thời với độ tin cậy cao
+    
+    - Thiết bị hiện trường:
+
+        - Cảm biến (**Sensor**): đo lường các thông số vật lý như nhiệt độ, áp suất, lưu lượng, mức chất lỏng, ... và chuyển đổi thành tín hiện logic/analog để gửi về các bộ điều khiển.
+
+        - Thiết bị chấp hành (**Actuator**): nhận tín hiệu điều khiển từ bộ điều khiển và thực hiện các tác động vật lý như mở van, khởi động động cơ, bật đèn báo, ...
+
+    - Hệ thống giám sát và quản lý:
+
+        - **HMI (Human-Machine Interface)**: một phần mềm cho phép con người (kỹ sư, vận hành viên) theo dõi và tương tác với quy trình công nghiệp. HMI hiển thị dữ liệu từ các cảm biến dưới dạng đồ họa trực quan (màn hình giám sát, biểu đồ, đèn báo), cho phép người vận hành xem thông số, xem báo động và gửi lệnh điều khiển.
+
+        - **SCADA (Supervisory Control and Data Acquisition)**: là một hệ thống giám sát và thu thập dữ liệu, nó bao gồm HMI nhưng có thêm khả năng thu thập dữ liệu lịch sử (historian), phân tích dữ liệu tập trung từ nhiều nguồn. SCADA thường được sử dụng để giám sát các quy trình công nghiệp trên diện rộng, phân tán trong khi HMI thường chỉ dùng cho một/một cụm thiết bị điều khiển cụ thể.
+
+- Các công nghệ khác ...
+
 
 ## 1. PLC
 
@@ -233,7 +270,7 @@ Dưới đây là cấu trúc 6 tầng (từ 0 đến 5) của mô hình này:
 
 ## 3. Siemen S7
 
-### 3.1 Một chút background
+### 3.1 Background
 
 **Fieldbus** là một loại mạng công nghiệp, dùng để kết nối PLC với thiết bị hiện trường (sensor, actuator) hoặc giữa các PLC với nhau hoặc với các thiết bị công nghiệp khác. Trong đó mỗi chuẩn fieldbus định nghĩa luôn:
 
@@ -265,7 +302,7 @@ Các PLC của Siemens có thể giao tiếp trên cáp Ethernet vật lý sử 
 
 - **S7 hay S7comm hoặc S7 Communication và bản nâng cấp sau này là S7 comm plus**: Đây là giao thức độc quyềng của Siemens xuất hiện lần đầu vào năm 1994 cùng với sự ra đời của dòng sản phẩm Simatic S7-200, S7-300 và S7-400. Trong kiến trúc mạng công nghiệp, giao thức S7 hoạt động theo mô hình request-response. 
 
-    *Một số tài liệu gọi bằng cái tên khác như mô hình client-server (với S7 chạy trên nền Ehternet hiện đại với hạ tầng mạng có switch có khả năng kết nối full-duplex) hoặc master-slave (Với S7 chạy trên mạng Fieldbus cũ như PROFIBUS với hạ tầng mạng chỉ là một bus chung duy nhất). Dù gọi là gì thì về bản chất, S7 vẫn tuân theo mô hình giao tiếp request-response, tức là một bên gửi yêu cầu và bên kia trả lời.*
+    *Một số tài liệu gọi bằng cái tên khác như mô hình client-server (với S7 chạy trên nền Ehternet hiện đại với hạ tầng mạng có switch có khả năng kết nối full-duplex) hoặc master-slave (Với S7 chạy trên mạng Fieldbus cũ như PROFIBUS với hạ tầng mạng chỉ là một bus chung duy nhất). Dù gọi là gì thì về bản chất, S7 vẫn tuân theo mô hình giao tiếp request-response, tức là một bên gửi yêu cầu và bên kia trả lời [[4]](#4).*
 
     S7 là giao thức hoạt động ở tầng 7. Tuy nhiên nó kéo dài xuống nhiều tầng dưới bằng cách tái sử dụng các giao thức ở tầng dưới. Điều này là vì ban đầu S7 không được thiết kế để chạy trên kiến trúc mạng TCP/IP. S7 ban đầu được thiết kế để chạy trên hạ tầng mạng Fieldbus như PROFIBUS hoặc MPI [[2]](#2), chúng sử dụng dây cáp công nghiệp chuyên dụng (thay vì dây LAN Etherner) để truyền dẫn.
 
@@ -273,9 +310,78 @@ Các PLC của Siemens có thể giao tiếp trên cáp Ethernet vật lý sử 
 
     Tuy nhiên để tăng tính tương thích, nó được cải tiếp để chạy trên nền **ISO TCP** (theo tiêu chuẩn RFC 1006) mà giao thức này lại chạy trên **TCP/IP**. Theo thiết kế gốc thì mô hình ISO TCP là một giao thức dạng gói (packet-based) hay block oriented , tức là mỗi tin nhắn có độ dài rõ ràng. Mỗi block này được gọi là một **PDU (Protocol Data Unit)**. Độ dài của PDU này dựa vào bộ vi xử lý giao tiếp bên trong PLC (**communication processors (CP)**) và được đàm phán giữa các thiết bị khi thiết lập kết nối. 
 
-    ![Siemen S7 protocol stack](./Siemens_S7_protocol_stack.png)
+### Cách đọc địa chỉ trong Siemen S7
 
-Trong giao thức ISO TCP, để ISO có thể tương thích với TCP vốn là:
+
+Cú pháp: 
+
+
+```
+[Loại vùng nhớ] [Kích thước dữ liệu] [Địa chỉ byte].[Địa chỉ bit]
+            │           │           │           │
+            │           │           │           └── 0-7 (chỉ dùng khi đọc bit)
+            │           │           └────────────── offset tính từ đầu vùng
+            │           └────────────────────────── X(bit) B(byte) W(word) D(dword) đây là số lượng dữ liệu muốn đọc
+            └────────────────────────────────────── I Q M DB T C
+```
+
+
+Ký hiệu các kích thước:
+
+|  Ký hiệu  |   Tên    |  Số bit  |  Ví dụ  |
+|-----|---------|----------|----------|
+|  X   |  Bit     |   1 bit  | M0.3  (Merker byte 0, bit 3)    |
+|  B   |  Byte    |   8 bit  | MB5   (Merker Byte 5)           |
+|  W   |  Word    |  16 bit  | MW10  (Merker Word tại byte 10) |
+|  D   |  DWord   |  32 bit  | MD20  (Merker DWord tại byte 20)|
+
+Với vùng DB thì cú pháp đặc biệt hơn:
+
+
+```
+Bit:   DB[n].DBX [byte] . [bit]  
+Byte:  DB[n].DBB [byte]         
+Word:  DB[n].DBW [byte]         
+DWord: DB[n].DBD [byte]        
+```
+
+
+Ví dụ:
+
+- DB1.DBX0.0  → bit 0 của byte 0 trong DB1
+- DB1.DBX0.1  → bit 1 của byte 0 trong DB1
+  
+
+*Siemens S7 sùng BIG ENDIAN (byte có trọng số cao nhất ở địa chỉ thấp nhất)*
+
+
+Các kiểu dữ liệu trong DB:
+
+
+|  Type   |  Size    |  Ghi chú                           |
+|----------|---------|------------------------------------|
+| BOOL    |  1 bit   | True/False                         |
+| BYTE    |  1 byte  | 0-255, unsigned                    |
+| INT     |  2 bytes | -32768 đến 32767, signed           |
+| WORD    |  2 bytes | 0-65535, unsigned                  |
+| DINT    |  4 bytes | -2^31 đến 2^31-1                   |
+| DWORD   |  4 bytes | 0 đến 2^32-1                       |
+| REAL    |  4 bytes | Float 32-bit (IEEE 754)            |
+| STRING  | variable | [max_len][cur_len][chars...]        |
+| S5TIME  |  2 bytes | Thời gian Siemens (định dạng riêng) |
+
+
+
+
+### 3.2 Cấu trúc gói tin S7
+
+![Siemen S7 protocol stack](./Siemens_S7_protocol_stack.png)
+
+
+#### 3.2.1  Phần COTP và TPKT
+
+
+Trong giao thức ISO TCP mà S7 chạy trên đó, để ISO có thể tương thích với TCP vốn là:
 
 1. Là giao thức hướng kết nối, trong khi ISO lại là giao thức không hướng kết nối (connectionless) -> Sử dụng thêm **COTP (Connection-Oriented Transport Protocol)**. COTP chịu trách nhiệm thiết lập kết nối logic giữa hai thực thể đầu cuối trước khi bất kỳ dữ liệu S7 nào được trao đổi giúp ISO TCP có khả năng định tuyến trên các mạng xa.
 
@@ -299,7 +405,88 @@ Kết quả là ta có một giao thức vừa có độ dài tin nhắn rõ rà
 
 *S7 hoạt động trên cổng TCP 102. COTP được định nghĩa trong RFC 905, TPKT được định nghĩa trong RFC 1006, cập nhật bởi RFC 2126*
 
-### 3.2.1 Các bước thiết lập kết nối S7
+#### 3.2.2 Phần S7 PDU
+
+Giao thức S7 được thiết kế theo hướng  Function oriented or Command oriented tức mỗi lần truyền sẽ bao gồm một lệnh điều khiển hoặc một phản hồi. Nếu command không vừa trong một PDU, nó sẽ được chia ra trên nhiều subsequent PDU.
+
+Một command sẽ bao gồm:
+
+- Header:
+
+    ![alt text](image-4.png)
+
+    Với:
+
+    - `Protocol ID`: Luôn luôn là `0x32` để định danh giao thức S7comm.
+
+    - `Message Type` hoặc `Remote Operating Service Control (ROSCTR)`: Cho biết loại gói tin:
+        
+        | ROSCTR | Ý nghĩa |
+        |---|---|
+        | Job (1) | Yêu cầu từ Client tới Server như đọc ghi memory, đọc/ghi block, chạy/dừng thiết bị, thiết lập liên kết |
+        | Ack (2) | Xác nhận nhận được yêu cầu từ Server, không kèm theo dữ liệu|
+        | Ack_Data (3) | Xác nhận nhận được yêu cầu từ Server, kèm theo dữ liệu trả về cho job request trước đó|
+        | User_Data (7) | Đây là phần mở rộng so với giao thức gốc, sử dụng cho các chức năng nâng cao. Nó chứa Function Group bao gồm các chức năng: Programmer commands, Cyclic data, Block functions, CPU functions, Security, Time functions. Trong các function này lại bao gồm nhiều subfunction khác. Ví dụ như trong nhóm function CPU Functions lại có: Read SZL, Message service, ... |
+
+    - `Reserved`: Luôn là `0x0000`, không có ý nghĩa gì.
+
+    - `PDU Reference`: Một số do Client tạo ra để định danh yêu cầu. Khi PLC phản hồi, nó sẽ trả lại số này để Client biết được phản hồi này tương ứng với yêu cầu nào. Số refer nay tăng dần theo từng yêu cầu mới gửi đi.
+
+    - `Parameter length`: Độ dài của phần tham số trong gói tin, tính theo byte, biểu diễn kiểu Big-Endian.
+
+    - `Data length`: Độ dài của phần dữ liệu trong gói tin, tính theo byte, biểu diễn kiểu Big-Endian.
+
+    - `Error class` và `Error code`: Chỉ xuất hiện trong các gói tin phản hồi `ROSCTR = Ack_Data`, cho biết có lỗi gì xảy ra không.
+
+- Tập các tham số (Bao gồm tên các tham số và giá trị cho các tham số đó nếu có). Tùy theo loại command (được xác định thông qua trường `S7 Header Function Code`) mà bộ các tham số trong phần này sẽ khác nhau. Các command được chia thành các nhóm chức năng: Data Read/Write, Cyclic Data Read/Write, Directory info, System Info, Blocks move, PLC Control, Date and Time, Security, Programming.
+
+
+    - Với command thiết lập liên kết S7 (Setup Communication), các tham số sẽ bao gồm:
+    
+        ![alt text](image-5.png)
+
+        Trong đó:
+
+        - `S7 Header Function Code`: Cho biết loại lệnh S7, ở đây là `0xF0` tương ứng với lệnh thiết lập liên kết S7 (Setup Communication)
+
+        - `Max AmQ calling`  quy định client gửi bao nhiêu request cùng lúc và `Max AmQ called`  quy định PLC xử lý bao nhiêu request cùng lúc. Tham số này sẽ được 2 bên đàm phán lúc thiết lập kết nối. Thường thì cả hai đều là 1, nghĩa là Client chỉ có thể gửi một yêu cầu mới sau khi nhận được phản hồi cho yêu cầu trước đó, và PLC sẽ xử lý tuần tự từng yêu cầu một. 
+
+        - `PDU length`: Độ dài tối đa của PDU mà PLC có thể xử lý. Tham số này cũng được đàm phán lúc thiết lập kết nối.
+
+    - Với command đọc ghi biến (`0x04`/`0x05`). Các biến được tương tác thông qua địa chỉ, có 3 cách thao tác với địa chỉ:
+
+        - Địa chỉ trực tiếp (Any-type): Chỉ rõ `area` (ví dụ: `DB`, `M`, `I`, `Q`), `address` (tức byte nào), kiểu dữ liệu. Ví dụ đọc biến `DB1.DBX0.0` sẽ có `area = DB`, `address = 1` (tức byte thứ 1), kiểu dữ liệu là bit.
+
+        - DB-Type: dành riêng cho area DB
+        - Địa chỉ gián tiếp (Symbolic): Thay vì dùng địa chỉ byte, ta có thể dùng tên biến đã được định nghĩa trong chương trình PLC. Ví dụ: `DB1.MyBit` hoặc `DB1.MyInt`. Khi này tham số sẽ bao gồm tên biến và kiểu dữ liệu. Cách này dễ đọc hơn nhưng đòi hỏi phải có thông tin về chương trình PLC để biết được tên biến nào tương ứng với địa chỉ byte nào. Chỉ hỗ trợ trên các dòng S7-1200/1500.
+
+
+    - Với command upload/download block (`0x1a-1f`). Đây là phần để lấy hoặc nạp chương trình điều khiển vào PLC. trong PLC, code chương trình và dữ liệu chương trình được tổ chức thành các block.
+
+
+        <div style="display: flex; gap: 20px; align-items: flex-start;">
+        <div style="text-align: center;">
+        <b>Upload Block</b><br>
+        <img src="./image-6.png" width="350">
+        </div>
+
+        <div style="text-align: center;">
+        <b>Download Block</b><br>
+        <img src="./image-7.png" width="350">
+        </div>
+
+        </div>
+    
+    - Với command điều khiển (`0x28`) để bắt đầu, dừng chương trình trong PLC.
+
+
+
+
+
+- Block dữ liệu (Data Block) nếu command đó yêu cầu truyền dữ liệu lớn (như đọc/ghi nhiều biến)
+
+
+### 3.3 Các bước thiết lập kết nối S7
 
 ![alt text](image-1.png)
 
@@ -421,7 +608,7 @@ Với:
 
 - `Function: Setup communication (0xf0)` cho biết đây là một yêu cầu thiết lập giao tiếp S7.
 
-- `Max AmQ (parallel jobs with ack) calling: 1`  quy định client gửi bao nhiêu request cùng lúc và `Max AmQ (parallel jobs with ack) called: 1`  quy định PLC xử lý bao nhiêu request cùng lúc. Ở đây cả hai đều là 1, nghĩa là Client chỉ có thể gửi một yêu cầu mới sau khi nhận được phản hồi cho yêu cầu trước đó, và PLC sẽ xử lý tuần tự từng yêu cầu một. 
+- `Max AmQ (parallel jobs with ack) calling: 1`, `Max AmQ (parallel jobs with ack) called: 1` Cả hai đều là 1, nghĩa là Client chỉ có thể gửi một yêu cầu mới sau khi nhận được phản hồi cho yêu cầu trước đó, và PLC sẽ xử lý tuần tự từng yêu cầu một. 
 
 - `PDU length: 480` là kích thước tối đa của payload 1 gói S7 mà client mong muốn tính theo Byte. 
 
@@ -451,16 +638,7 @@ Với `Protocol Data Unit Reference: 512` refer tới id của gói tin request 
 
 **4. Sau khi thiết lập xong kết nối S7, hai bên có thể bắt đầu trao đổi dữ liệu.**
 
-Giao thức S7 được thiết kế theo hướng  Function oriented or Command oriented tức mỗi lần truyền sẽ bao gồm một lệnh điều khiển hoặc một phản hồi. Nếu command không vừa trong một PDU, nó sẽ được chia ra trên nhiều subsequent PDU.
-
-Một command sẽ bao gồm:
-
-- Header 
-- Tập các tham số
-- Dữ liệu cho các tham số đó (nếu có)
-- Block dữ liệu (Data Block) nếu command đó yêu cầu truyền dữ liệu lớn (như đọc/ghi nhiều biến)
-
-
+Ở đây client thực hiện đọc thông tin trạng thái của PLC thông qua subfunction `Read SZL` (Subfunction 1 trong nhóm chức năng CPU functions) của S7comm.
 Ví dụ với gói tin số 13:
 
 ```
@@ -485,7 +663,7 @@ S7 Communication
         SZL-Index: 0x0004 [Object management system status]
 ```
 
-Request này yêu cầu PLC trả về thông tin về trạng thái hệ thống quản lý đối tượng (Object management system status) thông qua chức năng đọc SZL (System Zone List). Yêu cầu đọc tại địa chỉ SZL-ID `0x0132` và Index `0x0004`. PLC phản hồi lại với mã trả về `Success (0xff)` và dữ liệu trả về là một chuỗi 4 byte đại diện cho trạng thái hệ thống quản lý đối tượng của PLC.
+Request này yêu cầu PLC trả về thông tin về trạng thái hệ thống quản lý đối tượng (Object management system status) thông qua chức năng đọc SZL. Yêu cầu đọc tại địa chỉ SZL-ID `0x0132` và Index `0x0004`. PLC phản hồi lại với mã trả về `Success (0xff)` và dữ liệu trả về là một chuỗi 4 byte đại diện cho trạng thái hệ thống quản lý đối tượng của PLC.
 
 
 PLC sau đó phản hồi trong gói tin số 14:
@@ -506,6 +684,7 @@ S7 Communication
         Data unit reference number: 0
         Last data unit: Yes (0x00)
         Error code: No error (0x0000)
+
     Data (SZL-ID: 0x0132, Index: 0x0004)
         Return code: Success (0xff)
         Transport size: OCTET STRING (0x09)
@@ -527,23 +706,40 @@ S7 Communication
             res (Reserved): 02000000000000000000000000000000
 ```
 
-PLC phản hồi trạng thái hiện của các thông số như `key`, `param`, `real` liên quan đến mức độ bảo vệ của công tắc khóa (key switch) và công tắc chế độ (mode switch) của PLC. `bart_sch` cho biết vị trí của công tắc chế độ, ở đây là `RUN_P (2)`, nghĩa là PLC đang ở chế độ chạy + cho phép chỉnh sửa code. Các thông số khác như `ken_ver1_hw`, `ken_ver2_hw` cung cấp thông tin về phiên bản phần cứng của PLC, trong khi `ken_ver1_awp`, `ken_ver2_awp` cung cấp thông tin về phiên bản chương trình người dùng đang chạy trên PLC.
+**SZL hoặc SSL (System Status Lists)** là một danh sách ảo miêu tả trạng thái hiện tại của PLC. PLC không lưu sẵn danh sách này mà nó chỉ tạo ra mỗi khi có yêu cầu đọc SZL từ Client. Khi nhận được yêu cầu, PLC sẽ thu thập thông tin trạng thái hiện tại của các thành phần trong PLC, đóng gói chúng vào một cấu trúc dữ liệu theo định dạng SZL và trả về cho Client. Danh sách SZL dài 16 bit như sau, cấu trúc như sau:
+
+![alt text](image-8.png)
+
+Với:
+
+- `Module class`: xác định loại thiết bị muốn đọc
+
+    | Module class | Binary value |
+    |---|---|
+    |CPU| 0000|
+    | IM (Interface module) | 0100|
+    | FM (Function module) | 1000|
+    | CP (Communication processor) | 1100|
+
+- `Partial list number`: danh sách SZL được chia thành các danh sách con nhỏ hơn (partial list). Trường này xác định lấy danh sách con nào trong số các danh sách con của module class đó.
+
+- `Extract`: Trường này xác định lấy phần nào trong một danh sách con đó, ví dụ như đọc phần thông báo lỗi, phần đặc tính cơ bản, ...
+
+Với yêu cầu đọc SZL-ID `0x0132` và Index `0x0004`
+
+```
+0x0132 =   0000    0001   00110010
+            |       |       |
+            |       |       +-- Danh sách con: Dữ liệu truyền thông
+            |       +--  Lấy nhóm dữ liệu được xác định theo index kèm theo 
+            +-- Module class: CPU
+```
+
+Ở đây index là `0x0004`, tức sẽ lấy dữ liệu liên quan đến trạng thái của công tắc chế độ vận hành (operating mode switch) và các dữ liệu bảo vệ.
+
+Quan sát response của PLC, danh sách SZL này được trả về trong phần `Data`. PLC phản hồi trạng thái hiện của các thông số như `key`, `param`, `real` liên quan đến mức độ bảo vệ của công tắc khóa (key switch) và công tắc chế độ (mode switch) của PLC. `bart_sch` cho biết vị trí của công tắc chế độ, ở đây là `RUN_P (2)`, nghĩa là PLC đang ở chế độ chạy + cho phép chỉnh sửa code. Các thông số khác như `ken_ver1_hw`, `ken_ver2_hw` cung cấp thông tin về phiên bản phần cứng của PLC, trong khi `ken_ver1_awp`, `ken_ver2_awp` cung cấp thông tin về phiên bản chương trình người dùng đang chạy trên PLC.
 
 
-
-### 3.2 Các lệnh trong S7
-
-Các lệnh trong S7 được chia thành các nhóm chức năng:
-
-- Data Read/Write
-- Cyclic Data Read/Write
-- Directory info
-- System Info
-- Blocks move
-- PLC Control
-- Date and Time
-- Security
-- Programming
 
 ### 3.3 Các thành phần trong giao tiếp S7
 
@@ -573,66 +769,6 @@ Hoặc PLC cũng có thể đóng vai trò là Client khi nó cần giao tiếp 
 ![alt text](./Siemens_S7_Partner.png)
 
 
-
-### Cách đọc địa chỉ trong Siemen S7
-
-
-Cú pháp: 
-
-
-```
-[Loại vùng nhớ] [Kích thước dữ liệu] [Địa chỉ byte].[Địa chỉ bit]
-            │           │           │           │
-            │           │           │           └── 0-7 (chỉ dùng khi đọc bit)
-            │           │           └────────────── offset tính từ đầu vùng
-            │           └────────────────────────── X(bit) B(byte) W(word) D(dword) đây là số lượng dữ liệu muốn đọc
-            └────────────────────────────────────── I Q M DB T C
-```
-
-
-Ký hiệu các kích thước:
-
-|  Ký hiệu  |   Tên    |  Số bit  |  Ví dụ  |
-|-----|---------|----------|----------|
-|  X   |  Bit     |   1 bit  | M0.3  (Merker byte 0, bit 3)    |
-|  B   |  Byte    |   8 bit  | MB5   (Merker Byte 5)           |
-|  W   |  Word    |  16 bit  | MW10  (Merker Word tại byte 10) |
-|  D   |  DWord   |  32 bit  | MD20  (Merker DWord tại byte 20)|
-
-Với vùng DB thì cú pháp đặc biệt hơn:
-
-
-```
-Bit:   DB[n].DBX [byte] . [bit]  
-Byte:  DB[n].DBB [byte]         
-Word:  DB[n].DBW [byte]         
-DWord: DB[n].DBD [byte]        
-```
-
-
-Ví dụ:
-
-- DB1.DBX0.0  → bit 0 của byte 0 trong DB1
-- DB1.DBX0.1  → bit 1 của byte 0 trong DB1
-  
-
-*Siemens S7 sùng BIG ENDIAN (byte có trọng số cao nhất ở địa chỉ thấp nhất)*
-
-
-Các kiểu dữ liệu trong DB:
-
-
-|  Type   |  Size    |  Ghi chú                           |
-|----------|---------|------------------------------------|
-| BOOL    |  1 bit   | True/False                         |
-| BYTE    |  1 byte  | 0-255, unsigned                    |
-| INT     |  2 bytes | -32768 đến 32767, signed           |
-| WORD    |  2 bytes | 0-65535, unsigned                  |
-| DINT    |  4 bytes | -2^31 đến 2^31-1                   |
-| DWORD   |  4 bytes | 0 đến 2^32-1                       |
-| REAL    |  4 bytes | Float 32-bit (IEEE 754)            |
-| STRING  | variable | [max_len][cur_len][chars...]        |
-| S5TIME  |  2 bytes | Thời gian Siemens (định dạng riêng) |
 
 
 ## 4. IDS
@@ -676,4 +812,8 @@ IDS là một thành phần quan trọng song không phải là giải pháp all
 
 <a id="ref-2">[2]</a> Veit, M. F., ICS protocol dissectors for signature-based NIDS, Master’s Thesis, Department of Informatics, Institute of Telematics, Decentralized Systems and Network Services Research Group, in cooperation with Federal Office for Information Security (BSI), Available: https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/ICS/Masterarbeit_ICS_protocol_dissectors_for_signature_based_NIDS.pdf?__blob=publicationFile&v=7. Jan. 2021–Jun. 2021.
 
-<a id="ref-3">[3]</a> Siemens, “S7 Communication,” Siemens Industry Online Support. [Online]. Available: https://snap7.sourceforge.net/sharp7.html. [Accessed: 18-Mar-2026].
+<a id="ref-3">[3]</a> Snap7, “Sharp7,” SourceForge. [Online]. Available: https://snap7.sourceforge.net/sharp7.html. [Accessed: 18-Mar-2026].
+
+<a id="ref-4">[4]</a> Inprotech, “S7Comm Protocol Security Analyzed,” Inprotech. [Online]. Available: https://inprotech.es/en/s7comm-protocol-security-analyzed/. [Accessed: 18-Mar-2026].
+
+
