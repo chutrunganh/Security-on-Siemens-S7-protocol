@@ -109,7 +109,7 @@ Khi tạo dự án chọn tạo với ngoonnguwx lập trình **Ladder**. Sau kh
   END_VAR
   ```
 
-  Với code chương trình: `Library` > `Comparison` > `GT` > Enable `Execution Control` để cho phép so sánh 2 biến số nguyên. Sau đó điền các biến vào đầu vào, ra của block so sánh:
+  Với code chương trình: `Library` > `Comparison` > `GT` > Enable [`Execution Control`](https://openplc.discussion.community/post/openplc-v4-data-type-incompatibility-error-when-connecting-analog-input-to-ltgt-blocks-13778902) để cho phép so sánh 2 biến số nguyên. Sau đó điền các biến vào đầu vào, ra của block so sánh:
 
   ![alt text](image-6.png)
 
