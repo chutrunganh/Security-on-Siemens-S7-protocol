@@ -1,8 +1,8 @@
 PROGRAM main
 VAR
-	CoolingPumpStatus : bool AT %QX0.0;
-	CurrentTemp : int AT %MW0 := 0;
-	MaxLimitTemp : int AT %MW1 := 50;
+	CoolingPumpStatus : bool AT %QX0.0; (* Trạng thái bật tắt máy bơm *)
+	CurrentTemp : int AT %MW0 := 0; (* Nhiệt độ hiện tại *)
+	MaxLimitTemp : int AT %MW1 := 50; (* Giới hạn tối đa trước khi phải bật máy bơm *)
 END_VAR
 
 {
@@ -446,9 +446,9 @@ END_VAR
                     "value": "int"
                   },
                   "location": "%MW0",
-                  "initialValue": "50",
-                  "documentation": "",
-                  "debug": true
+                  "initialValue": "0",
+                  "documentation": "Nhiệt độ hiện tại",
+                  "debug": false
                 }
               }
             ],
@@ -617,9 +617,9 @@ END_VAR
                 "value": "int"
               },
               "location": "%MW0",
-              "initialValue": "50",
-              "documentation": "",
-              "debug": true
+              "initialValue": "0",
+              "documentation": "Nhiệt độ hiện tại",
+              "debug": false
             },
             "executionOrder": 0,
             "variant": "input",
@@ -713,9 +713,9 @@ END_VAR
                 "value": "int"
               },
               "location": "%MW1",
-              "initialValue": null,
-              "documentation": "",
-              "debug": false,
+              "initialValue": "50",
+              "documentation": "Giới hạn tối đa trước khi phải bật máy bơm",
+              "debug": true,
               "id": "broken-VARIABLE_baed7663-4317-43c6-87e2-436c7a0d7359"
             },
             "executionOrder": 0,
@@ -811,8 +811,8 @@ END_VAR
               },
               "location": "%QX0.0",
               "initialValue": null,
-              "documentation": "",
-              "debug": false,
+              "documentation": "Trạng thái bật tắt máy bơm",
+              "debug": true,
               "id": "broken-VARIABLE_f05a9e22-26b2-4ffd-a0c4-c7b976ac1e39"
             },
             "executionOrder": 0,

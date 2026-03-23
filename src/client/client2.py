@@ -1,9 +1,9 @@
 from time import sleep
 import snap7
 
-IP_ADDRESS = '192.168.0.2'
+IP_ADDRESS = '127.0.0.1'
 TRACK = 0
-SLOT = 1
+SLOT = 2
 
 plc = snap7.client.Client()
 plc.connect(IP_ADDRESS, TRACK, SLOT)

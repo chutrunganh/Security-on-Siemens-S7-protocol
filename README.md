@@ -1,15 +1,1 @@
-# Under construction....
 
-
-[project]
-name = "thesis"
-version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
-requires-python = ">=3.11"
-dependencies = [
-    "deep-translator>=1.11.4",
-    "docling>=2.76.0",
-    "markitdown[all]>=0.1.5",
-    "python-snap7>=2.1.0",
-]

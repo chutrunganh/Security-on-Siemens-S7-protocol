@@ -69,15 +69,6 @@
         }
       }
     ],
-    "deletedPous": [],
-    "debugVariables": {
-      "pous": {
-        "main": [
-          "CoolingPumpStatus",
-          "CurrentTemp",
-          "MaxLimitTemp"
-        ]
-      }
-    }
+    "deletedPous": []
   }
 }
