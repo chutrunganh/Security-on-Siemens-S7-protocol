@@ -76,6 +76,21 @@ Khi bạn kết nối tới PLC qua Ethernet, bạn thực ra kết nối tới 
 
 các phần mềm SCADA thương mại như WinCC (Siemens), iFIX (GE), hoặc CitectSCADA (Schneider) thường có chi phí bản quyền cao, từ vài chục đến vài trăm triệu đồng tùy theo số lượng thiết bị kết nối.  Free SCADA: ScadaBR,  OpenSCADA, Inductive Automation (Marker Edition),  AdvancedHMI 
 
+
+
+
+1. TIA Portal là gì?
+
+TIA Portal không phải là một phần mềm đơn lẻ mà là một hệ sinh thái hợp nhất. Thay vì phải dùng nhiều phần mềm riêng biệt cho PLC, màn hình HMI hay biến tần, Siemens gom tất cả vào một giao diện duy nhất.
+
+    STEP 7: Dùng để lập trình các dòng PLC (S7-1200, S7-1500, S7-300/400).
+
+    WinCC: Dùng để thiết kế giao diện vận hành (HMI) và hệ thống giám sát SCADA.
+
+    PLCSIM: Bộ mô phỏng giúp bạn chạy code PLC ngay trên máy tính mà không cần thiết bị thật (rất hữu ích cho việc test mã SZL của bạn).
+
+
+
 # Tài liệu tham khảo
 
 <a id="1">[1]</a> Available at: https://gitlab.fing.edu.uy/gsi/tectonic-ot/openplcmd/-/blob/main/documentation/S7-Protocol/Siemens%20Protocol%20driver%20for%20OpenPLC.pdf, accessed 12 April 2026.

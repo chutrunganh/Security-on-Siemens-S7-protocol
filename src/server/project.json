@@ -1,6 +1,6 @@
 {
   "meta": {
-    "name": "salve",
+    "name": "server",
     "type": "plc-project"
   },
   "data": {
@@ -28,7 +28,7 @@
     },
     "servers": [
       {
-        "name": "PLC_Salve",
+        "name": "PLC_Server",
         "protocol": "s7comm",
         "s7commSlaveConfig": {
           "server": {
@@ -52,20 +52,10 @@
           "dataBlocks": [
             {
               "dbNumber": 1,
-              "description": "InputBtn",
-              "sizeBytes": 2,
+              "description": "",
+              "sizeBytes": 128,
               "mapping": {
-                "type": "bool_memory",
-                "startBuffer": 0,
-                "bitAddressing": false
-              }
-            },
-            {
-              "dbNumber": 2,
-              "description": "OutputBtn",
-              "sizeBytes": 2,
-              "mapping": {
-                "type": "bool_output",
+                "type": "int_memory",
                 "startBuffer": 0,
                 "bitAddressing": false
               }
@@ -79,15 +69,15 @@
         }
       }
     ],
+    "deletedPous": [],
     "debugVariables": {
       "pous": {
         "main": [
-          "StartBtn",
-          "StopBtn",
-          "MotorOut"
+          "CoolingPumpStatus",
+          "CurrentTemp",
+          "MaxLimitTemp"
         ]
       }
-    },
-    "deletedPous": []
+    }
   }
 }

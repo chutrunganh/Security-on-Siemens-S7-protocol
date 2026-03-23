@@ -330,10 +330,10 @@ Ký hiệu các kích thước:
 
 |  Ký hiệu  |   Tên    |  Số bit  |  Ví dụ  |
 |-----|---------|----------|----------|
-|  X   |  Bit     |   1 bit  | M0.3  (Merker byte 0, bit 3)    |
-|  B   |  Byte    |   8 bit  | MB5   (Merker Byte 5)           |
-|  W   |  Word    |  16 bit  | MW10  (Merker Word tại byte 10) |
-|  D   |  DWord   |  32 bit  | MD20  (Merker DWord tại byte 20)|
+|  X   |  Bit     |   1 bit (mặc định nếu không chỉ định kích thước trong cú pháp, dùng cho loại dữ liệu boolean)  | M0.3  (Merker byte 0, bit 3)    |
+|  B   |  Byte    |   8 bit (Thường dùng cho số nguyên 0-255)  | MB5   (Merker Byte 5)           |
+|  W   |  Word    |  16 bit (Thường dùng cho số nguyên lớn)  | MW10  (Merker Word tại byte 10) |
+|  D   |  DWord   |  32 bit (Thường dùng cho số thực)  | MD20  (Merker DWord tại byte 20)|
 
 Với vùng DB thì cú pháp đặc biệt hơn:
 
