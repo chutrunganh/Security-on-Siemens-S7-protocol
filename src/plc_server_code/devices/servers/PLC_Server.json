@@ -23,10 +23,20 @@
     "dataBlocks": [
       {
         "dbNumber": 1,
-        "description": "",
+        "description": "For actual speed and setpoint speed",
         "sizeBytes": 128,
         "mapping": {
-          "type": "int_memory",
+          "type": "int_input",
+          "startBuffer": 0,
+          "bitAddressing": false
+        }
+      },
+      {
+        "dbNumber": 2,
+        "description": "For centrifuges status",
+        "sizeBytes": 128,
+        "mapping": {
+          "type": "bool_output",
           "startBuffer": 0,
           "bitAddressing": false
         }
@@ -34,7 +44,7 @@
     ],
     "logging": {
       "logConnections": true,
-      "logDataAccess": true,
+      "logDataAccess": false,
       "logErrors": true
     }
   }

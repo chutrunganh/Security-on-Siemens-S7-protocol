@@ -469,7 +469,6 @@ Một command sẽ bao gồm:
         <b>Upload Block</b><br>
         <img src="./image-6.png" width="350">
         </div>
-
         <div style="text-align: center;">
         <b>Download Block</b><br>
         <img src="./image-7.png" width="350">

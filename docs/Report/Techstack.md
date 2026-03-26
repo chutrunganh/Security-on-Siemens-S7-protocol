@@ -34,15 +34,7 @@ các phần mềm SCADA thương mại như WinCC (Siemens), iFIX (GE), hoặc C
 
 
 
-1. TIA Portal là gì?
 
-TIA Portal không phải là một phần mềm đơn lẻ mà là một hệ sinh thái hợp nhất. Thay vì phải dùng nhiều phần mềm riêng biệt cho PLC, màn hình HMI hay biến tần, Siemens gom tất cả vào một giao diện duy nhất.
-
-    STEP 7: Dùng để lập trình các dòng PLC (S7-1200, S7-1500, S7-300/400).
-
-    WinCC: Dùng để thiết kế giao diện vận hành (HMI) và hệ thống giám sát SCADA.
-
-    PLCSIM: Bộ mô phỏng giúp bạn chạy code PLC ngay trên máy tính mà không cần thiết bị thật (rất hữu ích cho việc test mã SZL của bạn).
 
 
 

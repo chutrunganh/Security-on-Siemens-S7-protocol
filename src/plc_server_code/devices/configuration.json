@@ -1,7 +1,7 @@
 {
   "deviceBoard": "OpenPLC Runtime v4",
   "communicationPort": "",
-  "runtimeIpAddress": "localhost",
+  "runtimeIpAddress": "172.16.16.131",
   "compileOnly": false,
   "communicationConfiguration": {
     "modbusRTU": {

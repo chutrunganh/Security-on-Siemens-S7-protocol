@@ -24,9 +24,10 @@ Press CTRL+C to quit
 ```bash
 docker pull ghcr.io/autonomy-logic/openplc-runtime:latest
 
-sudo docker run -d \
+sudo docker run \
   --name openplc-runtime \
   -p 8443:8443 \
+   -p 102:102 \
   --cap-add=SYS_NICE \
   --cap-add=SYS_RESOURCE \
   -v openplc-runtime-data:/var/run/runtime \
@@ -60,7 +61,7 @@ Như này là đã kết nối xong với PLC rumtime, giờ ta muốn PLC sẽ 
 
 Xác nhận PLC đã chạy Siemens S7 thành công trên port 102.
 
-![alt text](image-2.png)
+![alt text](image-11.png)
 
 > [!CAUTION]
 > Đảm bảo port 102 không bị sử dụng bởi các tiến trình khác. Thông thường khi trên máy đã cài các phần mềm của Siemens như TIA Portal, S7-PLCSIM thì port 102 sẽ bị chiếm dụng. Kiểm tra bằng lệnh `netstat -ano | findstr :102` trên Windows hoặc `sudo netstat -tuln | grep :102` trên Linux.
@@ -75,6 +76,8 @@ Xác nhận PLC đã chạy Siemens S7 thành công trên port 102.
 Image Name                     PID Session Name        Session#    Mem Usage
 ========================= ======== ================ =========== ============
 s7oiehsx64.exe                5432 Services                   0     45,480 K
+
+net stop s7oiehsx64
 ```
 
 Port đang bị chiếm dụng bởi tiến trình `s7oiehsx64.exe` (S7-PLCSIM). Cần dừng tiến trình này trước khi chạy OpenPLC runtime với giao thức Siemens S7comm. Khi chạy đúng:
@@ -84,6 +87,8 @@ Image Name                     PID Session Name        Session#    Mem Usage
 ========================= ======== ================ =========== ============
 plc_main.exe                  9848 Console                    1     58,036 K
 ```
+
+*Trên Linux, cần chạy chương trình với quyền `sudo` để có thể sử dụng port 102.*
 
 # Thử nghiệm chương trình PLC
 
