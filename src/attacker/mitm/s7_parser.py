@@ -43,79 +43,26 @@ def read_var_packet_job(packet_data, param_offset, s7_param_len):
     print("\n" + "-" * 83 + "\n")
 
 
-TRANSPORT_SIZE_MAP = {
-    0x03: "BIT",
-    0x04: "BYTE/WORD/DWORD",
-    0x05: "INT",
-    0x06: "DINT",
-    0x07: "REAL",
-    0x08: "DATE",
-    0x09: "OCTET STRING",
-}
-
-ERROR_CLASS_MAP = {
-    0x00: "No error",
-    0x81: "Application relationship error",
-    0x82: "Object definition error",
-    0x83: "No resources available error",
-    0x84: "Error on service processing",
-    0x85: "Error on supplies",
-    0x87: "Access error",
-}
-
-
-def read_var_packet_ackdata(packet_data, param_offset, data_offset, s7_data_len):
-    """Parse Read variable response packet data"""
-    func_code = packet_data[param_offset] if param_offset < len(packet_data) else 0x00
-    item_count = packet_data[param_offset + 1] if param_offset + 1 < len(packet_data) else 0
-
-    print("  Parameter: (Read Var)")
-    print(f"    Function: Read Var (0x{func_code:02x})")
-    print(f"    Item count: {item_count}")
-
-    print("  Data")
-    current_offset = data_offset
-    item_idx = 1
-
-    while current_offset < data_offset + s7_data_len and current_offset < len(packet_data):
-        if current_offset + 3 >= len(packet_data):
-            break
-
-        return_code = packet_data[current_offset]
-        transport_size = packet_data[current_offset + 1]
-        length = (packet_data[current_offset + 2] << 8) | packet_data[current_offset + 3]
-
-        # BIT (0x03) and BYTE/WORD/DWORD (0x04) both encode length in BITS.
-        # All other transport sizes (REAL, INT, OCTET STRING …) encode length in BYTES.
-        if transport_size in (0x03, 0x04):
-            byte_length = (length + 7) // 8  # ceil(bits → bytes)
-        else:
-            byte_length = length
-
-        # S7 data items are padded to even byte boundaries with a 0x00 fill byte.
-        has_fill_byte = byte_length % 2 != 0
-
-        header_len = 4
-        data_start = current_offset + header_len
-        data_end = min(data_start + byte_length, len(packet_data))
-
-        ret_msg = "Success" if return_code == 0xFF else "Error"
-        print(f"    Item [{item_idx}]: ({ret_msg})")
-        print(f"      Return code: {ret_msg} (0x{return_code:02x})")
-
-        ts_msg = TRANSPORT_SIZE_MAP.get(transport_size, f"Unknown (0x{transport_size:02x})")
-        print(f"      Transport size: {ts_msg} (0x{transport_size:02x})")
-        print(f"      Length: {byte_length}")  # display as bytes, like Wireshark
-
-        print("      Data: ", end="")
-        for i in range(data_start, data_end):
-            print(f"{packet_data[i]:02x}", end="")
-        print()
-
-        item_idx += 1
-        current_offset += header_len + byte_length
-        if has_fill_byte and current_offset < data_offset + s7_data_len and current_offset < len(packet_data):
-            current_offset += 1
+def read_var_packet_ackdata(packet_data, param_offset, s7_data_len):
+    """Parse Read variable response packet"""
+    print("Function code:\tRead variable")
+    
+    if param_offset + 1 >= len(packet_data):
+        return
+    
+    item_count = packet_data[param_offset + 1]
+    print(f"Item count:\t{item_count}")
+    print("-" * 93)
+    print(" Error Code |  Var Type |          Count        |                  Data")
+    print("-" * 93)
+    
+    for j in range(s7_data_len):
+        if param_offset + 2 + j < len(packet_data):
+            if packet_data[param_offset + 2 + j] == 0xFF:
+                print()
+            print(f"   0x{packet_data[param_offset + 2 + j]:02X}    ", end="")
+    
+    print("\n" + "-" * 93 + "\n")
 
 
 def write_var_packet_job(packet_data, param_offset, data_offset, data_len):
@@ -187,63 +134,64 @@ def s7_analysis(packet_data, total_headers_size, header):
     print("=" * 80)
     print("S7 Protocol Packet Detected")
     print("=" * 80)
-
-    pdu_ref = (packet_data[s7_offset + 4] << 8) | packet_data[s7_offset + 5]
-    reserved = (packet_data[s7_offset + 2] << 8) | packet_data[s7_offset + 3]
-
-    msg_type_name = {1: "Job", 2: "Ack", 3: "Ack_Data"}.get(s7_msg_type, f"Unknown ({s7_msg_type})")
-
-    print(f"\nS7 Communication")
-    print(f"  Header: ({msg_type_name})")
-    print(f"    Protocol Id: 0x{packet_data[s7_offset]:02x}")
-    print(f"    ROSCTR: {msg_type_name} ({s7_msg_type})")
-    print(f"    Redundancy Identification (Reserved): 0x{reserved:04x}")
-    print(f"    Protocol Data Unit Reference: {pdu_ref}")
-    print(f"    Parameter length: {s7_param_len}")
-    print(f"    Data length: {s7_data_len}")
-
-    # Ack-Data header has 2 extra bytes (error class + error code) before the parameter section.
-    # Job/Ack headers are 10 bytes; Ack-Data headers are 12 bytes.
-    if s7_msg_type == 3:
-        error_class = packet_data[s7_offset + 10] if s7_offset + 10 < len(packet_data) else 0
-        error_code  = packet_data[s7_offset + 11] if s7_offset + 11 < len(packet_data) else 0
-        ec_str = ERROR_CLASS_MAP.get(error_class, f"Unknown (0x{error_class:02x})")
-        print(f"    Error class: {ec_str} (0x{error_class:02x})")
-        print(f"    Error code: 0x{error_code:02x}")
-        param_offset = s7_offset + 12
-    else:
-        param_offset = s7_offset + 10
-
+    
+    # Debug output
+    debug = False
+    if debug:
+        print("\nTPKT:")
+        for j in range(4):
+            if total_headers_size + j < len(packet_data):
+                print(f"0x{packet_data[total_headers_size + j]:02X} ", end="")
+        
+        print("\nCOTP:")
+        for j in range(cotp_len):
+            if total_headers_size + 4 + j < len(packet_data):
+                print(f"0x{packet_data[total_headers_size + 4 + j]:02X} ", end="")
+    
+    print(f"\nMessage Type: {s7_msg_type}")
+    
+    param_offset = s7_offset + 10
     data_offset = param_offset + s7_param_len
-
+    
     # Analyze based on message type
     if s7_msg_type == 1:  # Job Request
-        print(f"  [Job Request]")
-
+        print("Type:\t\tJob Request\n")
+        
         if param_offset < len(packet_data):
             func_code = packet_data[param_offset]
-
+            
             if func_code == 0xF0:  # Setup comm
                 setup_comm_packet(packet_data, param_offset)
             elif func_code == 0x04:  # Read var
                 read_var_packet_job(packet_data, param_offset, s7_param_len)
             elif func_code == 0x05:  # Write var
                 write_var_packet_job(packet_data, param_offset, data_offset, s7_data_len)
-
+    
     elif s7_msg_type == 2:  # Ack
-        print(f"  [Ack]")
-
+        print("Type:\t\tAck\n")
+    
     elif s7_msg_type == 3:  # Ack-Data
+        print("Type:\t\tAck-Data\n")
+        
         if param_offset < len(packet_data):
             func_code = packet_data[param_offset]
+            
             if func_code == 0x04:  # Read var response
-                read_var_packet_ackdata(packet_data, param_offset, data_offset, s7_data_len)
-            elif func_code == 0x05:  # Write var response
-                print(f"  Parameter: (Write Var)")
-                print(f"    Function: Write Var (0x{func_code:02x})")
-            else:
-                print(f"  Parameter: (Function 0x{func_code:02x})")
-
+                read_var_packet_ackdata(packet_data, param_offset, s7_data_len)
+    
+    elif s7_msg_type == 7:  # Userdata
+        print("Type:\t\tUserdata\n")
+    
+    print(f"Param length:\t{s7_param_len}")
+    print("Parameters:\t", end="")
+    for j in range(param_offset, min(data_offset, len(packet_data))):
+        print(f"0x{packet_data[j]:02X} ", end="")
+    
+    print(f"\nData length:\t{s7_data_len}")
+    print("Data:\t\t", end="")
+    for j in range(data_offset, min(data_offset + s7_data_len, len(packet_data))):
+        print(f"0x{packet_data[j]:02X} ", end="")
+    
     print("\n" + "=" * 80 + "\n")
 
 

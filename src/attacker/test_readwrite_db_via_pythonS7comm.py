@@ -14,11 +14,13 @@ def write_and_read_db(value_to_write):
     iSetpoint = client.read_area("DB1.2 BYTE 2")
     bCentrifugeStatus = client.read_area("DB2.0 BYTE 1")
 
-    print(int.from_bytes(iSimSpeed, "big", signed=False), 
-        "   |   ", 
-        int.from_bytes(iSetpoint, "big", signed=False),
-         "   |   ", 
-        int.from_bytes(bCentrifugeStatus, "big", signed=False))
+    # print(int.from_bytes(iSimSpeed, "big", signed=False), 
+    #     "   |   ", 
+    #     int.from_bytes(iSetpoint, "big", signed=False),
+    #      "   |   ", 
+    #     int.from_bytes(bCentrifugeStatus, "big", signed=False))
+
+    print(iSimSpeed, "   |   ", iSetpoint, "   |   ", bCentrifugeStatus)
 
 
 
