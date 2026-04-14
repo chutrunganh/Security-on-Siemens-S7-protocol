@@ -1,5 +1,7 @@
 MITRE ATT&CK được tổ chức thành ba thành phần chính:
 
+![alt text](image-13.png)
+
 1. **Chiến thuật (Tactics)**: Đại diện cho mục tiêu của kẻ tấn công ở mỗi giai đoạn. Trả lời cho câu hỏi kẻ tấn công đang cố gắng làm gì
 
 
@@ -9,7 +11,7 @@ MITRE ATT&CK được tổ chức thành ba thành phần chính:
 3. **Sub-techniques**: Là các kỹ thuật con, cung cấp thêm chi tiết về cách thức thực hiện một kỹ thuật cụ thể.
 
 
-Hiện có 14 chiến thuật trong MITRE ATT&CK, bao gồm:
+Hiện có 14 chiến thuật trong MITRE ATT&CK (bản tiêu chuẩn cho Enterprise), bao gồm:
 
 - **Reconnaissance**: Thu thập thông tin về mục tiêu
 - **Resource Development**: Thu thập các tài nguyên có thể được sử dụng để tấn công, chẳng hạn như cơ sở hạ tầng, tài khoản
@@ -25,3 +27,8 @@ Hiện có 14 chiến thuật trong MITRE ATT&CK, bao gồm:
 - **Command and Control**: Kết nối với các hệ thống bị xâm nhập để kiểm soát chúng
 - **Exfiltration**: Đánh cắp dữ liệu thu thập được
 - **Impact**: Thay đổi hoặc phá hủy dữ liệu của mục tiêu
+
+Ngoài bản tiêu chuẩn cho Enterprise (có thể được lọc theo platform: PRE, Windows, macOS, Linux, Cloud, Network), MITRE ATT&CK còn có các bản khác cho:
+
+- Mobile
+- ICS
