@@ -1,6 +1,6 @@
 # Cài đặt và cấu hình OpenPLC v4 runtime, OpenPLC Editor v4
 
-Mô phỏng một PLC có chạy giao thức S7comm bằng cách sử dụng OpenPLC (Bản chất là phần mềm này chạy một Snap7 Server bên trong [[1]](#1)).Cho phép ảo hóa một máy tính để hoạt động như một PLC vật lý. Slave này sẽ lắng nghe các yêu cầu trên cổng 102 và phản hồi dựa trên các vùng nhớ được đăng ký.
+Mô phỏng một PLC có chạy giao thức S7comm bằng cách sử dụng OpenPLC (Bản chất là phần mềm này chạy một Snap7 Server bên trong [[1]](#1) ). Cho phép ảo hóa một máy tính để hoạt động như một PLC vật lý. Slave này sẽ lắng nghe các yêu cầu trên cổng 102 và phản hồi dựa trên các vùng nhớ được đăng ký.
 
 - Cài đặt tại: https://autonomylogic.com/runtime
 
@@ -45,8 +45,8 @@ OpenPLC v4 đã loại bỏ giao diện quản trị web trên port 8080, thay v
 
 Cài đặt OpenPLC Editor v4 tại: https://autonomylogic.com/editor
 
-> [!NOTE]
-> OpenPLC Editor cần có C compiler (như MinGW trên Windows hoặc GCC trên Linux) để biên dịch chương trình PLC thành mã máy có thể chạy trên OpenPLC Runtime. 
+> [!CAUTION]
+> OpenPLC Editor cần có C compiler (như MinGW trên Windows hoặc GCC trên Linux) để biên dịch chương trình PLC thành mã máy có thể chạy trên OpenPLC Runtime. Cần đảm bảo đã có C compiler được cài trên máy.
 
 
 Tạo Project mới. Kết nối với PLC runtime `Devies` > `Configuration` > `OpenPLC Runtime v4`:
