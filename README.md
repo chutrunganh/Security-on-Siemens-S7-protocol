@@ -1,4 +1,17 @@
-Pending
+# Contents
+
+- [Lý thuyết](./docs/Report/Theory.md)
+    - [ICS/OT là gì?](./docs/Report/Theory.md#otics-là-gì)
+    - [Mô hình mạng PRUDE](./docs/Report/Theory.md#2-mô-hình-purdue-purdue-enterprise-reference-architecture---pera)
+    - [PLC](./docs/Report/Theory.md#1-plc)
+    - [Cấu trúc S7 Comm](./docs/Report/Theory.md#3-siemen-s7)
+
+- [Cài đặt và cấu hình môi trường mô phỏng](./docs/Installation%20guides/README.md)
+
+- Tấn công mô phỏng
+    - [Stuxnet Man in the Middle Attack Simulation](./attacks/stuxnet_mitm_sim/README.md)
+
+# Pending
 
 6 Vụ tấn công vào ICS: https://icsec.pl/en/5-cyber-atakow-na-sieci-ics/, https://hackers-arise.com/scada-hacking-the-most-important-scada-ics-attacks-in-history/
 
