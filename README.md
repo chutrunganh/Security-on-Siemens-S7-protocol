@@ -19,12 +19,9 @@
 Tác động của 3 loại tấn công vào ICS: https://www.sciencedirect.com/science/article/pii/S2405896324002660?ref=pdf_download&fr=RR-2&rr=9e9e152e18231fc7
 
 
-Plan
-
-ICS Kill Chain
-
-
-
+Plan a a aass  as asss
+ dd ddd dd
+ICS Kill
 
 # Attack Simulation
 

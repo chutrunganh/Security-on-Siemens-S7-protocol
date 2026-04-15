@@ -9,3 +9,10 @@ wheels/
 # Virtual environments
 .venv
 
+# IDE, Editor files
+.vscode/
+.idea/
+.cursor/
+.cursorrules/
+.cursorrules/
+

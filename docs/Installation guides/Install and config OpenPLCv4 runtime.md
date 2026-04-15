@@ -1,13 +1,6 @@
-# Cài đặt và cấu hình OpenPLC v4 runtime, OpenPLC Editor v4
+# Cài đặt và cấu hình OpenPLC v4 Runtime
 
 Mô phỏng một PLC có chạy giao thức S7comm bằng cách sử dụng OpenPLC (Bản chất là phần mềm này chạy một Snap7 Server bên trong [[1]](#1) ). Cho phép ảo hóa một máy tính để hoạt động như một PLC vật lý. Slave này sẽ lắng nghe các yêu cầu trên cổng 102 và phản hồi dựa trên các vùng nhớ được đăng ký.
-
-- Cài đặt tại: https://autonomylogic.com/runtime
-
-- Github: https://github.com/Autonomy-Logic/openplc-runtime/
-
-- Tutorial cài đặt: https://youtu.be/wWBvFiq3ZU8?si=tVHIa5JJPeKZMd1I
-
 
 ```
  * Serving Flask app 'webserver.restapi'
@@ -19,11 +12,16 @@ WARNING: This is a development server. Do not use it in a production deployment.
 Press CTRL+C to quit
 ```
 
-Để đảm bảo tương thích cao nhất, trong dự án này chúng tôi chọn cài bằng Docker:
+- Cài đặt tại: https://autonomylogic.com/runtime
+
+- Github: https://github.com/Autonomy-Logic/openplc-runtime/
+
+- Tutorial cài đặt: https://youtu.be/wWBvFiq3ZU8?si=tVHIa5JJPeKZMd1I
+
+
+Để đảm bảo tương thích cao nhất, trong dự án này chúng tôi chọn cài bằng [Docker image này](https://github.com/orgs/autonomy-logic/packages/container/package/openplc-runtime):
 
 ```bash
-docker pull ghcr.io/autonomy-logic/openplc-runtime:latest
-
 sudo docker run \
   --name openplc-runtime \
   -p 8443:8443 \
@@ -31,7 +29,7 @@ sudo docker run \
   --cap-add=SYS_NICE \
   --cap-add=SYS_RESOURCE \
   -v openplc-runtime-data:/var/run/runtime \
-  ghcr.io/autonomy-logic/openplc-runtime:latest
+  ghcr.io/autonomy-logic/openplc-runtime:v4.0.9
 ```
 
 
@@ -41,7 +39,14 @@ Khác với OpenPLC v3 Runtime khi chạy sẽ mở 2 port (mặc định chưa 
 
 - Port **8443**: RESTful API (được chay bởi Flask server) để giao tiếp với PLC runtime (ví dụ như để upload chương trình PLC, đọc/ghi dữ liệu, ...). OpenPLC Editor sử dụng API này để giao tiếp với Runtime.
 
-OpenPLC v4 đã loại bỏ giao diện quản trị web trên port 8080, thay vào đó chỉ còn RESTful API trên port 8443, bởi vì giờ đây toàn bộ các chức năng cấu hình, giám sát runtime của web quản trị đều có thể được thực hiện thông qua API này. OpenPLC Editor v4 đã hỗ trợ đầy đủ các API này thông qua GUI.
+OpenPLC Runtime v4 đã loại bỏ giao diện quản trị web trên port 8080, thay vào đó chỉ còn RESTful API trên port 8443, bởi vì giờ đây toàn bộ các chức năng cấu hình, giám sát runtime của web quản trị đều có thể được thực hiện thông qua API này. OpenPLC Editor v4 đã hỗ trợ đầy đủ các API này thông qua GUI.
+
+> [!NOTE]
+> Muốn OpenPLC chạy giao thức nào thì sẽ cần expose thêm port tương ứng khi chạy container. Như ví dụ trên để chạy giao thức S7comm thì cần expose port `102`.
+
+# Cài đặt và cấu hình OpenPLC Editor v4
+
+Để tương tác với PLC runtime thông qua API, cần cài đặt OpenPLC Editor v4. Phần mềm này cho phép kết nối, cấu hình, viết chương trình và nạp code cho PLC runtime, giống Step7 của Siemens.
 
 Cài đặt OpenPLC Editor v4 tại: https://autonomylogic.com/editor
 
@@ -49,13 +54,17 @@ Cài đặt OpenPLC Editor v4 tại: https://autonomylogic.com/editor
 > OpenPLC Editor cần có C compiler (như MinGW trên Windows hoặc GCC trên Linux) để biên dịch chương trình PLC thành mã máy có thể chạy trên OpenPLC Runtime. Cần đảm bảo đã có C compiler được cài trên máy.
 
 
-Tạo Project mới. Kết nối với PLC runtime `Devies` > `Configuration` > `OpenPLC Runtime v4`:
+1. Tạo Project mới: `File` > `New Project`
+
+2. Kết nối với PLC runtime `Devies` > `Configuration` > `OpenPLC Runtime v4`:
 
 
 ![alt text](image.png)
 
 
-Như này là đã kết nối xong với PLC rumtime, giờ ta muốn PLC sẽ chạy như một server để chờ client kết nối tới `+` > `Server` > Thêm tên và chọn giao thức `Siemens S7comm`:
+Như này là đã kết nối xong với PLC rumtime
+
+3. Muốn PLC sẽ chạy như một server để chờ client kết nối tới `+` > `Server` > Thêm tên và chọn giao thức `Siemens S7comm`:
 
 ![alt text](image-1.png)
 
@@ -205,7 +214,7 @@ Với track và slot thường sẽ là 0,2 cho Siemens S7-300/400 và 0,1 cho S
 
 ![alt text](image-10.png)
 
-*PLC S7-1200/1500*
+*Module giao tiếp của PLC S7-1200/1500 nằm trên Rack 0, slot 1.*
 
 # References
 

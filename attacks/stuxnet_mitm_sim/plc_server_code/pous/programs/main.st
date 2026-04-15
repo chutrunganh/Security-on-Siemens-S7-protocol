@@ -12,7 +12,7 @@ IF iCounter > 628 THEN
 END_IF;
 
 IF iCounter <= 314 THEN
-    iSimSpeed := iSetpoint + (iCounter * 200 / 314) - 300;  (* ±100 RPM thay vì ±15 *)
+    iSimSpeed := iSetpoint + (iCounter * 200 / 314) - 300;  
 ELSE
     iSimSpeed := iSetpoint + 100 - ((iCounter - 314) * 300 / 314);
 END_IF;

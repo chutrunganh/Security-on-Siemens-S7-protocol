@@ -6,7 +6,7 @@ Dưới thời tổng thống George W. Bush, sau nhiều nỗ lực ngoại gia
 ![alt text](image-12.png)
 
 Quá trình tấn công:
-
+ as as  a a
 
 1. **Lây nhiễm trong windows**: Được lây nhiễm vào một máy tính trong mạng nội bộ thông qua USB do một gián điệp để lại. Sau đó, nó lan tiếp trong mạng nội bộ thông qua 4 lỗ hổng Zero-day  của Windows và gửi thông tin về các máy chủ Command and Control (C&C) của kẻ tấn công [[1]](../Research%20papers/Stuxnet%20in%20details.pptx.pdf)
 
@@ -58,23 +58,78 @@ Sự tồn tại của Stuxnet chỉ được phát hiện rộng rãi vào năm
 > Mục tiêu của tấn công là làm thay đổi giá trị của một biến nằm trong datablock của PLC, từ đó làm thay đổi hành vi của hệ thống điều khiển. Đồng thời can thiệp vào quá trình gửi dữ liệu để HMI không nhận ra sự thay đổi này.
 
 ## PLC
-Chương trình đang chạy trên PLC có dạng như sau
 
-.... Đợi máy ảo để làm. 
+Import dự án vào OpenPLC Editor với thư mục [này](./plc_server_code/). Chương trình đang chạy trên PLC có dạng như sau
 
-Import dự án vào OpenPLC Editor với thư mục [này](./plc_server_code/)
+- Với cấu hình datablock như sau để làm biến đầu vào và ra cho PLC:
+
+    ![alt text](image-1.png)
+
+- Khai báo tag và chương trình logic (viết dưới dạng Structured Text):
+
+    ![alt text](image-2.png)
+
+    Gồm các tags:
+
+    - `iSimSpeed`: tốc độ thực tế máy đang quay
+    - `iSetpoint`: tốc độ ngưỡng để máy quay dao động quanh giá trị này.
+    - `iCounter`: Dùng để tạo dao động mô phỏng
+    - `bCentrifugeStatus`: trạng thái hoạt động của máy ly tâm với 0 là bình thường, 1 là quá tốc độ.
+
+    Chương trình mô phỏng lại tốc độ quay của động cơ dao động quanh mốc `iSetpoint` được chỉ định bằng `1200`.
 
 
 ## HMI
-Trên HMI
 
-Import dự án vào FUXA với thư mục [này](./hmi/fuxa_hmi_design.json)
+Import dự án vào FUXA với thư mục [này](./hmi/fuxa_hmi_design.json):
+
+
+![alt text](image-8.png)
+
+![alt text](image-3.png)
+
+Thu thập gói tin trên máy HMI thấy là sự lặp đi lặp lại của 2 cặp request-response sau:
+
+- Cặp đầu tiên là request yêu cầu đọc 4 byte tại DB1 tại bit 0 của byte 0, tức ứng với biến `iSimSpeed` và `iSetpoint`:
+
+![alt text](image-4.png)
+
+*Request*
+
+![alt text](image-5.png)
+
+*Response*
+
+Biến `iSimSpeed` là `042d`, biến `iSetpoint` là `04b0`. S7 dùng Little Endian, nên giá trị `042d` tương ứng với `1069` và `04b0` tương ứng với `1200`.
+
+- Cặp thứ hai là request yêu cầu đọc 1 byte tại DB2 tại bit 0 của byte 0, tức ứng với biến `bCentrifugeStatus`:
+
+
+![alt text](image-6.png)
+
+![alt text](image-7.png)
+
 
 ## Attacker
 
 Từ máy tấn công sẽ làm đồng thời:
 
-- Tạo một lệnh ghi để ghi vào giá trị của một biến nằm trong Datablock của PLC sử dụng thư viện Snap 7 hoặc S7 Comm của Python. Ở đây sẽ chỉnh sửa giá trị biến `Setpoint` nằm ở vị trí `DB1.DBW2` từ `1200` thành `2000`. Script tại [đây](./attacker/test_readwrite_db_via_snap7.py) hoặc [đây](./attacker/test_readwrite_db_via_pythonS7comm.py)
+- Tạo một lệnh ghi để ghi vào giá trị của một biến nằm trong Datablock của PLC sử dụng thư viện Snap 7 hoặc S7 Comm của Python. Ở đây sẽ chỉnh sửa giá trị biến `Setpoint` nằm ở vị trí `DB1.DBW2` từ `1200` thành `2000`. Script tại [đây](./attacker/test_readwrite_db_via_snap7.py) hoặc [đây](./attacker/test_readwrite_db_via_pythonS7comm.py). Output:
+
+    ```
+    Current Speed  | Setpoint Speed    | Centrifuge Status
+    --------------------------------------------------
+    b'\x03\xc1'    |    b'\x04\xb0'    |    b'\x00'
+    b'\x07\xe4'    |    b'\x07\xd0'    |    b'\x01'
+    ```
+
+    `iSetpoint` từ `1200` (0x04b0) thành `2000` (0x07d0) và khi này trạng thái `bCentrifugeStatus` từ `0` thành `1`.  Nếu như chưa chạy scritpt can thiệp thì trên HMI sẽ thấy máy đang dao động quanh mức 2000:
+
+    ![alt text](image-14.png)
+
+    ![alt text](image-15.png)
+
+    
 
 - Tấn công Man in the middle bằng kỹ thuật ARP Spoofing giữa cổng của Router (`.60.1`) và HMI (`.60.10`) thông qua tool **Bettercap**:
 
@@ -88,8 +143,31 @@ Từ máy tấn công sẽ làm đồng thời:
     set arp.spoof.fullduplex true
     arp.spoof on
     ```
+    # Tắt đi bật lại để làm mới đợt tấn công
+arp.spoof off
+
+# Bật các tùy chọn ép buộc lừa đảo
+set arp.spoof.internal true
+set arp.spoof.fullduplex true
+
+# Chạy lại
+arp.spoof on
+
+Check net.show truoc da
+
+
+    Khi này trên HMI bắt gói tin sẽ thấy xen kẽ các gói tin của S7 và các gói ARP Spoofing:
+
+    ![alt text](image-13.png)
 
 - Chỉnh sửa gói tin S7comm để thay đổi giá trị `Setpoint` từ `2000` thành `1200`. Sau khi Bettercap đã redirect được gói tin giữa Router gateway và Router, đẩy các gói tin này vào NFQUEUE của OS (Vì ta muốn xử lý các gói tin thay vì để OS tự động chuyển tiếp) và sử dụng một script Python để lấy gói tin từ NFQUEUE (thông qua thư viện `NetfilterQueue`), parse gói tin S7comm, tìm đến vị trí chứa giá trị `Setpoint` ở `DB1.DBW2` và sửa giá trị này từ `2000` thành `1200` trước khi đẩy gói tin trở lại NFQUEUE để tiếp tục được chuyển đi. Script tại [đây](./attacker/mitm/s7_intercept.py).
+
+
+
+
+
+
+
 
 Với việc Parse gói tin S7, có một bộ Praser bằng C: https://github.com/ricardojoserf/s7-parser. Tuy nhiên nó có một vấn đề là không thể parse được phần `Data` trong gói tin S7, nên tôi đã dựa vào đó để viết lại bộ parser bằng Python và bổ sung thêm phần parse `Data` 
 
