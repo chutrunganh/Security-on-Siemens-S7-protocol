@@ -23,93 +23,6 @@ Plan
 
 ICS Kill Chain
 
-# Reconnaissance: 
-
-Có 3 cách
-
-## Quét thông qua Nmap cùng NSE Scripts
-
-```bash
-find /usr/share/nmpa -name "*s7*.nse" # Should return s7-info.nse, s7-enumerate.nse
-
-nmap -p 102 --script s7-info <IP_ADDRESS>
-```
-
-![alt text](image.png)
-
-Basic module type
-Firmware version
-
-## Quét bằng Metasploit
-
-module auxiliary/scanner/scada/s7_info
-
-Sends a single multicast discovery packet
- Targets local Ethernet networks
- Uses Siemens-specic discovery format
- Extracts:
- MAC and IP addresses
- Station name
- Device role/type
-: This module   to the same Ethernet
-segment as the targets.
-Note requires physical connection
-Typical Usage:
-use auxiliary/scanner/scada/profinet_siemens
-set INTERFACE eth0
-run
-The scanner listens for replies and parses device conguration details.
-
-## Script
-
-SiemensScan.py is a   for interacting with S7 devices.
-It supports both passive and active modes of operation, and is well-suited
-for red teaming or audit scenarios.
-Python 3-based script
-Start the Script:
-
-```bash
-sudo python3 SiemensScan.py
-```
-
- Performs local network discovery
- Sends crafted S7Comm packets
- Identies active Siemens devices
- Allows manual IP entry if not on the same subnet
-
-![alt text](image-1.png)
-
-- Flash Device LED: Useful for visually identifying hardware in the eld without
-disrupting operations.
-
-- Print Outputs / Internal Flags: Displays internal states; useful for diagnostics.
-
-- Change Device Name: Alters network identity (can cause confusion in engineering tools).
-
-- Alter Outputs / CPU State: Directly manipulates operational behavior. DO NOT use in
-production environments
- 
-- Change IP Address: Immediately disrupts communication, disconnecting the PLC from its network.
-
-
-## Quét bằng DCP
-
-The very early step that an attacker aims to is discovering the local switched network to get
-an overview of targetable PLCs in the network. In purpose to collect data of the available
-devices in our system, a function called PNIO Scanner based on the PROFINET DCP
-identify-response packets was used by us. Technically, this function sends a DCP identify
-request to the initiated interface (eno1 in our case), and waits for the answers from all
-found devices (PLCs, IE CPs... etc.). Then it sniffs the responses for a predefined time
-interval of 5 seconds and finally saves all results of the sniffing in a python dictionary for
-a further use. The output of executing our PNIO scanner function is shown in Fig. 2 and
-can be broken down into the following steps:
-1. Get local IP, port and subnet
-2. Calculate IP addresses of the subnet
-3. Set up TCP connection
-4. Send DCP identity request
-5. Receive DCP response
-6. Save responses in a Python response file
-7. Stop scanning and disconnect TCP connection
 
 
 # Attack Simulation
@@ -123,6 +36,34 @@ S7-300 thì mật khẩu chì dành cho việc bảo vệ
 > S7 Block Privacy With the S7 Block Privacy, only FBs and FCs can be protecte
 
 
+# Pending
 
+The common security challenges addressed in this project include:
+
+Unauthorized command injection — attackers may send control commands that alter process behavior
+Lack of authentication/authorization — devices may accept requests without verifying the legitimacy of the sender
+Confidentiality exposure — unencrypted communication can be observed and analyzed by adversaries
+Integrity and replay risk — captured traffic may be modified or replayed to trigger unintended actions
+Denial-of-service (DoS) — excessive or malformed traffic can degrade availability and disrupt operations
 
     
+The Core Problem: Industrial Protocols Were Not Designed for Security
+PROFINET and S7 were engineered for reliability and determinism — not authentication or confidentiality. Two weaknesses sit at the heart of this project:
+
+S7 PUT/GET has no source authentication.
+Any device on the network that knows the PLC's IP address, rack, slot, and data block number can read from or write to PLC memory with no credentials required. There are no passwords, tokens, or certificates in the default S7 communication model.
+
+PROFINET DCP is completely unauthenticated at Layer 2.
+PROFINET uses the Discovery and Configuration Protocol (DCP) over EtherType 0x8892 to assign and manage device station names. A PLC will refuse to communicate with a field device if its name does not match the configured value — and any device on the same broadcast domain can change that name with a single Ethernet frame. One unauthenticated Layer-2 packet can drop an entire field IO channel. Conventional IP-based firewalls and IDS tools cannot see this traffic because it never reaches the IP layer.
+
+Incidents such as Stuxnet, the Ukrainian power grid attacks, and the Triton malware have demonstrated that cyber attacks on industrial infrastructure can cause physical damage, disrupt critical services, and endanger human lives. Despite this, many OT environments continue to operate with minimal security monitoring, relying on network isolation as a primary defence.
+
+Proposed Solution
+To address the identified security gaps, this project proposes a passive, network-based intrusion detection architecture tailored for industrial environments:
+
+Deployment of a Suricata-based IDS connected via switch port mirroring
+Custom signature rules targeting S7 protocol function codes and memory manipulation
+Stateful Lua-based behavioural detection for rapid parameter changes
+Layer-2 inspection of PROFINET DCP traffic through EtherType-based filtering
+Signature-based detection rules for Modbus TCP targeting unauthorized write operations and abnormal request rates
+The IDS operates in passive mode, ensuring no traffic injection, no impact on PLC real-time performance, and full visibility of all mirrored network traffic. This architecture aims to detect process manipulation, command replay, flooding attempts, and device reconfiguration attacks — while maintaining industrial determinism.
