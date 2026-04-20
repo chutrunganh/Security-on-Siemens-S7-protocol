@@ -1,7 +1,7 @@
 from time import sleep
 import snap7
 
-IP_ADDRESS = '172.16.16.131'
+IP_ADDRESS = '172.16.16.137'
 TRACK = 0
 SLOT = 2
 

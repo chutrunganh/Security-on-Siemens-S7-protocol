@@ -4,7 +4,7 @@ from time import sleep
 
 # Connect to PLC
 client = Client()
-client.connect(address="172.16.16.131", rack=0, slot=2)
+client.connect(address="172.16.16.144", rack=0, slot=2)
 
 def write_and_read_db(value_to_write):
     # I do not actually know why using Different data type rather than BYTE will return garbage or zero values
