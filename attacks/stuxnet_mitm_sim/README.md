@@ -250,7 +250,73 @@ subprocess.run(f"iptables -t mangle -A FORWARD -p tcp --sport 102 -j NFQUEUE --q
 subprocess.run("iptables -I OUTPUT -p tcp --tcp-flags RST RST -j DROP", shell=True)
 ```
 
-Sau khi đã có được gói tin cần tiến hành chỉnh sửa. Tuy nhiên đã thử tìm trên mạng nhưng không có bộ Paser nào cho S7, chỉ duy nhất có một bộ Praser bằng C tại  https://github.com/ricardojoserf/s7-parser. Tuy nhiên nó có một vấn đề là không thể parse được phần `Data` trong gói tin S7, nên tôi đã dựa vào đó để viết lại bộ parser bằng Python và bổ sung thêm phần parse `Data` 
+Sau khi đã có được gói tin cần tiến hành chỉnh sửa. Cấu trúc của gói tin S7 như sau:
+
+![alt text](Siemens_S7_protocol_stack.png)
+
+Với:
+
+- `TPKT Header`: Cố định là 4 byte
+    ![alt text](image-19.png)
+- `COTP Header`: Cố định là 3 byte
+    ![alt text](image-20.png)
+- `S7 Header`: Byte đầu tiên luôn là `0x32`, ta dùng byte này để phân biệt gói tin S7comm và các gói tin khác. Ngoài ra trong đây có một trường mà ta cần quan tâm đó chính là `ROSCTR` - `ROS Control`, đây là trường quyết định loại lệnh S7comm mà PLC gửi đi. Cụ thể:
+    - `0x01`: Job
+    - `0x02`: Ack
+    - `0x03`: Ack_Data
+
+    Gói tin Read Var Request sẽ có `ROSCTR` là `Job`
+    ![alt text](image-25.png)
+
+    còn gói tin Read Var Response sẽ có `ROSCTR` là `Ack_Data`.
+    ![alt text](image-26.png)
+
+    Mấy trường còn lại trong Header không quan trọng cho dự án này.
+
+- Phần `Param` và `Data` sẽ tuỳ thuộc vào lệnh S7comm mà PLC gửi đi. 
+
+Ở đây chỉ xét tới loại lệnh Read Var [[2]](http://gmiru.com/article/s7comm-part2/). Đầu tiên là về cách định vị các Var muốn đọc. S7 có 3 cách để định vị các Var:
+
+- **Any-type**: Chỉ rõ `area` (ví dụ: `DB`, `M`, `I`, `Q`), `address` (tức byte nào), kiểu dữ liệu. Ví dụ đọc biến `DB1.DBX0.0` sẽ có `area = DB`, `address = 1` (tức byte thứ 1), kiểu dữ liệu là bit Khi này, cấu trúc của phần `Param` sẽ là:
+
+    Với Read Var Request:
+
+    ![alt text](AnyTypeStruct.svg)
+
+    - `Function Code`: `0x04` vì đây là lệnh Read Var (Các kiểu định vị khác như DB-Type, Symbolic cũng giống trường này)
+    - `Item count`: Số lượng Items có sẽ được chỉ định trong gói tin này (Các kiểu định vị khác như DB-Type, Symbolic cũng giống trường này)
+
+    - Các kiểu định vị chỉ khác nhau ở phần cấu trúc của `Request Item`:
+        - `Spec Type`: Luôn là `0x12` 
+        - `Length`: Độ dài của Item
+        - `Syntax ID`: `0x10` cho kiểu Any-type, `0xb0` cho kiểu DB-Type
+
+            Ảnh chụp lưu lượng từ Wireshark cho thấy hai bên trong dự án giao tiếp với nhau bằng kiểu Any-type:
+            ![alt text](image-22.png)
+        - `Variable Type`: xác định kiểu dữ liệu và độ dài của biến (thường sử dụng các kiểu dữ liệu S7 như REAL, BIT, BYTE, WORD, DWORD, COUNTER, …).
+        - `Count`: có thể chọn toàn bộ một mảng các biến có cùng kiểu bằng cách sử dụng một struct item duy nhất. Các biến này phải cùng kiểu, và phải liên tiếp trong bộ nhớ và trường `Count` xác định kích thước của mảng này. Được đặt là 1 cho việc đọc hoặc ghi một biến duy nhất.
+        - Các trường còn lại xách định đĩa chỉ muốn đọc, viết theo đúng cấu trúc của Any-type:
+
+            ![alt text](image-21.png)
+    
+    Với Read Var Response tương tự, chỉ khác phần `Request Item` thành `Response Item`:
+
+    ![alt text](ReadVarResponse.svg)
+
+    - `Error Code`: `0xff` cho success
+    - `Variable Type` và `Count` giống như Request Item
+    - `Data`: Dữ liệu trả về cho Request Item.
+
+    ![alt text](image-23.png)
+
+
+- **DB-Type**: dành riêng cho area DB, ngắn gọn hơn cách trên. Tạm không phân tích vì trong dự án này không sử dụng. Cấu trúc của Request Item và Response Item như sau:
+
+    ![alt text](image-24.png)
+
+- **Symbolic**: Thay vì dùng địa chỉ byte, ta có thể dùng tên biến đã được định nghĩa trong chương trình PLC. Ví dụ: `DB1.CustomProperty1`. Khi này tham số sẽ bao gồm tên biến và kiểu dữ liệu. Cáh này chỉ hỗ trợ trên các dòng S7-1200/1500. Tạm không phân tích vì trong dự án này không sử dụng.
+
+Lý do cần phân tích cấu trúc gói tin là vì đã thử tìm trên mạng nhưng không có bộ Paser nào cho S7, chỉ duy nhất có một bộ Praser bằng C tại  https://github.com/ricardojoserf/s7-parser. Tuy nhiên nó có một vấn đề là không thể parse được phần `Data` trong `Response Item` của gói tin S7, nên tôi đã dựa vào đó để viết lại bộ parser bằng Python và cải tiến thêm để có thể parse được phần `Data` này. 
 
 Thử nhiệm bộ parser bằng cách chạy trên một file PCAP, chỉ định gói tin cần extract (ở đây là gói tin thứ 9):
 ```bash
@@ -330,52 +396,24 @@ Giống với cách gói tin được Parse trong Wireshark:
 ![alt text](image-16.png)
 
 
+Bây giờ việc của [`s7_intercept.py`](./attacker/mitm/s7_intercept.py) là:
 
-Giải thích vị trí byte (Dành cho báo cáo đồ án)
+1. Lấy các gói tin S7 lên từ NFQUEUE, mỗi gói tin gọi hàm `process_packet` để xử lý
 
-Trong ảnh Wireshark bạn gửi, gói tin có Len: 29. Cấu trúc của nó như sau:
+2. Hàm `process_packet` sẽ kiểm tra đây có phải là gói tin S7 comm không bằng cách kiểm tra Byte TPKT `payload[0] == 0x03` -> COTP `payload[4] == 0x02` -> S7 Header `payload[7] == 0x32` -> ROSCTR `payload[8] == 0x03` (tức gói tin Response từ PLC gửi về HMI)
 
-    Byte 0-3: TPKT Header (03 00 00 1d)
+3. Nếu là gói tin S7 comm và là gói tin Response từ PLC gửi về HMI, thì tại đây sẽ có 2 trường hợp (ứng cới 2 cặp request-response đã đề cập ở đầu):
 
-    Byte 4-6: COTP Header (02 f0 80)
+- Gói tin trả lời cho lệnh đọc 1 bit `bCentrifugeStatus` tại `DB2.DBX0.0`
+- Gói tin trả lời cho lệnh 4 byte đọc `iSetpoint` và `iSimSpeed` tại `DB1.DBW2`
 
-    Byte 7: S7 Header (0x32) → Đây mới là nơi bạn cần check.
+Ta lọc để chỉ can thiệp vào gói tin Response trả về `iSetpoint` và `iSimSpeed`. Gói tin này có độ dài 29 Byte, dài hơn gói tin Response trả về `bCentrifugeStatus`. Và vì theo cấu trúc datablock DB1, ta biết biến `iSetpoint` nằm sau `iSimSpeed` nên vị trí của nó sẽ là tại offset 27, 28. Chỉ cần ghi đè giá trị mới vào 2 byte này là xong.
 
-    ...
+4. Xoá checksum để scapy tự tính lại
 
-    Byte 25-28: Data thực tế (04 26 04 b0) → Vị trí bạn cần sửa.
-
-3. Tại sao Parser của bạn phức tạp hơn?
-
-Bộ parser bạn gửi được thiết kế để đọc từ file PCAP (bao gồm cả Header Ethernet 14 byte). Trong khi đó, NetfilterQueue cung cấp gói tin bắt đầu từ lớp IP.
-
-    Do đó, trong script MITM, mình đã bỏ qua phần offset 14 byte của Ethernet để tính toán trực tiếp từ IP Payload.
-
-## ATT&CK của Stuxnet
-
-![alt text](image.png)
-
-- `Discovery`:
-    - `Network sniffing`: MITM để sniff được traffic mạng
-
-    - `Remote System Information Discovery`: Thực hiện các kỹ thuật tấn coogn quét mạng trình bày bên dưới
-
-- `Init Access`: 
-    - `Exploit of Remote Services`: Không khai thác các phần mềm, các dịch vụ từ xa -> Bỏ
-
-    - `Remote Services`: Không sử dụng các dịch vụ từ xa -> Bỏ
-
-    - `Replication Through Removable Media`: Không mô phỏng thông qua USB -> Bỏ
-
-- `Execution`:
-    - `Modify Controller Tasking`: Thay đổi giá trị trong Datablock của PLC để thay đổi hành vi của hệ thống điều khiển
+5. Đẩy gói tin trở lại NFQUEUE để tiếp tục được chuyển đi.
 
 
-Viết thành file Python để chạy  ???
-
-Thêm bước check Process để xem có là PLC/HMI không thì chạy ??? Cài trên máy OpenPLC editor -> checklog để tìm địa chỉ IP của PLC.
-
-Khi này sẽ can thiệp gói tin trên máy HMI luôn thay vì cần MITM ?
 
 
 # References
@@ -383,3 +421,5 @@ Khi này sẽ can thiệp gói tin trên máy HMI luôn thay vì cần MITM ?
 - [Animated video on this attack](https://youtu.be/WXK5XUYFZcg?si=2J6FR6y4AoPdBZUe)
 
 - [Detailed analysis of Stuxnet mechanism](../../docs/Research%20papers/Stuxnet_work_in_details.pdf)
+
+- [Detail on S7 Read Var Request and Response Structure](http://gmiru.com/article/s7comm-part2/)
