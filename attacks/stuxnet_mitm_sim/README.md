@@ -1,7 +1,7 @@
 # Chiến dịch tấn công mã độc Stuxnet
 Trong bối cảnh căng thẳng địa chính trị ở Trung Đông, bất chấp thỏa thuận với cơ quan nguyên tử quốc tế (IAEA) về việc giám sát các hoạt động hạt nhân của Iran, chương trình hạt nhân tại nước này không ngừng được đẩy mạnh gây nên mối đe dọa lớn về an ninh với các nước trung khu vực. 
 
-Dưới thời tổng thống George W. Bush, sau nhiều nỗ lực ngoại giao thất bại, Hoa Kỳ ( đứng đầu bởi Cơ quan NSA) và Israel bắt đầu một chiến dịch tấn công mạng có tên là **Operation Olympic Games** nhằm phá hoại chương trình hạt nhân của Iran. Mục tiêu là làm hư hại các máy ly tâm khí (**gas centrifuges**) được sử dụng để làm giàu Uranium tại nhà máy hạt nhân Natanz ở Iran, từ đó làm chậm lại chương trình hạt nhân của nước này. Chương trình được cho là đã phát triển một loại mã độc có tên là **Stuxnet** từ 2004-2008, tiêu tốn 2 tỷ đô la mỹ cùng các chiến dịch tình báo, xâm nhập phức tạp để đưa được mã độc vào hệ thống mạng nội bộ được cách ly air-gapped hoàn toàn của nhà máy hạt nhân Natanz.
+Dưới thời tổng thống George W. Bush, sau nhiều nỗ lực ngoại giao thất bại, Hoa Kỳ ( đứng đầu bởi Cơ quan NSA) và Israel bắt đầu một chiến dịch tấn công mạng có tên là **Operation Olympic Games** nhằm phá hoại chương trình hạt nhân của Iran. Mục tiêu là làm hư hại các máy ly tâm khí (**gas centrifuges**) được sử dụng để làm giàu Uranium tại nhà máy hạt nhân Natanz ở Iran, từ đó làm chậm lại chương trình hạt nhân của nước này. Chương trình được cho là đã phát triển một loại mã độc có tên là **Stuxnet** từ 2004-2008, tiêu tốn 2 tỷ đô la Mỹ cùng các chiến dịch tình báo, xâm nhập phức tạp để đưa được mã độc vào hệ thống mạng nội bộ được cách ly air-gapped hoàn toàn của nhà máy hạt nhân Natanz.
 
 ![alt text](image-12.png)
 
@@ -33,7 +33,7 @@ Quá trình tấn công:
     Đồng thời, Stuxnet cũng can thiệp vào đầu ra của PLC để gửi phần mềm HMI WinCC đọc dữ liệu sai lệch về tình trạng của máy ly tâm, khiến các kỹ sư không nhận ra rằng máy ly tâm đang bị hư hại.
 
 
-Tuy nhiên điều tinh vi ở đây là Stuxnet chọn lọc các mục tiêu rất kỳ càng. Nếu mục tiêu không thỏa mãn yêu cầu, Stuxnet sẽ ngủ đông để giảm thiểu sự hiện diện của mình. Nó chỉ tấn công vào các PLC điều khiển biến tần có thông số:
+Tuy nhiên điều tinh vi ở đây là Stuxnet chọn lọc các mục tiêu rất kỹ càng. Nếu mục tiêu không thỏa mãn yêu cầu, Stuxnet sẽ ngủ đông để giảm thiểu sự hiện diện của mình. Nó chỉ tấn công vào các PLC điều khiển biến tần có thông số:
 
 - Thuộc dòng Siemens S7-300
 
@@ -60,18 +60,22 @@ Sự tồn tại của Stuxnet chỉ được phát hiện rộng rãi vào năm
 
 Import dự án vào OpenPLC Editor với thư mục [này](./plc_server_code/). Chương trình đang chạy trên PLC có dạng như sau
 
-- Với cấu hình datablock như sau để làm biến đầu vào và ra cho PLC:
+- Với cấu hình datablock như sau để làm biến đầu vào (DB1) và ra (DB2) cho PLC:
 
     <div align="center">
+    <figure>
         <img src="./image-1.png">
-        <i>Khai báo 2 datablock do mỗi datablock trong OpenPLC chỉ cho phép 1 kiểu dữ liệu</i>
+        <figcaption>Khai báo 2 datablock do mỗi datablock trong OpenPLC chỉ cho phép 1 kiểu dữ liệu</figcaption>
+    </figure>
     </div>
 
 - Khai báo tag và chương trình logic (viết dưới dạng Structured Text). Chương trình mô phỏng lại tốc độ quay của động cơ dao động quanh mốc `iSetpoint` được chỉ định bằng `1200`:
 
     <div align="center">
-        <img src="./image-2.png">
-        <i>Khai báo tag và chương trình logic (viết dưới dạng Structured Text)</i>
+        <figure>
+            <img src="./image-2.png">
+            <figcaption>Khai báo tag và chương trình logic (viết dưới dạng Structured Text)</figcaption>
+        </figure>
     </div>
 
     Gồm các tags (Giống dạng binding variables trong IT):
@@ -88,46 +92,74 @@ Import dự án vào OpenPLC Editor với thư mục [này](./plc_server_code/).
 Import dự án vào FUXA với thư mục [này](./hmi/fuxa_hmi_design.json):
 
 <div align="center">
+    <figure>
     <img src="./image-8.png">
-    <i>Khai báo các HMI tags tương ứng với các PLC tags cần giám sát</i>
+    <figcaption>Khai báo các HMI tags tương ứng với các PLC tags cần giám sát</figcaption>
+    </figure>
 </div>
 
 <div align="center">
-    <img src="./HMI.gif">
-    <i>Giao diện HMI, hiện tại máy đang hoạt động quanh mức 1200 nên sẽ hiển thị màu xanh</i>
+    <figure>
+        <img src="./HMI.gif">
+        <figcaption>Giao diện HMI, hiện tại máy đang hoạt động quanh mức 1200 nên sẽ hiển thị màu xanh</figcaption>
+    </figure>
 </div>
 
-Trong Debugger của OpenPLC Editor:
+Trong Debugger của OpenPLC Editor cũng hiển thị thông tin tương tự:
 
-![alt text](image-17.png)
+<div align="center">
+    <figure>
+        <img src="./image-17.png">
+        <figcaption>Thông tin tương tự trong Debugger của OpenPLC Editor</figcaption>
+    </figure>
+</div>
+
+> [!NOTE]
+> Nên bật OpenPLC Editor nên để kiểm tra lại xem chương trình đã được nạp vào PLC chưa trước khi kết nối tới HMI hay đọc ghi vào PLC
 
 Thu thập gói tin trên máy HMI thấy giao tiếp giữa HMI và PLC là sự lặp đi lặp lại của 2 cặp request-response sau:
 
 - Cặp đầu tiên là request yêu cầu đọc 4 byte tại DB1 tại bit 0 của byte 0, tức ứng với biến `iSimSpeed` và `iSetpoint`:
 
-![alt text](image-4.png)
+    <div align="center">
+        <figure>
+            <img src="./image-4.png">
+            <figcaption>Request yêu cầu đọc 4 byte tại DB1 tại bit 0 của byte 0, tức ứng với biến `iSimSpeed` và `iSetpoint`</figcaption>
+        </figure>
+    </div>
 
-*Request*
+ 
 
-![alt text](image-5.png)
+    <div align="center">
+        <figure>
+            <img src="./image-5.png">
+            <figcaption>Response trả về giá trị của biến `iSimSpeed` và `iSetpoint`</figcaption>
+        </figure>
+    </div>
 
-*Response*
-
-Biến `iSimSpeed` là `042d`, biến `iSetpoint` là `04b0`. S7 dùng Little Endian, nên giá trị `042d` tương ứng với `1069` và `04b0` tương ứng với `1200`.
+    Biến `iSimSpeed` là `042d` do nó nằm ở trước trong cấu hình các PLC tags, biến `iSetpoint` là `04b0`. S7 dùng Little Endian, nên giá trị `042d` tương ứng với `1069` và `04b0` tương ứng với `1200`.
 
 - Cặp thứ hai là request yêu cầu đọc 1 byte tại DB2 tại bit 0 của byte 0, tức ứng với biến `bCentrifugeStatus`:
 
+<div align="center">
+    <figure>
+        <img src="./image-6.png">
+        <figcaption>Request yêu cầu đọc 1 byte tại DB2 tại bit 0 của byte 0, tức ứng với biến `bCentrifugeStatus`</figcaption>
+    </figure>
+</div>
 
-![alt text](image-6.png)
-
-![alt text](image-7.png)
-
+<div align="center">
+    <figure>
+        <img src="./image-7.png">
+        <figcaption>Response trả về giá trị của biến `bCentrifugeStatus`. Hiện đang là 0 tức máy đang hoạt động bình thường</figcaption>
+    </figure>
+</div>
 
 ## Attacker
 
 Từ máy tấn công sẽ làm đồng thời:
 
-1. Tạo một lệnh ghi để ghi vào giá trị của một biến nằm trong Datablock của PLC sử dụng thư viện Snap 7 hoặc S7 Comm của Python. Ở đây sẽ chỉnh sửa giá trị biến `Setpoint` nằm ở vị trí `DB1.DBW2` từ `1200` thành `2000`. Script tại [đây](./attacker/test_readwrite_db_via_snap7.py) hoặc [đây](./attacker/test_readwrite_db_via_pythonS7comm.py). Output:
+1. **Tạo một lệnh ghi để ghi** giá trị của một biến nằm trong Datablock của PLC sử dụng thư viện Snap 7 hoặc S7 Comm của Python. Việc ghi này dễ dàng do giao thức S7 không có cơ chế xác thực. Ở đây sẽ chỉnh sửa giá trị biến `Setpoint` nằm ở vị trí `DB1.DBW2` từ `1200` thành `2000`. Script tại [đây (Bản dùng thư viện Snap7)](./attacker/test_readwrite_db_via_snap7.py) hoặc [đây (Bản dùng thư viện S7 Comm)](./attacker/test_readwrite_db_via_pythonS7comm.py). Output:
 
     ```
     Current Speed  | Setpoint Speed    | Centrifuge Status
@@ -136,7 +168,7 @@ Từ máy tấn công sẽ làm đồng thời:
     b'\x07\xe4'    |    b'\x07\xd0'    |    b'\x01'
     ```
 
-    `iSetpoint` từ `1200` (0x04b0) thành `2000` (0x07d0) và khi này trạng thái `bCentrifugeStatus` từ `0` thành `1`.  Nếu như chưa chạy scritpt can thiệp thì trên HMI sẽ thấy máy đang dao động quanh mức 2000:
+    `iSetpoint` từ `1200` (0x04b0) thành `2000` (0x07d0) và khi này trạng thái `bCentrifugeStatus` từ `0` thành `1`.  Nếu như chưa chạy script can thiệp thì trên HMI sẽ thấy máy đang dao động quanh mức 2000:
 
     <div align="center">
         <img src="./image-14.png">
@@ -146,14 +178,14 @@ Từ máy tấn công sẽ làm đồng thời:
 
     <div align="center">
         <img src="./image-15.png">
-        <i>Kiểm tra trong các gói tin PLC gửi tới HMI để thấy giá trị của biến `iSetpoint` đã được thay đổi</i>
+        <i>Kiểm tra trong các gói tin PLC gửi tới HMI để thấy giá trị của biến `iSetpoint` đã được thay đổi thành `2000` (0x07d0)</i>
     </div>
 
     Tấn công thay đổi giá trị của PLC thành công, giờ ta sẽ can thiệp vào giao tiếp giữa HMI và PLC để HMI không nhận ra sự thay đổi này.
 
     
 
-2. Tấn công Man in the middle bằng kỹ thuật ARP Spoofing giữa cổng của Router (`.60.1`) và HMI (`.60.10`) thông qua tool **Bettercap**:
+2. **Tấn công Man in the middle bằng kỹ thuật ARP Spoofing** giữa cổng của Router (`.60.1`) và HMI (`.60.10`) thông qua tool **Bettercap**:
 
 
     ```bash
@@ -200,27 +232,48 @@ Từ máy tấn công sẽ làm đồng thời:
         <i>Gói tin S7comm và ARP Spoofing xen kẽ nhau</i>
     </div>
 
-3. Chỉnh sửa gói tin S7comm để thay đổi giá trị `Setpoint` từ `2000` thành `1200`. Sau khi Bettercap đã redirect được gói tin giữa Router gateway và Router, đẩy các gói tin này vào NFQUEUE của OS (Vì ta muốn xử lý các gói tin thay vì để OS tự động chuyển tiếp) và sử dụng một script Python để lấy gói tin từ NFQUEUE (thông qua thư viện `NetfilterQueue`), parse gói tin S7comm, tìm đến vị trí chứa giá trị `Setpoint` ở `DB1.DBW2` và sửa giá trị này từ `2000` thành `1200` trước khi đẩy gói tin trở lại NFQUEUE để tiếp tục được chuyển đi. Script tại [đây](./attacker/mitm/s7_intercept.py).
+3. **Chỉnh sửa gói tin S7comm** được gửi từ PLC tới HMI để thay đổi giá trị `Setpoint` từ `2000` thành `1200`. Sau khi Bettercap đã redirect được gói tin giữa Router gateway và Router, đẩy các gói tin này vào NFQUEUE của OS (Vì ta muốn xử lý các gói tin thay vì để OS tự động chuyển tiếp) và sử dụng một script Python để lấy gói tin từ NFQUEUE (thông qua thư viện `NetfilterQueue`), parse gói tin S7comm, tìm đến vị trí chứa giá trị `Setpoint` ở `DB1.DBW2` và sửa giá trị này từ `2000` thành `1200` trước khi đẩy gói tin trở lại NFQUEUE để tiếp tục được chuyển đi. Script tại [đây](./attacker/mitm/s7_intercept.py).
 
 <div align="center">
+<figure>
     <img src="./image-18.png">
-    <i>Tấn công thành công khi thực tế máy đang chạy ở mức > 1500 Hz (màu đỏ), nhưng Setpoint vẫn hiển thị ở mức 1200</i>
+    <figcaption>Tấn công thành công khi thực tế máy đang chạy ở mức > 1500 Hz (màu đỏ), nhưng Setpoint vẫn hiển thị ở mức 1200</figcaption>
+</figure>
+</div>
+
+Kiểm tra các gói tin:
+
+<div align="center">
+<figure>
+     <img src="./image-28.png">
+    <figcaption>Giá trị `iSetpoint` trên gói tin tới HMI đang là 1200 (04b0) </figcaption>
+</figure>
 </div>
 
 <div align="center">
+<figure>
+     <img src="./image-29.png">
+    <figcaption>Giá trị `bCentrifugeStatus` trên gói tin tới HMI 01</figcaption>
+</figure>
+</div>
+
+
+<div align="center">
+<figure>
     <img src="./image-3.png">
-    <i>Kiểm tra debugger của OpenPLC Editor cũng cho thấy thực tế máy đang chạy giao động quanh mốc 2000</i>
+    <figcaption>Kiểm tra debugger của OpenPLC Editor cũng cho thấy thực tế máy đang chạy giao động quanh mốc 2000</figcaption>
+</figure>
 </div>
 
 ## Phân tích tấn công
 
-Phần khó nhất của cuộc tấn công này là nào sao sửa đổi gói tin rồi chuyển tiếp lại được. Để đảm bảo tốc độ, ở đây sử dụng phương pháp ARP Spoofing bằng Bettercap để redirect gói tin đến máy Attacker, tại đây, gói tin sẽ được đẩy vào NFQUEUE để Python app gọi lên xử lý thay vì để OS Kernel tự động forwảd gói tin đi. 
+Phần khó nhất của cuộc tấn công này là làm sao sửa đổi gói tin rồi chuyển tiếp lại được. Để đảm bảo tốc độ, ở đây sử dụng phương pháp ARP Spoofing bằng Bettercap để redirect gói tin đến máy Attacker, tại đây, gói tin sẽ được đẩy vào NFQUEUE để Python app gọi lên xử lý thay vì để OS Kernel tự động forward gói tin đi. 
 
 *Một phần vì Bettercap chỉ cung cấp khả năng chỉnh sửa gói tin khi intercept bằng Javascript mà ngôn ngữ này lại không phù hợp để viết bộ S7 Parser nên mới phải làm cách này*
 
 ```Python
 # 1. Bật IP Forwarding
-    subprocess.run("sysctl -w net.ipv4.ip_forward=1 > /dev/null", shell=True)
+subprocess.run("sysctl -w net.ipv4.ip_forward=1 > /dev/null", shell=True)
 
 # 2. Tắt RP Filter (Tránh rớt gói tin chiều về từ Router)
 # Tránh kernel tự động drop gói tin lạ -> Cho phép gói tin từ PLC về được phép qua
@@ -256,16 +309,16 @@ Sau khi đã có được gói tin cần tiến hành chỉnh sửa. Cấu trúc
 
 Với:
 
-- `TPKT Header`: Cố định là 4 byte
+- `TPKT Header`: Cố định là 4 byte như đã trình bày trong phần lý thuyết về giao thức S7.
     ![alt text](image-19.png)
-- `COTP Header`: Cố định là 3 byte
+- `COTP Header`: Cố định là 3 byte như đã trình bày trong phần lý thuyết về giao thức S7.
     ![alt text](image-20.png)
 - `S7 Header`: Byte đầu tiên luôn là `0x32`, ta dùng byte này để phân biệt gói tin S7comm và các gói tin khác. Ngoài ra trong đây có một trường mà ta cần quan tâm đó chính là `ROSCTR` - `ROS Control`, đây là trường quyết định loại lệnh S7comm mà PLC gửi đi. Cụ thể:
     - `0x01`: Job
     - `0x02`: Ack
     - `0x03`: Ack_Data
 
-    Gói tin Read Var Request sẽ có `ROSCTR` là `Job`
+    Như trong trường hợp này, quan sát thấy gói tin Read Var Request sẽ có `ROSCTR` là `Job`
     ![alt text](image-25.png)
 
     còn gói tin Read Var Response sẽ có `ROSCTR` là `Ack_Data`.
@@ -273,40 +326,40 @@ Với:
 
     Mấy trường còn lại trong Header không quan trọng cho dự án này.
 
-- Phần `Param` và `Data` sẽ tuỳ thuộc vào lệnh S7comm mà PLC gửi đi. 
+- Phần `Param` và `Data` sẽ tuỳ thuộc vào loại lệnh S7comm đang được sử dụng, ví dụ như Setup Communication, Read Var, Write Var, ...
 
-Ở đây chỉ xét tới loại lệnh Read Var [[2]](http://gmiru.com/article/s7comm-part2/). Đầu tiên là về cách định vị các Var muốn đọc. S7 có 3 cách để định vị các Var:
+Ở đây chỉ xét tới phần `Param` và `Data` của loại lệnh **Read Var** [[2]](http://gmiru.com/article/s7comm-part2/). Đầu tiên là về cách định vị các Var muốn đọc. S7 có 3 cách để định vị các Var:
 
 - **Any-type**: Chỉ rõ `area` (ví dụ: `DB`, `M`, `I`, `Q`), `address` (tức byte nào), kiểu dữ liệu. Ví dụ đọc biến `DB1.DBX0.0` sẽ có `area = DB`, `address = 1` (tức byte thứ 1), kiểu dữ liệu là bit Khi này, cấu trúc của phần `Param` sẽ là:
 
-    Với Read Var Request:
+    Với Read Var **Request**:
 
     ![alt text](AnyTypeStruct.svg)
 
-    - `Function Code`: `0x04` vì đây là lệnh Read Var (Các kiểu định vị khác như DB-Type, Symbolic cũng giống trường này)
-    - `Item count`: Số lượng Items có sẽ được chỉ định trong gói tin này (Các kiểu định vị khác như DB-Type, Symbolic cũng giống trường này)
+    - `Function Code`: `0x04` vì đây là lệnh Read Var (Các kiểu định vị khác như DB-Type, Symbolic cũng giống trường này vì chúng đều thuộc nhóm command đọc ghi biến (`0x04`/`0x05`).)
+    - `Item count`: Số lượng Items có sẽ được chỉ định trong gói tin này (Các kiểu định vị khác như DB-Type, Symbolic cũng giống trường này). Như trong hình là có 2 items.
 
     - Các kiểu định vị chỉ khác nhau ở phần cấu trúc của `Request Item`:
         - `Spec Type`: Luôn là `0x12` 
-        - `Length`: Độ dài của Item
+        - `Length`: Độ dài của Item này
         - `Syntax ID`: `0x10` cho kiểu Any-type, `0xb0` cho kiểu DB-Type
 
-            Ảnh chụp lưu lượng từ Wireshark cho thấy hai bên trong dự án giao tiếp với nhau bằng kiểu Any-type:
+            Ảnh chụp lưu lượng từ Wireshark cho thấy hai bên trong dự án giao tiếp với nhau bằng kiểu Any-type `0x10`:
             ![alt text](image-22.png)
+
         - `Variable Type`: xác định kiểu dữ liệu và độ dài của biến (thường sử dụng các kiểu dữ liệu S7 như REAL, BIT, BYTE, WORD, DWORD, COUNTER, …).
         - `Count`: có thể chọn toàn bộ một mảng các biến có cùng kiểu bằng cách sử dụng một struct item duy nhất. Các biến này phải cùng kiểu, và phải liên tiếp trong bộ nhớ và trường `Count` xác định kích thước của mảng này. Được đặt là 1 cho việc đọc hoặc ghi một biến duy nhất.
-        - Các trường còn lại xách định đĩa chỉ muốn đọc, viết theo đúng cấu trúc của Any-type:
+        - Các trường còn lại xách định địa chỉ muốn đọc, viết theo đúng cấu trúc của Any-type:
 
             ![alt text](image-21.png)
     
-    Với Read Var Response tương tự, chỉ khác phần `Request Item` thành `Response Item`:
+    Với Read Var **Response** tương tự, chỉ thay thế phần `Request Item` thành `Response Item`:
 
     ![alt text](ReadVarResponse.svg)
 
     - `Error Code`: `0xff` cho success
     - `Variable Type` và `Count` giống như Request Item
-    - `Data`: Dữ liệu trả về cho Request Item.
-
+    - `Data`: Trả về dữ liệu cho các Items tương ứng được hỏi trong Request Item.
     ![alt text](image-23.png)
 
 
@@ -314,11 +367,11 @@ Với:
 
     ![alt text](image-24.png)
 
-- **Symbolic**: Thay vì dùng địa chỉ byte, ta có thể dùng tên biến đã được định nghĩa trong chương trình PLC. Ví dụ: `DB1.CustomProperty1`. Khi này tham số sẽ bao gồm tên biến và kiểu dữ liệu. Cáh này chỉ hỗ trợ trên các dòng S7-1200/1500. Tạm không phân tích vì trong dự án này không sử dụng.
+- **Symbolic**: Thay vì dùng địa chỉ byte, ta có thể dùng tên biến đã được định nghĩa trong chương trình PLC. Ví dụ: `DB1.CustomProperty1`. Khi này tham số sẽ bao gồm tên biến và kiểu dữ liệu. Cách này chỉ hỗ trợ trên các dòng S7-1200/1500. Tạm không phân tích vì trong dự án này không sử dụng.
 
-Lý do cần phân tích cấu trúc gói tin là vì đã thử tìm trên mạng nhưng không có bộ Paser nào cho S7, chỉ duy nhất có một bộ Praser bằng C tại  https://github.com/ricardojoserf/s7-parser. Tuy nhiên nó có một vấn đề là không thể parse được phần `Data` trong `Response Item` của gói tin S7, nên tôi đã dựa vào đó để viết lại bộ parser bằng Python và cải tiến thêm để có thể parse được phần `Data` này. 
+Lý do cần phân tích cấu trúc gói tin là vì đã thử tìm trên mạng nhưng không có bộ Parser nào cho S7, chỉ duy nhất có một bộ Parser bằng C tại  https://github.com/ricardojoserf/s7-parser. Tuy nhiên nó có một vấn đề là không thể parse được phần `Data` trong `Response Item` của gói tin S7, nên dự án đã dựa vào đó để viết lại bộ parser bằng Python và cải tiến thêm để có thể parse được phần `Data` này. Script tại [đây](./attacker/mitm/s7_parser.py).
 
-Thử nhiệm bộ parser bằng cách chạy trên một file PCAP, chỉ định gói tin cần extract (ở đây là gói tin thứ 9):
+Thử nghiệm bộ parser bằng cách chạy trên một file PCAP, chỉ định gói tin cần extract (ở đây là gói tin thứ 9):
 ```bash
 uv run .\s7_parser.py .\wincc_s300_setup-alarm-read-write.pcapng 9
 ```
@@ -402,18 +455,22 @@ Bây giờ việc của [`s7_intercept.py`](./attacker/mitm/s7_intercept.py) là
 
 2. Hàm `process_packet` sẽ kiểm tra đây có phải là gói tin S7 comm không bằng cách kiểm tra Byte TPKT `payload[0] == 0x03` -> COTP `payload[4] == 0x02` -> S7 Header `payload[7] == 0x32` -> ROSCTR `payload[8] == 0x03` (tức gói tin Response từ PLC gửi về HMI)
 
-3. Nếu là gói tin S7 comm và là gói tin Response từ PLC gửi về HMI, thì tại đây sẽ có 2 trường hợp (ứng cới 2 cặp request-response đã đề cập ở đầu):
+3. Nếu là gói tin S7 comm và là gói tin Response từ PLC gửi về HMI, thì tại đây sẽ có 2 trường hợp (ứng với 2 cặp request-response đã đề cập ở đầu):
 
 - Gói tin trả lời cho lệnh đọc 1 bit `bCentrifugeStatus` tại `DB2.DBX0.0`
 - Gói tin trả lời cho lệnh 4 byte đọc `iSetpoint` và `iSimSpeed` tại `DB1.DBW2`
 
-Ta lọc để chỉ can thiệp vào gói tin Response trả về `iSetpoint` và `iSimSpeed`. Gói tin này có độ dài 29 Byte, dài hơn gói tin Response trả về `bCentrifugeStatus`. Và vì theo cấu trúc datablock DB1, ta biết biến `iSetpoint` nằm sau `iSimSpeed` nên vị trí của nó sẽ là tại offset 27, 28. Chỉ cần ghi đè giá trị mới vào 2 byte này là xong.
+    Ta lọc để chỉ can thiệp vào gói tin Response trả về `iSetpoint` và `iSimSpeed`. Gói tin này có độ dài 29 Byte, dài hơn gói tin Response trả về `bCentrifugeStatus`. Và vì theo cấu trúc datablock DB1, ta biết biến `iSetpoint` nằm sau `iSimSpeed` nên vị trí của nó sẽ là tại offset 27, 28. Chỉ cần ghi đè giá trị mới vào 2 byte này là xong.
 
 4. Xoá checksum để scapy tự tính lại
 
 5. Đẩy gói tin trở lại NFQUEUE để tiếp tục được chuyển đi.
 
+Lưu ý trên HMI Fuxa khi cấu hình tham số Pooling:
 
+![alt text](image-27.png)
+
+Tốc độ chỉnh sửa gói tin và gửi lại cần phải nhanh hơn tần số polling này để tránh có hiện tượng có gói tin bị mất.
 
 
 # References

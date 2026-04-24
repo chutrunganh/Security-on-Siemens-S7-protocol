@@ -225,7 +225,7 @@ Một command sẽ bao gồm:
 
 ![alt text](image.png)
 
-*Three-way Handshake của TCP giữa `192.168.1.10` và PLC `192.168.1.40` ở gói tin 5, 6, 6*
+*Three-way Handshake của TCP giữa `192.168.1.10` và PLC `192.168.1.40` ở gói tin 5, 6, 7*
 
 
 **2. Sau khi kết nối TCP được thiết lập, Client sẽ gửi một yêu cầu kết nối **COTP CR** (COTP Connect Request) tới PLC**. Yêu cầu này bao gồm thông tin về TSAP để định danh dịch vụ và vị trí CPU mà Client muốn giao tiếp.
@@ -365,108 +365,7 @@ S7 Communication
 Với `Protocol Data Unit Reference: 512` refer tới id của gói tin request trước đó, `ROSCTR: Ack_Data (3)` để xác nhận yêu cầu thiết lập giao tiếp đã được chấp nhận và không có lỗi nào xảy ra (`Error class: No error (0x00)`, `Error code: 0x00`). PLC chấp nhận các thông số kết nối mà Client đề xuất, trừ thông số PDU length được PLC giảm xuống còn `240` Byte.
 
 
-**4. Sau khi thiết lập xong kết nối S7, hai bên có thể bắt đầu trao đổi dữ liệu.**
-
-Ở đây client thực hiện đọc thông tin trạng thái của PLC thông qua subfunction `Read SZL` (Subfunction 1 trong nhóm chức năng CPU functions) của S7comm.
-Ví dụ với gói tin số 13:
-
-```
-S7 Communication
-    . . .
-    Parameter: (Request) ->(CPU functions) ->(Read SZL)
-        Function: CPU services (0x00)
-        Item count: 1
-        Variable specification: 0x12
-        Length of following address specification: 4
-        Syntax Id: ParameterShort (0x11)
-        01.. .... = Type: Request (1)
-        ..00 0100 = Function group: CPU functions (4)
-        Subfunction: Read SZL (1)
-        Sequence number: 0
-
-    Data (SZL-ID: 0x0132, Index: 0x0004)
-        Return code: Success (0xff)
-        Transport size: OCTET STRING (0x09)
-        Length: 4
-        . . 
-        SZL-Index: 0x0004 [Object management system status]
-```
-
-Request này yêu cầu PLC trả về thông tin về trạng thái hệ thống quản lý đối tượng (Object management system status) thông qua chức năng đọc SZL. Yêu cầu đọc tại địa chỉ SZL-ID `0x0132` và Index `0x0004`. PLC phản hồi lại với mã trả về `Success (0xff)` và dữ liệu trả về là một chuỗi 4 byte đại diện cho trạng thái hệ thống quản lý đối tượng của PLC.
-
-
-PLC sau đó phản hồi trong gói tin số 14:
-
-```
-S7 Communication
-    . . .
-    Parameter: (Response) ->(CPU functions) ->(Read SZL)
-        Function: CPU services (0x00)
-        Item count: 1
-        Variable specification: 0x12
-        Length of following address specification: 8
-        Syntax Id: ParameterExtended (0x12)
-        10.. .... = Type: Response (2)
-        ..00 0100 = Function group: CPU functions (4)
-        Subfunction: Read SZL (1)
-        Sequence number: 1
-        Data unit reference number: 0
-        Last data unit: Yes (0x00)
-        Error code: No error (0x0000)
-
-    Data (SZL-ID: 0x0132, Index: 0x0004)
-        Return code: Success (0xff)
-        Transport size: OCTET STRING (0x09)
-        Length: 48
-       . . .
-        SZL data tree (list count no. 1)
-            Index: 0x0004
-            key (Protection level for the key switch, possible values: 1,2 or 3): 1
-            param (Assigned protection level, possible values: 0, 1, 2 or 3): 0
-            real (Valid protection level of the CPU, possible values: 1, 2 or 3): 1
-            bart_sch (Position of the mode switch): RUN_P (2)
-            crst_wrst (Setting of the CRST/WRST switch): undefined, does not exist or cannot be ascertained (0)
-            ken_f (Reserved): 0x0000
-            ken_rel (ID for valid version identifications/checksums): 0x5656
-            ken_ver1_hw (Version ID/checksum 1 of the hardware configuration): 0x04bc
-            ken_ver2_hw (Version ID/checksum 2 of the hardware configuration): 0xd5a3
-            ken_ver1_awp (Version ID/checksum 1 of the user program): 0x0184
-            ken_ver2_awp (Version ID/checksum 2 of the user program): 0xb2d6
-            res (Reserved): 02000000000000000000000000000000
-```
-
-**SZL hoặc SSL (System Status Lists)** là một danh sách ảo miêu tả trạng thái hiện tại của PLC. PLC không lưu sẵn danh sách này mà nó chỉ tạo ra mỗi khi có yêu cầu đọc SZL từ Client. Khi nhận được yêu cầu, PLC sẽ thu thập thông tin trạng thái hiện tại của các thành phần trong PLC, đóng gói chúng vào một cấu trúc dữ liệu theo định dạng SZL và trả về cho Client. Danh sách SZL dài 16 bit như sau, cấu trúc như sau:
-
-![alt text](image-8.png)
-
-Với:
-
-- `Module class`: xác định loại thiết bị muốn đọc
-
-    | Module class | Binary value |
-    |---|---|
-    |CPU| 0000|
-    | IM (Interface module) | 0100|
-    | FM (Function module) | 1000|
-    | CP (Communication processor) | 1100|
-
-- `Partial list number`: danh sách SZL được chia thành các danh sách con nhỏ hơn (partial list). Trường này xác định lấy danh sách con nào trong số các danh sách con của module class đó.
-
-- `Extract`: Trường này xác định lấy phần nào trong một danh sách con đó, ví dụ như đọc phần thông báo lỗi, phần đặc tính cơ bản, ...
-
-Với yêu cầu đọc SZL-ID `0x0132` và Index `0x0004`
-
-```
-0x0132 =   0000    0001   00110010
-            |       |       |
-            |       |       +-- Danh sách con: Dữ liệu truyền thông
-            |       +--  Lấy nhóm dữ liệu được xác định theo index kèm theo 
-            +-- Module class: CPU
-```
-
-Ở đây index là `0x0004`, tức sẽ lấy dữ liệu liên quan đến trạng thái của công tắc chế độ vận hành (operating mode switch) và các dữ liệu bảo vệ.
-
-Quan sát response của PLC, danh sách SZL này được trả về trong phần `Data`. PLC phản hồi trạng thái hiện của các thông số như `key`, `param`, `real` liên quan đến mức độ bảo vệ của công tắc khóa (key switch) và công tắc chế độ (mode switch) của PLC. `bart_sch` cho biết vị trí của công tắc chế độ, ở đây là `RUN_P (2)`, nghĩa là PLC đang ở chế độ chạy + cho phép chỉnh sửa code. Các thông số khác như `ken_ver1_hw`, `ken_ver2_hw` cung cấp thông tin về phiên bản phần cứng của PLC, trong khi `ken_ver1_awp`, `ken_ver2_awp` cung cấp thông tin về phiên bản chương trình người dùng đang chạy trên PLC.
+**4. Sau khi thiết lập xong kết nối S7, hai bên có thể bắt đầu trao đổi dữ liệu** bằng các lệnh của S7 như Read/Write Var, ReadSZL, ... Tuỳ mỗi lệnh mà cấu trúc gói tin sẽ khác nhau.
 
 
 

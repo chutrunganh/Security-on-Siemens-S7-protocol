@@ -66,13 +66,3 @@ Layer-2 inspection of PROFINET DCP traffic through EtherType-based filtering
 Signature-based detection rules for Modbus TCP targeting unauthorized write operations and abnormal request rates
 The IDS operates in passive mode, ensuring no traffic injection, no impact on PLC real-time performance, and full visibility of all mirrored network traffic. This architecture aims to detect process manipulation, command replay, flooding attempts, and device reconfiguration attacks — while maintaining industrial determinism.
 
-
-
-| Tuần | Task | Output |
-|------|------|--------|
-| 1 (7/4-10/4) | Tìm hiểu các giải pháp Trellix: ePO, Agent, ENS| Hiểu được cơ bản về các giải pháp này, cách hoạt động và cách triển khai |
-| 2 (11/4-17/4) | Tìm hiểu quy trình chuẩn hoá Endpoiny VF_HP, viết script tạo thư mục và kiểm tra trên các môi trường khác nhau, dựng lab mô phỏng OT | Tìm hiểu các khái niệm cơ bản trong OT, mô hình mạng PRUDE, giao thức S7 Comm|
-| 3 (18/4-24/4) | Tiến hành các kịch bản tấn công vào PLC: MITM, Scanning | Demo tấn công, file pcap của các kịch bản tấn công |
-| 4 (25/4-1/5) | Tiến hành các kịch bản tấn công DoS, gửi lệnh thao tác qua DCP, dựng IDS sử dụng Suricata | Demo tấn công, file pcap của các kịch bản tấn công |
-| 5 (2/5-8/5) | Nghiên cứu các đặc tính tấn công để viết rule ngăn chặn | Tập luật ngăn chặn, demo tấn công, file pcap của các kịch bản tấn công |
-| 6 (9/5-15/5) | Xuống nhà máy VF_HP | _ |
