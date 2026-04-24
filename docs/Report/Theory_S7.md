@@ -30,7 +30,7 @@ Các PLC của Siemens có thể giao tiếp trên cáp Ethernet vật lý sử 
 
 - **Open TCP/IP**: triển khai tiêu chuẩn của TCP/IP, nghĩa là PLC dùng TCP/IP bình thường. Khi này ta có thể triển khai chương trình như lập trình mạng thông thường dùng socker, TCP, UDP. Tuy nhiên, giao thức này chỉ truyền dữ liệu dưới dạng luồng (stream-based), mà các lệnh điều khiển của Siemens cần có độ dài cố định (Data Block), nên chương trình PLC FC (Function Code) và FB (Function Block) lập trình viên phải tự đóng gói message (packetize) từ dữ liệu stream thành các block.
 
-- **S7 hay S7comm hoặc S7 Communication và bản nâng cấp sau này là S7 comm plus**: Đây là giao thức độc quyềng của Siemens xuất hiện lần đầu vào năm 1994 cùng với sự ra đời của dòng sản phẩm Simatic S7-200, S7-300 và S7-400. Trong kiến trúc mạng công nghiệp, giao thức S7 hoạt động theo mô hình request-response. 
+- **S7 hay S7comm hoặc S7 Communication và bản nâng cấp sau này là S7 comm plus**: Đây là giao thức độc quyền của Siemens xuất hiện lần đầu vào năm 1994 cùng với sự ra đời của dòng sản phẩm Simatic S7-200, S7-300 và S7-400. Trong kiến trúc mạng công nghiệp, giao thức S7 hoạt động theo mô hình request-response. 
 
     *Một số tài liệu gọi bằng cái tên khác như mô hình client-server (với S7 chạy trên nền Ehternet hiện đại với hạ tầng mạng có switch có khả năng kết nối full-duplex) hoặc master-slave (Với S7 chạy trên mạng Fieldbus cũ như PROFIBUS với hạ tầng mạng chỉ là một bus chung duy nhất). Dù gọi là gì thì về bản chất, S7 vẫn tuân theo mô hình giao tiếp request-response, tức là một bên gửi yêu cầu và bên kia trả lời [[4]](#4).*
 
@@ -38,7 +38,7 @@ Các PLC của Siemens có thể giao tiếp trên cáp Ethernet vật lý sử 
 
     ![Siemens S7 network stack](./Siemens_S7.png)
 
-    Tuy nhiên để tăng tính tương thích, nó được cải tiếp để chạy trên nền **ISO TCP** (theo tiêu chuẩn RFC 1006) mà giao thức này lại chạy trên **TCP/IP**. Theo thiết kế gốc thì mô hình ISO TCP là một giao thức dạng gói (packet-based) hay block oriented , tức là mỗi tin nhắn có độ dài rõ ràng. Mỗi block này được gọi là một **PDU (Protocol Data Unit)**. Độ dài của PDU này dựa vào bộ vi xử lý giao tiếp bên trong PLC (**communication processors (CP)**) và được đàm phán giữa các thiết bị khi thiết lập kết nối. 
+    Tuy nhiên để tăng tính tương thích, S7 Comm được cải tiếp để chạy trên nền **ISO TCP** (theo tiêu chuẩn RFC 1006) mà giao thức ISO TCP này lại chạy trên **TCP/IP**. Theo thiết kế gốc thì mô hình ISO TCP là một giao thức dạng gói (packet-based) hay block oriented , tức là mỗi tin nhắn có độ dài rõ ràng. Mỗi block này được gọi là một **PDU (Protocol Data Unit)**. Độ dài của PDU này dựa vào bộ vi xử lý giao tiếp bên trong PLC (**communication processors (CP)**) và được đàm phán giữa các thiết bị khi thiết lập kết nối. 
 
 ### Cách đọc địa chỉ trong Siemen S7
 
@@ -126,14 +126,15 @@ Trong giao thức ISO TCP mà S7 chạy trên đó, để ISO có thể tương 
 2. Là giao thức dạng luồng (stream-based) -> Sử dụng **TPKT (ISO Transport Service on top of TCP)** đóng vai trò làm vỏ bọc để giúp TCP (vốn là dạng luồng) có thể hiểu được các gói tin có độ dài cố định. 
 
     Cụ thể, ngăn xếp giao thức (protocol stack) của Siemens sẽ tự động chèn thêm một header TPKT vào trước dữ liệu COTP và S7. Nhiệm vụ của TPKT là nó đóng vai trò như một khung hình (framing). TPKT header có độ dài 4 byte, trong đó:
-    - byte đầu tiên của TPKT luôn là phiên bản (`0x03`)
-    - byte thứ hai là phần dự phòng, luôn là `0x00`
+    - Byte đầu tiên của TPKT luôn là phiên bản (`0x03`)
+    - Byte thứ hai là phần dự phòng, luôn là `0x00`
     - 2 byte cuối cùng quy định tổng độ dài của gói tin (bao gồm cả header và dữ liệu payload). Khi PLC nhận được dòng byte từ TCP stream, nó sẽ nhìn vào 4 byte này để biết được gói tin này dài bao nhiêu byte. Sau đó nó sẽ đợi cho đến khi nhận đủ số bytes rồi mới đẩy khối dữ liệu đó lên tầng trên (S7comm) để xử lý.
 
 
 Kết quả là ta có một giao thức vừa có độ dài tin nhắn rõ ràng (ưu điểm ISO), vừa có thể đi xuyên qua các router mạng (ưu điểm TCP).
 
-*S7 hoạt động trên cổng TCP 102. COTP được định nghĩa trong RFC 905, TPKT được định nghĩa trong RFC 1006, cập nhật bởi RFC 2126*
+> [!NOTE]
+> S7 hoạt động trên cổng TCP 102. COTP được định nghĩa trong RFC 905, TPKT được định nghĩa trong RFC 1006, cập nhật bởi RFC 2126
 
 #### 3.2.2 Phần S7 PDU
 
@@ -141,19 +142,21 @@ Giao thức S7 được thiết kế theo hướng  Function oriented or Command
 
 Một command sẽ bao gồm:
 
-- Header:
+![alt text](s7struct.png)
 
-    ![alt text](image-4.png)
+- **Header**:
+
+    ![alt text](s7header.png)
 
     Với:
 
-    - `Protocol ID`: Luôn luôn là `0x32` để định danh giao thức S7comm.
+    - `Protocol ID` (kích thước 1 Byte): Luôn luôn là `0x32` để định danh giao thức S7comm.
 
     - `Message Type` hoặc `Remote Operating Service Control (ROSCTR)`: Cho biết loại gói tin:
         
         | ROSCTR | Ý nghĩa |
         |---|---|
-        | Job (1) | Yêu cầu từ Client tới Server như đọc ghi memory, đọc/ghi block, chạy/dừng thiết bị, thiết lập liên kết |
+        | Job (1) | Yêu cầu từ Client tới Server như read/write memory, read/write blocks, start/stop device, setup communication |
         | Ack (2) | Xác nhận nhận được yêu cầu từ Server, không kèm theo dữ liệu|
         | Ack_Data (3) | Xác nhận nhận được yêu cầu từ Server, kèm theo dữ liệu trả về cho job request trước đó|
         | User_Data (7) | Đây là phần mở rộng so với giao thức gốc, sử dụng cho các chức năng nâng cao. Nó chứa Function Group bao gồm các chức năng: Programmer commands, Cyclic data, Block functions, CPU functions, Security, Time functions. Trong các function này lại bao gồm nhiều subfunction khác. Ví dụ như trong nhóm function CPU Functions lại có: Read SZL, Message service, ... |
@@ -168,52 +171,7 @@ Một command sẽ bao gồm:
 
     - `Error class` và `Error code`: Chỉ xuất hiện trong các gói tin phản hồi `ROSCTR = Ack_Data`, cho biết có lỗi gì xảy ra không.
 
-- Tập các tham số (Bao gồm tên các tham số và giá trị cho các tham số đó nếu có). Tùy theo loại command (được xác định thông qua trường `S7 Header Function Code`) mà bộ các tham số trong phần này sẽ khác nhau. Các command được chia thành các nhóm chức năng: Data Read/Write, Cyclic Data Read/Write, Directory info, System Info, Blocks move, PLC Control, Date and Time, Security, Programming.
-
-
-    - Với command thiết lập liên kết S7 (Setup Communication), các tham số sẽ bao gồm:
-    
-        ![alt text](image-5.png)
-
-        Trong đó:
-
-        - `S7 Header Function Code`: Cho biết loại lệnh S7, ở đây là `0xF0` tương ứng với lệnh thiết lập liên kết S7 (Setup Communication)
-
-        - `Max AmQ calling`  quy định client gửi bao nhiêu request cùng lúc và `Max AmQ called`  quy định PLC xử lý bao nhiêu request cùng lúc. Tham số này sẽ được 2 bên đàm phán lúc thiết lập kết nối. Thường thì cả hai đều là 1, nghĩa là Client chỉ có thể gửi một yêu cầu mới sau khi nhận được phản hồi cho yêu cầu trước đó, và PLC sẽ xử lý tuần tự từng yêu cầu một. 
-
-        - `PDU length`: Độ dài tối đa của PDU mà PLC có thể xử lý. Tham số này cũng được đàm phán lúc thiết lập kết nối.
-
-    - Với command đọc ghi biến (`0x04`/`0x05`). Các biến được tương tác thông qua địa chỉ, có 3 cách thao tác với địa chỉ:
-
-        - Địa chỉ trực tiếp (Any-type): Chỉ rõ `area` (ví dụ: `DB`, `M`, `I`, `Q`), `address` (tức byte nào), kiểu dữ liệu. Ví dụ đọc biến `DB1.DBX0.0` sẽ có `area = DB`, `address = 1` (tức byte thứ 1), kiểu dữ liệu là bit.
-
-        - DB-Type: dành riêng cho area DB
-        - Địa chỉ gián tiếp (Symbolic): Thay vì dùng địa chỉ byte, ta có thể dùng tên biến đã được định nghĩa trong chương trình PLC. Ví dụ: `DB1.MyBit` hoặc `DB1.MyInt`. Khi này tham số sẽ bao gồm tên biến và kiểu dữ liệu. Cách này dễ đọc hơn nhưng đòi hỏi phải có thông tin về chương trình PLC để biết được tên biến nào tương ứng với địa chỉ byte nào. Chỉ hỗ trợ trên các dòng S7-1200/1500.
-
-
-    - Với command upload/download block (`0x1a-1f`). Đây là phần để lấy hoặc nạp chương trình điều khiển vào PLC. trong PLC, code chương trình và dữ liệu chương trình được tổ chức thành các block.
-
-
-        <div style="display: flex; gap: 20px; align-items: flex-start;">
-        <div style="text-align: center;">
-        <b>Upload Block</b><br>
-        <img src="./image-6.png" width="350">
-        </div>
-        <div style="text-align: center;">
-        <b>Download Block</b><br>
-        <img src="./image-7.png" width="350">
-        </div>
-
-        </div>
-    
-    - Với command điều khiển (`0x28`) để bắt đầu, dừng chương trình trong PLC.
-
-
-
-
-
-- Block dữ liệu (Data Block) nếu command đó yêu cầu truyền dữ liệu lớn (như đọc/ghi nhiều biến)
-
+- **Tập các tham số** (Bao gồm tên các tham số và giá trị cho các tham số đó nếu có). Tùy theo loại command (được xác định thông qua trường `S7 Header Function Code`) mà bộ các tham số trong phần này sẽ khác nhau. Các command được chia thành các nhóm chức năng: Data Read/Write, Cyclic Data Read/Write, Directory info, System Info, Blocks move, PLC Control, Date and Time, Security, Programming.
 
 ### 3.3 Các bước thiết lập kết nối S7
 
@@ -221,14 +179,15 @@ Một command sẽ bao gồm:
 
 *SampleCaptures/s7comm_reading_plc_status.pcap from https://wiki.wireshark.org/S7comm* với filter `tcp.port==102`
 
-**1. Thiết lập kết nối tới TCP 102 bằng Three-way Handshake của TCP**
+#### 3.3.1 Thiết lập kết nối tới TCP 102 bằng Three-way Handshake của TCP
 
 ![alt text](image.png)
 
 *Three-way Handshake của TCP giữa `192.168.1.10` và PLC `192.168.1.40` ở gói tin 5, 6, 7*
 
+#### 3.3.2 Thiết lập kết nối COTP
 
-**2. Sau khi kết nối TCP được thiết lập, Client sẽ gửi một yêu cầu kết nối **COTP CR** (COTP Connect Request) tới PLC**. Yêu cầu này bao gồm thông tin về TSAP để định danh dịch vụ và vị trí CPU mà Client muốn giao tiếp.
+Sau khi kết nối TCP được thiết lập, Client sẽ gửi một yêu cầu kết nối **COTP CR** (COTP Connect Request) tới PLC. Yêu cầu này bao gồm thông tin về TSAP để định danh dịch vụ và vị trí CPU mà Client muốn giao tiếp.
 
 ![alt text](image-2.png)
 
@@ -307,7 +266,21 @@ ISO 8073/X.224 COTP Connection-Oriented Transport Protocol
 
 - `Source reference: 0x0003` là giá trị PLC tạo ra để định danh nó trong session này. Client sẽ dùng giá trị này làm Destination reference trong các gói tin tiếp theo để gửi dữ liệu tới PLC.
 
-3. **Thiết lập tới S7comm layer bằng cách gửi một yêu cầu thiết lập giao tiếp S7** với mã chức năng `0xF0` (gói tin số 10). Wireshark đã được tích hợp sẵn bộ phân tích gói tin S7comm, nên nó có thể giải mã trực tiếp các trường dữ liệu của S7comm trong phần Parameter và Data của gói tin.
+#### 3.3.3 Thiết lập kết nối S7comm ban đầu
+
+Bắt đầu thiết lập tới S7comm layer bằng cách gửi một yêu cầu thiết lập giao tiếp S7 **Setup Communication** (gói tin số 10), các tham số sẽ bao gồm:
+    
+![alt text](s7setup.png)
+
+Trong đó:
+
+- `S7 Header Function Code`: Cho biết loại lệnh S7, ở đây là `0xF0` tương ứng với lệnh thiết lập liên kết S7 (Setup Communication)
+
+- `Max AmQ calling`  quy định client gửi bao nhiêu request cùng lúc và `Max AmQ called`  quy định PLC xử lý bao nhiêu request cùng lúc. Tham số này sẽ được 2 bên đàm phán lúc thiết lập kết nối. Thường thì cả hai đều là 1, nghĩa là Client chỉ có thể gửi một yêu cầu mới sau khi nhận được phản hồi cho yêu cầu trước đó, và PLC sẽ xử lý tuần tự từng yêu cầu một. 
+
+- `PDU length`: Độ dài tối đa của PDU mà PLC có thể xử lý. Tham số này cũng được đàm phán lúc thiết lập kết nối.
+
+Wireshark đã được tích hợp sẵn bộ phân tích gói tin S7comm, nên nó có thể giải mã trực tiếp các trường dữ liệu của S7comm trong phần Parameter và Data của gói tin.
 
 ```
 S7 Communication
@@ -364,12 +337,13 @@ S7 Communication
 
 Với `Protocol Data Unit Reference: 512` refer tới id của gói tin request trước đó, `ROSCTR: Ack_Data (3)` để xác nhận yêu cầu thiết lập giao tiếp đã được chấp nhận và không có lỗi nào xảy ra (`Error class: No error (0x00)`, `Error code: 0x00`). PLC chấp nhận các thông số kết nối mà Client đề xuất, trừ thông số PDU length được PLC giảm xuống còn `240` Byte.
 
+#### 3.3.4 Trao đổi dữ liệu S7
 
-**4. Sau khi thiết lập xong kết nối S7, hai bên có thể bắt đầu trao đổi dữ liệu** bằng các lệnh của S7 như Read/Write Var, ReadSZL, ... Tuỳ mỗi lệnh mà cấu trúc gói tin sẽ khác nhau.
+Sau khi thiết lập xong kết nối S7, hai bên có thể bắt đầu trao đổi dữ liệu** bằng các lệnh của S7 như Read/Write Var, ReadSZL, ... Tuỳ mỗi lệnh mà cấu trúc gói tin sẽ khác nhau.
 
 
 
-### 3.3 Các thành phần trong giao tiếp S7
+### 3.4 Các thành phần trong giao tiếp S7
 
 Có 3 actor trong giao tiếp S7:
 

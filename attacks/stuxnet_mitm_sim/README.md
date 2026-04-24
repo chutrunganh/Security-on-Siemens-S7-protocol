@@ -349,11 +349,11 @@ Với:
 
         - `Variable Type`: xác định kiểu dữ liệu và độ dài của biến (thường sử dụng các kiểu dữ liệu S7 như REAL, BIT, BYTE, WORD, DWORD, COUNTER, …).
         - `Count`: có thể chọn toàn bộ một mảng các biến có cùng kiểu bằng cách sử dụng một struct item duy nhất. Các biến này phải cùng kiểu, và phải liên tiếp trong bộ nhớ và trường `Count` xác định kích thước của mảng này. Được đặt là 1 cho việc đọc hoặc ghi một biến duy nhất.
-        - Các trường còn lại xách định địa chỉ muốn đọc, viết theo đúng cấu trúc của Any-type:
+        - Các trường còn lại xách định địa chỉ muốn đọc, viết theo đúng cấu trúc của Any-type với `DB Number` (chỉ có khi `area` là DB) cho datablock muốn đọc, `Area` cho loại vùng nhớ muốn đọc (DB, M, I, Q), `Address` cho địa chỉ cụ thể muốn đọc trong vùng nhớ đó. Trường `Address` 3 byte này encode bit offset theo dạng big-endian.
 
             ![alt text](image-21.png)
     
-    Với Read Var **Response** tương tự, chỉ thay thế phần `Request Item` thành `Response Item`:
+    Với Read Var **Response** tương tự, chỉ thay thế phần `Request Item` thành `Data Item`:
 
     ![alt text](ReadVarResponse.svg)
 
