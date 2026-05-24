@@ -1,0 +1,73 @@
+\babel@toc {nil}{}\relax 
+\ttl@change@i {\@ne }{chapter}{0.0cm}{\bfseries \vspace {0.3cm}}{{\bfseries {\scshape } CHAPTER \thecontentslabel .\ }}{}{\titlerule *[0.3pc]{.}\contentspage }\relax 
+\ttl@change@v {chapter}{}{}{}\relax 
+\ttl@change@i {\@ne }{section}{0.0cm}{\vspace {0.3cm}}{\thecontentslabel \ }{}{\titlerule *[0.3pc]{.}\contentspage }\relax 
+\ttl@change@v {section}{}{}{}\relax 
+\ttl@change@i {\@ne }{subsection}{1.0cm}{\vspace {0.3cm}}{\thecontentslabel \ }{}{\titlerule *[0.3pc]{.}\contentspage }\relax 
+\ttl@change@v {subsection}{}{}{}\relax 
+\thispagestyle {empty}
+\contentsline {chapter}{\numberline {1}INTRODUCTION}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Đặt vấn đề}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Tổng quan và các vấn đề nghiên cứu}{2}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Mục tiêu nghiên cứu và định hướng giải pháp}{3}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Đóng góp của đồ án}{4}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Bố cục đồ án}{4}{section.1.5}%
+\contentsline {chapter}{\numberline {2}LITERATURE REVIEW}{6}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Tổng quan về hệ thống OT và ICS}{6}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Bộ điều khiển logic khả trình (PLC)}{9}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Khái niệm PLC}{9}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Cấu tạo PLC}{10}{subsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {a}Bộ xử lý trung tâm (CPU)}{10}{subsubsection.2.2.2.1}%
+\contentsline {subsubsection}{\numberline {b}Module đầu vào và đầu ra}{11}{subsubsection.2.2.2.2}%
+\contentsline {subsubsection}{\numberline {c}Bộ nhớ và các thành phần khác}{12}{subsubsection.2.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.3}Ngôn ngữ lập trình PLC}{13}{subsection.2.2.3}%
+\contentsline {section}{\numberline {2.3}Mô hình Purdue}{15}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Giao thức Siemens S7comm}{18}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Bối cảnh: Fieldbus và Ethernet công nghiệp}{18}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Cách đọc địa chỉ trong Siemens S7}{19}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}Cấu trúc gói tin S7comm}{20}{subsection.2.4.3}%
+\contentsline {subsubsection}{\numberline {a}Phần COTP và TPKT}{20}{subsubsection.2.4.3.1}%
+\contentsline {subsubsection}{\numberline {b}Phần S7 PDU}{21}{subsubsection.2.4.3.2}%
+\contentsline {subsection}{\numberline {2.4.4}Thiết lập kết nối S7comm}{22}{subsection.2.4.4}%
+\contentsline {subsubsection}{\numberline {a}Bắt tay TCP (three-way handshake)}{22}{subsubsection.2.4.4.1}%
+\contentsline {subsubsection}{\numberline {b}Thiết lập kết nối COTP}{22}{subsubsection.2.4.4.2}%
+\contentsline {subsubsection}{\numberline {c}Thiết lập S7comm (Setup Communication)}{23}{subsubsection.2.4.4.3}%
+\contentsline {subsubsection}{\numberline {d}Trao đổi dữ liệu}{23}{subsubsection.2.4.4.4}%
+\contentsline {subsection}{\numberline {2.4.5}Các vai trò trong giao tiếp S7}{24}{subsection.2.4.5}%
+\contentsline {section}{\numberline {2.5}Hệ thống phát hiện xâm nhập (IDS)}{24}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Phương pháp xây dựng luật phát hiện}{24}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Giới hạn và tính bảo mật của IDS}{25}{subsection.2.5.2}%
+\contentsline {chapter}{\numberline {3}METHODOLOGY}{26}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Overview}{26}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Tên của nội dung chi tiết thứ 1}{26}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Tên của nội dung chi tiết thứ 2}{26}{section.3.3}%
+\contentsline {chapter}{\numberline {4}THEORETICAL ANALYSIS}{27}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Tên của kết quả phân tích số 1}{27}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Tên của kết quả phân tích số 2}{27}{section.4.2}%
+\contentsline {chapter}{\numberline {5}NUMERICAL RESULTS}{28}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Evaluation Parameters}{28}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Simulation Method}{28}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Tên của kết quả thí nghiệm 1}{28}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Tên của kết quả thí nghiệm 2}{28}{section.5.4}%
+\contentsline {chapter}{\numberline {6}CONCLUSIONS}{29}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Summary}{29}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Suggestion for Future Works }{29}{section.6.2}%
+\contentsline {chapter}{REFERENCE}{33}{section*.36}%
+\contentsline {chapter}{APPENDIX}{35}{section*.37}%
+\ttl@change@i {\@ne }{chapter}{0.0cm}{\bfseries \vspace {0.3cm}}{{\bfseries {\scshape } \thecontentslabel .\ }}{}{\titlerule *[0.3pc]{.}\contentspage }\relax 
+\ttl@change@v {chapter}{}{}{}\relax 
+\contentsline {chapter}{\numberline {A}GRADUATION THESIS GUIDANCE}{35}{appendix.A}%
+\contentsline {section}{\numberline {A.1}General Regulations}{35}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Majoring}{36}{section.A.2}%
+\contentsline {section}{\numberline {A.3}Bulleting and Numbering}{36}{section.A.3}%
+\contentsline {section}{\numberline {A.4}Table insertion}{37}{section.A.4}%
+\contentsline {section}{\numberline {A.5}Figure Insertion}{37}{section.A.5}%
+\contentsline {section}{\numberline {A.6}Reference}{37}{section.A.6}%
+\contentsline {paragraph}{Listing}{37}{paragraph*.40}%
+\contentsline {paragraph}{Types of Reference}{37}{paragraph*.41}%
+\contentsline {section}{\numberline {A.7}Equations}{38}{section.A.7}%
+\contentsline {section}{\numberline {A.8}Qui cách đóng quyển}{38}{section.A.8}%
+\contentsline {chapter}{\numberline {B}USE CASE DESCRIPTIONS}{41}{appendix.B}%
+\contentsline {section}{\numberline {B.1}Đặc tả use case ``Thống kê tình hình mượn sách''}{41}{section.B.1}%
+\contentsline {section}{\numberline {B.2}Đặc tả use case ``Đăng ký làm thẻ mượn''}{41}{section.B.2}%
+\contentsfinish 

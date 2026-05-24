@@ -1,3 +1,6 @@
+
+net stop s7oiehsx64
+
 # Contents
 
 - [Lý thuyết](./docs/Report/Theory.md)
@@ -18,21 +21,7 @@
 
 Tác động của 3 loại tấn công vào ICS: https://www.sciencedirect.com/science/article/pii/S2405896324002660?ref=pdf_download&fr=RR-2&rr=9e9e152e18231fc7
 
-
-Plan a a aass  as asss
- dd ddd dd
-ICS Kill
-
-# Attack Simulation
-
-## Password Brute Force
-
-S7-300 thì mật khẩu chì dành cho việc bảo vệ
-- upload/download program
-- modify block structure
-
-> S7 Block Privacy With the S7 Block Privacy, only FBs and FCs can be protecte
-
+cách thuyết trình: [text](https://www.youtube.com/watch?v=dHxsctLBUEI)
 
 # Pending
 
@@ -65,4 +54,7 @@ Stateful Lua-based behavioural detection for rapid parameter changes
 Layer-2 inspection of PROFINET DCP traffic through EtherType-based filtering
 Signature-based detection rules for Modbus TCP targeting unauthorized write operations and abnormal request rates
 The IDS operates in passive mode, ensuring no traffic injection, no impact on PLC real-time performance, and full visibility of all mirrored network traffic. This architecture aims to detect process manipulation, command replay, flooding attempts, and device reconfiguration attacks — while maintaining industrial determinism.
+
+
+
 

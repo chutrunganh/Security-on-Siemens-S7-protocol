@@ -1,0 +1,53 @@
+# Suricata rules for Siemens S7comm traffic used in this thesis lab.
+# Default scope:
+#   - TCP/102 is ISO-TSAP, carrying TPKT + COTP + S7comm.
+#   - These rules use $HOME_NET as the PLC network. Tighten this in suricata.yaml
+#     to the exact PLC/server IPs used in the lab.
+#
+# S7comm over TCP payload layout used by most rules:
+#   0      : TPKT version 0x03
+#   1      : TPKT reserved 0x00
+#   4..6   : COTP data TPDU 0x02 f0 80
+#   7      : S7 protocol id 0x32
+#   8      : ROSCTR, 0x01 Job, 0x03 Ack_Data, 0x07 Userdata
+#   17     : first S7 parameter byte for Job/Userdata packets with normal COTP DT
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Setup Communication to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|F0|"; offset:17; depth:1; sid:1000001; rev:1; metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:3;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read SZL request - PLC information enumeration"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:4; depth:5; content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8; sid:1000002; rev:1; metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read SZL module identification 0x0011"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:4; depth:5; content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8; content:"|00 11 00 01|"; distance:0; within:12; sid:1000003; rev:1; metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read SZL communication status 0x001c"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:4; depth:5; content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8; content:"|00 1C 00 00|"; distance:0; within:12; sid:1000004; rev:1; metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM List Blocks request - PLC block inventory enumeration"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:4; depth:5; content:"|00 01 12 04 11 13 01 00|"; offset:17; depth:8; sid:1000005; rev:1; metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Write Var request to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|05|"; offset:17; depth:1; sid:1000010; rev:1; metadata:service iso-tsap, protocol s7comm, attack modify_process_variable; priority:1;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Write Var to DB1.DBW2 setpoint"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|05|"; offset:17; depth:1; content:"|12 0A 10|"; offset:19; depth:3; content:"|00 01 84 00 00 10|"; offset:25; depth:6; sid:1000011; rev:1; metadata:service iso-tsap, protocol s7comm, attack stuxnet_mitm_sim; priority:1;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Write Var DB1.DBW2 setpoint to 2000"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|05|"; offset:17; depth:1; content:"|12 0A 10|"; offset:19; depth:3; content:"|00 01 84 00 00 10|"; offset:25; depth:6; content:"|00 04 00 10 07 D0|"; offset:31; depth:6; sid:1000012; rev:1; metadata:service iso-tsap, protocol s7comm, attack stuxnet_mitm_sim; priority:1;)
+
+alert tcp any 102 -> $HOME_NET any (msg:"ICS S7COMM suspicious Ack_Data response to HMI/engineering station"; flow:from_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 03|"; offset:4; depth:5; sid:1000013; rev:1; metadata:service iso-tsap, protocol s7comm, attack possible_mitm_observation; threshold:type both, track by_src, count 60, seconds 10; priority:3;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Request Download block to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1A|"; offset:17; depth:1; sid:1000020; rev:1; metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+
+alert tcp $HOME_NET 102 -> any any (msg:"ICS S7COMM PLC requests Download Block data"; flow:from_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1B|"; offset:17; depth:1; sid:1000021; rev:1; metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Download Ended"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1C|"; offset:17; depth:1; sid:1000022; rev:1; metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Start Upload block from PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1D|"; offset:17; depth:1; sid:1000023; rev:1; metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Upload Block request"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1E|"; offset:17; depth:1; sid:1000024; rev:1; metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM End Upload"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1F|"; offset:17; depth:1; sid:1000025; rev:1; metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM client sends Download Block data to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 03|"; offset:4; depth:5; content:"|1B|"; offset:19; depth:1; sid:1000026; rev:1; metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM PLC Control command"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|28|"; offset:17; depth:1; sid:1000030; rev:1; metadata:service iso-tsap, protocol s7comm, attack plc_control; priority:1;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM replayed Start CPU P_PROGRAM"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|28|"; offset:17; depth:1; content:"P_PROGRAM"; distance:0; within:24; sid:1000031; rev:1; metadata:service iso-tsap, protocol s7comm, attack start_stop_replay; priority:1;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM PLC Stop command"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|29|"; offset:17; depth:1; sid:1000032; rev:1; metadata:service iso-tsap, protocol s7comm, attack plc_stop; priority:1;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM replayed Stop CPU P_PROGRAM"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|29|"; offset:17; depth:1; content:"P_PROGRAM"; distance:0; within:24; sid:1000033; rev:1; metadata:service iso-tsap, protocol s7comm, attack start_stop_replay; priority:1;)

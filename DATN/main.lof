@@ -1,0 +1,30 @@
+\babel@toc {nil}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Ví dụ một hệ thống SCADA trải rộng trên 3 khu vực địa lý Texas, North Dakota, Alaska. SCADA Control Center bao gồm Control Servers, HMI, Historian, Engineering Workstation, Communication Infrastructure, nằm tại Supervisory Zone}}{7}{figure.caption.8}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Nhà máy đặt tại Alaska trong số ba nhà máy được giám sát bởi SCADA phía trên sử dụng DCS, bao gồm nhiều bộ điều khiển đơn lẻ (Local Control Unit), mỗi bộ điều khiển này sẽ thực hiện một chức năng cụ thể trong dây chuyền sản xuất (PCS).}}{7}{figure.caption.9}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces SIS Controller cũng giống PLC/RTU nhưng sử dụng 2 Gauges Level Sensors, 2 Valve Actuator của riêng nó để điều khiển mực nước trong bể chứa. Dù cho PLC có hỏng hay Sensor chính gặp vấn đề thì vẫn còn SIS dự phòng để đảm bảo an toàn.}}{9}{figure.caption.10}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Các thành phần chính của PLC}}{10}{figure.caption.12}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Hai dạng PLC: Compact và Modular}}{13}{figure.caption.15}%
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Trong phần mềm lập trình Tia Portal sẽ cần chỉ định rack và slot của module truyền thông của PLC, như ví dụ trong ảnh là rack 0, slot 1}}{13}{figure.caption.16}%
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Năm ngôn ngữ lập trình PLC theo IEC 61131-3}}{14}{figure.caption.17}%
+\contentsline {figure}{\numberline {2.8}{\ignorespaces Ví dụ một chương trình mạch tự duy trì băng ngôn ngữ Ladder}}{14}{figure.caption.18}%
+\contentsline {figure}{\numberline {2.9}{\ignorespaces Ví dụ mã FBD}}{14}{figure.caption.19}%
+\contentsline {figure}{\numberline {2.10}{\ignorespaces Ví dụ mã SFC}}{15}{figure.caption.20}%
+\contentsline {figure}{\numberline {2.11}{\ignorespaces Kiến trúc tham chiếu doanh nghiệp Purdue (PERA) trong Hình 2.2 hiển thị khái niệm phân đoạn mạng giúp tách vùng của Mạng ICS (OT) khỏi Vùng của Mạng doanh nghiệp (IT). Nó cũng cho thấy sự phụ thuộc lẫn nhau và tương tác giữa các thành phần chính ở cấp độ 0 đến 5. Mô hình này được áp dụng từ IEC 62443, một bộ tiêu chuẩn về An ninh mạng trong các mạng công nghiệp.}}{16}{figure.caption.21}%
+\contentsline {figure}{\numberline {2.12}{\ignorespaces Ngăn xếp giao thức S7comm (TPKT, COTP, S7 PDU)}}{20}{figure.caption.27}%
+\contentsline {figure}{\numberline {2.13}{\ignorespaces Cấu trúc một gói tin S7comm}}{21}{figure.caption.29}%
+\contentsline {figure}{\numberline {2.14}{\ignorespaces Cấu trúc S7 Header}}{21}{figure.caption.30}%
+\contentsline {figure}{\numberline {2.15}{\ignorespaces Luồng thiết lập kết nối S7comm (minh họa Wireshark~\blx@tocontentsinit {0}\cite {wireshark_s7comm}, cổng TCP 102; nguồn mẫu: \textit {SampleCaptures/s7comm\_reading\_plc\_status.pcap})}}{22}{figure.caption.32}%
+\contentsline {figure}{\numberline {2.16}{\ignorespaces Gói tin Setup Communication trong Wireshark}}{23}{figure.caption.33}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Internet vạn vật}}{38}{figure.caption.39}%
+\contentsline {figure}{\numberline {A.2}{\ignorespaces Qui cách đóng quyển đồ án}}{39}{figure.caption.42}%
+\contentsline {figure}{\numberline {A.3}{\ignorespaces Qui cách đóng quyển đồ án}}{40}{figure.caption.43}%
+\addvspace {10\p@ }
+\contentsfinish 
+\contentsfinish 

@@ -1,0 +1,438 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{none/global//global/global/global}
+  \entry{snap7_sharp7}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=S}{%
+         family={{Snap7}},
+         familyi={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{S1}
+    \strng{fullhash}{S1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{\url{https://snap7.sourceforge.net/sharp7.html}}
+    \field{title}{Sharp7}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{snap7_s7protocol}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=S}{%
+         family={{Snap7}},
+         familyi={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{S1}
+    \strng{fullhash}{S1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{\url{https://snap7.sourceforge.net/siemens_comm.html}}
+    \field{title}{S7 Protocol}
+    \field{urlday}{12}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{inprotech_s7comm_security}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=I}{%
+         family={{Inprotech}},
+         familyi={I\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{I1}
+    \strng{fullhash}{I1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://inprotech.es/en/s7comm-protocol-security-analyzed/}}
+    \field{title}{{S7Comm} Protocol Security Analyzed}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{veit2021ics_dissectors}{thesis}{}{}
+    \name{author}{1}{}{%
+      {{hash=VMF}{%
+         family={Veit},
+         familyi={V\bibinitperiod},
+         given={M.\bibnamedelima F.},
+         giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{VMF1}
+    \strng{fullhash}{VMF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{{ICS} Protocol Dissectors for Signature-Based {NIDS}}
+    \verb{url}
+    \verb https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/ICS/Masterarbeit_
+    \verb ICS_protocol_dissectors_for_signature_based_NIDS.pdf
+    \endverb
+    \list{institution}{2}{%
+      {Department of Informatics, Institute of Telematics, Decentralized
+  Systems}%
+      {Network Services Research Group, in cooperation with Federal Office for
+  Information Security (BSI)}%
+    }
+    \field{type}{mathesis}
+    \field{year}{2021}
+    \field{urlday}{12}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{rfc1006}{misc}{}{}
+    \name{author}{2}{}{%
+      {{hash=RMT}{%
+         family={Rose},
+         familyi={R\bibinitperiod},
+         given={M.\bibnamedelima T.},
+         giveni={M\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+      {{hash=CDE}{%
+         family={Cass},
+         familyi={C\bibinitperiod},
+         given={D.\bibnamedelima E.},
+         giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{RMTCDE1}
+    \strng{fullhash}{RMTCDE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{RFC 1006}
+    \field{title}{ISO Transport Service on Top of the {TCP}}
+    \verb{url}
+    \verb https://www.rfc-editor.org/rfc/rfc1006
+    \endverb
+    \field{year}{1987}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{rfc905}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=I}{%
+         family={{ISO}},
+         familyi={I\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{I2}
+    \strng{fullhash}{I2}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{RFC 905}
+    \field{title}{{ISO} Transport Protocol Specification for Computer Systems}
+    \verb{url}
+    \verb https://www.rfc-editor.org/rfc/rfc905
+    \endverb
+    \field{year}{1984}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{rfc2126}{misc}{}{}
+    \name{author}{4}{}{%
+      {{hash=KM}{%
+         family={Kubica},
+         familyi={K\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=DD}{%
+         family={Dalgi},
+         familyi={D\bibinitperiod},
+         given={D.},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=CD}{%
+         family={Cass},
+         familyi={C\bibinitperiod},
+         given={D.},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=KF}{%
+         family={Kastenholz},
+         familyi={K\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{KM+1}
+    \strng{fullhash}{KMDDCDKF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{RFC 2126}
+    \field{title}{{ISO} Transport Service on Top of {TCP} ({ITOT})}
+    \verb{url}
+    \verb https://www.rfc-editor.org/rfc/rfc2126
+    \endverb
+    \field{year}{1997}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{wireshark_s7comm}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=W}{%
+         family={{Wireshark Foundation}},
+         familyi={W\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{W1}
+    \strng{fullhash}{W1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{\url{https://wiki.wireshark.org/S7comm}}
+    \field{title}{{S7comm} --- Wireshark Wiki}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{hovy1993automated}{article}{}{}
+    \name{author}{1}{}{%
+      {{hash=HEH}{%
+         family={Hovy},
+         familyi={H\bibinitperiod},
+         given={Eduard\bibnamedelima H},
+         giveni={E\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Elsevier Science Publishers}%
+    }
+    \strng{namehash}{HEH1}
+    \strng{fullhash}{HEH1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{number}{1-2}
+    \field{pages}{341\bibrangedash 385}
+    \field{title}{Automated discourse generation using discourse structure
+  relations}
+    \field{volume}{63}
+    \field{journaltitle}{Artificial intelligence}
+    \field{year}{1993}
+  \endentry
+
+  \entry{peterson2007computer}{book}{}{}
+    \name{author}{2}{}{%
+      {{hash=PLL}{%
+         family={Peterson},
+         familyi={P\bibinitperiod},
+         given={Larry\bibnamedelima L},
+         giveni={L\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=DBS}{%
+         family={Davie},
+         familyi={D\bibinitperiod},
+         given={Bruce\bibnamedelima S},
+         giveni={B\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Elsevier}%
+    }
+    \strng{namehash}{PLLDBS1}
+    \strng{fullhash}{PLLDBS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Computer networks: a systems approach}
+    \field{year}{2007}
+  \endentry
+
+  \entry{NguyenThucHai}{book}{}{}
+    \name{author}{1}{}{%
+      {{hash=HNT}{%
+         family={Hải},
+         familyi={H\bibinitperiod},
+         given={Nguyễn\bibnamedelima Thúc},
+         giveni={N\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Nhà xuất bản giáo dục}%
+    }
+    \strng{namehash}{HNT1}
+    \strng{fullhash}{HNT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Mạng máy tính và các hệ thống mở}
+    \field{year}{1999}
+  \endentry
+
+  \entry{poesio2001discourse}{inproceedings}{}{}
+    \name{author}{2}{}{%
+      {{hash=PM}{%
+         family={Poesio},
+         familyi={P\bibinitperiod},
+         given={Massimo},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=DEB}{%
+         family={Di\bibnamedelima Eugenio},
+         familyi={D\bibinitperiod\bibinitdelim E\bibinitperiod},
+         given={Barbara},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{PMDEB1}
+    \strng{fullhash}{PMDEB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{{ESSLLI} workshop on information structure, discourse
+  structure and discourse semantics, Copenhagen, Denmark}
+    \field{pages}{129\bibrangedash 143}
+    \field{title}{Discourse structure and anaphoric accessibility}
+    \field{year}{2001}
+  \endentry
+
+  \entry{knott1996data}{thesis}{}{}
+    \name{author}{1}{}{%
+      {{hash=KA}{%
+         family={Knott},
+         familyi={K\bibinitperiod},
+         given={Alistair},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{KA1}
+    \strng{fullhash}{KA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{A data-driven methodology for motivating a set of coherence
+  relations}
+    \list{institution}{1}{%
+      {The University of Edinburgh, {UK}}%
+    }
+    \field{type}{phdthesis}
+    \field{year}{1996}
+  \endentry
+
+  \entry{BernersTim}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=BLT}{%
+         family={Berners-Lee},
+         familyi={B\bibinithyphendelim L\bibinitperiod},
+         given={Tim},
+         giveni={T\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BLT1}
+    \strng{fullhash}{BLT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Hypertext Transfer Protocol ({HTTP})}
+    \verb{url}
+    \verb ftp:/info.cern.ch/pub/www/doc/http-spec.txt.Z
+    \endverb
+    \field{urlday}{30}
+    \field{urlmonth}{09}
+    \field{urlyear}{2010}
+  \endentry
+
+  \entry{LectureA}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=P}{%
+         family={{Princeton University}},
+         familyi={P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{P1}
+    \strng{fullhash}{P1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{WordNet}
+    \verb{url}
+    \verb http://www.cogsci.princeton.edu/~wn/index.shtml
+    \endverb
+    \field{urlday}{30}
+    \field{urlmonth}{09}
+    \field{urlyear}{2010}
+  \endentry
+
+  \entry{scott2013sdn}{inproceedings}{}{}
+    \name{author}{3}{}{%
+      {{hash=SHS}{%
+         family={Scott-Hayward},
+         familyi={S\bibinithyphendelim H\bibinitperiod},
+         given={Sandra},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=OG}{%
+         family={O'Callaghan},
+         familyi={O\bibinitperiod},
+         given={Gemma},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=SS}{%
+         family={Sezer},
+         familyi={S\bibinitperiod},
+         given={Sakir},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \list{organization}{1}{%
+      {IEEE}%
+    }
+    \strng{namehash}{SHS+1}
+    \strng{fullhash}{SHSOGSS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{2013 IEEE SDN For Future Networks and Services (SDN4FNS)}
+    \field{pages}{1\bibrangedash 7}
+    \field{title}{SDN security: A survey}
+    \field{year}{2013}
+  \endentry
+
+  \entry{ashton2009internet}{article}{}{}
+    \true{moreauthor}
+    \true{morelabelname}
+    \name{author}{1}{}{%
+      {{hash=AK}{%
+         family={Ashton},
+         familyi={A\bibinitperiod},
+         given={Kevin},
+         giveni={K\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Hauppauge, New York}%
+    }
+    \strng{namehash}{AK+1}
+    \strng{fullhash}{AK+1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{number}{7}
+    \field{pages}{97\bibrangedash 114}
+    \field{title}{That ‘internet of things’ thing}
+    \field{volume}{22}
+    \field{journaltitle}{RFID journal}
+    \field{year}{2009}
+  \endentry
+\enddatalist
+\endinput

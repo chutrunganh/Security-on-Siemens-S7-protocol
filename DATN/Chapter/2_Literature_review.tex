@@ -1,0 +1,801 @@
+\documentclass[../main.tex]{subfiles}
+\usepackage{tikz}
+\usepackage{xcolor}
+\begin{document}
+
+Chương này trình bày các kiến thức nền tảng phục vụ cho nghiên cứu của đồ án, bao gồm khái niệm về công nghệ vận hành (OT), hệ thống điều khiển công nghiệp (ICS), bộ điều khiển logic khả trình (PLC), mô hình kiến trúc mạng Purdue, giao thức Siemens S7comm và hệ thống phát hiện xâm nhập (IDS). Nội dung chương là cơ sở để hiểu bối cảnh vận hành, điểm yếu bảo mật và hướng tiếp cận phát hiện tấn công trên giao thức S7comm trong các chương tiếp theo.
+
+\section{Tổng quan về hệ thống OT và ICS}
+\label{sec:ot-ics}
+
+Mọi công nghệ để vận hành nhà máy vật lý được gọi là OT (\textit{Operational Technology}), bao gồm:
+
+\begin{itemize}
+    \item Công nghệ giám sát và quản lý phụ trợ như BMS (\textit{Building Management Systems}) để điều khiển điều hòa (HVAC), chiếu sáng, phòng cháy chữa cháy; EMS (\textit{Energy Management Systems}) để quản lý năng lượng tiêu thụ.
+    \item Công nghệ bảo trì như EAM (\textit{Enterprise Asset Management}) để theo dõi tình trạng thiết bị.
+    \item Công nghệ giao thông và điều khiển vận hành hiện trường.
+    \item Công nghệ điều khiển ICS (\textit{Industrial Control Systems}) là cách điều khiển và giám sát các quy trình công nghiệp. Trong hệ thống ICS bao gồm các thành phần chính sau:
+\end{itemize}
+
+\begin{center}
+    \begin{tikzpicture}
+    
+    % Vòng ngoài cùng (OT)
+    \fill[red!80] (0,0) circle (4);
+    
+    % ICS
+    \fill[green!70] (0,0) circle (3.2);
+    
+    % SCADA
+    \fill[cyan!70] (0,0) circle (2.4);
+    
+    % DCS
+    \fill[purple!70] (0,0) circle (1.6);
+    
+    % PCS
+    \fill[blue!60] (0,0) circle (1);
+    
+    % Text labels
+    \node at (0,3.5) {\textbf{OT}};
+    \node at (0,2.7) {\textbf{ICS}};
+    \node at (0,2.0) {\textbf{SCADA}};
+    \node at (0,1.3) {\textbf{DCS}};
+    \node at (0,0) {\textbf{PCS}};
+    
+    \end{tikzpicture}
+    \end{center}
+
+\begin{itemize}
+    \item \textbf{Industrial Control Systems (ICS)}: hoạt động điều khiển các quy trình công nghiệp nói chung.
+    \item \textbf{Supervisory Control and Data Acquisition (SCADA)}: cung cấp khả năng giám sát, phân tích thời gian thực và quản lý ở mức cao cho các thiết bị trải rộng trên \textbf{nhiều vùng địa lý} tại một trung tâm chỉ huy duy nhất.
+    
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{Figure/SCADA.png}
+    \caption{Ví dụ một hệ thống SCADA}
+    \label{fig:scada}
+    \end{figure}
+
+
+    Hệ thống SCADA quản lý và giám sát 3 nhà máy tại 3 khu vực địa lý khác nhau Texas, North Dakota, Alaska. SCADA Control Center bao gồm Control Servers, HMI, Historian, Engineering Workstation, Communication Infrastructure, nằm tại Supervisory Zone
+
+    \item \textbf{Distributed Control Systems (DCS)}: tập trung vào việc điều khiển các quá trình công nghiệp phức tạp, 
+    liên tục và cần sự phối hợp của nhiều bộ điều khiển đơn lẻ, được kết nối với nhau bằng một bộ điều khiển trung tâm để phối hợp hoạt động. Việc tách ra làm các bộ điều khiển đơn lẻ cho từng process cụ thể trong process tổng thể giúp các bộ điều khiển ở gần với process mà nó điều khiển hơn, viết logic đơn giản hơn, giảm độ trễ và bảo trì. Tuy nhiên, các bộ điều khiển này đều nằm trong cùng một khu vực địa lý. DCS thường được sử dụng trong các nhà máy lớn và phức tạp, nơi có hàng ngàn thông số cần được phối hợp và điều khiển đồng thời với độ tin cậy cao
+
+    \item \textbf{Process Control Systems (PCS)}: khái niệm chung chỉ một hệ con (\textit{subsystem}) thực hiện chuyên biệt một tác vụ/chức năng cụ thể trong toàn bộ quá trình sản xuất. Một ICS có thể bao gồm hàng trăm PCS.
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{Figure/DCS.png}
+    \caption{Ví dụ về một hệ thống DCS triển khai tại một nhà máy}
+    \label{fig:dcs}
+    \end{figure}
+
+    Nhà máy đặt tại Alaska trong số ba nhà máy được giám sát bởi SCADA phía trên sử dụng DCS, bao gồm nhiều bộ điều khiển đơn 
+    lẻ (Local Control Unit), mỗi bộ điều khiển này sẽ thực hiện một chức năng cụ thể trong dây chuyền sản xuất (PCS). Trong một PCS bao gồm các thành phần sau:
+
+    \begin{itemize}
+        \item \textbf{Field Devices}: chuyển đổi qua lại giữa tín hiệu từ các quy trình vật lý và tín hiệu điện tử, gồm:
+        \begin{itemize}
+            \item \textbf{Sensors}: đo lường các thông số vật lý như nhiệt độ, áp suất, lưu lượng, độ ẩm\ldots\ và chuyển thành tín hiệu điện tử đầu vào.
+            \item \textbf{Actuators}: nhận tín hiệu điện tử đầu ra để điều khiển thiết bị thực thi các quy trình vật lý như van, bơm, động cơ\ldots
+        \end{itemize}
+
+        \item \textbf{Field Controller}: bộ điều khiển hiện trường, gồm:
+        \begin{itemize}
+            \item \textbf{PLC} (\textit{Programmable Logic Controller}): thiết bị có khả năng lập trình; nhận tín hiệu đầu vào $\rightarrow$ xử lý các phép toán logic đã lập trình sẵn $\rightarrow$ xuất tín hiệu đầu ra. Đồng thời gửi dữ liệu quá trình về HMI và nhận lệnh điều khiển từ HMI.
+
+            \item \textbf{IED} (\textit{Intelligent Electronic Device}): tương tự PLC nhưng chuyên điều khiển thiết bị mạch điện như rơle bảo vệ, \textit{on-load tap changer}, máy cắt (\textit{circuit breaker}). IED thường chạy độc lập chương trình đã lập trình sẵn hơn là nhận lệnh điều khiển trực tiếp từ HMI.
+
+            \item \textbf{RTU} (\textit{Remote Terminal Unit}): tương tự PLC nhưng tập trung truyền tải dữ liệu \textit{telemetry} từ xa về trung tâm điều khiển; thường được trang bị các chuẩn giao tiếp xa, không dây mạnh mẽ hơn PLC như RF, vệ tinh, cellular\ldots
+
+            \item \textbf{PAC} (\textit{Programmable Automation Controller}): mở rộng khả năng của PLC, gần với mô hình PC kết hợp PLC; hỗ trợ lập trình bằng năm ngôn ngữ IEC~61131-3 và thêm C/C++. PAC hỗ trợ nhiều module I/O hơn, xử lý logic phức tạp hơn, tích hợp xử lý dữ liệu và kết nối cơ sở dữ liệu, thường dùng cho điều khiển và giám sát đa miền (\textit{multi-domain}).
+        \end{itemize}
+
+        \item \textbf{HMI} (\textit{Human Machine Interface}): giao diện giữa con người và máy móc. Chiều Human $\rightarrow$ Machine chuyển tương tác của người vận hành thành tín hiệu mà máy hiểu được; chiều Machine $\rightarrow$ Human chuyển tín hiệu thành biểu tượng, đồ thị như trạng thái (\textit{status}), báo động (\textit{alarms}) và thông báo (\textit{notifications}).
+    \end{itemize}
+
+    \item \textbf{SIS (Safety Instrumented System)}: hệ thống điều khiển giống PLC nhưng được triển khai \textbf{độc lập, cách ly} với hệ thống điều khiển chính để tạo thêm một lớp an toàn bổ sung trong trường hợp 
+    hệ thống điều khiển chính bị Lỗi
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{Figure/SIS.png}
+    \caption{Ví dụ hệ thống SIS}
+    \label{fig:sis}
+    \end{figure}
+
+    SIS Controller cũng giống PLC/RTU nhưng sử dụng 2 Gauges Level Sensors, 2 Valve Actuator của riêng 
+    nó để điều khiển mực nước trong bể chứa. Dù cho PLC có hỏng hay Sensor chính gặp vấn đề thì vẫn còn SIS dự 
+    phòng để đảm bảo an toàn.
+
+    \item \textbf{EMS (Energy Management System)}: hệ thống quản lý năng lượng, giúp tối ưu hóa việc sử dụng, truyền tải và phân phối năng lượng để nhà máy vận hành hiệu quả và không làm quá tải lưới điện.
+\end{itemize}
+
+\section{Bộ điều khiển logic khả trình (PLC)}
+\label{sec:plc}
+
+\subsection{Khái niệm PLC}
+
+PLC là tên viết tắt của \textbf{Programmable Logic Controller} là bộ điều khiển logic khả trình hay bộ điều khiển logic có khả năng lập trình. PLC về bản chất giống mới một chiếc PC chạy chương trình do lập trình viên viết ra. Điểm khác biệt duy nhất nằm ở chất lượng phần cứng đặc biệt tốt, nhỏ gọn để chịu được môi trường đặc thù nhiều rung động, nhiệt độ cao, bụi bẩn, nhiễu điện từ, hoạt động liên tục 24/7 trong nhiều năm của các nhà máy sản xuất.
+
+Trước khi PLC ra đời, việc điều khiển các quy trình này thường được thực hiện bằng hàng trăm, thậm chí hàng nghìn rơ le (relay), bộ định thời (timer), và bộ đếm (counter) cơ điện. Hệ thống này rất cồng kềnh, phức tạp, khó khăn trong việc sửa đổi logic điều khiển. Sự ra đời của PLC vào cuối những năm 1960 bởi \textbf{Richard E. Morley} được xem là một cuộc cách mạng, thay thế hoàn toàn các hệ thống điều khiển bằng rơ le truyền thống. Điểm đặc biệt của PLC so với các hệ thống điều khiển cứng bằng rơ le là logic điều khiển có thể dễ dàng thay đổi bằng cách sửa đổi chương trình phần mềm mà không cần phải thay đổi phần cứng hay đi lại dây phức tạp.
+
+Thị trường PLC toàn cầu được thống trị bởi một số ít nhà sản xuất lớn, mỗi hãng có dòng sản phẩm, 
+phần mềm lập trình và hệ sinh thái riêng. Việc lựa chọn PLC thường phụ thuộc vào kinh nghiệm đội 
+ngũ kỹ thuật, tính sẵn có của thiết bị và hỗ trợ kỹ thuật có sẵn tại nhà máy.
+
+\begin{table}[H]
+    \centering
+    \caption{Các nhà sản xuất PLC tiêu biểu}
+    \label{tab:plc-manufacturers}
+    \begin{tabular}{|p{3.2cm}|p{1.8cm}|p{4.2cm}|p{3.5cm}|}
+        \hline
+        \textbf{Tên} & \textbf{Quốc gia} & \textbf{Các dòng máy phổ biến} & \textbf{Phần mềm lập trình} \\
+        \hline
+        Siemens & Đức & LOGO!, Simatic S7-200 SMART, S7-300, S7-400, S7-1200, S7-1500 & TIA Portal \\
+        \hline
+        Rockwell Automation / Allen-Bradley & Mỹ & MicroLogix, CompactLogix, ControlLogix & RSLogix 5000, Studio 5000 \\
+        \hline
+        Mitsubishi Electric & Nhật Bản & FX, Q, L, iQ-R/F series & GX Works2, GX Works3 \\
+        \hline
+        Omron & Nhật Bản & CP1, CJ2, NX/NJ series & CX-One \\
+        \hline
+        Schneider Electric & Pháp & Modicon M221, M340, M580 & EcoStruxure Control Expert \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Ngoài ra còn các nhà sản xuất khác như Delta (Đài Loan), Keyence (Nhật Bản) và LS Electric (Hàn Quốc)\ldots
+
+\subsection{Cấu tạo PLC}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Figure/PLC_components.png}
+    \caption{Các thành phần chính của PLC}
+    \label{fig:plc-components}
+\end{figure}
+
+\subsubsection{Bộ xử lý trung tâm (CPU)}
+
+\textbf{Bộ xử lý trung tâm CPU} (\textit{Central Processing Unit}) được coi là bộ não của PLC. Khác với CPU
+ của máy tính thông thường hoạt động đa nhiệm và theo sự kiện (\textit{event-driven}), CPU của PLC hoạt 
+ động theo chu kỳ quét (\textit{scan cycle}, thường tính bằng miligiây) và thực hiện tuần tự các lệnh trong chương trình. Một chu trình quét điển hình gồm 3 bước chính:
+
+\begin{enumerate}
+    \item \textbf{Đọc đầu vào (Input Scan)}: CPU kiểm tra trạng thái cảm biến, nút nhấn kết nối module đầu vào và chép dữ liệu vào Bảng ảnh đầu vào (\textit{Input Image Table} -- PII), đảm bảo CPU có bản chụp nhất quán về trạng thái đầu vào.
+    \item \textbf{Thực thi chương trình (Program Execution)}: CPU chạy chương trình đã nạp sẵn để xử lý logic, số học và các lệnh điều khiển dựa trên đầu vào nhận được.
+    \item \textbf{Cập nhật đầu ra (Output Scan)}: Sau khi tính toán xong, CPU cập nhật giá trị vào Bảng ảnh đầu ra (\textit{Output Image Table} -- PIQ), sau đó ghi ra module đầu ra để điều khiển các thiết bị chấp hành (động cơ, van, đèn\ldots).
+    \item \textbf{Lặp lại chu trình quét}.
+\end{enumerate}
+
+Ngoài thực thi logic chính, CPU còn quản lý chuẩn đoán lỗi và giao tiếp với PLC hoặc hệ thống khác. CPU của PLC 
+thường được thiết kế dựa trên các kiến trúc Intel X86, PowerPC, ARM, MIPS.
+
+
+\subsubsection{Module đầu vào và đầu ra}
+
+\textbf{Module đầu vào (Input Modules)} nhận tín hiệu từ thiết bị hiện trường và chuyển thành tín hiệu logic mà CPU hiểu được. Có hai loại chính:
+\begin{itemize}
+    \item Module đầu vào số (DI -- \textit{Digital Input Module}): nhận tín hiệu ON/OFF.
+    \item Module đầu vào tương tự (AI -- \textit{Analog Input Module}): nhận tín hiệu liên tục.
+\end{itemize}
+
+Số lượng I/O mà PLC quản lý phản ánh khả năng xử lý và quy mô ứng dụng:
+
+\begin{table}[htbp]
+    \centering
+    \caption{Phân loại PLC theo số lượng điểm I/O}
+    \label{tab:plc-io-scale}
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Loại PLC} & \textbf{Số lượng I/O} \\
+        \hline
+        Micro PLC & dưới 32--64 điểm I/O \\
+        \hline
+        Small PLC & 64 đến vài trăm điểm I/O \\
+        \hline
+        Medium PLC & vài trăm đến khoảng 1000--2000 điểm I/O \\
+        \hline
+        Large PLC & hàng nghìn, hàng chục nghìn điểm I/O \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\textbf{Module đầu ra (Output Modules)} nhận lệnh từ CPU và chuyển thành tín hiệu điều khiển thiết bị chấp hành. Tương tự có:
+
+\begin{itemize}
+    \item Module đầu ra số (DO) xuất tín hiệu ON/OFF (Relay, Transistor, Triac)
+    \item Module đầu ra tương tự (AO) xuất tín hiệu liên tục.
+\end{itemize} 
+
+
+\subsubsection{Bộ nhớ}
+
+Trong PLC bao gồm các loại bộ nhớ sau:
+
+\begin{itemize}
+    \item \textbf{Read-only Memory (ROM)}: Chứa firmware, OS của PLC. Do phần này không thay đổi trong quá trình hoạt động của PLC nên chỉ cần Read. OS của PLC thường riêng biệt để tối ưu cho môi trường Real-time (RTOS Real-time Operating System), điển hình như VxWorks, Windows CE, Neutrino \& RTOS.
+    \item \textbf{Random Access Memory (RAM)}: Chứa dữ liệu tạm thời như trạng thái I/O, timer, counter, biến nội bộ. Mất dữ liệu khi mất điện.  Các vùng nhớ quan trọng~\cite{snap7_sharp7}:
+
+    \begin{table}[H]
+        \centering
+        \caption{Các vùng nhớ RAM trong PLC (theo ký hiệu Siemens)}
+        \label{tab:plc-memory}
+        \begin{tabular}{|l|c|p{7.5cm}|}
+            \hline
+            \textbf{Vùng nhớ} & \textbf{Ký hiệu} & \textbf{Ý nghĩa} \\
+            \hline
+            Input & I hoặc E & Lưu trạng thái của các cổng vào vật lý (nút nhấn, công tắc hành trình). PLC đọc từ phần cứng và chép vào đây ở đầu chu kỳ quét. \\
+            \hline
+            Output & Q hoặc A & Lưu trạng thái mong muốn của các thiết bị chấp hành (motor, đèn, van). Cuối chu kỳ quét, dữ liệu từ đây sẽ được đẩy ra phần cứng. \\
+            \hline
+            Memory/Merker & M & Vùng nhớ trung gian toàn cục của PLC, giống global variables trong IT. Nó dùng để lưu các trạng thái trung gian của thuật toán mà không xuất trực tiếp ra ngoài phần cứng. \\
+            \hline
+            Data Block & DB & Khối dữ liệu người dùng; lưu setpoint, giới hạn nhiệt độ/áp suất, mật khẩu\ldots \\
+            \hline
+            Local data & L & Lưu trữ các biến cục bộ trong các khối chương trình \\
+            \hline
+            Timer & T hoặc \%T & Bộ đếm thời gian. \\
+            \hline
+            Counter & C hoặc \%C & Bộ đếm sự kiện. \\
+            \hline
+        \end{tabular}
+    \end{table}
+
+
+    \item \textbf{Electrically Erasable Programmable Read-Only Memory (EEPROM)}: Thao tác với dữ liệu ở cấp độ Byte. Không mất dữ liệu khi mất điện. Thường dùng cho lưu trữ chương trình và dữ liệu cấu hình của PLC.
+    \item \textbf{Flash Memory}: Giống EEPROM nhưng thao tác với dữ liệu ở cấp độ Block. Dung lượng lớn, nhanh và rẻ hơn.
+\end{itemize}
+
+\subsubsection{Các thành phần khác}
+
+\textbf{Bộ nguồn (Power Supply Unit)} cung cấp điện áp ổn định cho các thành phần PLC, dự trữ năng lượng (UPS) để bảo vệ các thiết bị khi mất nguồn điện đột ngột.
+
+\textbf{Cổng truyền thông (Communication Processor)} cho phép PLC giao tiếp với máy trạm nạp chương trình, HMI, SCADA, PLC khác hoặc hệ thống quản lý dữ liệu. PLC có thể
+giao tiếp qua các loại Serial cũ như RS-232, RS-485 hoặc cổng Ethernet RJ45 hiện đại.
+
+
+Các thành phần này có thể được tách ra thành từng module vật lý khác nhau và kết nối lại với nhau thành một PLC hoàn chỉnh thông qua bus hệ thống (\textit{Modular PLC}) (Modular PLC) hoặc được tích hợp sẵn trong một khối duy nhất (\textit{Compact PLC} hay \textit{Brick PLC}).
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Compact_PLC_type.png}
+        \caption{LOGO! Siemens -- Compact PLC}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Modular_PLC_type.png}
+        \caption{Siemens S7-1200 -- Modular PLC}
+    \end{subfigure}
+    \caption{Hai dạng PLC: Compact và Modular}
+    \label{fig:plc-types}
+\end{figure}
+
+Với PLC dạng module, các thành phần được gắn theo \textit{slot} trên \textit{rack} của tủ điện:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Figure/PLC_rack.png}
+    \caption{Trong phần mềm lập trình Tia Portal sẽ cần chỉ định rack và slot của module truyền thông của PLC, như ví dụ trong ảnh là rack 0, slot 1 để có thể kết nối tới đúng PLC}
+    \label{fig:plc-rack}
+\end{figure}
+
+\subsection{Ngôn ngữ lập trình PLC}
+
+Chương trình điều khiển PLC được viết bằng 5 ngôn ngữ lập trình theo chuẩn \textbf{IEC 61131-3}:
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Figure/Code_PLC.png}
+    \caption{Năm ngôn ngữ lập trình PLC theo IEC 61131-3}
+    \label{fig:plc-languages}
+\end{figure}
+
+\begin{enumerate}
+    \item \textbf{Ladder Diagram (LD)}: ngôn ngữ đồ họa dạng mạch rơle, bao gồm 2 thanh dọc (Bus Bar) đại diện cho dây nóng và 
+    dây trung tính, nối giữa 2 thanh dọc này là các thanh 
+    ngang (rung) đại diện cho các dòng logic điều khiển bao gồm các đầu
+     vào, các biến đổi logic nối với đầu ra và các tiếp điểm (Contacts) và cuộn dây (Coils). PLC sẽ scan các rungs từ trên xuống dưới, 
+     mỗi rungs scan logic từ trái qua phải. Mỗi chu kỳ scan ~50-60ms. Đây là ngôn ngữ phổ biến nhất được sử dụng bởi các lỹ sư lập trình PLC do nó 
+     có tư duy thiết kế giống với dạng mạch điện tử.
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{Figure/Ladder.png}
+        \caption{Ví dụ một chương trình mạch tự duy trì băng ngôn ngữ Ladder}
+        \label{fig:ld-example}
+    \end{figure}
+
+    \item \textbf{Function Block Diagram (FBD)}:  Logic bằng block function. Các khối hình chữ nhật với đầu vào bên trái và đầu ra bên phải, được nối với nhau bằng các đường kẻ (dây tín hiệu). Cho phép xây dựng các ứng dụng điều khiển phức tạp một cách trực quan. 
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{FBD_code.png}
+        \caption{Ví dụ mã FBD}
+        \label{fig:fbd-example}
+    \end{figure}
+
+    \item \textbf{Sequential Function Chart (SFC)}: Giống như một lưu đồ (flowchart) gồm các bước (Steps) và các điều kiện chuyển bước (Transitions). Sử dụng cho quy trình phức tạp và tuần tự
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{SFC_code.png}
+        \caption{Ví dụ mã SFC}
+        \label{fig:sfc-example}
+    \end{figure}
+
+    \item \textbf{Structured Text (ST)}: Là các dòng mã thuần văn bản, có dạng gần giống C / Pascal.  Phù hợp các lập trình viên code cho các ứng dụng phức tạp, có nhiều tính toán và xử lý dữ liệu, dùng  các cấu trúc như \texttt{IF...THEN}, \texttt{FOR}, \texttt{WHILE}
+
+\begin{quote}
+\small\ttfamily
+IF Input1 THEN\\
+\quad Output1 := NOT Output1;\\
+END\_IF;
+\end{quote}
+
+    \item \textbf{Instruction List (IL)}: Ngôn ngữ cấp thấp, tương tự như Assembly. Tức gồm một danh sách các lệnh viết tắt theo cột dọc. Đòi hỏi lập trình viên có kiến thức chuyên sâu về PLC và kiến trúc máy tính, sử dụng cho các ứng dụng cần tốc độ xử lý cao và có yêu cầu về hiệu suất. Tuy nhiên không còn được khuyến khích sử dụng bởi các nhà sản xuất.
+
+\begin{quote}
+\small\ttfamily
+LD Input1 \hfill\textit{(Load Input 1)}\\
+AND Input2 \hfill\textit{(And với Input 2)}\\
+ST Output1 \hfill\textit{(Store vào Output 1)}
+\end{quote}
+\end{enumerate}
+
+\section{Mô hình Purdue}
+\label{sec:purdue}
+
+Mô hình Purdue (\textit{Purdue Enterprise Reference Architecture} -- PERA) là 
+mô hình tiêu chuẩn để phân chia các lớp mạng trong môi trường ICS/OT.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Figure/Purdue.png}
+    \caption{Mô hình phân vùng mạng Purdue}
+    \label{fig:purdue-overview}
+\end{figure}
+
+Kiến trúc này hiển thị khái niệm phân đoạn mạng giúp tách vùng của Mạng ICS (OT) khỏi Vùng của Mạng doanh nghiệp (IT). Nó cũng cho thấy sự phụ thuộc lẫn nhau và tương tác giữa các thành phần chính ở cấp độ 0 đến 5. Mô hình này được áp dụng từ IEC 62443, một bộ tiêu chuẩn về An ninh mạng trong các mạng công nghiệp.
+
+Bảng~\ref{tab:purdue-layers-ot} và Bảng~\ref{tab:purdue-layers-it} mô tả chi tiết từng tầng, thiết bị điển hình và ví dụ thực tế tại nhà máy VinFast Hải Phòng (VF HP).
+
+\begin{table}[H]
+    \centering
+    \caption{Phân tầng mạng Purdue --- vùng OT (tầng 0--2)}
+    \label{tab:purdue-layers-ot}
+    \footnotesize
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{|>{\raggedright\arraybackslash}p{2.1cm}|>{\raggedright\arraybackslash}p{4.3cm}|>{\raggedright\arraybackslash}p{7.2cm}|}
+        \hline
+        \textbf{Tầng} & \textbf{Mô tả} & \textbf{Thiết bị} \\
+        \hline
+        0 --- \textit{Physical Layer} &
+        Nơi tín hiệu điện/quang được chuyển thành quy trình vật lý (với Actuator) hoặc theo chiều ngược lại (với Sensor). &
+        \textbf{Sensor}: đo các thông số vật lý như nhiệt độ, hình ảnh\ldots\ Ví dụ tại VF HP dùng cảm biến máy ảnh Zeiss kiểm tra thân vỏ xe.
+        \par\vspace{0.3em}
+        \textbf{Actuator}: van, cánh tay robot\ldots\ Ví dụ tại VF HP dùng cánh tay robot ABB kết hợp súng hàn ISI Welding Gun.
+        \par\vspace{0.3em}
+        \includegraphics[width=0.6\linewidth]{Figure/ABB.png} \\
+        \hline
+        1 --- \textit{Controller Layer} &
+        Chứa các bộ điều khiển nhận tín hiệu từ Sensor $\rightarrow$ xử lý logic điều khiển $\rightarrow$ xuất tín hiệu điều khiển cho Actuator. &
+        PLC, RTU. Ví dụ tại VF HP, xưởng BODY sử dụng 98 PLC S7-1500 điều khiển toàn bộ dây chuyền. Bản thân các PLC này không điều khiển trực tiếp các cánh tay robot ABB mà sẽ gửi task chỉ là một số thứ tự xuống ABB robot controller. Các controller này chứa các lệnh điều khiển robot thực tế và sẽ thực thi chương trình ứng với task được PLC giao xuống.
+        \par\vspace{0.3em}
+        \includegraphics[width=0.6\linewidth]{Figure/PLCS7-1500.png} \\
+        \hline
+        2 --- \textit{Supervisor Layer} &
+        Chứa thiết bị giám sát cục bộ cho \textbf{một xưởng} trong nhà máy. &
+        HMI cục bộ, PC cục bộ, Engineering Workstation của xưởng. Ví dụ tại xưởng BODY, mỗi PCS có một (hoặc vài) HMI để công nhân thao tác; thường ký hiệu theo dạng tên truyền + trạm + số thứ tự, ví dụ \texttt{L8=B1RS1++OP1}.
+        \par\vspace{0.3em}
+        \includegraphics[width=0.6\linewidth]{Figure/HMI.png} \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Phân tầng mạng Purdue --- vùng vận hành và IT (tầng 3--5)}
+    \label{tab:purdue-layers-it}
+    \footnotesize
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{|>{\raggedright\arraybackslash}p{2.1cm}|>{\raggedright\arraybackslash}p{4.3cm}|>{\raggedright\arraybackslash}p{7.2cm}|}
+        \hline
+        \textbf{Tầng} & \textbf{Mô tả} & \textbf{Thiết bị} \\
+        \hline
+        3 --- \textit{Operation Layer} &
+        Chứa thiết bị giám sát, điều phối cho \textbf{toàn bộ các xưởng}, đặt tại nhà điều hành trung tâm của nhà máy. &
+        Database, SCADA Control Center, MES (Manufactoring Execution System) là hệ thống điều phối các hoạt động sản xuất như lập lịch, theo dõi orders, QC giám sát chất lượng sản phẩm. \\
+        \hline
+        3.5 --- \textit{DMZ Layer} &
+        Tầng DMZ là khu vực đệm ngăn cách mạng OT và IT. Phân vùng này kiểm soát truy cập qua tường lửa, không cho phép lưu lượng đi trực tiếp giữa OT và IT. &
+        Firewall, data diodes,Jump Server: Máy từ IT -> Jump Server (DMZ) -> Máy trong OT, Replica Historian: Máy IT lấy dữ liệu lịch sử ở đây thay vì cần phải chọc xuống máy OT, Patch Server: Do mạng OT không được phép kết nối tới Internet nên cần phải tải các bản Update từ Internet -> Patch Server (DMZ) -> Các máy OT lấy bản update từ Patch Server (DMZ) này thay vì trực tiếp từ Internet. \\
+        \hline
+        4 --- \textit{Management Layer} &
+        Mạng IT nội bộ của nhà máy. &
+        Máy trạm văn phòng tại nhà điều hành trung tâm. Hệ thống ERP (Enterprise Resource Planning) là hệ thống quản lý toàn bộ hoạt động của doanh nghiệp bao gồm không chỉ mảng sản xuất của nhà máy (MES) mà còn các hoạt động khác như nhân sự, kế toán tài chính, chuỗi cung ứng. CRM (Customer Relationship Management). \\
+        \hline
+        5 &
+        DMZ giữa mạng IT nội bộ và Internet. Kết nối nhà máy ra Internet cho phép quản lý một nhà máy từ một vị trí địa lý khác. &
+        Tường lửa và các máy chủ cần expose ra Internet như Web Server, Email Server\ldots \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\section{Giao thức Siemens S7comm}
+\label{sec:s7comm}
+
+\subsection{Bối cảnh: Fieldbus và Ethernet công nghiệp}
+
+\textbf{Fieldbus}  là một loại mạng công nghiệp, dùng để kết nối PLC với thiết bị hiện trường (sensor, actuator) hoặc giữa các PLC với nhau hoặc với các thiết bị công nghiệp khác. Trong đó mỗi chuẩn fieldbus định nghĩa:
+
+\begin{itemize}
+    \item loại cáp
+    \item cách truyền tín hiệu
+    \item giao thức truyền dũ liệu
+    \item cách tổ chức mạng
+\end{itemize}
+
+Một số loại Fieldbus phổ biến:
+
+
+\begin{table}[H]
+    \centering
+    \caption{Một số chuẩn Fieldbus phổ biến}
+    \label{tab:fieldbus}
+    \footnotesize
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+        \textbf{Tên} & \textbf{Cáp} & \textbf{Topology} & \textbf{Giao thức} \\
+        \hline
+        PROFIBUS & RS-485 & bus & PROFIBUS \\
+        \hline
+        Modbus RTU & RS-485 & bus & Modbus \\
+        \hline
+        CAN bus & twisted pair & bus & CANopen, DeviceNet \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\textbf{Ethernet công nghiệp}  là một loại mạng công nghiệp khác, nó sử dụng cáp Ethernet tiêu chuẩn. Các giao thức phổ biến chạy trên Ethernet công nghiệp bao gồm: EtherNet/IP, Modbus TCP, \textbf{PROFINET} và \textbf{Siemens S7}. 
+
+Ưu điểm của mạng Ethernet công nghiệp là
+
+\begin{itemize}
+    \item Tốc độ cao, tương thích tốt hơn với các thiết bị IT, dễ dàng debug
+    \item Chi phí rẻ hơn các loại fieldbus truyền thống do sử dụng hạ tầng Ethernet tiêu chuẩn, không yêu cầu các adapter, dây cáp kết nối chuyên dụng
+\end{itemize}
+
+PLC Siemens có thể giao tiếp trên Ethernet bằng một trong hai giao thức sau ~\cite{snap7_s7protocol}:
+
+\begin{itemize}
+    \item \textbf{Open TCP/IP}: triển khai tiêu chuẩn của TCP/IP, nghĩa là PLC dùng TCP/IP bình thường. Khi này ta có thể triển khai chương trình như lập trình mạng thông thường dùng socker, TCP, UDP. Tuy nhiên, giao thức này chỉ truyền dữ liệu dưới dạng luồng (stream-based), mà các lệnh điều khiển của Siemens cần có độ dài cố định (Data Block), nên chương trình PLC FC (Function Code) và FB (Function Block) lập trình viên phải tự đóng gói message (packetize) từ dữ liệu stream thành các block.
+
+    \item \textbf{S7} hay \textbf{S7comm} hoặc \textbf{S7 Communication} và bản nâng cấp sau này là \textbf{S7 comm plus}. Đây là giao thức độc quyền của Siemens xuất hiện lần đầu vào năm 1994 cùng với sự ra đời của dòng sản phẩm Simatic S7-200, S7-300 và S7-400. Trong kiến trúc mạng công nghiệp, giao thức S7 hoạt động theo mô hình \textit{request--response}: một bên gửi yêu cầu, bên kia trả lời.
+\end{itemize}
+
+\textit{Một số tài liệu gọi bằng cái tên khác như mô hình client-server (với S7 chạy trên nền Ehternet hiện đại với hạ tầng mạng có switch có khả năng kết nối full-duplex) hoặc master-slave (Với S7 chạy trên mạng Fieldbus cũ như PROFIBUS với hạ tầng mạng chỉ là một bus chung duy nhất). Dù gọi là gì thì về bản chất, S7 vẫn tuân theo mô hình giao tiếp request-response, tức là một bên gửi yêu cầu và bên kia trả lời ~\cite{inprotech_s7comm_security}.}
+
+S7 là giao thức hoạt động ở tầng 7. Tuy nhiên nó kéo dài xuống nhiều tầng dưới bằng cách tái sử dụng các giao thức ở tầng dưới. Điều này là vì ban đầu S7 không được thiết kế để chạy trên kiến trúc mạng TCP/IP. S7 ban đầu được thiết kế để chạy trên hạ tầng mạng Fieldbus như PROFIBUS hoặc MPI~\cite{veit2021ics_dissectors} sử dụng dây cáp công nghiệp chuyên dụng thay vì dây cáp Etherner để truyền dẫn. Tuy nhiên để tăng tính tương thích, S7 Comm được cải tiếp để chạy trên nền ISO TCP (theo tiêu chuẩn RFC 1006) mà giao thức ISO TCP này lại chạy trên TCP/IP. Theo thiết kế gốc thì mô hình ISO TCP là một giao thức dạng gói (packet-based) hay block oriented , tức là mỗi tin nhắn có độ dài rõ ràng. Mỗi block này được gọi là một \textbf{PDU} (\textit{Protocol Data Unit}). Độ dài PDU phụ thuộc bộ xử lý giao tiếp (\textit{Communication Processor -- CP}) nằm bên trong PLC và được đàm phán giữa các thiết bị khi thiết lập kết nối.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Figure/S7_stack.png}
+    \caption{Kiến trúc mạng S7}
+    \label{fig:s7-network-stack}
+\end{figure}
+
+\subsection{Cách đọc địa chỉ trong Siemens S7}
+
+Cú pháp chung:
+\begin{quote}
+\small\ttfamily
+[Loại vùng nhớ] [Kích thước] [Địa chỉ byte].[Địa chỉ bit]
+\end{quote}
+
+Trong đó: 
+\begin{itemize}
+    \item Loại vùng nhớ là I, Q, M, DB, T, C;
+    \item Kích thước là X (bit), B (byte), W (word), D (dword)
+    
+    \begin{table}[H]
+        \centering
+        \caption{Ký hiệu kích thước dữ liệu trong S7}
+        \label{tab:s7-data-size}
+        \footnotesize
+        \begin{tabular}{|c|l|c|l|}
+            \hline
+            \textbf{Ký hiệu} & \textbf{Tên} & \textbf{Số bit} & \textbf{Ví dụ} \\
+            \hline
+            X & Bit & 1 & M0.3 (Merker byte 0, bit 3) \\
+            \hline
+            B & Byte & 8 & MB5 \\
+            \hline
+            W & Word & 16 & MW10 \\
+            \hline
+            D & DWord & 32 & MD20 \\
+            \hline
+        \end{tabular}
+    \end{table}
+    
+    
+    \item Địa chỉ Byte để chỉ định Byte cụ thể trong phạm vi kích thước được chỉ định phía trên.
+    \item Địa chỉ bit để chỉ định bit cụ thể trong Byte được chỉ định phía trên.
+\end{itemize}
+
+
+Vùng DB có cú pháp riêng:
+\begin{quote}
+\small\ttfamily
+Bit:   DB[n].DBX [byte] . [bit]\\
+Byte:  DB[n].DBB [byte]\\
+Word:  DB[n].DBW [byte]\\
+DWord: DB[n].DBD [byte]
+\end{quote}
+Ví dụ: \texttt{DB1.DBX0.0} là bit 0 của byte 0 trong DB1; \texttt{DB1.DBX0.1} là bit 1 của byte 0 trong DB1.
+
+Siemens S7 dùng \textbf{big-endian} (byte có trọng số cao ở địa chỉ thấp).
+
+\begin{table}[H]
+    \centering
+    \caption{Kiểu dữ liệu trong Data Block}
+    \label{tab:s7-db-types}
+    \footnotesize
+    \begin{tabular}{|l|c|l|}
+        \hline
+        \textbf{Kiểu} & \textbf{Kích thước} & \textbf{Ghi chú} \\
+        \hline
+        BOOL & 1 bit & True/False \\
+        \hline
+        BYTE & 1 byte & 0--255, unsigned \\
+        \hline
+        INT & 2 bytes & Signed 16-bit \\
+        \hline
+        WORD & 2 bytes & Unsigned 16-bit \\
+        \hline
+        DINT & 4 bytes & Signed 32-bit \\
+        \hline
+        DWORD & 4 bytes & Unsigned 32-bit \\
+        \hline
+        REAL & 4 bytes & IEEE 754 float \\
+        \hline
+        STRING & biến đổi & [max\_len][cur\_len][chars\ldots] \\
+        \hline
+        S5TIME & 2 bytes & Định dạng thời gian Siemens \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Cấu trúc gói tin S7comm}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Figure/Siemens_S7_protocol_stack.png}
+    \caption{Ngăn xếp giao thức S7comm (TPKT, COTP, S7 PDU)}
+    \label{fig:s7-protocol-stack}
+\end{figure}
+
+\subsubsection{Phần COTP và TPKT}
+
+Trong ISO TCP, để tương thích với TCP:
+
+\begin{enumerate}
+    \item TCP là giao thức hướng kết nối, ISO gốc không hướng kết nối $\rightarrow$ dùng \textbf{COTP} (\textit{Connection-Oriented Transport Protocol}) thiết lập kết nối logic trước khi trao đổi S7. Tham số \textbf{TSAP} (\textit{Transport Service Access Point}) định tuyến thông điệp tới đúng tiến trình trong CPU PLC.
+
+    \begin{table}[H]
+        \centering
+        \caption{Cấu trúc TSAP (2 byte)}
+        \label{tab:tsap}
+        \footnotesize
+        \begin{tabular}{|l|c|p{7cm}|}
+            \hline
+            \textbf{Thành phần} & \textbf{Giá trị} & \textbf{Ý nghĩa} \\
+            \hline
+            Byte 1 (loại thiết bị) & \texttt{0x01}, \texttt{0x02}, \texttt{0x03} & PG (máy lập trình), OP (bảng vận hành), kết nối khác \\
+            \hline
+            Byte 2 (vị trí) & Rack/Slot & Vị trí CPU trong tủ điện (ví dụ Rack 0, Slot 2) \\
+            \hline
+        \end{tabular}
+    \end{table}
+
+    \item TCP là dạng luồng $\rightarrow$ dùng \textbf{TPKT} (\textit{ISO Transport Service on top of TCP}) đóng khung (\textit{framing}) để tách luồng byte thành gói có độ dài cố định. Ngăn xếp giao thức Siemens tự chèn header TPKT trước dữ liệu COTP và S7. Header TPKT dài 4 byte: byte 1 = \texttt{0x03} (phiên bản), byte 2 = \texttt{0x00} (reserved), 2 byte cuối = tổng độ dài gói (header + payload). Khi PLC nhận dòng byte từ TCP stream, nó đọc 4 byte đầu để biết cần nhận đủ bao nhiêu byte, rồi mới đẩy khối dữ liệu lên S7comm.
+\end{enumerate}
+
+Kết quả: giao thức vừa có độ dài thông điệp rõ ràng (ưu điểm ISO), vừa đi qua router IP (ưu điểm TCP). S7comm thường dùng cổng TCP \textbf{102}. COTP theo~\cite{rfc905}, TPKT theo~\cite{rfc1006,rfc2126}.
+
+\subsubsection{Phần S7 PDU}
+
+S7 thiết kế theo hướng \textit{function/command oriented}: mỗi lần truyền gồm một lệnh điều khiển hoặc phản hồi. Nếu lệnh không vừa một PDU, nó được chia thành nhiều PDU tiếp theo.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Figure/s7struct.png}
+    \caption{Cấu trúc một gói tin S7comm}
+    \label{fig:s7-struct}
+\end{figure}
+
+Một lệnh gồm \textbf{Header} và \textbf{Parameter/Data}:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Figure/s7header.png}
+    \caption{Cấu trúc S7 Header}
+    \label{fig:s7-header}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Protocol ID} (1 byte): luôn \texttt{0x32} để nhận dạng S7comm.
+    \item \textbf{Message Type / ROSCTR} (\textit{Remote Operating Service Control}): cho biết loại gói tin. Bảng~\ref{tab:rosctr} liệt kê các giá trị phổ biến.
+    \item \textbf{Reserved}: luôn \texttt{0x0000}, không mang ý nghĩa nghiệp vụ.
+    \item \textbf{PDU Reference}: số tham chiếu do client tạo để định danh yêu cầu; khi PLC phản hồi sẽ trả lại số này để client ghép đúng cặp request--response. Số reference thường tăng dần theo từng yêu cầu mới.
+    \item \textbf{Parameter length}, \textbf{Data length}: độ dài phần tham số và dữ liệu (big-endian).
+    \item \textbf{Error class}, \textbf{Error code}: chỉ xuất hiện trong gói phản hồi \texttt{Ack\_Data} khi có lỗi.
+\end{itemize}
+
+\begin{table}[H]
+    \centering
+    \caption{Các loại gói tin S7comm theo ROSCTR}
+    \label{tab:rosctr}
+    \footnotesize
+    \begin{tabular}{|c|l|p{8.5cm}|}
+        \hline
+        \textbf{ROSCTR} & \textbf{Tên} & \textbf{Ý nghĩa} \\
+        \hline
+        1 & Job & Yêu cầu từ client tới server: read/write memory, read/write blocks, start/stop device, setup communication\ldots \\
+        \hline
+        2 & Ack & Xác nhận đã nhận yêu cầu, không kèm dữ liệu. \\
+        \hline
+        3 & Ack\_Data & Xác nhận đã nhận yêu cầu và kèm dữ liệu trả về cho job trước đó. \\
+        \hline
+        7 & User\_Data & Phần mở rộng so với giao thức gốc: \textit{Function Group} gồm programmer commands, cyclic data, block functions, CPU functions, security, time functions; mỗi nhóm lại có nhiều \textit{subfunction} (ví dụ trong CPU Functions: Read SZL, message service\ldots). \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Phần \textbf{tham số} (tên tham số và giá trị nếu có) phụ thuộc \textit{Function Code} (\textit{S7 Header Function Code}) trong header. Các nhóm lệnh gồm Data Read/Write, Cyclic Data Read/Write, Directory info, System Info, Blocks move, PLC Control, Date and Time, Security, Programming\ldots
+
+\subsection{Thiết lập kết nối S7comm}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Figure/image-1.png}
+    \caption{Luồng thiết lập kết nối S7comm (minh họa Wireshark~\cite{wireshark_s7comm}, cổng TCP 102; nguồn mẫu: \textit{SampleCaptures/s7comm\_reading\_plc\_status.pcap})}
+    \label{fig:s7-connect-flow}
+\end{figure}
+
+\subsubsection{Bắt tay TCP (three-way handshake)}
+
+Client và PLC (ví dụ \texttt{192.168.1.10} và \texttt{192.168.1.40}) thiết lập kết nối TCP trên cổng 102 bằng ba bước SYN, SYN-ACK, ACK (\textit{three-way handshake}) --- trong bắt gói mẫu \textit{SampleCaptures/s7comm\_reading\_plc\_status.pcap} tương ứng các gói 5, 6, 7.
+
+\subsubsection{Thiết lập kết nối COTP}
+
+Sau khi kết nối TCP được thiết lập, client gửi \textbf{COTP CR} (\textit{COTP Connect Request}) tới PLC, kèm thông tin TSAP để định danh dịch vụ và vị trí CPU cần giao tiếp. Gói này được bọc bởi header TPKT, ví dụ:
+\begin{quote}
+\small\ttfamily
+TPKT, Version: 3, Length: 22\\
+\quad Version: 3\\
+\quad Reserved: 0\\
+\quad Length: 22
+\end{quote}
+
+\texttt{Version: 3} là phiên bản TPKT theo RFC~1006 (giá trị cố định). \texttt{Length: 22} là tổng độ dài gói TPKT, gồm header TPKT (4 byte) và payload COTP CR (18 byte). PLC đọc 4 byte đầu để biết cần nhận đủ 22 byte rồi mới xử lý COTP; nếu gói bị cắt ngắn hoặc lỗi truyền, PLC có thể bỏ qua hoặc gửi lại yêu cầu kết nối.
+
+Phần COTP CR điển hình (gói 8 trong bắt mẫu):
+\begin{quote}
+\small\ttfamily
+ISO 8073/X.224 COTP Connection-Oriented Transport Protocol\\
+\quad Length: 17\\
+\quad PDU Type: CR Connect Request (0x0e)\\
+\quad Destination reference: 0x0000\\
+\quad Source reference: 0x000f\\
+\quad Parameter code: src-tsap (0xc1), length: 2, Source TSAP: 0100\\
+\quad Parameter code: dst-tsap (0xc2), length: 2, Destination TSAP: 0102\\
+\quad Parameter code: tpdu-size (0xc0), length: 1, TPDU size: 1024
+\end{quote}
+
+Giải thích: \texttt{PDU Type: CR (0x0e)} là yêu cầu kết nối (ngoài ra còn \texttt{CC (0x0d)} và \texttt{DT (0x0f)}). \texttt{Destination reference} ban đầu bằng 0; \texttt{Source reference} do client tạo (\texttt{0x000f}). \texttt{Source TSAP: 0100}: byte \texttt{0x01} là PG (máy lập trình). \texttt{Destination TSAP: 0102}: Rack~0, Slot~2. \texttt{TPDU size: 1024} là kích thước TPDU tối đa client có thể gửi (TPDU = TPKT + PDU S7comm).
+
+PLC phản hồi \textbf{COTP CC} (\textit{Connect Confirm}, gói 9):
+\begin{quote}
+\small\ttfamily
+PDU Type: CC Connect Confirm (0x0d)\\
+Destination reference: 0x000f\\
+Source reference: 0x0003\\
+Source TSAP: 0100, Destination TSAP: 0102, TPDU size: 1024
+\end{quote}
+
+\texttt{Destination reference: 0x000f} khớp \texttt{Source reference} của client; \texttt{Source reference: 0x0003} do PLC tạo --- client dùng giá trị này làm \texttt{Destination reference} trong các gói tiếp theo.
+
+\subsubsection{Thiết lập S7comm (Setup Communication)}
+
+Client gửi lệnh \textbf{Setup Communication} với \texttt{S7 Header Function Code = 0xF0}:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Figure/s7setup.png}
+    \caption{Gói tin Setup Communication trong Wireshark}
+    \label{fig:s7-setup}
+\end{figure}
+
+Yêu cầu Setup Communication (gói 10) có dạng:
+\begin{quote}
+\small\ttfamily
+S7 Communication, Header: (Job)\\
+\quad Protocol Id: 0x32, ROSCTR: Job (1)\\
+\quad Reserved: 0x0000, PDU Reference: 512\\
+\quad Parameter length: 8, Data length: 0\\
+Parameter: Setup communication (0xf0)\\
+\quad Max AmQ calling: 1, Max AmQ called: 1\\
+\quad PDU length: 480
+\end{quote}
+
+\texttt{Max AmQ calling} quy định client gửi bao nhiêu request song song; \texttt{Max AmQ called} quy định PLC xử lý bao nhiêu request song song --- thường cả hai bằng 1 (client chỉ gửi yêu cầu mới sau khi nhận phản hồi trước). \texttt{PDU length: 480} là kích thước payload S7 tối đa client mong muốn (byte).
+
+PLC phản hồi (gói 11):
+\begin{quote}
+\small\ttfamily
+Header: (Ack\_Data), ROSCTR: Ack\_Data (3)\\
+PDU Reference: 512, Error class/code: No error\\
+Setup communication (0xf0), Max AmQ: 1/1, PDU length: 240
+\end{quote}
+
+\texttt{PDU Reference: 512} tham chiếu gói request; \texttt{Ack\_Data (3)} xác nhận thiết lập thành công; PLC chấp nhận tham số trừ \texttt{PDU length} giảm còn 240 byte. Wireshark có dissector S7comm tích hợp sẵn nên giải mã trực tiếp Parameter/Data~\cite{wireshark_s7comm}.
+
+\subsubsection{Trao đổi dữ liệu}
+
+Sau khi setup, hai bên trao đổi bằng các lệnh S7 như Read/Write Var, ReadSZL\ldots; tùy từng lệnh mà cấu trúc phần Parameter và Data sẽ khác nhau.
+
+\subsection{Các vai trò trong giao tiếp S7}
+
+Có ba vai trò chính trong giao tiếp S7:
+
+\begin{itemize}
+    \item \textbf{Client}: thường là HMI, SCADA hoặc Engineering Station, giám sát và điều khiển PLC. Client gửi lệnh đọc/ghi dữ liệu, yêu cầu thực thi chương trình hoặc thay đổi cấu hình PLC.
+
+    \item \textbf{Server}: chính là PLC --- nhận yêu cầu, thực thi và trả kết quả (đọc/ghi, start/stop, trạng thái\ldots). PLC giao tiếp qua \textbf{CP} (\textit{Communication Processor}): nhận gói S7 từ mạng, giải mã, chuyển tới CPU; sau khi CPU xử lý, kết quả trả ngược qua CP. Các thiết bị bên trái (HMI, SCADA, máy lập trình) kết nối tới CP bên phải để gửi \textit{S7 Request}.
+
+    PLC cũng có thể là \textbf{client} khi cần giao tiếp với PLC khác qua Get/Put để lấy dữ liệu hoặc gửi lệnh điều khiển.
+
+    \item \textbf{Partner}: mô hình peer-to-peer --- sau khi thiết lập kết nối, cả hai bên đều có thể gửi dữ liệu mà không bắt buộc request--response từng gói như client--server. Trong tài liệu Siemens gọi là \textit{Client--Client}. PLC khởi tạo kết nối: \textit{Active Connection}; PLC nhận kết nối: \textit{Passive Connection}. Hai bên trao đổi qua BSend/BRecv: khi PLC~A gọi BSend thì PLC~B phải gọi BRecv cùng lúc để hoàn tất giao dịch.
+\end{itemize}
+
+\section{Hệ thống phát hiện xâm nhập (IDS)}
+\label{sec:ids}
+
+\subsection{Phương pháp xây dựng luật phát hiện}
+
+IDS có thể phát hiện bất thường theo hai hướng: \textit{signature-based} (dựa chữ ký) và \textit{anomaly detection} (dựa hành vi/thống kê). Đồ án tập trung vào hướng chữ ký. Khi kiểm tra gói tin S7comm, có hai cách viết rule phổ biến:
+
+\textbf{Mẫu byte (\textit{Byte Pattern / Raw Offset})}: hệ thống không cần hiểu ngữ nghĩa giao thức S7comm mà coi gói tin là chuỗi byte hex. Quy tắc chỉ định: tại vị trí thứ $X$, nếu thấy giá trị $Y$ thì báo động. Ví dụ: \texttt{(content:"|45 01|"; offset:22)} tương ứng byte liên quan chức năng mật khẩu của S7. Cách này nhanh, ít tốn tài nguyên vì làm việc trực tiếp trên tải TCP thô; nhược điểm là cứng nhắc --- nếu giao thức thay đổi hoặc vị trí byte lệch, luật có thể không còn hiệu lực.
+
+\textbf{Từ khóa chuyên dụng (\textit{Protocol-Specific Keywords})}: yêu cầu parser hiểu sâu S7comm. Thay vì \texttt{offset:22}, có thể viết \texttt{s7comm\_function: password\_request}. Cơ chế: parser gom các mảnh TCP thành luồng hoàn chỉnh, chuyển chuỗi hex thành cấu trúc dữ liệu (mã chức năng, địa chỉ\ldots), rồi detector đối chiếu với rule.
+\begin{itemize}
+    \item Ưu điểm: chính xác, hiểu ngữ cảnh lệnh điều khiển.
+    \item Nhược điểm: tốn CPU/RAM (\textit{overhead}) do thêm bước ``dịch'' từ mã máy sang cấu trúc dữ liệu~\cite{veit2021ics_dissectors}.
+\end{itemize}
+
+\subsection{Giới hạn và tính bảo mật của IDS}
+
+IDS là thành phần quan trọng nhưng không phải giải pháp ``all-in-one'' trong hạ tầng mạng. Một NIDS dù mạnh vẫn bị giới hạn bởi ba yếu tố:
+
+\begin{itemize}
+    \item \textbf{Tầm nhìn}: IDS có thực sự quan sát hết lưu lượng không? Kẻ tấn công có thể định tuyến đi vòng qua IDS.
+    \item \textbf{Tải trọng (hiệu suất)}: khi lưu lượng quá lớn (ví dụ tấn công DoS), IDS có thể bị ``ngạt'' và bỏ lỡ gói độc hại.
+    \item \textbf{Độ sâu phân tích}: phân tích càng sâu càng tốn tài nguyên; parser kém hiệu quả trở thành nút thắt, trong khi phân tích nông có thể bỏ sót tấn công tinh vi.
+\end{itemize}
+
+\textbf{Lỗi triển khai}: IDS là phần mềm phức tạp và cũng có lỗ hổng. Parser lỗi có thể khiến IDS treo khi nhận gói tin đặc biệt. IDS thường viết bằng C/C++ để đạt tốc độ cao nên dễ gặp tràn bộ đệm (\textit{buffer overflow}); nếu bị chiếm quyền, kẻ tấn công có vị trí thuận lợi trong mạng. Các biện pháp giảm thiểu gồm:
+\begin{itemize}
+    \item Dùng ngôn ngữ an toàn bộ nhớ (\textit{memory-safe languages}). Thay vì C/C++, có thể chuyển sang Rust --- Suricata đang chuyển dần phần phân tích giao thức sang Rust để giảm lỗi tràn bộ nhớ.
+    \item \textbf{Fuzzing}: đưa dữ liệu lỗi vào IDS để phát hiện lỗi trước kẻ tấn công khai thác.
+    \item \textbf{Sanitizing}: phân tích hành vi để ngăn thực thi lệnh trái phép từ dữ liệu đầu vào.
+\end{itemize}
+
+Chương này đã trình bày nền tảng về OT/ICS, PLC, mô hình Purdue, giao thức S7comm và IDS --- các khái niệm cần thiết để hiểu môi trường mạng công nghiệp, cấu trúc gói tin S7 và cơ sở xây dựng luật phát hiện ở các chương sau.
+
+\end{document}

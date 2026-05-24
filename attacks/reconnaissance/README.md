@@ -263,3 +263,217 @@ Có một vài cách để quét các thiết bị PLC thông qua DCP:
 - Sử dụng script [`SiemensScan.py`](./SiemensScan.py)
 
 Tuy nhiên đã thử trong dự án này để quét OpenPLC nhưng không phát hiện được PLC. Có thể là do OpenPLC Runtime không hỗ trợ DCP.
+
+# Quét các block trên PLC
+
+Sau khi quét thông tin PLC, ta có thể quét các block trên PLC để lấy thông tin về các block chương trình điều khiển sử dụng Snap 7 `.list_blocks()` và `.list_blocks_of_type(type)`. Script tại [đây](./scanBlock.py).
+
+```
+All blocks: <block list count OB: 0 FB: 0 FC: 0 SFB: 0 SFC: 0x0 DB: 2 SDB: 0>
+```
+
+```
+DB 1:
+    Block type: 10
+    Block number: 1
+    Block language: 5
+    Block flags: 1
+    MC7Size: 128
+    Load memory size: 220        
+    Local data: 0
+    SBB Length: 20
+    Checksum: 0
+    Version: 1
+    Code date: b'1999/11/18'
+    Interface date: b'1999/11/18'
+    Author: b''
+    Family: b''
+    Header: b''
+
+DB 2:
+    Block type: 10
+    Block number: 2
+    Block language: 5
+    Block flags: 1
+    MC7Size: 128
+    Load memory size: 220
+    Local data: 0
+    SBB Length: 20
+    Checksum: 0
+    Version: 1
+    Code date: b'1999/11/18'
+    Interface date: b'1999/11/18'
+    Author: b''
+    Family: b''
+    Header: b''
+```
+
+Trong PLC sẽ bao gồm các block:
+
+- **OB** (Organization Block): Đây là block chính để tổ chức chương trình điều khiển. Giống hàm `main () {}` trong C++.
+
+- **(S)DB** ( (System) Data Block): Chứa dữ liệu cần dùng bởi chương trình điều khiển. DB là block dữ liệu do người dùng tạo ra, còn SDB là block dữ liệu hệ thống do Siemens tạo ra.
+
+- **(S)FC** ( (System) Function): Chứa các hàm để có thể tái sử dụng trong chương trình điều khiển. FC là **stateless**, tức nó không lưu trạng thái/không có bộ nhớ riêng
+
+- **(S)FB** ( (System) Function Block): Giống FC nhưng là **stateful**. Thường thì nó hay liên kết với một DB để lưu trạng thái của nó.
+
+Tuy nhiên do giới hạn mô phỏng của OpenPLC Runtime mà nó chỉ hiện thị được block DB `DB: 2` mặc dù hiện tại PLC đang chạy chương trình điều khiển (Khi này OB của chương trình sẽ khác 0)
+
+![alt text](image.png)
+
+Với mỗi datablock, thu được các thông tin như:
+
+
+```
+DB 1:
+    Block type: 10                   -> 10(decimal) = 0x0A(hex) = OB(block type)
+    Block number: 1                  -> Số thứ tự của block trong PLC (0x0001)
+    Block language: 5                -> Ngôn ngữ lập trình của block (AWL, KOP, FUP, SCL, DB, GRAPH) (0x05)
+    Block flags: 1                
+    MC7Size: 128                     -> Độ lớn vùng dữ liệu có thể đọc/ghi
+    Load memory size: 220            -> Vùng dữ liệu có thể đọc/ghi + header/metadata 
+    Local data: 0                    -> Dữ liệu stack. DB không có stack như block logic lên bằng 0
+    SBB Length: 20                   
+    Checksum: 0                      -> Checksum của block (0x00)
+    Version: 1                       
+    Code date: b'1999/11/18'         -> Ngày tạo block (b'1999/11/18'). Lỗi trên mô phỏng PLC ảo
+    Interface date: b'1999/11/18'    -> Ngày cập nhật block (b'1999/11/18'). Lỗi trên mô phỏng PLC ảo
+    Author: b''                    
+    Family: b''                      
+    Header: b''                     
+```
+
+*Xem các thông số trong [S7_constants.txt](../../docs/Report/S7_constants.txt).*
+
+Quan sát các gói tin trong quá trình quét block:
+
+![alt text](image-1.png)
+
+1. Gói số 13, 14 khởi tạo kết nối S7 command
+
+2. Gói số 15, 16 là yêu cầu đọc danh sách tất cả các block
+
+```
+S7 Communication
+    Header: (Userdata)
+        Protocol Id: 0x32
+        ROSCTR: Userdata (7)
+        Redundancy Identification (Reserved): 0x0000
+        Protocol Data Unit Reference: 256
+        Parameter length: 8
+        Data length: 4
+    Parameter: (Request) ->(Block functions) ->(List blocks)
+        Function: CPU services (0x00)
+        Item count: 1
+        Variable specification: 0x12
+        Length of following address specification: 4
+        Syntax Id: ParameterShort (0x11)
+        01.. .... = Type: Request (1)
+        ..00 0011 = Function group: Block functions (3)
+        Subfunction: List blocks (1)
+        Sequence number: 0
+    Data
+        Return code: Object does not exist (0x0a)
+        Transport size: NULL (0x00)
+        Length: 0
+```
+
+Đây là request thuộc nhóm `CPU services` > `Block functions` > `List blocks`. Kết quả sẽ trả về các block trong PLC:
+
+```
+S7 Communication
+    Header: (Userdata)
+        Protocol Id: 0x32
+        ROSCTR: Userdata (7)
+    . . .
+    Parameter: (Response) ->(Block functions) ->(List blocks)
+        Function: CPU services (0x00)
+        Item count: 1
+        Variable specification: 0x12
+        Length of following address specification: 8
+        Syntax Id: ParameterExtended (0x12)
+        10.. .... = Type: Response (2)
+        ..00 0011 = Function group: Block functions (3)
+        Subfunction: List blocks (1)
+    . . .
+    Data
+        Return code: Success (0xff)
+        Transport size: OCTET STRING (0x09)
+        Length: 28
+        Item [1]: (Block type OB)
+            Block type: 08 (OB)
+            Block count: 0
+        Item [2]: (Block type FB)
+            Block type: 0E (FB)
+            Block count: 0
+        Item [3]: (Block type FC)
+            Block type: 0C (FC)
+            Block count: 0
+        Item [4]: (Block type DB)
+            Block type: 0A (DB)
+            Block count: 2
+        Item [5]: (Block type SDB)
+            Block type: 0B (SDB)
+            Block count: 0
+        Item [6]: (Block type SFC)
+            Block type: 0D (SFC)
+            Block count: 0
+        Item [7]: (Block type SFB)
+            Block type: 0F (SFB)
+            Block count: 0
+```
+
+3. Gói số 17, 18 tiếp tục yêu cầu đọc thông tin về các block khả dụng, ở đây là block DB `DB: 2`.
+
+4. Gói tin số 19, 20 đọc thông tin về DB1:
+
+```
+S7 Communication
+   ....
+    Data [DB 1]
+        Return code: Success (0xff)
+        Transport size: OCTET STRING (0x09)
+        Length: 8
+        Block type: 0A (DB)
+        Block number: 00001
+        Filesystem: A (Active embedded module)
+```
+
+Response:
+
+```
+S7 Communication
+    . . .
+    Data: (Block:[DB 1])
+        Return code: Success (0xff)
+        Transport size: OCTET STRING (0x09)
+        Length: 78
+        Block type: \x01 (Unknown Block type: 0x0100)
+        Length of Info: 74
+        Unknown blockinfo 2: 0x2200
+        Constant 3: pp
+        Unknown byte(s) blockinfo: 01
+        0000 0001 = Block flags: 0x01, Linked
+        Block language: DB (5)
+        Subblk type: DB (10)
+        Block number: 1
+        Length load memory: 220
+        Block Security: None (0)
+        Code timestamp: Nov 18, 1999 00:00:00.000
+        Interface timestamp: Nov 18, 1999 00:00:00.000
+        SSB length: 20
+        ADD length: 0
+        Localdata length: 0
+        MC7 code length: 128
+        Author: 
+        Family: 
+        Name (Header): 
+        Version (Header): 0.1
+        Unknown byte(s) blockinfo: 00
+        Block checksum: 0x0000
+        Reserved 1: 0x00000000
+        Reserved 2: 0x00000000
+```
+
+Giống với các thông tin đã thu được từ script `scanBlock.py`.

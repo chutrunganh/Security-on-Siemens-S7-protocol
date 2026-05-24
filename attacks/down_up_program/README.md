@@ -112,3 +112,44 @@ sequenceDiagram
 2. **Download Block**: PLC chủ động gửi request để yêu cầu máy client gửi block dữ liệu của chương trình điều khiển mới. Máy client sẽ gửi block dữ liệu đó trong phần data của gói tin phản hồi.
 
 Các trường thông tin còn lại y hệt như trong phần Upload. Chỉ có lưu ý trong quá trình Download, `Session ID` luôn là `0x00000000`, nó không được sử dụng, thay vào đó, trong Download thì sử dụng `Filename` để định danh trong một session Download.
+
+# Mô phỏng traffic
+
+Ở phần này đã thử mô phỏng việc download và upload chương trình điều khiển PLC nhưng không thành công do giới hạn phần mềm mô phỏng.
+
+Khi upload code chương trình từ OpenPLC Editor vào OpenPLC Runtime thì chương trình được gửi thông qua RESTful API của OpenPLC Runtime thay vì bằng cách gửi thông qua cấu trúc chuẩn của S7comm.
+
+![alt text](image-5.png)
+
+OpenPLC Runtime không hỗ trợ việc nạp chương tình theo cách thông thường của Siemens S7comm.
+
+Một cách khác là thử mô phỏng việc upload chương trình trên một PLC Siemens thông qua PLC Sim Advance. Cách này thì chương trình được gửi thông qua cấu trúc chuẩn của S7comm. 
+
+Bước 1: Set up một Switch ảo để các thiết bị ảo của Siemens sử dụng:
+
+![alt text](image-2.png)
+
+Bước 2: Chạy một PLC Siemens trong PLC Sim Advance sử dụng cùng giải mạng với Switch ảo. Tuy nhiên PLC Sim Advance chỉ hỗ trợ mô phỏng PLC Simens S7-1500.
+
+![alt text](image.png)
+
+Bước 3: Kết nối PLC với HMI WinCC thông qua card kết nối IE general
+
+![alt text](image-1.png)
+
+Bước 4: Tạo một chương trình PLC, nạp vào PLC vào chạy thử:
+
+![alt text](image-3.png)
+
+Ảnh chụp bao gồm chương trình PLC đang ở running mode, PLC đang chạy trong PLC Sim Advance và HMI WinCC đang hiển thị giá trị của các biến PLC.
+
+Tuy nhiên khi quan sát các gói tin trên Wireshark thì thấy Wireshark không Parse được gói tin S7comm. Sau khi tìm hiểu thì là do S7-1500 sử dụng giao thức S7 comm plus và không có cách nào ép S7-1500 sử dụng giao thức S7 comm thông thường (Theo như bài viết này [text](https://industrialmonitordirect.com/blogs/knowledgebase/s7comm-vs-s7comm-plus-switching-protocol-in-s7-1500-hmi-communication) thì bật Option `Permit access with PUT/GET communication from remote partners` chỉ giúp tạo tính tương thích, các máy khác lấy thông tin từ S7 comm plus như thể chúng đang lấy thông tin từ S7 comm thông thường chứ Wireshark thì vẫn không thể Parse được gói tin S7comm plus.
+
+![alt text](image-6.png)
+
+![alt text](image-4.png)
+
+Wireshark chỉ có thể nhận diện được lớp COTP ở bên ngoài gói tin S7comm plus chứ không thể parse sâu hơn gói tin S7comm plus được gói trong gói tin COTP này.
+
+
+Vì thế nên trong dự án này chúng tôi sẽ sử dụng traffic mô phỏng từ trang sau: https://wiki.wireshark.org/S7comm
