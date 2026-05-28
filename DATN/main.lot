@@ -2,21 +2,28 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {2.1}{\ignorespaces Các nhà sản xuất PLC tiêu biểu}}{10}{table.caption.11}%
-\contentsline {table}{\numberline {2.2}{\ignorespaces Phân loại PLC theo số lượng điểm I/O}}{11}{table.caption.13}%
-\contentsline {table}{\numberline {2.3}{\ignorespaces Các vùng nhớ RAM trong PLC (theo ký hiệu Siemens)}}{12}{table.caption.14}%
-\contentsline {table}{\numberline {2.4}{\ignorespaces Phân tầng mạng Purdue --- vùng OT (tầng 0--2)}}{17}{table.caption.22}%
-\contentsline {table}{\numberline {2.5}{\ignorespaces Phân tầng mạng Purdue --- vùng vận hành và IT (tầng 3--5)}}{18}{table.caption.23}%
-\contentsline {table}{\numberline {2.6}{\ignorespaces Một số chuẩn Fieldbus phổ biến}}{18}{table.caption.24}%
-\contentsline {table}{\numberline {2.7}{\ignorespaces Ký hiệu kích thước dữ liệu trong S7}}{19}{table.caption.25}%
-\contentsline {table}{\numberline {2.8}{\ignorespaces Kiểu dữ liệu trong Data Block}}{20}{table.caption.26}%
-\contentsline {table}{\numberline {2.9}{\ignorespaces Cấu trúc TSAP (2 byte)}}{20}{table.caption.28}%
-\contentsline {table}{\numberline {2.10}{\ignorespaces Các loại gói tin S7comm theo ROSCTR}}{22}{table.caption.31}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces Phân loại PLC theo số lượng điểm I/O}}{12}{table.caption.13}%
+\contentsline {table}{\numberline {2.3}{\ignorespaces Các vùng nhớ RAM trong PLC (theo ký hiệu Siemens)}}{13}{table.caption.14}%
+\contentsline {table}{\numberline {2.4}{\ignorespaces Phân tầng mạng Purdue --- vùng OT (tầng 0--2)}}{18}{table.caption.22}%
+\contentsline {table}{\numberline {2.5}{\ignorespaces Phân tầng mạng Purdue --- vùng vận hành và IT (tầng 3--5)}}{19}{table.caption.23}%
+\contentsline {table}{\numberline {2.6}{\ignorespaces Một số chuẩn Fieldbus phổ biến}}{20}{table.caption.24}%
+\contentsline {table}{\numberline {2.7}{\ignorespaces Ký hiệu kích thước dữ liệu trong S7}}{22}{table.caption.27}%
+\contentsline {table}{\numberline {2.8}{\ignorespaces Kiểu dữ liệu trong Data Block}}{22}{table.caption.28}%
+\contentsline {table}{\numberline {2.9}{\ignorespaces Cấu trúc TSAP (2 byte)}}{23}{table.caption.30}%
+\contentsline {table}{\numberline {2.10}{\ignorespaces Các loại gói tin S7comm theo ROSCTR}}{25}{table.caption.33}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Vị trí byte neo trong payload TCP/102 (S7comm Data TPDU)}}{84}{table.caption.102}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Mã chức năng S7comm và kịch bản mô phỏng}}{85}{table.caption.103}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Luật phát hiện trinh sát S7comm}}{86}{table.caption.104}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Luật phát hiện Start/Stop PLC}}{87}{table.caption.105}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces Luật phát hiện upload/download block}}{87}{table.caption.106}%
+\contentsline {table}{\numberline {4.6}{\ignorespaces Luật phát hiện ghi biến và quan sát MITM}}{88}{table.caption.107}%
+\contentsline {table}{\numberline {4.7}{\ignorespaces Ánh xạ kịch bản tấn công và nhóm luật Suricata}}{89}{table.caption.108}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {A.1}{\ignorespaces Table to test captions and labels.}}{37}{table.caption.38}%
+\contentsline {table}{\numberline {A.1}{\ignorespaces Table to test captions and labels.}}{99}{table.caption.113}%
 \addvspace {10\p@ }
 \contentsfinish 
 \contentsfinish 

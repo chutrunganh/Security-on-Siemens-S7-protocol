@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.24)  24 MAY 2026 17:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.24)  25 MAY 2026 23:08
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1868,7 +1868,7 @@ LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-<../Figure/SCADA.png, id=66, 1221.56375pt x 747.79375pt>
+<../Figure/SCADA.png, id=58, 1221.56375pt x 747.79375pt>
 File: ../Figure/SCADA.png Graphic file (type png)
 <use ../Figure/SCADA.png>
 Package pdftex.def Info: ../Figure/SCADA.png  used on input line 54.
@@ -1886,7 +1886,7 @@ Overfull \hbox (23.25652pt too wide) in paragraph at lines 60--61
 Infrastructure,
  []
 
-<../Figure/DCS.png, id=76, 1257.69875pt x 742.775pt>
+<../Figure/DCS.png, id=68, 1257.69875pt x 742.775pt>
 File: ../Figure/DCS.png Graphic file (type png)
 <use ../Figure/DCS.png>
 Package pdftex.def Info: ../Figure/DCS.png  used on input line 69.
@@ -1937,7 +1937,7 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 86.
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<../Figure/SIS.png, id=83, 747.79375pt x 736.7525pt>
+<../Figure/SIS.png, id=75, 747.79375pt x 736.7525pt>
 File: ../Figure/SIS.png Graphic file (type png)
 <use ../Figure/SIS.png>
 Package pdftex.def Info: ../Figure/SIS.png  used on input line 103.
@@ -2021,7 +2021,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 144--145
 []|\T5/ptm/m/n/13 EcoStruxure
  []
 
-<../Figure/PLC_components.png, id=94, 1204.5pt x 719.68875pt>
+<../Figure/PLC_components.png, id=86, 1204.5pt x 719.68875pt>
 File: ../Figure/PLC_components.png Graphic file (type png)
 <use ../Figure/PLC_components.png>
 Package pdftex.def Info: ../Figure/PLC_components.png  used on input line 155.
@@ -2041,13 +2041,13 @@ Overfull \hbox (12.50555pt too wide) in paragraph at lines 248--249
 5/ptm/m/n/13 : Thao
  []
 
-<../../docs/Report/Compact_PLC_type.png, id=122, 1204.5pt x 578.16pt>
+<../../docs/Report/Compact_PLC_type.png, id=114, 1204.5pt x 578.16pt>
 File: ../../docs/Report/Compact_PLC_type.png Graphic file (type png)
 <use ../../docs/Report/Compact_PLC_type.png>
 Package pdftex.def Info: ../../docs/Report/Compact_PLC_type.png  used on input 
 line 266.
 (pdftex.def)             Requested size: 192.0548pt x 92.18108pt.
-<../../docs/Report/Modular_PLC_type.png, id=123, 1204.5pt x 538.01pt>
+<../../docs/Report/Modular_PLC_type.png, id=115, 1204.5pt x 538.01pt>
 File: ../../docs/Report/Modular_PLC_type.png Graphic file (type png)
 <use ../../docs/Report/Modular_PLC_type.png>
 Package pdftex.def Info: ../../docs/Report/Modular_PLC_type.png  used on input 
@@ -2057,12 +2057,12 @@ line 272.
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [8]
-<../Figure/PLC_rack.png, id=130, 1093.08376pt x 429.10312pt>
+<../Figure/PLC_rack.png, id=122, 1093.08376pt x 429.10312pt>
 File: ../Figure/PLC_rack.png Graphic file (type png)
 <use ../Figure/PLC_rack.png>
 Package pdftex.def Info: ../Figure/PLC_rack.png  used on input line 283.
 (pdftex.def)             Requested size: 362.77525pt x 142.4098pt.
-<../Figure/Code_PLC.png, id=131, 501.875pt x 278.03876pt>
+<../Figure/Code_PLC.png, id=123, 501.875pt x 278.03876pt>
 File: ../Figure/Code_PLC.png Graphic file (type png)
 <use ../Figure/Code_PLC.png>
 Package pdftex.def Info: ../Figure/Code_PLC.png  used on input line 294.
@@ -2070,18 +2070,18 @@ Package pdftex.def Info: ../Figure/Code_PLC.png  used on input line 294.
 
 [9 <../../docs/Report/Compact_PLC_type.png> <../../docs/Report/Modular_PLC_type
 .png> <../Figure/PLC_rack.png> <../Figure/Code_PLC.png>]
-<../Figure/Ladder.png, id=144, 803.0pt x 302.12875pt>
+<../Figure/Ladder.png, id=136, 803.0pt x 302.12875pt>
 File: ../Figure/Ladder.png Graphic file (type png)
 <use ../Figure/Ladder.png>
 Package pdftex.def Info: ../Figure/Ladder.png  used on input line 309.
 (pdftex.def)             Requested size: 298.75264pt x 112.40825pt.
-<../../docs/Report/FBD_code.png, id=145, 1204.5pt x 505.89pt>
+<../../docs/Report/FBD_code.png, id=137, 1204.5pt x 505.89pt>
 File: ../../docs/Report/FBD_code.png Graphic file (type png)
 <use ../../docs/Report/FBD_code.png>
 Package pdftex.def Info: ../../docs/Report/FBD_code.png  used on input line 318
 .
 (pdftex.def)             Requested size: 298.75264pt x 125.4764pt.
-<../../docs/Report/SFC_code.png, id=146, 1204.5pt x 691.58376pt>
+<../../docs/Report/SFC_code.png, id=138, 1204.5pt x 691.58376pt>
 File: ../../docs/Report/SFC_code.png Graphic file (type png)
 <use ../../docs/Report/SFC_code.png>
 Package pdftex.def Info: ../../docs/Report/SFC_code.png  used on input line 327
@@ -2099,7 +2099,7 @@ File: t5ucr.fd 2005/08/24 Fontinst v1.929 font definitions for T5/pcr.
 )
 LaTeX Font Info:    Font shape `T5/pcr/m/it' in size <11.86258> not available
 (Font)              Font shape `T5/pcr/m/sl' tried instead on input line 345.
-<../Figure/Purdue.png, id=156, 1027.84pt x 788.9475pt>
+<../Figure/Purdue.png, id=148, 1027.84pt x 788.9475pt>
 File: ../Figure/Purdue.png Graphic file (type png)
 <use ../Figure/Purdue.png>
 Package pdftex.def Info: ../Figure/Purdue.png  used on input line 359.
@@ -2143,17 +2143,17 @@ LaTeX Font Warning: Font shape `U/lasy/m/n' in size <7.58339> not available
 LaTeX Font Warning: Font shape `U/lasy/m/n' in size <5.41673> not available
 (Font)              size <5> substituted on input line 374.
 
-<../Figure/ABB.png, id=169, 508.90125pt x 339.2675pt>
+<../Figure/ABB.png, id=161, 508.90125pt x 339.2675pt>
 File: ../Figure/ABB.png Graphic file (type png)
 <use ../Figure/ABB.png>
 Package pdftex.def Info: ../Figure/ABB.png  used on input line 384.
 (pdftex.def)             Requested size: 122.91708pt x 81.94354pt.
-<../Figure/PLCS7-1500.png, id=170, 1284.8pt x 856.19875pt>
+<../Figure/PLCS7-1500.png, id=162, 1284.8pt x 856.19875pt>
 File: ../Figure/PLCS7-1500.png Graphic file (type png)
 <use ../Figure/PLCS7-1500.png>
 Package pdftex.def Info: ../Figure/PLCS7-1500.png  used on input line 390.
 (pdftex.def)             Requested size: 122.91708pt x 81.90149pt.
-<../Figure/HMI.png, id=171, 1085.05376pt x 983.675pt>
+<../Figure/HMI.png, id=163, 1085.05376pt x 983.675pt>
 File: ../Figure/HMI.png Graphic file (type png)
 <use ../Figure/HMI.png>
 Package pdftex.def Info: ../Figure/HMI.png  used on input line 396.
@@ -2174,146 +2174,218 @@ LaTeX Warning: Citation 'snap7_s7protocol' on page 15 undefined on input line 4
 74.
 
 [15]
-<../Figure/S7_stack.png, id=196, 1027.84pt x 636.3775pt>
+<../Figure/S7_stack.png, id=188, 1027.84pt x 636.3775pt>
 File: ../Figure/S7_stack.png Graphic file (type png)
 <use ../Figure/S7_stack.png>
 Package pdftex.def Info: ../Figure/S7_stack.png  used on input line 488.
 (pdftex.def)             Requested size: 384.1096pt x 237.8156pt.
+<../Figure/read_memory.png, id=189, 752.8125pt x 104.64093pt>
+File: ../Figure/read_memory.png Graphic file (type png)
+<use ../Figure/read_memory.png>
+Package pdftex.def Info: ../Figure/read_memory.png  used on input line 501.
+(pdftex.def)             Requested size: 384.1096pt x 53.3933pt.
 
-Overfull \hbox (28.01866pt too wide) in paragraph at lines 498--499
-[]\T5/pcr/m/n/11.86258 [Lo¤i vòng nhî] [K½ch th÷îc] [^^^àa ch¿ byte].[^^^àa ch¿
- bit] 
+Overfull \hbox (2.94745pt too wide) in paragraph at lines 509--510
+[]\T5/ptm/m/n/13 Lo¤i vòng nhî l  I (Input), Q (Output), M (Memory/Merker), DB 
+(Data Block),
  []
 
-
-Underfull \vbox (badness 3579) has occurred while \output is active []
-
- [16 <../Figure/S7_stack.png (PNG copy)>]
-<../Figure/Siemens_S7_protocol_stack.png, id=204, 779.91376pt x 201.75375pt>
+[16 <../Figure/S7_stack.png (PNG copy)> <../Figure/read_memory.png>]
+<../Figure/Siemens_S7_protocol_stack.png, id=198, 779.91376pt x 201.75375pt>
 File: ../Figure/Siemens_S7_protocol_stack.png Graphic file (type png)
 <use ../Figure/Siemens_S7_protocol_stack.png>
 Package pdftex.def Info: ../Figure/Siemens_S7_protocol_stack.png  used on input
- line 578.
+ line 582.
 (pdftex.def)             Requested size: 362.77525pt x 93.8453pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
  [17 <../Figure/Siemens_S7_protocol_stack.png>]
-<../Figure/s7struct.png, id=217, 712.6625pt x 68.255pt>
+Overfull \hbox (20.96704pt too wide) in paragraph at lines 592--593
+\T5/ptm/m/n/13 h÷îng k¸t nèi (connectionless). Do ^^_â ISO c¦n sû döng th¶m \T5
+/ptm/b/n/13 COTP (Connection-
+ []
+
+
+Overfull \hbox (23.24516pt too wide) in paragraph at lines 601--610
+ [][] 
+ []
+
+[18]
+<../Figure/s7struct.png, id=215, 712.6625pt x 68.255pt>
 File: ../Figure/s7struct.png Graphic file (type png)
 <use ../Figure/s7struct.png>
-Package pdftex.def Info: ../Figure/s7struct.png  used on input line 617.
+Package pdftex.def Info: ../Figure/s7struct.png  used on input line 633.
 (pdftex.def)             Requested size: 320.0935pt x 30.65613pt.
-<../Figure/s7header.png, id=218, 175.6161pt x 61.6704pt>
+<../Figure/s7header.png, id=216, 175.6161pt x 61.6704pt>
 File: ../Figure/s7header.png Graphic file (type png)
 <use ../Figure/s7header.png>
-Package pdftex.def Info: ../Figure/s7header.png  used on input line 626.
+Package pdftex.def Info: ../Figure/s7header.png  used on input line 644.
 (pdftex.def)             Requested size: 362.77525pt x 127.4094pt.
-
-[18 <../Figure/s7struct.png (PNG copy)> <../Figure/s7header.png>]
-Overfull \hbox (6.66864pt too wide) in paragraph at lines 635--636
-\T5/ptm/m/n/13 ph£n hçi s³ tr£ l¤i sè n y ^^_º client gh²p ^^_óng c°p request--
-response. Sè reference
+ [19 <../Figure/s7struct.png (PNG copy)> <../Figure/s7header.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 672--673
+[]|\T5/ptm/m/n/10.83347 Y¶u c¦u tø client tîi server nh÷ read/write
  []
 
 
-Underfull \hbox (badness 2922) in paragraph at lines 649--650
-[]|\T5/ptm/m/n/10.83347 Y¶u c¦u tø client tîi server: read/write memory,
+Underfull \hbox (badness 1939) in paragraph at lines 672--673
+\T5/ptm/m/n/10.83347 memory, read/write blocks, start/stop device, setup
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 649--650
-\T5/ptm/m/n/10.83347 read/write blocks, start/stop device, setup
+Overfull \hbox (29.20967pt too wide) in paragraph at lines 685--686
+\T5/ptm/m/n/13 System Info, Blocks move, PLC Control, Date and Time, Security, 
+Programming,... 
  []
 
-<../Figure/image-1.png, id=233, 1229.7945pt x 218.0145pt>
-File: ../Figure/image-1.png Graphic file (type png)
-<use ../Figure/image-1.png>
-Package pdftex.def Info: ../Figure/image-1.png  used on input line 666.
+
+Overfull \hbox (5.52705pt too wide) in paragraph at lines 695--696
+[]\T5/ptm/m/n/13 PLC Control/PLC Stop \T5/pcr/m/n/13 0x28\T5/ptm/m/n/13 /\T5/pc
+r/m/n/13 0x29 \T5/ptm/m/n/13 ^^_÷ñc tr¼nh b y trong möc thüc nghi»m
+ []
+
+[20]
+<../Figure/setup_S7.png, id=232, 1229.7945pt x 218.0145pt>
+File: ../Figure/setup_S7.png Graphic file (type png)
+<use ../Figure/setup_S7.png>
+Package pdftex.def Info: ../Figure/setup_S7.png  used on input line 709.
 (pdftex.def)             Requested size: 384.1096pt x 68.09276pt.
-[19 <../Figure/image-1.png>]
-Overfull \hbox (33.02466pt too wide) in paragraph at lines 691--699
-[]\T5/pcr/m/n/11.86258 ISO 8073/X.224 COTP Connection-Oriented Transport Protoc
-ol 
+LaTeX Font Info:    Calculating math sizes for size <11.86258> on input line 71
+0.
+
+Underfull \hbox (badness 10000) in paragraph at lines 710--710
+[]\T5/ptm/b/n/11.86258 H¼nh 0.17: |\T5/ptm/m/n/11.86258 Luçng thi¸t lªp k¸t nèi
+ S7comm
  []
 
 
-Overfull \hbox (18.38622pt too wide) in paragraph at lines 691--699
-\T5/pcr/m/n/11.86258 Parameter code: src-tsap (0xc1), length: 2, Source TSAP:
+Underfull \hbox (badness 1668) in paragraph at lines 710--710
+\T5/ptm/m/n/11.86258 (SampleCaptures/s7comm_reading_plc_status.pcap tø []$\T5/p
+cr/m/n/11.86258 h t t p s : / / w i k i . w i r e s
  []
 
+<../../docs/Report/image.png, id=235, 1792.6975pt x 363.3575pt>
+File: ../../docs/Report/image.png Graphic file (type png)
+<use ../../docs/Report/image.png>
+Package pdftex.def Info: ../../docs/Report/image.png  used on input line 720.
+(pdftex.def)             Requested size: 384.1096pt x 77.8542pt.
+LaTeX Font Info:    Font shape `T5/pcr/m/it' in size <13> not available
+(Font)              Font shape `T5/pcr/m/sl' tried instead on input line 725.
 
-Overfull \hbox (12.30075pt too wide) in paragraph at lines 691--699
-\T5/pcr/m/n/11.86258 Parameter code: dst-tsap (0xc2), length: 2, Destination
+Overfull \hbox (10.05708pt too wide) in paragraph at lines 725--726
+[]\T5/ptm/m/it/13 Three-way Handshake cõa TCP giúa \T5/pcr/m/sl/13 192.168.1.10
+ \T5/ptm/m/it/13 v  PLC \T5/pcr/m/sl/13 192.168.1.40
  []
 
+<../../docs/Report/image-2.png, id=236, 1155.31625pt x 719.68875pt>
+File: ../../docs/Report/image-2.png Graphic file (type png)
+<use ../../docs/Report/image-2.png>
+Package pdftex.def Info: ../../docs/Report/image-2.png  used on input line 734.
 
-Overfull \hbox (12.60919pt too wide) in paragraph at lines 691--699
-\T5/pcr/m/n/11.86258 Parameter code: tpdu-size (0xc0), length: 1, TPDU size:
- []
+(pdftex.def)             Requested size: 384.1096pt x 239.26605pt.
 
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Overfull \hbox (11.00974pt too wide) in paragraph at lines 701--702
-\T5/pcr/m/n/13 (0x0d) \T5/ptm/m/n/13 v  \T5/pcr/m/n/13 DT (0x0f)\T5/ptm/m/n/13 
-). \T5/pcr/m/n/13 Destination reference \T5/ptm/m/n/13 ban ^^_¦u b¬ng 0; \T5/pc
-r/m/n/13 Source
- []
-
-
-Overfull \hbox (3.57051pt too wide) in paragraph at lines 701--702
-\T5/pcr/m/n/13 1024 \T5/ptm/m/n/13 l  k½ch th÷îc TPDU tèi ^^_a client câ thº gû
-i (TPDU = TPKT + PDU S7comm). 
- []
-
-
-Overfull \hbox (34.04483pt too wide) in paragraph at lines 706--710
-\T5/pcr/m/n/11.86258 Source TSAP: 0100, Destination TSAP: 0102, TPDU size: 1024
- 
- []
-
-
-Overfull \hbox (23.09773pt too wide) in paragraph at lines 712--713
-[]\T5/pcr/m/n/13 Destination reference: 0x000f \T5/ptm/m/n/13 khîp \T5/pcr/m/n/
-13 Source reference \T5/ptm/m/n/13 cõa client;
+ [21 <../Figure/setup_S7.png> <../../docs/Report/image.png (PNG copy)>]
+Overfull \hbox (22.31976pt too wide) in paragraph at lines 772--772
+[]\T5/pcr/m/n/13 ISO 8073/X.224 COTP Connection-Oriented Transport Protocol[] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [20]
-<../Figure/s7setup.png, id=251, 144.54pt x 56.6115pt>
+ [22 <../../docs/Report/image-2.png (PNG copy)>]
+Overfull \hbox (14.79378pt too wide) in paragraph at lines 779--780
+[]\T5/pcr/m/n/13 Destination reference: 0x0000\T5/ptm/m/n/13 , \T5/pcr/m/n/13 S
+ource reference: 0x000f
+ []
+
+
+Overfull \hbox (22.31976pt too wide) in paragraph at lines 808--808
+[]\T5/pcr/m/n/13 ISO 8073/X.224 COTP Connection-Oriented Transport Protocol[] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [23]
+<../Figure/s7setup.png, id=256, 144.54pt x 56.6115pt>
 File: ../Figure/s7setup.png Graphic file (type png)
 <use ../Figure/s7setup.png>
-Package pdftex.def Info: ../Figure/s7setup.png  used on input line 720.
+Package pdftex.def Info: ../Figure/s7setup.png  used on input line 820.
 (pdftex.def)             Requested size: 362.77525pt x 142.09502pt.
 
-Overfull \hbox (13.47958pt too wide) in paragraph at lines 747--748
-\T5/ptm/m/n/13 Wireshark câ dissector S7comm t½ch hñp s®n n¶n gi£i m¢ trüc ti¸p
- Parameter/Data [[]7[]]. 
+Overfull \hbox (1.16974pt too wide) in paragraph at lines 828--829
+[]\T5/pcr/m/n/13 S7 Header Function Code\T5/ptm/m/n/13 : Cho bi¸t lo¤i l»nh S7,
+ ð ^^_¥y l  \T5/pcr/m/n/13 0xF0 \T5/ptm/m/n/13 t÷ìng
+ []
+
+[24 <../Figure/s7setup.png>]
+Overfull \hbox (10.2047pt too wide) in paragraph at lines 860--861
+[]\T5/pcr/m/n/13 Protocol Data Unit Reference: 512 \T5/ptm/m/n/13 l  mët sè tha
+m chi¸u do Client
  []
 
 
-Overfull \hbox (8.53752pt too wide) in paragraph at lines 751--752
-[]\T5/ptm/m/n/13 Sau khi setup, hai b¶n trao ^^_êi b¬ng c¡c l»nh S7 nh÷ Read/Wr
-ite Var, ReadSZL...;
+Overfull \hbox (71.20084pt too wide) in paragraph at lines 866--867
+[]\T5/pcr/m/n/13 Max AmQ (parallel jobs with ack) calling: 1\T5/ptm/m/n/13 , \T
+5/pcr/m/n/13 Max AmQ (parallel
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [21 <../Figure/s7setup.png>]
-Overfull \hbox (55.32672pt too wide) in paragraph at lines 776--778
-\T5/ptm/m/n/13 S7comm. Thay v¼ \T5/pcr/m/n/13 offset:22\T5/ptm/m/n/13 , câ thº 
-vi¸t \T5/pcr/m/n/13 s7comm_function: password_request\T5/ptm/m/n/13 .
+ [25]
+Overfull \hbox (14.27063pt too wide) in paragraph at lines 892--893
+[]\T5/ptm/m/n/13 Vîi \T5/pcr/m/n/13 Protocol Data Unit Reference: 512 \T5/ptm/m
+/n/13 refer tîi id cõa gâi tin request
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [22]
+ [26]
+<../../docs/Report/Siemens_S7_Client_Server.png, id=274, 560.0925pt x 627.34375
+pt>
+File: ../../docs/Report/Siemens_S7_Client_Server.png Graphic file (type png)
+<use ../../docs/Report/Siemens_S7_Client_Server.png>
+Package pdftex.def Info: ../../docs/Report/Siemens_S7_Client_Server.png  used o
+n input line 909.
+(pdftex.def)             Requested size: 362.77525pt x 406.35187pt.
+<../../docs/Report/Simens_S7_CP.png, id=275, 612.2875pt x 234.8775pt>
+File: ../../docs/Report/Simens_S7_CP.png Graphic file (type png)
+<use ../../docs/Report/Simens_S7_CP.png>
+Package pdftex.def Info: ../../docs/Report/Simens_S7_CP.png  used on input line
+ 918.
+(pdftex.def)             Requested size: 362.77525pt x 139.1607pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [27 <../../docs/Report/Siemens_S7_Client_Server.png>]
+<../../docs/Report/Siemens_S7_Client_Server_2.png, id=282, 563.10374pt x 396.48
+125pt>
+File: ../../docs/Report/Siemens_S7_Client_Server_2.png Graphic file (type png)
+<use ../../docs/Report/Siemens_S7_Client_Server_2.png>
+Package pdftex.def Info: ../../docs/Report/Siemens_S7_Client_Server_2.png  used
+ on input line 928.
+(pdftex.def)             Requested size: 362.77525pt x 255.42897pt.
+<../../docs/Report/Siemens_S7_Partner.png, id=283, 531.9875pt x 370.38374pt>
+File: ../../docs/Report/Siemens_S7_Partner.png Graphic file (type png)
+<use ../../docs/Report/Siemens_S7_Partner.png>
+Package pdftex.def Info: ../../docs/Report/Siemens_S7_Partner.png  used on inpu
+t line 939.
+(pdftex.def)             Requested size: 362.77525pt x 252.58101pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [28 <../../docs/Report/Simens_S7_CP.png> <../../docs/Report/Siemens_S7_Client_
+Server_2.png>]
 
 Package glossaries Warning: No \printnoidxglossary or \printnoidxglossaries
  found. (Remove \makenoidxglossaries if you don't want any glossaries.)
 This document will not have a glossary.
 
-[23] (2_Literature_review.aux)
+[29 <../../docs/Report/Siemens_S7_Partner.png>] (2_Literature_review.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
@@ -2327,7 +2399,7 @@ LaTeX Font Warning: Size substitutions with differences
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `2_Literature_review.out' has not changed.
-(rerunfilecheck)             Checksum: 225A0C7D822666FA2DE2D248DBAB22CD;3268.
+(rerunfilecheck)             Checksum: D326F973325ECFD85B00D606E2D0B2BC;2803.
 
 Package biblatex Warning: Please (re)run BibTeX on the file(s):
 (biblatex)                2_Literature_review
@@ -2338,29 +2410,13 @@ Package logreq Info: Writing requests to '2_Literature_review.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 44212 strings out of 467870
- 869614 string characters out of 5415451
- 1526773 words of memory out of 5000000
- 72306 multiletter control sequences out of 15000+600000
- 666488 words of font info for 96 fonts, out of 8000000 for 9000
+ 44313 strings out of 467870
+ 872721 string characters out of 5415451
+ 1527212 words of memory out of 5000000
+ 72400 multiletter control sequences out of 15000+600000
+ 667395 words of font info for 105 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,14n,124p,2617b,1324s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{cite.0@wireshark_s7comm} has been referenced but do
-es not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@rfc2126} has been referenced but does not ex
-ist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@rfc1006} has been referenced but does not ex
-ist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@rfc905} has been referenced but does not exi
-st, replaced by a fixed one
-
+ 128i,14n,124p,2617b,993s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 pdfTeX warning (dest): name{cite.0@veit2021ics_dissectors} has been referenced 
 but does not exist, replaced by a fixed one
@@ -2374,19 +2430,17 @@ pdfTeX warning (dest): name{cite.0@snap7_sharp7} has been referenced but does n
 ot exist, replaced by a fixed one
 
 <C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
-/cm/cmmi12.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/amsfonts/cm/cmsy10.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKT
-eX/fonts/type1/vntex/urwvn/ucrr8v.pfb><C:/Users/chutrunganh/AppData/Local/Progr
-ams/MiKTeX/fonts/type1/vntex/urwvn/ucrro8v.pfb><C:/Users/chutrunganh/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/vntex/urwvn/utmb8v.pfb><C:/Users/chutrunganh/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/vntex/urwvn/utmbi8v.pfb><C:/Users/chutr
-unganh/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users
-/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/vntex/urwvn/utmr8v.pfb><
-C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/vntex/urwvn/utmr
-i8v.pfb>
-Output written on 2_Literature_review.pdf (23 pages, 7708379 bytes).
+/cm/cmsy10.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/
+vntex/urwvn/ucrr8v.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/font
+s/type1/vntex/urwvn/ucrro8v.pfb><C:/Users/chutrunganh/AppData/Local/Programs/Mi
+KTeX/fonts/type1/vntex/urwvn/utmb8v.pfb><C:/Users/chutrunganh/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/vntex/urwvn/utmbi8v.pfb><C:/Users/chutrunganh/AppData/
+Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/chutrunganh/Ap
+pData/Local/Programs/MiKTeX/fonts/type1/vntex/urwvn/utmr8v.pfb><C:/Users/chutru
+nganh/AppData/Local/Programs/MiKTeX/fonts/type1/vntex/urwvn/utmri8v.pfb>
+Output written on 2_Literature_review.pdf (29 pages, 8212404 bytes).
 PDF statistics:
- 334 PDF objects out of 1000 (max. 8388607)
- 94 named destinations out of 1000 (max. 500000)
- 238 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 358 PDF objects out of 1000 (max. 8388607)
+ 101 named destinations out of 1000 (max. 500000)
+ 257 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -1,0 +1,89 @@
+\babel@toc {nil}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Ví dụ một hệ thống SCADA}}{7}{figure.caption.6}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Ví dụ về một hệ thống DCS triển khai tại một nhà máy}}{7}{figure.caption.7}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Ví dụ hệ thống SIS}}{9}{figure.caption.8}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Các thành phần chính của PLC}}{11}{figure.caption.10}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Hai dạng PLC: Compact và Modular}}{14}{figure.caption.13}%
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Trong phần mềm lập trình Tia Portal sẽ cần chỉ định rack và slot của module truyền thông của PLC, như ví dụ trong ảnh là rack 0, slot 1 để có thể kết nối tới đúng PLC}}{14}{figure.caption.14}%
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Năm ngôn ngữ lập trình PLC theo IEC 61131-3}}{14}{figure.caption.15}%
+\contentsline {figure}{\numberline {2.8}{\ignorespaces Ví dụ một chương trình mạch tự duy trì băng ngôn ngữ Ladder}}{15}{figure.caption.16}%
+\contentsline {figure}{\numberline {2.9}{\ignorespaces Ví dụ mã FBD}}{15}{figure.caption.17}%
+\contentsline {figure}{\numberline {2.10}{\ignorespaces Ví dụ mã SFC}}{16}{figure.caption.18}%
+\contentsline {figure}{\numberline {2.11}{\ignorespaces Mô hình phân vùng mạng Purdue}}{17}{figure.caption.19}%
+\contentsline {figure}{\numberline {2.12}{\ignorespaces Kiến trúc mạng S7}}{21}{figure.caption.23}%
+\contentsline {figure}{\numberline {2.13}{\ignorespaces Cú pháp địa chỉ trong Siemens S7}}{21}{figure.caption.24}%
+\contentsline {figure}{\numberline {2.14}{\ignorespaces Ngăn xếp giao thức S7comm bao gồm 3 thành phần: TPKT, COTP và S7 PDU}}{22}{figure.caption.27}%
+\contentsline {figure}{\numberline {2.15}{\ignorespaces Cấu trúc một gói tin S7comm}}{24}{figure.caption.29}%
+\contentsline {figure}{\numberline {2.16}{\ignorespaces Cấu trúc S7 Header}}{24}{figure.caption.30}%
+\contentsline {figure}{\numberline {2.17}{\ignorespaces Luồng thiết lập kết nối S7comm (SampleCaptures/s7comm\_reading\_plc\_status.pcap từ \url {https://wiki.wireshark.org/S7comm} với filter \texttt {tcp.port{=}{=}102})}}{26}{figure.caption.32}%
+\contentsline {figure}{\numberline {2.18}{\ignorespaces alt text}}{26}{figure.caption.33}%
+\contentsline {figure}{\numberline {2.19}{\ignorespaces alt text}}{27}{figure.caption.34}%
+\contentsline {figure}{\numberline {2.20}{\ignorespaces Cấu trúc gói tin Setup Communication}}{29}{figure.caption.35}%
+\contentsline {figure}{\numberline {2.21}{\ignorespaces Các thiết bị bên trái là Client kết nối tới CP bên phải để gửi các S7 Request}}{32}{figure.caption.36}%
+\contentsline {figure}{\numberline {2.22}{\ignorespaces Kiến trúc bên trong PLC Server}}{33}{figure.caption.37}%
+\contentsline {figure}{\numberline {2.23}{\ignorespaces PLC đóng vai trò là client}}{33}{figure.caption.38}%
+\contentsline {figure}{\numberline {2.24}{\ignorespaces PLC đóng vai trò là partner}}{34}{figure.caption.39}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Luồng phương pháp nghiên cứu của đồ án}}{36}{figure.caption.40}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces alt text}}{39}{figure.caption.43}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces alt text}}{40}{figure.caption.44}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces alt text}}{40}{figure.caption.45}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces alt text}}{40}{figure.caption.46}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces alt text}}{41}{figure.caption.47}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces alt text}}{41}{figure.caption.48}%
+\contentsline {figure}{\numberline {3.8}{\ignorespaces alt text}}{44}{figure.caption.51}%
+\contentsline {figure}{\numberline {3.9}{\ignorespaces alt text}}{48}{figure.caption.52}%
+\contentsline {figure}{\numberline {3.10}{\ignorespaces alt text}}{48}{figure.caption.53}%
+\contentsline {figure}{\numberline {3.11}{\ignorespaces alt text}}{54}{figure.caption.59}%
+\contentsline {figure}{\numberline {3.12}{\ignorespaces alt text}}{54}{figure.caption.60}%
+\contentsline {figure}{\numberline {3.13}{\ignorespaces alt text}}{55}{figure.caption.61}%
+\contentsline {figure}{\numberline {3.14}{\ignorespaces alt text}}{55}{figure.caption.62}%
+\contentsline {figure}{\numberline {3.15}{\ignorespaces alt text}}{59}{figure.caption.67}%
+\contentsline {figure}{\numberline {3.16}{\ignorespaces alt text}}{59}{figure.caption.68}%
+\contentsline {figure}{\numberline {3.17}{\ignorespaces alt text}}{60}{figure.caption.69}%
+\contentsline {figure}{\numberline {3.18}{\ignorespaces alt text}}{61}{figure.caption.70}%
+\contentsline {figure}{\numberline {3.19}{\ignorespaces alt text}}{62}{figure.caption.71}%
+\contentsline {figure}{\numberline {3.20}{\ignorespaces alt text}}{62}{figure.caption.72}%
+\contentsline {figure}{\numberline {3.21}{\ignorespaces alt text}}{63}{figure.caption.73}%
+\contentsline {figure}{\numberline {3.22}{\ignorespaces alt text}}{64}{figure.caption.74}%
+\contentsline {figure}{\numberline {3.23}{\ignorespaces \relax }}{64}{figure.caption.75}%
+\contentsline {figure}{\numberline {3.24}{\ignorespaces \relax }}{65}{figure.caption.76}%
+\contentsline {figure}{\numberline {3.25}{\ignorespaces alt text}}{65}{figure.caption.77}%
+\contentsline {figure}{\numberline {3.26}{\ignorespaces \relax }}{67}{figure.caption.78}%
+\contentsline {figure}{\numberline {3.27}{\ignorespaces \relax }}{67}{figure.caption.79}%
+\contentsline {figure}{\numberline {3.28}{\ignorespaces \relax }}{68}{figure.caption.80}%
+\contentsline {figure}{\numberline {3.29}{\ignorespaces \relax }}{69}{figure.caption.81}%
+\contentsline {figure}{\numberline {3.30}{\ignorespaces \relax }}{69}{figure.caption.82}%
+\contentsline {figure}{\numberline {3.31}{\ignorespaces \relax }}{70}{figure.caption.83}%
+\contentsline {figure}{\numberline {3.32}{\ignorespaces \relax }}{70}{figure.caption.84}%
+\contentsline {figure}{\numberline {3.33}{\ignorespaces \relax }}{70}{figure.caption.85}%
+\contentsline {figure}{\numberline {3.34}{\ignorespaces \relax }}{72}{figure.caption.86}%
+\contentsline {figure}{\numberline {3.35}{\ignorespaces \relax }}{72}{figure.caption.87}%
+\contentsline {figure}{\numberline {3.36}{\ignorespaces \relax }}{73}{figure.caption.88}%
+\contentsline {figure}{\numberline {3.37}{\ignorespaces \relax }}{74}{figure.caption.89}%
+\contentsline {figure}{\numberline {3.38}{\ignorespaces \relax }}{74}{figure.caption.90}%
+\contentsline {figure}{\numberline {3.39}{\ignorespaces \relax }}{75}{figure.caption.91}%
+\contentsline {figure}{\numberline {3.40}{\ignorespaces \relax }}{75}{figure.caption.92}%
+\contentsline {figure}{\numberline {3.41}{\ignorespaces alt text}}{77}{figure.caption.93}%
+\contentsline {figure}{\numberline {3.42}{\ignorespaces alt text}}{77}{figure.caption.94}%
+\contentsline {figure}{\numberline {3.43}{\ignorespaces alt text}}{77}{figure.caption.95}%
+\contentsline {figure}{\numberline {3.44}{\ignorespaces alt text}}{78}{figure.caption.96}%
+\contentsline {figure}{\numberline {3.45}{\ignorespaces alt text}}{78}{figure.caption.97}%
+\contentsline {figure}{\numberline {3.46}{\ignorespaces alt text}}{79}{figure.caption.98}%
+\contentsline {figure}{\numberline {3.47}{\ignorespaces alt text}}{79}{figure.caption.99}%
+\contentsline {figure}{\numberline {3.48}{\ignorespaces alt text}}{80}{figure.caption.100}%
+\contentsline {figure}{\numberline {3.49}{\ignorespaces alt text}}{80}{figure.caption.101}%
+\contentsline {figure}{\numberline {3.50}{\ignorespaces alt text}}{83}{figure.caption.102}%
+\contentsline {figure}{\numberline {3.51}{\ignorespaces alt text}}{84}{figure.caption.103}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Internet vạn vật}}{94}{figure.caption.108}%
+\contentsline {figure}{\numberline {A.2}{\ignorespaces Qui cách đóng quyển đồ án}}{95}{figure.caption.111}%
+\contentsline {figure}{\numberline {A.3}{\ignorespaces Qui cách đóng quyển đồ án}}{96}{figure.caption.112}%
+\addvspace {10\p@ }
+\contentsfinish 
+\contentsfinish 

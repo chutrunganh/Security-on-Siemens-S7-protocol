@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.24)  24 MAY 2026 16:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.24)  28 MAY 2026 23:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -981,6 +981,28 @@ Package: blindtext 2012/01/06 V2.0 blindtext-Package
 \c@blind@pangramcount=\count377
 \c@blind@pangrammax=\count378
 )
+(C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/csquotes\csquotes
+.sty
+Package: csquotes 2026-05-19 v5.2p context-sensitive quotations (JAW)
+\csq@reset=\count379
+\csq@gtype=\count380
+\csq@glevel=\count381
+\csq@qlevel=\count382
+\csq@maxlvl=\count383
+\csq@tshold=\count384
+\csq@ltx@everypar=\toks55
+
+(C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/csquotes\csquotes
+.def
+File: csquotes.def 2026-05-19 v5.2p csquotes generic definitions (JAW)
+)
+Package csquotes Info: Trying to load configuration file 'csquotes.cfg'...
+Package csquotes Info: ... configuration file loaded successfully.
+
+(C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/csquotes\csquotes
+.cfg
+File: csquotes.cfg 
+))
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\biblatex
 .sty
 Package: biblatex 2025/07/10 v3.21 programmable bibliographies (PK/MW)
@@ -1000,54 +1022,54 @@ Package pdftexcmds Info: \pdfdraftmode found.
 )
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/logreq\logreq.sty
 Package: logreq 2010/08/04 v1.0 xml request logger
-\lrq@indent=\count379
+\lrq@indent=\count385
 
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/logreq\logreq.def
 File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
 ))
-\c@tabx@nest=\count380
-\c@listtotal=\count381
-\c@listcount=\count382
-\c@liststart=\count383
-\c@liststop=\count384
-\c@citecount=\count385
-\c@citetotal=\count386
-\c@multicitecount=\count387
-\c@multicitetotal=\count388
-\c@instcount=\count389
-\c@maxnames=\count390
-\c@minnames=\count391
-\c@maxitems=\count392
-\c@minitems=\count393
-\c@citecounter=\count394
-\c@maxcitecounter=\count395
-\c@savedcitecounter=\count396
-\c@uniquelist=\count397
-\c@uniquename=\count398
-\c@refsection=\count399
-\c@refsegment=\count400
-\c@maxextratitle=\count401
-\c@maxextratitleyear=\count402
-\c@maxextraname=\count403
-\c@maxextradate=\count404
-\c@maxextraalpha=\count405
-\c@abbrvpenalty=\count406
-\c@highnamepenalty=\count407
-\c@lownamepenalty=\count408
-\c@maxparens=\count409
-\c@parenlevel=\count410
-\blx@tempcnta=\count411
-\blx@tempcntb=\count412
-\blx@tempcntc=\count413
-\c@blx@maxsection=\count414
-\blx@maxsegment@0=\count415
-\blx@notetype=\count416
-\blx@parenlevel@text=\count417
-\blx@parenlevel@foot=\count418
-\blx@sectionciteorder@0=\count419
-\blx@sectionciteorderinternal@0=\count420
-\blx@entrysetcounter=\count421
-\blx@biblioinstance=\count422
+\c@tabx@nest=\count386
+\c@listtotal=\count387
+\c@listcount=\count388
+\c@liststart=\count389
+\c@liststop=\count390
+\c@citecount=\count391
+\c@citetotal=\count392
+\c@multicitecount=\count393
+\c@multicitetotal=\count394
+\c@instcount=\count395
+\c@maxnames=\count396
+\c@minnames=\count397
+\c@maxitems=\count398
+\c@minitems=\count399
+\c@citecounter=\count400
+\c@maxcitecounter=\count401
+\c@savedcitecounter=\count402
+\c@uniquelist=\count403
+\c@uniquename=\count404
+\c@refsection=\count405
+\c@refsegment=\count406
+\c@maxextratitle=\count407
+\c@maxextratitleyear=\count408
+\c@maxextraname=\count409
+\c@maxextradate=\count410
+\c@maxextraalpha=\count411
+\c@abbrvpenalty=\count412
+\c@highnamepenalty=\count413
+\c@lownamepenalty=\count414
+\c@maxparens=\count415
+\c@parenlevel=\count416
+\blx@tempcnta=\count417
+\blx@tempcntb=\count418
+\blx@tempcntc=\count419
+\c@blx@maxsection=\count420
+\blx@maxsegment@0=\count421
+\blx@notetype=\count422
+\blx@parenlevel@text=\count423
+\blx@parenlevel@foot=\count424
+\blx@sectionciteorder@0=\count425
+\blx@sectionciteorderinternal@0=\count426
+\blx@entrysetcounter=\count427
+\blx@biblioinstance=\count428
 \labelnumberwidth=\skip111
 \labelalphawidth=\skip112
 \biblabelsep=\skip113
@@ -1059,9 +1081,9 @@ File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
 \blx@bcfin=\read4
 \blx@bcfout=\write4
 \blx@langwohyphens=\language81
-\c@mincomprange=\count423
-\c@maxcomprange=\count424
-\c@mincompwidth=\count425
+\c@mincomprange=\count429
+\c@maxcomprange=\count430
+\c@mincompwidth=\count431
 Package biblatex Info: Trying to load biblatex default data model...
 Package biblatex Info: ... file 'blx-dm.def' found.
 
@@ -1073,74 +1095,74 @@ Package biblatex Info: Trying to load biblatex style data model...
 Package biblatex Info: ... file 'ieee.dbx' not found.
 Package biblatex Info: Trying to load biblatex custom data model...
 Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
-\c@afterword=\count426
-\c@savedafterword=\count427
-\c@annotator=\count428
-\c@savedannotator=\count429
-\c@author=\count430
-\c@savedauthor=\count431
-\c@bookauthor=\count432
-\c@savedbookauthor=\count433
-\c@commentator=\count434
-\c@savedcommentator=\count435
-\c@editor=\count436
-\c@savededitor=\count437
-\c@editora=\count438
-\c@savededitora=\count439
-\c@editorb=\count440
-\c@savededitorb=\count441
-\c@editorc=\count442
-\c@savededitorc=\count443
-\c@foreword=\count444
-\c@savedforeword=\count445
-\c@holder=\count446
-\c@savedholder=\count447
-\c@introduction=\count448
-\c@savedintroduction=\count449
-\c@namea=\count450
-\c@savednamea=\count451
-\c@nameb=\count452
-\c@savednameb=\count453
-\c@namec=\count454
-\c@savednamec=\count455
-\c@translator=\count456
-\c@savedtranslator=\count457
-\c@shortauthor=\count458
-\c@savedshortauthor=\count459
-\c@shorteditor=\count460
-\c@savedshorteditor=\count461
-\c@labelname=\count462
-\c@savedlabelname=\count463
-\c@institution=\count464
-\c@savedinstitution=\count465
-\c@lista=\count466
-\c@savedlista=\count467
-\c@listb=\count468
-\c@savedlistb=\count469
-\c@listc=\count470
-\c@savedlistc=\count471
-\c@listd=\count472
-\c@savedlistd=\count473
-\c@liste=\count474
-\c@savedliste=\count475
-\c@listf=\count476
-\c@savedlistf=\count477
-\c@location=\count478
-\c@savedlocation=\count479
-\c@organization=\count480
-\c@savedorganization=\count481
-\c@origlocation=\count482
-\c@savedoriglocation=\count483
-\c@origpublisher=\count484
-\c@savedorigpublisher=\count485
-\c@publisher=\count486
-\c@savedpublisher=\count487
-\c@language=\count488
-\c@savedlanguage=\count489
-\c@origlanguage=\count490
-\c@savedoriglanguage=\count491
-\c@pageref=\count492
-\c@savedpageref=\count493
+\c@afterword=\count432
+\c@savedafterword=\count433
+\c@annotator=\count434
+\c@savedannotator=\count435
+\c@author=\count436
+\c@savedauthor=\count437
+\c@bookauthor=\count438
+\c@savedbookauthor=\count439
+\c@commentator=\count440
+\c@savedcommentator=\count441
+\c@editor=\count442
+\c@savededitor=\count443
+\c@editora=\count444
+\c@savededitora=\count445
+\c@editorb=\count446
+\c@savededitorb=\count447
+\c@editorc=\count448
+\c@savededitorc=\count449
+\c@foreword=\count450
+\c@savedforeword=\count451
+\c@holder=\count452
+\c@savedholder=\count453
+\c@introduction=\count454
+\c@savedintroduction=\count455
+\c@namea=\count456
+\c@savednamea=\count457
+\c@nameb=\count458
+\c@savednameb=\count459
+\c@namec=\count460
+\c@savednamec=\count461
+\c@translator=\count462
+\c@savedtranslator=\count463
+\c@shortauthor=\count464
+\c@savedshortauthor=\count465
+\c@shorteditor=\count466
+\c@savedshorteditor=\count467
+\c@labelname=\count468
+\c@savedlabelname=\count469
+\c@institution=\count470
+\c@savedinstitution=\count471
+\c@lista=\count472
+\c@savedlista=\count473
+\c@listb=\count474
+\c@savedlistb=\count475
+\c@listc=\count476
+\c@savedlistc=\count477
+\c@listd=\count478
+\c@savedlistd=\count479
+\c@liste=\count480
+\c@savedliste=\count481
+\c@listf=\count482
+\c@savedlistf=\count483
+\c@location=\count484
+\c@savedlocation=\count485
+\c@organization=\count486
+\c@savedorganization=\count487
+\c@origlocation=\count488
+\c@savedoriglocation=\count489
+\c@origpublisher=\count490
+\c@savedorigpublisher=\count491
+\c@publisher=\count492
+\c@savedpublisher=\count493
+\c@language=\count494
+\c@savedlanguage=\count495
+\c@origlanguage=\count496
+\c@savedoriglanguage=\count497
+\c@pageref=\count498
+\c@savedpageref=\count499
 \shorthandwidth=\skip119
 \shortjournalwidth=\skip120
 \shortserieswidth=\skip121
@@ -1180,19 +1202,19 @@ Package biblatex Info: ... file 'biblatex.def' found.
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\biblatex
 .def
 File: biblatex.def 2025/07/10 v3.21 biblatex compatibility (PK/MW)
-\c@textcitecount=\count494
-\c@textcitetotal=\count495
-\c@textcitemaxnames=\count496
-\c@biburlbigbreakpenalty=\count497
-\c@biburlbreakpenalty=\count498
-\c@biburlnumpenalty=\count499
-\c@biburlucpenalty=\count500
-\c@biburllcpenalty=\count501
+\c@textcitecount=\count500
+\c@textcitetotal=\count501
+\c@textcitemaxnames=\count502
+\c@biburlbigbreakpenalty=\count503
+\c@biburlbreakpenalty=\count504
+\c@biburlnumpenalty=\count505
+\c@biburlucpenalty=\count506
+\c@biburllcpenalty=\count507
 \biburlbigskip=\muskip19
 \biburlnumskip=\muskip20
 \biburlucskip=\muskip21
 \biburllcskip=\muskip22
-\c@smartand=\count502
+\c@smartand=\count508
 )
 Package biblatex Info: Trying to load bibliography style 'ieee'...
 Package biblatex Info: ... file 'ieee.bbx' found.
@@ -1218,8 +1240,8 @@ Package biblatex Info: ... file 'standard.bbx' found.
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/biblatex/bbx\stan
 dard.bbx
 File: standard.bbx 2025/07/10 v3.21 biblatex bibliography style (PK/MW)
-\c@bbx:relatedcount=\count503
-\c@bbx:relatedtotal=\count504
+\c@bbx:relatedcount=\count509
+\c@bbx:relatedtotal=\count510
 ))))
 Package biblatex Info: Trying to load citation style 'ieee'...
 Package biblatex Info: ... file 'ieee.cbx' found.
@@ -1261,7 +1283,7 @@ Package: expl3 2025-12-24 L3 programming layer (loader)
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backe
 nd-pdftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count505
+\l__color_backend_stack_int=\count511
 ))
 Package biblatex Info: ... and expl3
 (biblatex)             2025-12-24 L3 programming layer (loader) 
@@ -1278,7 +1300,7 @@ Package: blx-case-expl3 2025/07/10 v3.21 expl3 case changing code for biblatex
 ))
 
 LaTeX Warning: \include should only be used after \begin{document} on input lin
-e 59.
+e 60.
 
 No file lstlisting.
 (glossary.tex)
@@ -1310,7 +1332,7 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count506
+\c@section@level=\count512
 )
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/generic/stringenc\strin
 genc.sty
@@ -1318,8 +1340,8 @@ Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
 )
 )
 \@linkdim=\dimen280
-\Hy@linkcounter=\count507
-\Hy@pagecounter=\count508
+\Hy@linkcounter=\count513
+\Hy@pagecounter=\count514
 
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.d
 ef
@@ -1331,7 +1353,7 @@ Now handling font encoding PD1 ...
 .sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-\Hy@SavedSpaceFactor=\count509
+\Hy@SavedSpaceFactor=\count515
 
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.de
 f
@@ -1346,7 +1368,7 @@ Package hyperref Info: Plain pages OFF on input line 4210.
 Package hyperref Info: Backreferencing OFF on input line 4215.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4462.
-\c@Hy@tempcnt=\count510
+\c@Hy@tempcnt=\count516
 LaTeX Info: Redefining \url on input line 4801.
 \XeTeXLinkMargin=\dimen281
 
@@ -1359,7 +1381,7 @@ ntcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
-\Fld@menulength=\count511
+\Fld@menulength=\count517
 \Field@Width=\dimen282
 \Fld@charsize=\dimen283
 Package hyperref Info: Hyper figures OFF on input line 6078.
@@ -1369,17 +1391,17 @@ Package hyperref Info: backreferencing OFF on input line 6093.
 Package hyperref Info: Link coloring OFF on input line 6098.
 Package hyperref Info: Link coloring with OCG OFF on input line 6103.
 Package hyperref Info: PDF/A mode OFF on input line 6108.
-\Hy@abspage=\count512
-\c@Item=\count513
-\c@Hfootnote=\count514
+\Hy@abspage=\count518
+\c@Item=\count519
+\c@Hfootnote=\count520
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hpdftex.
 def
 File: hpdftex.def 2025-07-12 v7.01o Hyperref driver for pdfTeX
-\Fld@listcount=\count515
-\c@bookmark@seq@number=\count516
+\Fld@listcount=\count521
+\c@bookmark@seq@number=\count522
 
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/rerunfilecheck\re
 runfilecheck.sty
@@ -1401,16 +1423,18 @@ Package: hypcap 2024-07-26 v1.13 Adjusting the anchors of captions (HO)
 xmacro.sty
 Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
 ))
-\c@example=\count517
+\c@example=\count523
+Package csquotes Info: Checking for multilingual support...
+Package csquotes Info: ... found 'babel' package.
+Package csquotes Info: Adjusting default style.
 
 
-Package biblatex Warning: 'babel/polyglossia' detected but 'csquotes' missing.
-(biblatex)                Loading 'csquotes' recommended.
+Package csquotes Warning: No style for language 'nil'.
+(csquotes)                Using fallback style on input line 162.
 
-\@quotelevel=\count518
-\@quotereset=\count519
+Package csquotes Info: Redefining alias 'default' -> 'fallback'.
 LaTeX Font Info:    Trying to load font information for T5+ptm on input line 16
-1.
+2.
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/vntex\t5ptm.fd
 File: t5utm.fd 2005/08/24 Fontinst v1.929 font definitions for T5/ptm.
 )
@@ -1419,7 +1443,7 @@ LaTeX Warning: Unused global option(s):
     [13pt,3p].
 
 (main.aux
-\g__glossaries_gls_ref_acronym_int=\count520
+\g__glossaries_gls_ref_acronym_int=\count524
 
 
 LaTeX Warning: Label `fig:Bia' multiply defined.
@@ -1427,26 +1451,26 @@ LaTeX Warning: Label `fig:Bia' multiply defined.
 )
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 161.
-LaTeX Font Info:    ... okay on input line 161.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 161.
-LaTeX Font Info:    ... okay on input line 161.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 161.
-LaTeX Font Info:    ... okay on input line 161.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 161.
-LaTeX Font Info:    ... okay on input line 161.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 161.
-LaTeX Font Info:    ... okay on input line 161.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 161.
-LaTeX Font Info:    ... okay on input line 161.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 161.
-LaTeX Font Info:    ... okay on input line 161.
-LaTeX Font Info:    Checking defaults for T5/cmr/m/n on input line 161.
-LaTeX Font Info:    ... okay on input line 161.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 161.
-LaTeX Font Info:    ... okay on input line 161.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 161.
-LaTeX Font Info:    ... okay on input line 161.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 162.
+LaTeX Font Info:    ... okay on input line 162.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 162.
+LaTeX Font Info:    ... okay on input line 162.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 162.
+LaTeX Font Info:    ... okay on input line 162.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 162.
+LaTeX Font Info:    ... okay on input line 162.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 162.
+LaTeX Font Info:    ... okay on input line 162.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 162.
+LaTeX Font Info:    ... okay on input line 162.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 162.
+LaTeX Font Info:    ... okay on input line 162.
+LaTeX Font Info:    Checking defaults for T5/cmr/m/n on input line 162.
+LaTeX Font Info:    ... okay on input line 162.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 162.
+LaTeX Font Info:    ... okay on input line 162.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 162.
+LaTeX Font Info:    ... okay on input line 162.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1486,17 +1510,17 @@ LaTeX Font Info:    ... okay on input line 161.
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-
 pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count521
+\scratchcounter=\count525
 \scratchdimen=\dimen284
 \scratchbox=\box83
-\nofMPsegments=\count522
-\nofMParguments=\count523
-\everyMPshowfont=\toks55
-\MPscratchCnt=\count524
+\nofMPsegments=\count526
+\nofMParguments=\count527
+\everyMPshowfont=\toks56
+\MPscratchCnt=\count528
 \MPscratchDim=\dimen285
-\MPnumerator=\count525
-\makeMPintoPDFobject=\count526
-\everyMPtoPDFconversion=\toks56
+\MPnumerator=\count529
+\makeMPintoPDFobject=\count530
+\everyMPtoPDFconversion=\toks57
 )
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epst
 opdf-base.sty
@@ -1529,14 +1553,14 @@ Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )
 Package caption Info: supertabular package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\c@lstlisting=\count527
-Package tocbasic Info: setting babel extension for `lol' on input line 161.
+\c@lstlisting=\count531
+Package tocbasic Info: setting babel extension for `lol' on input line 162.
 Package biblatex Info: Trying to load language 'nil'...
 Package biblatex Info: ... file 'nil.lbx' not found.
 
 
 Package biblatex Warning: Language 'nil' not supported.
-(biblatex)                Using dummy definitions on input line 161.
+(biblatex)                Using dummy definitions on input line 162.
 
 Package biblatex Info: Input encoding 'utf8' detected.
 Package biblatex Info: Automatic encoding selection.
@@ -1548,10 +1572,79 @@ Package biblatex Info: Data encoding 'utf8' specified.
 
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
-(main.bbl)
-Package biblatex Info: Reference section=0 on input line 161.
-Package biblatex Info: Reference segment=0 on input line 161.
-Package hyperref Info: Link coloring OFF on input line 161.
+(main.bbl
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 36.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 54.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 72.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 103.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 133.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 155.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 197.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 215.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 240.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 266.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 286.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 312.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 334.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 356.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 376.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 410.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 436.
+
+)
+Package biblatex Info: Reference section=0 on input line 162.
+Package biblatex Info: Reference segment=0 on input line 162.
+Package hyperref Info: Link coloring OFF on input line 162.
  (main.out) (main.out)
 \@outlinefile=\write5
 \openout5 = `main.out'.
@@ -1618,7 +1711,7 @@ s for their unwavering
  []
 
 )
-Overfull \hbox (13.21948pt too wide) in paragraph at lines 12--177
+Overfull \hbox (13.21948pt too wide) in paragraph at lines 12--178
 \T5/ptm/m/n/13 comments and suggestions from professors, colleagues, and friend
 s to further improve
  []
@@ -1628,7 +1721,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.186 \newpage
+l.187 \newpage
                [1] (main.toc
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -1637,14 +1730,10 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.43 ... dung chi ti·∫øt th·ª© 2}{26}{section.3.3}
+l.44 ...h√¢n t√≠ch l∆∞u l∆∞·ª£ng}{38}{section.3.3}
                                                   % [1
 
-])
-\tf@toc=\write6
-\openout6 = `main.toc'.
-
-
+]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
@@ -1652,51 +1741,52 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.214 \cleardoublepage
-                       [2]
+l.80 ...numberline {A.2}Majoring}{93}{section.A.2}
+                                                  % [2])
+\tf@toc=\write6
+\openout6 = `main.toc'.
+
+
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.214 \cleardoublepage
+l.215 \cleardoublepage
                        [3]
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.214 \cleardoublepage
+l.215 \cleardoublepage
                        [4
 
 
 ] (main.lof
-Overfull \hbox (46.48659pt too wide) in paragraph at lines 4--4
- \T5/ptm/m/n/13 Control Servers, HMI, Historian, Engineering Workstation, Commu
-nication 
+LaTeX Font Info:    Trying to load font information for T5+pcr on input line 20
+.
+
+(C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/vntex\t5pcr.fd
+File: t5ucr.fd 2005/08/24 Fontinst v1.929 font definitions for T5/pcr.
+)
+Overfull \hbox (127.04765pt too wide) in paragraph at lines 20--20
+ [][] []\T5/ptm/m/n/13 Figure []LuÁng thi∏t l™p k∏t nËi S7comm (SampleCaptures/
+s7comm_reading_plc_status.pcap 
  []
 
 
-Overfull \hbox (9.91606pt too wide) in paragraph at lines 6--6
- [][] []\T5/ptm/m/n/13 Figure []SIS Controller cÙng giËng PLC/RTU nh˜ng s˚ dˆng
- 2 Gauges 
- []
-
-
-Overfull \hbox (55.34325pt too wide) in paragraph at lines 18--18
- \T5/ptm/m/n/13 cÍng TCP 102; nguÁn m®u: \T5/ptm/m/it/13 SampleCaptures/s7comm_
-reading_plc_status.pcap\T5/ptm/m/n/13 )[] [][]  
- []
-
-
-Underfull \vbox (badness 5245) has occurred while \output is active []
+Underfull \vbox (badness 1308) has occurred while \output is active []
 
  [1
 
-])
+]
+Underfull \vbox (badness 1694) has occurred while \output is active []
+
+ [2])
 \tf@lof=\write7
 \openout7 = `main.lof'.
 
 
-[2] (main.lot)
+[3] (main.lot)
 \tf@lot=\write8
 \openout8 = `main.lot'.
 
@@ -1704,15 +1794,15 @@ Underfull \vbox (badness 5245) has occurred while \output is active []
 
 Package glossaries Warning: Empty glossary for \printnoidxglossary[type={main}]
 . Rerun may be required (or you may have forgotten to use commands like \gls) o
-n input line 238.
+n input line 239.
 
 
 Package glossaries Info: Preparing to sort glossary `acronym' (total number of
 (glossaries)             referenced entries: 5)
 
-[3
+[4
 
-] [4
+] [5
 
 
 ]
@@ -1958,7 +2048,7 @@ Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
-<Figure/SCADA.png, id=467, 1221.56375pt x 747.79375pt>
+<Figure/SCADA.png, id=649, 1221.56375pt x 747.79375pt>
 File: Figure/SCADA.png Graphic file (type png)
 <use Figure/SCADA.png>
 Package pdftex.def Info: Figure/SCADA.png  used on input line 54.
@@ -1970,12 +2060,16 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 {C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc
 }]
-<Figure/DCS.png, id=473, 1257.69875pt x 742.775pt>
+Overfull \hbox (23.25652pt too wide) in paragraph at lines 60--61
+\T5/ptm/m/n/13 Servers, HMI, Historian, Engineering Workstation, Communication 
+Infrastructure,
+ []
+
+<Figure/DCS.png, id=656, 1257.69875pt x 742.775pt>
 File: Figure/DCS.png Graphic file (type png)
 <use Figure/DCS.png>
-Package pdftex.def Info: Figure/DCS.png  used on input line 68.
+Package pdftex.def Info: Figure/DCS.png  used on input line 69.
 (pdftex.def)             Requested size: 234.73654pt x 138.62393pt.
-
 
 Package fancyhdr Warning: \headheight is too small (10.0pt): 
 (fancyhdr)                Make it at least 15.59995pt, for example:
@@ -1984,10 +2078,10 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
 [7 <./Figure/SCADA.png (PNG copy)> <./Figure/DCS.png (PNG copy)>]
-<Figure/SIS.png, id=479, 747.79375pt x 736.7525pt>
+<Figure/SIS.png, id=661, 747.79375pt x 736.7525pt>
 File: Figure/SIS.png Graphic file (type png)
 <use Figure/SIS.png>
-Package pdftex.def Info: Figure/SIS.png  used on input line 102.
+Package pdftex.def Info: Figure/SIS.png  used on input line 103.
 (pdftex.def)             Requested size: 234.73654pt x 231.26884pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -2001,9 +2095,6 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
 [8]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 Package fancyhdr Warning: \headheight is too small (10.0pt): 
 (fancyhdr)                Make it at least 15.59995pt, for example:
@@ -2012,93 +2103,86 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
 [9 <./Figure/SIS.png (PNG copy)>]
-Underfull \hbox (badness 2205) in paragraph at lines 136--136
+Underfull \hbox (badness 2205) in paragraph at lines 134--134
 []|\T5/ptm/b/n/13 C°c d·ng m°y phÍ
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 136--137
+Underfull \hbox (badness 10000) in paragraph at lines 134--135
 []|\T5/ptm/b/n/13 Ph¶n m∑m l™p
  []
 
 
-Underfull \hbox (badness 2582) in paragraph at lines 138--138
+Underfull \hbox (badness 2582) in paragraph at lines 136--136
 []|\T5/ptm/m/n/13 LOGO!, Simatic S7-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--140
+Underfull \hbox (badness 10000) in paragraph at lines 138--138
 []|\T5/ptm/m/n/13 Rockwell
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--140
+Underfull \hbox (badness 10000) in paragraph at lines 138--138
 \T5/ptm/m/n/13 Automation /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--140
+Underfull \hbox (badness 10000) in paragraph at lines 138--138
 []|\T5/ptm/m/n/13 MicroLogix,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--140
+Underfull \hbox (badness 10000) in paragraph at lines 138--138
 \T5/ptm/m/n/13 CompactLogix,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--141
+Underfull \hbox (badness 10000) in paragraph at lines 138--139
 []|\T5/ptm/m/n/13 RSLogix 5000,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 142--142
+Underfull \hbox (badness 10000) in paragraph at lines 140--140
 []|\T5/ptm/m/n/13 Mitsubishi
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 142--142
+Underfull \hbox (badness 10000) in paragraph at lines 140--140
 []|\T5/ptm/m/n/13 FX, Q, L, iQ-R/F
  []
 
 
-Underfull \hbox (badness 3000) in paragraph at lines 142--143
+Underfull \hbox (badness 3000) in paragraph at lines 140--141
 []|\T5/ptm/m/n/13 GX Works2, GX
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 144--144
+Underfull \hbox (badness 10000) in paragraph at lines 142--142
 []|\T5/ptm/m/n/13 CP1, CJ2, NX/NJ
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 146--146
+Underfull \hbox (badness 10000) in paragraph at lines 144--144
 []|\T5/ptm/m/n/13 Schneider
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 146--146
+Underfull \hbox (badness 10000) in paragraph at lines 144--144
 []|\T5/ptm/m/n/13 Modicon M221,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 146--147
+Underfull \hbox (badness 10000) in paragraph at lines 144--145
 []|\T5/ptm/m/n/13 EcoStruxure
  []
 
-<Figure/PLC_components.png, id=489, 1204.5pt x 719.68875pt>
+<Figure/PLC_components.png, id=671, 1204.5pt x 719.68875pt>
 File: Figure/PLC_components.png Graphic file (type png)
 <use Figure/PLC_components.png>
-Package pdftex.def Info: Figure/PLC_components.png  used on input line 157.
+Package pdftex.def Info: Figure/PLC_components.png  used on input line 155.
 (pdftex.def)             Requested size: 362.77525pt x 216.75386pt.
 
-Package fancyhdr Warning: \headheight is too small (10.0pt): 
-(fancyhdr)                Make it at least 15.59995pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.59995pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
-
-[10 <./Figure/PLC_components.png>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
@@ -2109,11 +2193,25 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[11]
-Overfull \hbox (12.50555pt too wide) in paragraph at lines 244--245
-[]\T5/ptm/b/n/13 Electrically Erasable Programmable Read-Only Memory (EEPROM)\T
-5/ptm/m/n/13 : Thao
- []
+[10]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[11 <./Figure/PLC_components.png>]
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 220.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 
 
 Package fancyhdr Warning: \headheight is too small (10.0pt): 
@@ -2123,33 +2221,23 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
 [12]
-<../docs/Report/Compact_PLC_type.png, id=513, 1204.5pt x 578.16pt>
+Overfull \hbox (12.50555pt too wide) in paragraph at lines 248--249
+[]\T5/ptm/b/n/13 Electrically Erasable Programmable Read-Only Memory (EEPROM)\T
+5/ptm/m/n/13 : Thao
+ []
+
+<../docs/Report/Compact_PLC_type.png, id=696, 1204.5pt x 578.16pt>
 File: ../docs/Report/Compact_PLC_type.png Graphic file (type png)
 <use ../docs/Report/Compact_PLC_type.png>
 Package pdftex.def Info: ../docs/Report/Compact_PLC_type.png  used on input lin
-e 259.
+e 266.
 (pdftex.def)             Requested size: 192.0548pt x 92.18108pt.
-<../docs/Report/Modular_PLC_type.png, id=514, 1204.5pt x 538.01pt>
+<../docs/Report/Modular_PLC_type.png, id=697, 1204.5pt x 538.01pt>
 File: ../docs/Report/Modular_PLC_type.png Graphic file (type png)
 <use ../docs/Report/Modular_PLC_type.png>
 Package pdftex.def Info: ../docs/Report/Modular_PLC_type.png  used on input lin
-e 265.
+e 272.
 (pdftex.def)             Requested size: 192.0548pt x 85.7796pt.
-<Figure/PLC_rack.png, id=515, 1093.08376pt x 429.10312pt>
-File: Figure/PLC_rack.png Graphic file (type png)
-<use Figure/PLC_rack.png>
-Package pdftex.def Info: Figure/PLC_rack.png  used on input line 276.
-(pdftex.def)             Requested size: 362.77525pt x 142.4098pt.
-<Figure/Code_PLC.png, id=516, 501.875pt x 278.03876pt>
-File: Figure/Code_PLC.png Graphic file (type png)
-<use Figure/Code_PLC.png>
-Package pdftex.def Info: Figure/Code_PLC.png  used on input line 287.
-(pdftex.def)             Requested size: 362.77525pt x 200.98534pt.
-<Figure/Ladder.png, id=517, 803.0pt x 302.12875pt>
-File: Figure/Ladder.png Graphic file (type png)
-<use Figure/Ladder.png>
-Package pdftex.def Info: Figure/Ladder.png  used on input line 302.
-(pdftex.def)             Requested size: 298.75264pt x 112.40825pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -2161,17 +2249,41 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[13 <../docs/Report/Compact_PLC_type.png> <../docs/Report/Modular_PLC_type.png>
- <./Figure/PLC_rack.png>]
-<../docs/Report/FBD_code.png, id=527, 1204.5pt x 505.89pt>
+[13]
+<Figure/PLC_rack.png, id=703, 1093.08376pt x 429.10312pt>
+File: Figure/PLC_rack.png Graphic file (type png)
+<use Figure/PLC_rack.png>
+Package pdftex.def Info: Figure/PLC_rack.png  used on input line 283.
+(pdftex.def)             Requested size: 362.77525pt x 142.4098pt.
+<Figure/Code_PLC.png, id=704, 501.875pt x 278.03876pt>
+File: Figure/Code_PLC.png Graphic file (type png)
+<use Figure/Code_PLC.png>
+Package pdftex.def Info: Figure/Code_PLC.png  used on input line 294.
+(pdftex.def)             Requested size: 362.77525pt x 200.98534pt.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[14 <../docs/Report/Compact_PLC_type.png> <../docs/Report/Modular_PLC_type.png>
+ <./Figure/PLC_rack.png> <./Figure/Code_PLC.png>]
+<Figure/Ladder.png, id=714, 803.0pt x 302.12875pt>
+File: Figure/Ladder.png Graphic file (type png)
+<use Figure/Ladder.png>
+Package pdftex.def Info: Figure/Ladder.png  used on input line 309.
+(pdftex.def)             Requested size: 298.75264pt x 112.40825pt.
+<../docs/Report/FBD_code.png, id=715, 1204.5pt x 505.89pt>
 File: ../docs/Report/FBD_code.png Graphic file (type png)
 <use ../docs/Report/FBD_code.png>
-Package pdftex.def Info: ../docs/Report/FBD_code.png  used on input line 311.
+Package pdftex.def Info: ../docs/Report/FBD_code.png  used on input line 318.
 (pdftex.def)             Requested size: 298.75264pt x 125.4764pt.
-<../docs/Report/SFC_code.png, id=528, 1204.5pt x 691.58376pt>
+<../docs/Report/SFC_code.png, id=716, 1204.5pt x 691.58376pt>
 File: ../docs/Report/SFC_code.png Graphic file (type png)
 <use ../docs/Report/SFC_code.png>
-Package pdftex.def Info: ../docs/Report/SFC_code.png  used on input line 320.
+Package pdftex.def Info: ../docs/Report/SFC_code.png  used on input line 327.
 (pdftex.def)             Requested size: 298.75264pt x 171.53421pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -2184,18 +2296,13 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[14 <./Figure/Code_PLC.png> <./Figure/Ladder.png (PNG copy)> <../docs/Report/FB
-D_code.png>]
-LaTeX Font Info:    Trying to load font information for T5+pcr on input line 32
-5.
-
-(C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/vntex\t5pcr.fd
-File: t5ucr.fd 2005/08/24 Fontinst v1.929 font definitions for T5/pcr.
-)
-<Figure/Purdue.png, id=537, 1027.84pt x 788.9475pt>
+[15 <./Figure/Ladder.png (PNG copy)> <../docs/Report/FBD_code.png>]
+LaTeX Font Info:    Font shape `T5/pcr/m/it' in size <11.86258> not available
+(Font)              Font shape `T5/pcr/m/sl' tried instead on input line 345.
+<Figure/Purdue.png, id=724, 1027.84pt x 788.9475pt>
 File: Figure/Purdue.png Graphic file (type png)
 <use Figure/Purdue.png>
-Package pdftex.def Info: Figure/Purdue.png  used on input line 350.
+Package pdftex.def Info: Figure/Purdue.png  used on input line 359.
 (pdftex.def)             Requested size: 362.77525pt x 278.45915pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -2208,56 +2315,56 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[15 <../docs/Report/SFC_code.png>]
-LaTeX Font Info:    Calculating math sizes for size <10.83347> on input line 36
-3.
+[16 <../docs/Report/SFC_code.png>]
+LaTeX Font Info:    Calculating math sizes for size <10.83347> on input line 37
+4.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <7.58339> not available
-(Font)              size <8> substituted on input line 363.
+(Font)              size <8> substituted on input line 374.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <5.41673> not available
-(Font)              size <5> substituted on input line 363.
+(Font)              size <5> substituted on input line 374.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <7.58339> not available
-(Font)              size <8> substituted on input line 363.
+(Font)              size <8> substituted on input line 374.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <5.41673> not available
-(Font)              size <5> substituted on input line 363.
+(Font)              size <5> substituted on input line 374.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <7.58339> not available
-(Font)              size <8> substituted on input line 363.
+(Font)              size <8> substituted on input line 374.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <5.41673> not available
-(Font)              size <5> substituted on input line 363.
+(Font)              size <5> substituted on input line 374.
 
 
 LaTeX Font Warning: Font shape `U/lasy/m/n' in size <7.58339> not available
-(Font)              size <8> substituted on input line 363.
+(Font)              size <8> substituted on input line 374.
 
 
 LaTeX Font Warning: Font shape `U/lasy/m/n' in size <5.41673> not available
-(Font)              size <5> substituted on input line 363.
+(Font)              size <5> substituted on input line 374.
 
-<Figure/ABB.png, id=548, 508.90125pt x 339.2675pt>
+<Figure/ABB.png, id=735, 508.90125pt x 339.2675pt>
 File: Figure/ABB.png Graphic file (type png)
 <use Figure/ABB.png>
-Package pdftex.def Info: Figure/ABB.png  used on input line 373.
+Package pdftex.def Info: Figure/ABB.png  used on input line 384.
 (pdftex.def)             Requested size: 122.91708pt x 81.94354pt.
-<Figure/PLCS7-1500.png, id=549, 1284.8pt x 856.19875pt>
+<Figure/PLCS7-1500.png, id=736, 1284.8pt x 856.19875pt>
 File: Figure/PLCS7-1500.png Graphic file (type png)
 <use Figure/PLCS7-1500.png>
-Package pdftex.def Info: Figure/PLCS7-1500.png  used on input line 379.
+Package pdftex.def Info: Figure/PLCS7-1500.png  used on input line 390.
 (pdftex.def)             Requested size: 122.91708pt x 81.90149pt.
-<Figure/HMI.png, id=550, 1085.05376pt x 983.675pt>
+<Figure/HMI.png, id=737, 1085.05376pt x 983.675pt>
 File: Figure/HMI.png Graphic file (type png)
 <use Figure/HMI.png>
-Package pdftex.def Info: Figure/HMI.png  used on input line 385.
+Package pdftex.def Info: Figure/HMI.png  used on input line 396.
 (pdftex.def)             Requested size: 122.91708pt x 111.43166pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -2270,7 +2377,7 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[16 <./Figure/Purdue.png (PNG copy)>]
+[17 <./Figure/Purdue.png (PNG copy)>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
@@ -2281,31 +2388,10 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[17 <./Figure/ABB.png (PNG copy)> <./Figure/PLCS7-1500.png (PNG copy)> <./Figur
+[18 <./Figure/ABB.png (PNG copy)> <./Figure/PLCS7-1500.png (PNG copy)> <./Figur
 e/HMI.png (PNG copy)>]
-Overfull \hbox (2.49478pt too wide) in paragraph at lines 455--456
-[]\T5/ptm/b/n/13 Open TCP/IP\T5/ptm/m/n/13 : tri∫n khai TCP/IP thu¶n; c‚ th∫ l™
-p trºnh b¨ng socket TCP/UDP
- []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-Package fancyhdr Warning: \headheight is too small (10.0pt): 
-(fancyhdr)                Make it at least 15.59995pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.59995pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
-
-[18]
-Overfull \hbox (28.01866pt too wide) in paragraph at lines 471--472
-[]\T5/pcr/m/n/11.86258 [Lo§i vÚng nhÓ] [KΩch th˜Óc] [^^^‡a chø byte].[^^^‡a chø
- bit] 
- []
-
-
-Overfull \hbox (10.75993pt too wide) in paragraph at lines 505--506
-[]\T5/ptm/m/n/13 VÚng DB c‚ cÛ ph°p ri∂ng: \T5/pcr/m/n/13 DB[n].DBX[byte].[bit]
-\T5/ptm/m/n/13 . VΩ dˆ: \T5/pcr/m/n/13 DB1.DBX0.0
- []
 
 
 Package fancyhdr Warning: \headheight is too small (10.0pt): 
@@ -2315,13 +2401,60 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
 [19]
-<Figure/Siemens_S7_protocol_stack.png, id=576, 779.91376pt x 201.75375pt>
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 474.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 482.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 484.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[20]
+<Figure/S7_stack.png, id=760, 1027.84pt x 636.3775pt>
+File: Figure/S7_stack.png Graphic file (type png)
+<use Figure/S7_stack.png>
+Package pdftex.def Info: Figure/S7_stack.png  used on input line 488.
+(pdftex.def)             Requested size: 384.1096pt x 237.8156pt.
+<Figure/read_memory.png, id=761, 752.8125pt x 104.64093pt>
+File: Figure/read_memory.png Graphic file (type png)
+<use Figure/read_memory.png>
+Package pdftex.def Info: Figure/read_memory.png  used on input line 501.
+(pdftex.def)             Requested size: 384.1096pt x 53.3933pt.
+
+Overfull \hbox (2.94745pt too wide) in paragraph at lines 509--510
+[]\T5/ptm/m/n/13 Lo§i vÚng nhÓ l† I (Input), Q (Output), M (Memory/Merker), DB 
+(Data Block),
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[21 <./Figure/S7_stack.png (PNG copy)> <./Figure/read_memory.png>]
+<Figure/Siemens_S7_protocol_stack.png, id=768, 779.91376pt x 201.75375pt>
 File: Figure/Siemens_S7_protocol_stack.png Graphic file (type png)
 <use Figure/Siemens_S7_protocol_stack.png>
 Package pdftex.def Info: Figure/Siemens_S7_protocol_stack.png  used on input li
-ne 543.
+ne 582.
 (pdftex.def)             Requested size: 362.77525pt x 93.8453pt.
 
+Underfull \vbox (badness 4819) has occurred while \output is active []
+
+
 
 Package fancyhdr Warning: \headheight is too small (10.0pt): 
 (fancyhdr)                Make it at least 15.59995pt, for example:
@@ -2329,38 +2462,36 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[20 <./Figure/Siemens_S7_protocol_stack.png>]
-<Figure/s7struct.png, id=588, 712.6625pt x 68.255pt>
+[22 <./Figure/Siemens_S7_protocol_stack.png>]
+Overfull \hbox (20.96704pt too wide) in paragraph at lines 592--593
+\T5/ptm/m/n/13 h˜Óng k∏t nËi (connectionless). Do ^^_‚ ISO c¶n s˚ dˆng th∂m \T5
+/ptm/b/n/13 COTP (Connection-
+ []
+
+
+Overfull \hbox (23.24516pt too wide) in paragraph at lines 601--610
+ [][] 
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[23]
+<Figure/s7struct.png, id=781, 712.6625pt x 68.255pt>
 File: Figure/s7struct.png Graphic file (type png)
 <use Figure/s7struct.png>
-Package pdftex.def Info: Figure/s7struct.png  used on input line 582.
+Package pdftex.def Info: Figure/s7struct.png  used on input line 633.
 (pdftex.def)             Requested size: 320.0935pt x 30.65613pt.
-<Figure/s7header.png, id=589, 175.6161pt x 61.6704pt>
+<Figure/s7header.png, id=782, 175.6161pt x 61.6704pt>
 File: Figure/s7header.png Graphic file (type png)
 <use Figure/s7header.png>
-Package pdftex.def Info: Figure/s7header.png  used on input line 591.
+Package pdftex.def Info: Figure/s7header.png  used on input line 644.
 (pdftex.def)             Requested size: 362.77525pt x 127.4094pt.
 
-Overfull \hbox (6.66864pt too wide) in paragraph at lines 600--601
-\T5/ptm/m/n/13 ph£n hÁi s≥ tr£ l§i sË n†y ^^_∫ client gh≤p ^^_Ûng c∞p request--
-response. SË reference
- []
-
-
-Underfull \hbox (badness 2922) in paragraph at lines 614--615
-[]|\T5/ptm/m/n/10.83347 Y∂u c¶u t¯ client tÓi server: read/write memory,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 614--615
-\T5/ptm/m/n/10.83347 read/write blocks, start/stop device, setup
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 620--621
-[]|\T5/ptm/m/n/10.83347 Ph¶n m rÎng: programmer commands, cyclic
- []
-
 
 Package fancyhdr Warning: \headheight is too small (10.0pt): 
 (fancyhdr)                Make it at least 15.59995pt, for example:
@@ -2368,72 +2499,32 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[21 <./Figure/s7struct.png (PNG copy)> <./Figure/s7header.png>]
-Overfull \hbox (3.6106pt too wide) in paragraph at lines 625--626
-[]\T5/ptm/m/n/13 Ph¶n tham sË phˆ thuÎc \T5/ptm/m/it/13 Function Code \T5/ptm/m
-/n/13 (\T5/ptm/m/it/13 S7 Header Function Code\T5/ptm/m/n/13 ) trong header;
- []
-
-<Figure/image-1.png, id=599, 1229.7945pt x 218.0145pt>
-File: Figure/image-1.png Graphic file (type png)
-<use Figure/image-1.png>
-Package pdftex.def Info: Figure/image-1.png  used on input line 631.
-(pdftex.def)             Requested size: 384.1096pt x 68.09276pt.
-
-Overfull \hbox (5.9007pt too wide) in paragraph at lines 651--652
-\T5/pcr/m/n/13 reference \T5/ptm/m/n/13 ban ^^_¶u b¨ng 0; \T5/pcr/m/n/13 Source
- reference \T5/ptm/m/n/13 do client t§o (vΩ dˆ \T5/pcr/m/n/13 0x000f\T5/ptm/m/n
-/13 );
+[24 <./Figure/s7struct.png (PNG copy)> <./Figure/s7header.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 672--673
+[]|\T5/ptm/m/n/10.83347 Y∂u c¶u t¯ client tÓi server nh˜ read/write
  []
 
 
-Package fancyhdr Warning: \headheight is too small (10.0pt): 
-(fancyhdr)                Make it at least 15.59995pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.59995pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
-
-[22 <./Figure/image-1.png>]
-<Figure/s7setup.png, id=609, 144.54pt x 56.6115pt>
-File: Figure/s7setup.png Graphic file (type png)
-<use Figure/s7setup.png>
-Package pdftex.def Info: Figure/s7setup.png  used on input line 659.
-(pdftex.def)             Requested size: 362.77525pt x 142.09502pt.
-
-Overfull \hbox (8.53752pt too wide) in paragraph at lines 675--676
-[]\T5/ptm/m/n/13 Sau khi setup, hai b∂n trao ^^_Íi b¨ng c°c lªnh S7 nh˜ Read/Wr
-ite Var, ReadSZL...;
+Underfull \hbox (badness 1939) in paragraph at lines 672--673
+\T5/ptm/m/n/10.83347 memory, read/write blocks, start/stop device, setup
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-Package fancyhdr Warning: \headheight is too small (10.0pt): 
-(fancyhdr)                Make it at least 15.59995pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.59995pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
-
-[23 <./Figure/s7setup.png>]
-Overfull \hbox (55.32672pt too wide) in paragraph at lines 698--700
-\T5/ptm/m/n/13 S7comm. Thay vº \T5/pcr/m/n/13 offset:22\T5/ptm/m/n/13 , c‚ th∫ 
-vi∏t \T5/pcr/m/n/13 s7comm_function: password_request\T5/ptm/m/n/13 .
+Overfull \hbox (29.20967pt too wide) in paragraph at lines 685--686
+\T5/ptm/m/n/13 System Info, Blocks move, PLC Control, Date and Time, Security, 
+Programming,... 
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Overfull \hbox (5.52705pt too wide) in paragraph at lines 695--696
+[]\T5/ptm/m/n/13 PLC Control/PLC Stop \T5/pcr/m/n/13 0x28\T5/ptm/m/n/13 /\T5/pc
+r/m/n/13 0x29 \T5/ptm/m/n/13 ^^_˜Òc trºnh b†y trong mˆc th¸c nghiªm
+ []
 
 
+Underfull \vbox (badness 4132) has occurred while \output is active []
 
-Package fancyhdr Warning: \headheight is too small (10.0pt): 
-(fancyhdr)                Make it at least 15.59995pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.59995pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[24])
 
 Package fancyhdr Warning: \headheight is too small (10.0pt): 
 (fancyhdr)                Make it at least 15.59995pt, for example:
@@ -2442,22 +2533,2108 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
 [25]
+<Figure/setup_S7.png, id=795, 1229.7945pt x 218.0145pt>
+File: Figure/setup_S7.png Graphic file (type png)
+<use Figure/setup_S7.png>
+Package pdftex.def Info: Figure/setup_S7.png  used on input line 709.
+(pdftex.def)             Requested size: 384.1096pt x 68.09276pt.
+LaTeX Font Info:    Calculating math sizes for size <11.86258> on input line 71
+0.
+
+Underfull \hbox (badness 10000) in paragraph at lines 710--710
+[]\T5/ptm/b/n/11.86258 Figure 2.17: |\T5/ptm/m/n/11.86258 LuÁng thi∏t l™p k∏t n
+Ëi S7comm
+ []
+
+
+Underfull \hbox (badness 1668) in paragraph at lines 710--710
+\T5/ptm/m/n/11.86258 (SampleCaptures/s7comm_reading_plc_status.pcap t¯ []$\T5/p
+cr/m/n/11.86258 h t t p s : / / w i k i . w i r e s
+ []
+
+<../docs/Report/image.png, id=798, 1792.6975pt x 363.3575pt>
+File: ../docs/Report/image.png Graphic file (type png)
+<use ../docs/Report/image.png>
+Package pdftex.def Info: ../docs/Report/image.png  used on input line 720.
+(pdftex.def)             Requested size: 384.1096pt x 77.8542pt.
+LaTeX Font Info:    Font shape `T5/pcr/m/it' in size <13> not available
+(Font)              Font shape `T5/pcr/m/sl' tried instead on input line 725.
+
+Overfull \hbox (10.05708pt too wide) in paragraph at lines 725--726
+[]\T5/ptm/m/it/13 Three-way Handshake cıa TCP gi˙a \T5/pcr/m/sl/13 192.168.1.10
+ \T5/ptm/m/it/13 v† PLC \T5/pcr/m/sl/13 192.168.1.40
+ []
+
+<../docs/Report/image-2.png, id=799, 1155.31625pt x 719.68875pt>
+File: ../docs/Report/image-2.png Graphic file (type png)
+<use ../docs/Report/image-2.png>
+Package pdftex.def Info: ../docs/Report/image-2.png  used on input line 734.
+(pdftex.def)             Requested size: 384.1096pt x 239.26605pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[26 <./Figure/setup_S7.png> <../docs/Report/image.png (PNG copy)>]
+Overfull \hbox (22.31976pt too wide) in paragraph at lines 772--772
+[]\T5/pcr/m/n/13 ISO 8073/X.224 COTP Connection-Oriented Transport Protocol[] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[27 <../docs/Report/image-2.png (PNG copy)>]
+Overfull \hbox (14.79378pt too wide) in paragraph at lines 779--780
+[]\T5/pcr/m/n/13 Destination reference: 0x0000\T5/ptm/m/n/13 , \T5/pcr/m/n/13 S
+ource reference: 0x000f
+ []
+
+
+Overfull \hbox (22.31976pt too wide) in paragraph at lines 808--808
+[]\T5/pcr/m/n/13 ISO 8073/X.224 COTP Connection-Oriented Transport Protocol[] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[28]
+<Figure/s7setup.png, id=816, 144.54pt x 56.6115pt>
+File: Figure/s7setup.png Graphic file (type png)
+<use Figure/s7setup.png>
+Package pdftex.def Info: Figure/s7setup.png  used on input line 820.
+(pdftex.def)             Requested size: 362.77525pt x 142.09502pt.
+
+Overfull \hbox (1.16974pt too wide) in paragraph at lines 828--829
+[]\T5/pcr/m/n/13 S7 Header Function Code\T5/ptm/m/n/13 : Cho bi∏t lo§i lªnh S7,
+  ^^_•y l† \T5/pcr/m/n/13 0xF0 \T5/ptm/m/n/13 t˜Ïng
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[29 <./Figure/s7setup.png>]
+Overfull \hbox (10.2047pt too wide) in paragraph at lines 860--861
+[]\T5/pcr/m/n/13 Protocol Data Unit Reference: 512 \T5/ptm/m/n/13 l† mÎt sË tha
+m chi∏u do Client
+ []
+
+
+Overfull \hbox (71.20084pt too wide) in paragraph at lines 866--867
+[]\T5/pcr/m/n/13 Max AmQ (parallel jobs with ack) calling: 1\T5/ptm/m/n/13 , \T
+5/pcr/m/n/13 Max AmQ (parallel
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[30]
+Overfull \hbox (14.27063pt too wide) in paragraph at lines 892--893
+[]\T5/ptm/m/n/13 VÓi \T5/pcr/m/n/13 Protocol Data Unit Reference: 512 \T5/ptm/m
+/n/13 refer tÓi id cıa g‚i tin request
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[31]
+<../docs/Report/Siemens_S7_Client_Server.png, id=833, 560.0925pt x 627.34375pt>
+
+File: ../docs/Report/Siemens_S7_Client_Server.png Graphic file (type png)
+<use ../docs/Report/Siemens_S7_Client_Server.png>
+Package pdftex.def Info: ../docs/Report/Siemens_S7_Client_Server.png  used on i
+nput line 909.
+(pdftex.def)             Requested size: 362.77525pt x 406.35187pt.
+<../docs/Report/Simens_S7_CP.png, id=834, 612.2875pt x 234.8775pt>
+File: ../docs/Report/Simens_S7_CP.png Graphic file (type png)
+<use ../docs/Report/Simens_S7_CP.png>
+Package pdftex.def Info: ../docs/Report/Simens_S7_CP.png  used on input line 91
+8.
+(pdftex.def)             Requested size: 362.77525pt x 139.1607pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[32 <../docs/Report/Siemens_S7_Client_Server.png>]
+<../docs/Report/Siemens_S7_Client_Server_2.png, id=840, 563.10374pt x 396.48125
+pt>
+File: ../docs/Report/Siemens_S7_Client_Server_2.png Graphic file (type png)
+<use ../docs/Report/Siemens_S7_Client_Server_2.png>
+Package pdftex.def Info: ../docs/Report/Siemens_S7_Client_Server_2.png  used on
+ input line 928.
+(pdftex.def)             Requested size: 362.77525pt x 255.42897pt.
+<../docs/Report/Siemens_S7_Partner.png, id=841, 531.9875pt x 370.38374pt>
+File: ../docs/Report/Siemens_S7_Partner.png Graphic file (type png)
+<use ../docs/Report/Siemens_S7_Partner.png>
+Package pdftex.def Info: ../docs/Report/Siemens_S7_Partner.png  used on input l
+ine 939.
+(pdftex.def)             Requested size: 362.77525pt x 252.58101pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[33 <../docs/Report/Simens_S7_CP.png> <../docs/Report/Siemens_S7_Client_Server_
+2.png>])
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[34 <../docs/Report/Siemens_S7_Partner.png>]
 CHAPTER 3.
-(Chapter/3_Methodology.tex) [26
+(Chapter/3_Methodology.tex
+Overfull \hbox (15.49565pt too wide) in paragraph at lines 23--24
+\T5/ptm/m/n/13 thao t°c upload/download v† tßn cÊng man-in-the-middle tr∂n giao
+ th˘c S7comm. 
+ []
+
+
+! LaTeX Error: Environment tikzpicture undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.37     \begin{tikzpicture}
+                            [
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+! Undefined control sequence.
+l.43         \node
+                  [box] (lab) {Thi·∫øt l·∫≠p\\m√¥i tr∆∞·ªùng lab};
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.44         \node
+                  [box, right=of lab] (atk) {M√¥ ph·ªèng\\k·ªãch b·∫£n t·∫•n...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.45         \node
+                  [box, right=of atk] (pcap) {Thu th·∫≠p\\PCAP};
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.46         \node
+                  [box, right=of pcap] (ana) {Ph√¢n t√≠ch\\S7comm};
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.47         \node
+                  [box, right=of ana] (ids) {Lu·∫≠t Suricata\\v√† ki·ªÉm th·...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.48         \draw
+                  [arr] (lab) -- (atk);
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.49         \draw
+                  [arr] (atk) -- (pcap);
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.50         \draw
+                  [arr] (pcap) -- (ana);
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.51         \draw
+                  [arr] (ana) -- (ids);
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: \begin{figure} on input line 35 ended by \end{tikzpicture}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.52     \end{tikzpicture}
+                          
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [35
 
 ]
+<Figure/S7_on_OpenPLC.png, id=865, 1474.50874pt x 691.58376pt>
+File: Figure/S7_on_OpenPLC.png Graphic file (type png)
+<use Figure/S7_on_OpenPLC.png>
+Package pdftex.def Info: Figure/S7_on_OpenPLC.png  used on input line 76.
+(pdftex.def)             Requested size: 384.1096pt x 180.15576pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[36]
+Overfull \hbox (11.26521pt too wide) in paragraph at lines 82--83
+[]\T5/ptm/m/n/13 - []\T5/ptm/b/n/13 OpenPLC Editor[]\T5/ptm/m/n/13 : ^^^•y l† I
+DE ^^_∫ vi∏t ch˜Ïng trºnh d†nh cho OpenPLC Runtime.
+ []
+
+<Figure/OpenPLC_Editor.png, id=872, 1910.13625pt x 745.78625pt>
+File: Figure/OpenPLC_Editor.png Graphic file (type png)
+<use Figure/OpenPLC_Editor.png>
+Package pdftex.def Info: Figure/OpenPLC_Editor.png  used on input line 86.
+(pdftex.def)             Requested size: 384.1096pt x 149.96257pt.
+<Figure/FUXA.png, id=873, 627.09282pt x 354.57469pt>
+File: Figure/FUXA.png Graphic file (type png)
+<use Figure/FUXA.png>
+Package pdftex.def Info: Figure/FUXA.png  used on input line 95.
+(pdftex.def)             Requested size: 384.1096pt x 217.19377pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[37 <./Figure/S7_on_OpenPLC.png (PNG copy)> <./Figure/OpenPLC_Editor.png (PNG c
+opy)>]
+! You can't use `macro parameter character #' in horizontal mode.
+l.114 ...ªØ l·∫≠p tr√¨nh ph·ªï bi·∫øn nh∆∞ C++, C#
+                                                  , Python, Java cho ph√©p l...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[38 <./Figure/FUXA.png>]
+Overfull \hbox (125.78683pt too wide) in paragraph at lines 161--161
+[]\T5/pcr/m/n/13 ubuntu@ubuntuserver2204:~$ nmap -p 102 --script s7-info 192.16
+8.50.0/24[] 
+ []
+
+
+Overfull \hbox (63.8158pt too wide) in paragraph at lines 161--161
+[]\T5/pcr/m/n/13 Starting Nmap 7.80 ( https://nmap.org ) at 2026-04-21 16:23 UT
+C[] 
+ []
+
+
+Overfull \hbox (72.08383pt too wide) in paragraph at lines 161--161
+[]\T5/pcr/m/n/13 Nmap done: 256 IP addresses (2 hosts up) scanned in 3.21 secon
+ds[] 
+ []
+
+<../attacks/reconnaissance/image-2.png, id=883, 1108.8928pt x 201.75375pt>
+File: ../attacks/reconnaissance/image-2.png Graphic file (type png)
+<use ../attacks/reconnaissance/image-2.png>
+Package pdftex.def Info: ../attacks/reconnaissance/image-2.png  used on input l
+ine 173.
+(pdftex.def)             Requested size: 384.1096pt x 69.88525pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[39]
+<../attacks/reconnaissance/image-5.png, id=889, 1921.1775pt x 447.6725pt>
+File: ../attacks/reconnaissance/image-5.png Graphic file (type png)
+<use ../attacks/reconnaissance/image-5.png>
+Package pdftex.def Info: ../attacks/reconnaissance/image-5.png  used on input l
+ine 191.
+(pdftex.def)             Requested size: 384.1096pt x 89.50558pt.
+<../attacks/reconnaissance/image-4.png, id=890, 877.77937pt x 338.01282pt>
+File: ../attacks/reconnaissance/image-4.png Graphic file (type png)
+<use ../attacks/reconnaissance/image-4.png>
+Package pdftex.def Info: ../attacks/reconnaissance/image-4.png  used on input l
+ine 210.
+(pdftex.def)             Requested size: 384.1096pt x 147.91634pt.
+<../attacks/reconnaissance/image-6.png, id=891, 921.4425pt x 288.3272pt>
+File: ../attacks/reconnaissance/image-6.png Graphic file (type png)
+<use ../attacks/reconnaissance/image-6.png>
+Package pdftex.def Info: ../attacks/reconnaissance/image-6.png  used on input l
+ine 228.
+(pdftex.def)             Requested size: 384.1096pt x 120.19029pt.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[40 <../attacks/reconnaissance/image-2.png> <../attacks/reconnaissance/image-5.
+png (PNG copy)> <../attacks/reconnaissance/image-4.png>]
+<../attacks/reconnaissance/image-8.png, id=900, 772.8875pt x 244.915pt>
+File: ../attacks/reconnaissance/image-8.png Graphic file (type png)
+<use ../attacks/reconnaissance/image-8.png>
+Package pdftex.def Info: ../attacks/reconnaissance/image-8.png  used on input l
+ine 242.
+(pdftex.def)             Requested size: 384.1096pt x 121.71724pt.
+
+Overfull \hbox (24.34877pt too wide) in paragraph at lines 271--271
+ []    \T5/pcr/m/n/13 Parameter: (Request) ->(CPU functions) ->(Read SZL)[] 
+ []
+
+
+Overfull \hbox (11.34882pt too wide) in paragraph at lines 271--271
+ []        \T5/pcr/m/n/13 .... 0100 = Function group: CPU functions (4)[] 
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[41 <../attacks/reconnaissance/image-6.png> <../attacks/reconnaissance/image-8.
+png (PNG copy)>]
+Overfull \hbox (966.05609pt too wide) in paragraph at lines 271--271
+ []        \T5/pcr/m/n/13 SZL-ID: 0x0011, Diagnostic type: CPU, Number of the p
+artial list extract: All identification data records of a module, Number of the
+ partial list: Module identification[] 
+ []
+
+
+Overfull \hbox (66.03986pt too wide) in paragraph at lines 271--271
+ []            \T5/pcr/m/n/13 0000 .... .... .... = Diagnostic type: CPU (0x0)[
+] 
+ []
+
+
+Overfull \hbox (546.97498pt too wide) in paragraph at lines 271--271
+ []            \T5/pcr/m/n/13 0000 0000 0001 0001 = Number of the partial list 
+extract: All identification data records of a module (0x0011)[] 
+ []
+
+
+Overfull \hbox (298.25891pt too wide) in paragraph at lines 271--271
+ []            \T5/pcr/m/n/13 .... .... 0001 0001 = Number of the partial list:
+ Module identification (0x11)[] 
+ []
+
+
+Overfull \hbox (5.36877pt too wide) in paragraph at lines 274--275
+\T5/ptm/m/n/13 tr£ v∑: \T5/pcr/m/n/13 Diagnostic type: CPU, Number of the parti
+al list
+ []
+
+
+Overfull \hbox (66.16985pt too wide) in paragraph at lines 287--287
+ []                \T5/pcr/m/n/13 |       |       +-- Lßy danh s°ch con n†o, [
+] 
+ []
+
+
+Overfull \hbox (96.94086pt too wide) in paragraph at lines 287--287
+ []                \T5/pcr/m/n/13 |       |           ^^_•y l† Module Identific
+ation[] 
+ []
+
+
+Overfull \hbox (104.92285pt too wide) in paragraph at lines 287--287
+ []                \T5/pcr/m/n/13 |       +-- MuËn lßy ph¶n n†o trong danh s°ch
+ con[] 
+ []
+
+
+Overfull \hbox (112.96986pt too wide) in paragraph at lines 287--287
+ []                \T5/pcr/m/n/13 |           ^^_‚, b¨ng 0 l† lßy h∏t danh s°ch
+ con ^^_‚[] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[42]
+Overfull \hbox (570.20598pt too wide) in paragraph at lines 394--394
+ []        \T5/pcr/m/n/13 SZL-ID: 0x0011, Diagnostic type: CPU, Number of the p
+artial list extract: All identification data records of a module[] 
+ []
+
+
+Overfull \hbox (34.42383pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 Index: Identification of the module (0x0001)[] 
+ []
+
+
+Overfull \hbox (34.73584pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 MlfB (Order number of the module): 6ES7 315-
+ []
+
+
+Overfull \hbox (211.58786pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 Ausbg (Version of the module or release of the op
+erating system): 4[] 
+ []
+
+
+Overfull \hbox (41.30081pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 Ausbe (Release of the PG description file): 1[] 
+ []
+
+
+Overfull \hbox (96.40784pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 Index: Identification of the basic hardware (0x00
+06)[] 
+ []
+
+
+Overfull \hbox (34.73584pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 MlfB (Order number of the module): 6ES7 315-
+ []
+
+
+Overfull \hbox (211.58786pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 Ausbg (Version of the module or release of the op
+erating system): 4[] 
+ []
+
+
+Overfull \hbox (41.30081pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 Ausbe (Release of the PG description file): 1[] 
+ []
+
+
+Underfull \vbox (badness 5403) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[43]
+Overfull \hbox (96.7458pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 Index: Identification of the basic firmware (0x00
+07)[] 
+ []
+
+
+Overfull \hbox (242.78787pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 Ausbg (Version of the module or release of the op
+erating system): 22019[] 
+ []
+
+
+Overfull \hbox (56.90082pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 Ausbe (Release of the PG description file): 518[]
+ 
+ []
+
+
+Overfull \hbox (127.43881pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 Index: Identification of the firmware-extension (
+0x0081)[] 
+ []
+
+
+Overfull \hbox (50.04984pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 MlfB (Order number of the module): Boot Loader[] 
+
+ []
+
+
+Overfull \hbox (242.78787pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 Ausbg (Version of the module or release of the op
+erating system): 16672[] 
+ []
+
+
+Overfull \hbox (64.70082pt too wide) in paragraph at lines 394--394
+ []            \T5/pcr/m/n/13 Ausbe (Release of the PG description file): 2313[
+] 
+ []
+
+
+Overfull \hbox (44.49792pt too wide) in paragraph at lines 400--401
+[]\T5/ptm/m/n/13 Ti∏p tˆc l† y∂u c¶u ^^_Âc l§i SZL-ID \T5/pcr/m/n/13 0x001c\T5/
+ptm/m/n/13 , t˘c ^^_Âc danh s°ch con \T5/pcr/m/n/13 Communication
+ []
+
+<../attacks/reconnaissance/image-7.png, id=917, 1196.21906pt x 35.38219pt>
+File: ../attacks/reconnaissance/image-7.png Graphic file (type png)
+<use ../attacks/reconnaissance/image-7.png>
+Package pdftex.def Info: ../attacks/reconnaissance/image-7.png  used on input l
+ine 405.
+(pdftex.def)             Requested size: 384.1096pt x 11.36139pt.
+
+Overfull \hbox (40.89783pt too wide) in paragraph at lines 468--468
+ []            \T5/pcr/m/n/13 Index: Name of the automation system (0x0001)[] 
+ []
+
+
+Overfull \hbox (18.82382pt too wide) in paragraph at lines 468--468
+ []            \T5/pcr/m/n/13 Name (Name of the module): CPU 315-2 PN/DP[] 
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[44 <../attacks/reconnaissance/image-7.png>]
+Overfull \hbox (58.29185pt too wide) in paragraph at lines 468--468
+ []            \T5/pcr/m/n/13 Index: Plant designation of the module (0x0003)[]
+ 
+ []
+
+
+Overfull \hbox (10.2698pt too wide) in paragraph at lines 468--468
+ []            \T5/pcr/m/n/13 Tag (Plant identification of the module):[] 
+ []
+
+
+Overfull \hbox (26.72784pt too wide) in paragraph at lines 468--468
+ []            \T5/pcr/m/n/13 Index: Serial number of the module (0x0005)[] 
+ []
+
+
+Overfull \hbox (18.58984pt too wide) in paragraph at lines 468--468
+ []            \T5/pcr/m/n/13 Serialn (Serialnumber of the module): S C-
+ []
+
+
+Overfull \hbox (50.60886pt too wide) in paragraph at lines 468--468
+ []            \T5/pcr/m/n/13 Cputypname (Module type name): CPU 315-2 PN/DP[] 
+
+ []
+
+
+Overfull \hbox (65.71484pt too wide) in paragraph at lines 468--468
+ []            \T5/pcr/m/n/13 Index: Serial number of the memory card (0x0008)[
+] 
+ []
+
+
+Overfull \hbox (283.8809pt too wide) in paragraph at lines 468--468
+ []            \T5/pcr/m/n/13 Sn_mc/mmc (Serial number of the Memory Card/Micro
+ Memory Card): MMC 267FF11F[] 
+ []
+
+
+Overfull \hbox (127.21785pt too wide) in paragraph at lines 468--468
+ []            \T5/pcr/m/n/13 Index: Manufacturer and profile of a CPU module (
+0x0009)[] 
+ []
+
+
+Overfull \hbox (175.35689pt too wide) in paragraph at lines 468--468
+ []            \T5/pcr/m/n/13 Reserved: 000000000000000000000000000000000000000
+0000000000000[] 
+ []
+
+
+Overfull \hbox (2.05382pt too wide) in paragraph at lines 468--468
+ []            \T5/pcr/m/n/13 Oem_copyright_string (OEM Copyright ID):[] 
+ []
+
+
+Overfull \hbox (19.40884pt too wide) in paragraph at lines 468--468
+ []            \T5/pcr/m/n/13 Oem_add_id (OEM additional ID): 0x00000000[] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[45]
+Overfull \hbox (18.2036pt too wide) in paragraph at lines 487--488
+[]\T5/ptm/b/n/13 Basic Configuration\T5/ptm/m/n/13 : G°n ^^_‡a chø IP, Subnet M
+ask, Gateway, NameOfStation
+ []
+
+
+Overfull \hbox (10.1696pt too wide) in paragraph at lines 501--502
+[]\T5/ptm/m/n/13 S˚ dˆng module auxiliary/scanner/scada/profinet_siemens trong 
+Metasploit 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[46]
+Overfull \hbox (198.2889pt too wide) in paragraph at lines 517--517
+ []\T5/pcr/m/n/13 All blocks: <block list count OB: 0 FB: 0 FC: 0 SFB: 0 SFC: 0
+x0 DB: 2 SDB: 0>[] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[47]
+Overfull \hbox (2.26482pt too wide) in paragraph at lines 571--572
+\T5/ptm/m/n/13 ch˜Ïng trºnh ^^_i∑u khi∫n. FC l† \T5/ptm/b/n/13 stateless\T5/ptm
+/m/n/13 , t˘c n‚ khÊng l˜u tr§ng th°i/khÊng
+ []
+
+<../attacks/reconnaissance/image.png, id=940, 1094.58937pt x 303.38344pt>
+File: ../attacks/reconnaissance/image.png Graphic file (type png)
+<use ../attacks/reconnaissance/image.png>
+Package pdftex.def Info: ../attacks/reconnaissance/image.png  used on input lin
+e 585.
+(pdftex.def)             Requested size: 384.1096pt x 106.46355pt.
+
+Overfull \hbox (221.94891pt too wide) in paragraph at lines 612--612
+ []    \T5/pcr/m/n/13 Block type: 10                   -> 10(decimal) = 0x0A(he
+x) = OB(block type)[] 
+ []
+
+
+Overfull \hbox (204.84088pt too wide) in paragraph at lines 612--612
+ []    \T5/pcr/m/n/13 Block number: 1                  -> SË th˘ t¸ cıa block t
+rong PLC (0x0001)[] 
+ []
+
+
+Overfull \hbox (431.88599pt too wide) in paragraph at lines 612--612
+ []    \T5/pcr/m/n/13 Block language: 5                -> NgÊn ng˙ l™p trºnh cı
+a block (AWL, KOP, FUP, SCL, DB, GRAPH) (0x05)[] 
+ []
+
+
+Overfull \hbox (175.3179pt too wide) in paragraph at lines 612--612
+ []    \T5/pcr/m/n/13 MC7Size: 128                     -> ^^^Î lÓn vÚng d˙ liªu
+ c‚ th∫ ^^_Âc/ghi[] 
+ []
+
+
+Overfull \hbox (260.3899pt too wide) in paragraph at lines 612--612
+ []    \T5/pcr/m/n/13 Load memory size: 220            -> VÚng d˙ liªu c‚ th∫ ^
+^_Âc/ghi + header/metadata[] 
+ []
+
+
+Overfull \hbox (367.88692pt too wide) in paragraph at lines 612--612
+ []    \T5/pcr/m/n/13 Local data: 0                    -> D˙ liªu stack. DB khÊ
+ng c‚ stack nh˜ block logic l∂n b¨ng 0[] 
+ []
+
+
+Overfull \hbox (104.62386pt too wide) in paragraph at lines 612--612
+ []    \T5/pcr/m/n/13 Checksum: 0                      -> Checksum cıa block (0
+x00)[] 
+ []
+
+
+Overfull \hbox (345.61795pt too wide) in paragraph at lines 612--612
+ []    \T5/pcr/m/n/13 Code date: b'1999/11/18'         -> Ng†y t§o block (b'199
+9/11/18'). LÈi tr∂n mÊ ph‰ng PLC £o[] 
+ []
+
+
+Overfull \hbox (383.40895pt too wide) in paragraph at lines 612--612
+ []    \T5/pcr/m/n/13 Interface date: b'1999/11/18'    -> Ng†y c™p nh™t block (
+b'1999/11/18'). LÈi tr∂n mÊ ph‰ng PLC £o[] 
+ []
+
+
+Underfull \vbox (badness 1163) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[48 <../attacks/reconnaissance/image.png>]
+<../attacks/reconnaissance/image-1.png, id=948, 1364.09625pt x 228.10219pt>
+File: ../attacks/reconnaissance/image-1.png Graphic file (type png)
+<use ../attacks/reconnaissance/image-1.png>
+Package pdftex.def Info: ../attacks/reconnaissance/image-1.png  used on input l
+ine 623.
+(pdftex.def)             Requested size: 384.1096pt x 64.23015pt.
+
+Overfull \hbox (3.0938pt too wide) in paragraph at lines 662--662
+ []        \T5/pcr/m/n/13 Redundancy Identification (Reserved): 0x0000[] 
+ []
+
+
+Overfull \hbox (63.02377pt too wide) in paragraph at lines 662--662
+ []    \T5/pcr/m/n/13 Parameter: (Request) ->(Block functions) ->(List blocks)[
+] 
+ []
+
+
+Overfull \hbox (2.2098pt too wide) in paragraph at lines 662--662
+ []        \T5/pcr/m/n/13 Length of following address specification: 4[] 
+ []
+
+
+Overfull \hbox (26.83182pt too wide) in paragraph at lines 662--662
+ []        \T5/pcr/m/n/13 ..00 0011 = Function group: Block functions (3)[] 
+ []
+
+
+Overfull \hbox (3.24976pt too wide) in paragraph at lines 665--666
+[]\T5/ptm/m/n/13 ^^^•y l† request thuÎc nh‚m \T5/pcr/m/n/13 CPU services \T5/pt
+m/m/n/13 > \T5/pcr/m/n/13 Block functions \T5/ptm/m/n/13 > \T5/pcr/m/n/13 List
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[49 <../attacks/reconnaissance/image-1.png>]
+Overfull \hbox (70.4468pt too wide) in paragraph at lines 709--709
+ []    \T5/pcr/m/n/13 Parameter: (Response) ->(Block functions) ->(List blocks)
+[] 
+ []
+
+
+Overfull \hbox (2.2098pt too wide) in paragraph at lines 709--709
+ []        \T5/pcr/m/n/13 Length of following address specification: 8[] 
+ []
+
+
+Overfull \hbox (26.83182pt too wide) in paragraph at lines 709--709
+ []        \T5/pcr/m/n/13 ..00 0011 = Function group: Block functions (3)[] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[50]
+Overfull \hbox (11.04982pt too wide) in paragraph at lines 770--770
+ []        \T5/pcr/m/n/13 Block type: \x01 (Unknown Block type: 0x0100)[] 
+ []
+
+
+Overfull \hbox (17.6538pt too wide) in paragraph at lines 770--770
+ []        \T5/pcr/m/n/13 Interface timestamp: Nov 18, 1999 00:00:00.000[] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[51]
+Overfull \hbox (279.21146pt too wide) in paragraph at lines 790--799
+ [][] 
+ []
+
+
+Overfull \hbox (207.97282pt too wide) in paragraph at lines 805--805
+[]    \T5/pcr/m/n/13 TPKT (4 Byte) + COTP DT (3 Byte) + S7 Header (10 Byte) + P
+arameter +  data PI-
+ []
+
+
+Overfull \hbox (5.2647pt too wide) in paragraph at lines 809--810
+[]\T5/ptm/b/n/13 Start\T5/ptm/m/n/13 : \T5/pcr/m/n/13 param_length = 5\T5/ptm/m
+/n/13 , function \T5/pcr/m/n/13 0x28\T5/ptm/m/n/13 , khËi tham sË ch˘a \T5/pcr/
+m/n/13 0xfd \T5/ptm/m/n/13 (tr§ng
+ []
+
+<../attacks/start_stop_plc/image-2.png, id=967, 1442.38875pt x 704.6325pt>
+File: ../attacks/start_stop_plc/image-2.png Graphic file (type png)
+<use ../attacks/start_stop_plc/image-2.png>
+Package pdftex.def Info: ../attacks/start_stop_plc/image-2.png  used on input l
+ine 813.
+(pdftex.def)             Requested size: 384.1096pt x 187.64063pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[52]
+<../attacks/start_stop_plc/image-3.png, id=974, 1443.89438pt x 664.73344pt>
+File: ../attacks/start_stop_plc/image-3.png Graphic file (type png)
+<use ../attacks/start_stop_plc/image-3.png>
+Package pdftex.def Info: ../attacks/start_stop_plc/image-3.png  used on input l
+ine 821.
+(pdftex.def)             Requested size: 384.1096pt x 176.8331pt.
+<../attacks/start_stop_plc/image.png, id=975, 1373.13pt x 661.72218pt>
+File: ../attacks/start_stop_plc/image.png Graphic file (type png)
+<use ../attacks/start_stop_plc/image.png>
+Package pdftex.def Info: ../attacks/start_stop_plc/image.png  used on input lin
+e 832.
+(pdftex.def)             Requested size: 384.1096pt x 185.0992pt.
+<../attacks/start_stop_plc/image-1.png, id=976, 1370.87157pt x 644.4075pt>
+File: ../attacks/start_stop_plc/image-1.png Graphic file (type png)
+<use ../attacks/start_stop_plc/image-1.png>
+Package pdftex.def Info: ../attacks/start_stop_plc/image-1.png  used on input l
+ine 840.
+(pdftex.def)             Requested size: 384.1096pt x 180.5607pt.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[53 <../attacks/start_stop_plc/image-2.png> <../attacks/start_stop_plc/image-3.
+png> <../attacks/start_stop_plc/image.png>]
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[54 <../attacks/start_stop_plc/image-1.png>]
+Overfull \hbox (8.13673pt too wide) in paragraph at lines 909--909
+[]    \T5/pcr/m/n/13 Workstation->>PLC: Job - Start Upload: Block Address[] 
+ []
+
+
+Overfull \hbox (38.90773pt too wide) in paragraph at lines 909--909
+[]    \T5/pcr/m/n/13 PLC->>Workstation: Ack Data - Start Upload: Block Length[]
+ 
+ []
+
+
+Overfull \hbox (31.09474pt too wide) in paragraph at lines 909--909
+[]    \T5/pcr/m/n/13 PLC-->>Workstation: Ack Data - Upload Block: Block Data[] 
+
+ []
+
+
+Overfull \hbox (803.64758pt too wide) in paragraph at lines 920--935
+ [][] 
+ []
+
+
+Overfull \hbox (2.20882pt too wide) in paragraph at lines 945--945
+[]    \T5/pcr/m/n/13 ---------------------------------------------------
+ []
+
+
+Overfull \hbox (2.20882pt too wide) in paragraph at lines 945--945
+\T5/pcr/m/n/13 -------------------------------------------------------
+ []
+
+
+Overfull \hbox (101.67175pt too wide) in paragraph at lines 945--945
+[]    \T5/pcr/m/n/13 |  1 char - File identifier  |  2 chars - Block type | 5 c
+hars -
+ []
+
+
+Overfull \hbox (2.20882pt too wide) in paragraph at lines 945--945
+[]    \T5/pcr/m/n/13 ---------------------------------------------------
+ []
+
+
+Overfull \hbox (2.20882pt too wide) in paragraph at lines 945--945
+\T5/pcr/m/n/13 -------------------------------------------------------
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[55]
+Overfull \hbox (803.45267pt too wide) in paragraph at lines 999--1014
+ [][] 
+ []
+
+
+Overfull \hbox (215.12013pt too wide) in paragraph at lines 1025--1032
+ [][] 
+ []
+
+
+Overfull \hbox (102.02277pt too wide) in paragraph at lines 1053--1053
+[]    \T5/pcr/m/n/13 Workstation->>PLC: Job - Request Download: Block Address, 
+Length[] 
+ []
+
+
+Overfull \hbox (31.61476pt too wide) in paragraph at lines 1053--1053
+[]    \T5/pcr/m/n/13 PLC-->>Workstation: Job - Download Block: Block Address[] 
+
+ []
+
+
+Overfull \hbox (46.61674pt too wide) in paragraph at lines 1053--1053
+[]    \T5/pcr/m/n/13 Workstation-->>PLC: Ack Data - Download Block: Block Data[
+] 
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[56]
+<../attacks/down_up_program/image-5.png, id=1007, 1431.09656pt x 683.55376pt>
+File: ../attacks/down_up_program/image-5.png Graphic file (type png)
+<use ../attacks/down_up_program/image-5.png>
+Package pdftex.def Info: ../attacks/down_up_program/image-5.png  used on input 
+line 1081.
+(pdftex.def)             Requested size: 384.1096pt x 183.46681pt.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[57 <../attacks/down_up_program/image-5.png>]
+<../attacks/down_up_program/image-2.png, id=1015, 701.62125pt x 474.27188pt>
+File: ../attacks/down_up_program/image-2.png Graphic file (type png)
+<use ../attacks/down_up_program/image-2.png>
+Package pdftex.def Info: ../attacks/down_up_program/image-2.png  used on input 
+line 1098.
+(pdftex.def)             Requested size: 384.1096pt x 259.64903pt.
+<../attacks/down_up_program/image.png, id=1016, 386.19281pt x 539.76656pt>
+File: ../attacks/down_up_program/image.png Graphic file (type png)
+<use ../attacks/down_up_program/image.png>
+Package pdftex.def Info: ../attacks/down_up_program/image.png  used on input li
+ne 1109.
+(pdftex.def)             Requested size: 384.1096pt x 536.85786pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[58 <../attacks/down_up_program/image-2.png>]
+<../attacks/down_up_program/image-1.png, id=1022, 531.48563pt x 636.12656pt>
+File: ../attacks/down_up_program/image-1.png Graphic file (type png)
+<use ../attacks/down_up_program/image-1.png>
+Package pdftex.def Info: ../attacks/down_up_program/image-1.png  used on input 
+line 1120.
+(pdftex.def)             Requested size: 384.1096pt x 459.73853pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[59 <../attacks/down_up_program/image.png>]
+<../attacks/down_up_program/image-3.png, id=1028, 1300.86pt x 680.5425pt>
+File: ../attacks/down_up_program/image-3.png Graphic file (type png)
+<use ../attacks/down_up_program/image-3.png>
+Package pdftex.def Info: ../attacks/down_up_program/image-3.png  used on input 
+line 1131.
+(pdftex.def)             Requested size: 384.1096pt x 200.9452pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[60 <../attacks/down_up_program/image-1.png>]
+<../attacks/down_up_program/image-6.png, id=1036, 552.0625pt x 188.705pt>
+File: ../attacks/down_up_program/image-6.png Graphic file (type png)
+<use ../attacks/down_up_program/image-6.png>
+Package pdftex.def Info: ../attacks/down_up_program/image-6.png  used on input 
+line 1145.
+(pdftex.def)             Requested size: 384.1096pt x 131.30075pt.
+<../attacks/down_up_program/image-4.png, id=1037, 1441.63594pt x 476.53032pt>
+File: ../attacks/down_up_program/image-4.png Graphic file (type png)
+<use ../attacks/down_up_program/image-4.png>
+Package pdftex.def Info: ../attacks/down_up_program/image-4.png  used on input 
+line 1153.
+(pdftex.def)             Requested size: 384.1096pt x 126.96342pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[61 <../attacks/down_up_program/image-3.png> <../attacks/down_up_program/image-
+6.png>]
+<../attacks/stuxnet_mitm_sim/image-12.png, id=1046, 436.63126pt x 209.28188pt>
+File: ../attacks/stuxnet_mitm_sim/image-12.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-12.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-12.png  used on inpu
+t line 1175.
+(pdftex.def)             Requested size: 384.1096pt x 184.10793pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[62 <../attacks/down_up_program/image-4.png>]
+<../attacks/stuxnet_mitm_sim/image-9.png, id=1052, 501.875pt x 268.00125pt>
+File: ../attacks/stuxnet_mitm_sim/image-9.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-9.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-9.png  used on input
+ line 1200.
+(pdftex.def)             Requested size: 362.77525pt x 193.72954pt.
+<../attacks/stuxnet_mitm_sim/image-10.png, id=1053, 501.875pt x 268.00125pt>
+File: ../attacks/stuxnet_mitm_sim/image-10.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-10.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-10.png  used on inpu
+t line 1208.
+(pdftex.def)             Requested size: 362.77525pt x 193.72954pt.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[63 <../attacks/stuxnet_mitm_sim/image-12.png> <../attacks/stuxnet_mitm_sim/ima
+ge-9.png>]
+<../attacks/stuxnet_mitm_sim/image-11.png, id=1062, 466.74374pt x 280.04625pt>
+File: ../attacks/stuxnet_mitm_sim/image-11.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-11.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-11.png  used on inpu
+t line 1223.
+(pdftex.def)             Requested size: 384.1096pt x 230.47693pt.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[64 <../attacks/stuxnet_mitm_sim/image-10.png> <../attacks/stuxnet_mitm_sim/ima
+ge-11.png>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[65]
+<../attacks/stuxnet_mitm_sim/image-1.png, id=1075, 1093.08376pt x 252.19218pt>
+File: ../attacks/stuxnet_mitm_sim/image-1.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-1.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-1.png  used on input
+ line 1287.
+(pdftex.def)             Requested size: 362.77525pt x 83.69699pt.
+<../attacks/stuxnet_mitm_sim/image-2.png, id=1076, 1144.275pt x 666.23906pt>
+File: ../attacks/stuxnet_mitm_sim/image-2.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-2.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-2.png  used on input
+ line 1301.
+(pdftex.def)             Requested size: 362.77525pt x 211.21849pt.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[66 <../attacks/stuxnet_mitm_sim/image-1.png> <../attacks/stuxnet_mitm_sim/imag
+e-2.png>]
+<../attacks/stuxnet_mitm_sim/image-8.png, id=1087, 1157.07281pt x 195.73125pt>
+File: ../attacks/stuxnet_mitm_sim/image-8.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-8.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-8.png  used on input
+ line 1329.
+(pdftex.def)             Requested size: 362.77525pt x 61.36595pt.
+<../attacks/stuxnet_mitm_sim/image-17.png, id=1088, 249.18094pt x 204.01219pt>
+File: ../attacks/stuxnet_mitm_sim/image-17.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-17.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-17.png  used on inpu
+t line 1344.
+(pdftex.def)             Requested size: 362.77525pt x 297.04283pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[67 <../attacks/stuxnet_mitm_sim/image-8.png>]
+<../attacks/stuxnet_mitm_sim/image-4.png, id=1096, 846.16125pt x 344.28625pt>
+File: ../attacks/stuxnet_mitm_sim/image-4.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-4.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-4.png  used on input
+ line 1364.
+(pdftex.def)             Requested size: 362.77525pt x 147.60416pt.
+<../attacks/stuxnet_mitm_sim/image-5.png, id=1097, 887.315pt x 321.2pt>
+File: ../attacks/stuxnet_mitm_sim/image-5.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-5.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-5.png  used on input
+ line 1375.
+(pdftex.def)             Requested size: 362.77525pt x 131.32036pt.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[68 <../attacks/stuxnet_mitm_sim/image-17.png> <../attacks/stuxnet_mitm_sim/ima
+ge-4.png (PNG copy)>]
+<../attacks/stuxnet_mitm_sim/image-6.png, id=1103, 854.19125pt x 322.20375pt>
+File: ../attacks/stuxnet_mitm_sim/image-6.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-6.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-6.png  used on input
+ line 1392.
+(pdftex.def)             Requested size: 362.77525pt x 136.8389pt.
+<../attacks/stuxnet_mitm_sim/image-7.png, id=1104, 858.20625pt x 284.06125pt>
+File: ../attacks/stuxnet_mitm_sim/image-7.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-7.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-7.png  used on input
+ line 1401.
+(pdftex.def)             Requested size: 362.77525pt x 120.07642pt.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[69 <../attacks/stuxnet_mitm_sim/image-5.png (PNG copy)> <../attacks/stuxnet_mi
+tm_sim/image-6.png (PNG copy)> <../attacks/stuxnet_mitm_sim/image-7.png (PNG co
+py)>]
+Overfull \hbox (23.99678pt too wide) in paragraph at lines 1424--1424
+[]    \T5/pcr/m/n/13 Current Speed  | Setpoint Speed    | Centrifuge Status[] 
+ []
+
+<../attacks/stuxnet_mitm_sim/image-14.png, id=1111, 283.0575pt x 254.45062pt>
+File: ../attacks/stuxnet_mitm_sim/image-14.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-14.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-14.png  used on inpu
+t line 1432.
+(pdftex.def)             Requested size: 362.77525pt x 326.13829pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[70]
+<../attacks/stuxnet_mitm_sim/image-15.png, id=1119, 852.18375pt x 288.07625pt>
+File: ../attacks/stuxnet_mitm_sim/image-15.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-15.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-15.png  used on inpu
+t line 1442.
+(pdftex.def)             Requested size: 362.77525pt x 122.63518pt.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[71 <../attacks/stuxnet_mitm_sim/image-14.png> <../attacks/stuxnet_mitm_sim/ima
+ge-15.png (PNG copy)>]
+Overfull \hbox (2.20882pt too wide) in paragraph at lines 1484--1484
+[]    \T5/pcr/m/n/13 +---------------+-------------------+---------+----
+ []
+
+
+Overfull \hbox (304.86191pt too wide) in paragraph at lines 1484--1484
+[]    \T5/pcr/m/n/13 |     IP ^      |        MAC        |  Name   |    Vendor 
+   | Sent  | Recvd  |   Seen   |[] 
+ []
+
+
+Overfull \hbox (2.20882pt too wide) in paragraph at lines 1484--1484
+[]    \T5/pcr/m/n/13 +---------------+-------------------+---------+----
+ []
+
+
+Overfull \hbox (306.17493pt too wide) in paragraph at lines 1484--1484
+[]    \T5/pcr/m/n/13 | 192.168.60.20 | 00:0c:29:a6:c0:b0 | ens33   | VMware, In
+c. | 0 B   | 0 B    | 14:52:24 |[] 
+ []
+
+
+Overfull \hbox (304.7449pt too wide) in paragraph at lines 1484--1484
+[]    \T5/pcr/m/n/13 | 192.168.60.1  | 00:0c:29:f1:b8:5e | gateway | VMware, In
+c. | 816 B | 0 B    | 14:52:24 |[] 
+ []
+
+
+Overfull \hbox (306.40894pt too wide) in paragraph at lines 1484--1484
+[]    \T5/pcr/m/n/13 |               |                   |         |           
+   |       |        |          |[] 
+ []
+
+
+Overfull \hbox (306.17493pt too wide) in paragraph at lines 1484--1484
+[]    \T5/pcr/m/n/13 | 192.168.60.10 | 00:0c:29:2f:0d:bb |         | VMware, In
+c. | 16 kB | 8.3 kB | 14:53:43 |[] 
+ []
+
+
+Overfull \hbox (2.20882pt too wide) in paragraph at lines 1484--1484
+[]    \T5/pcr/m/n/13 +---------------+-------------------+---------+----
+ []
+
+
+Overfull \hbox (94.63881pt too wide) in paragraph at lines 1498--1498
+[]    \T5/pcr/m/n/13 # Enable full duplex ARP spoofing since we need to ensure 
+HMI -
+ []
+
+<../attacks/stuxnet_mitm_sim/image-13.png, id=1126, 893.58844pt x 232.61906pt>
+File: ../attacks/stuxnet_mitm_sim/image-13.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-13.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-13.png  used on inpu
+t line 1506.
+(pdftex.def)             Requested size: 362.77525pt x 94.43736pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[72]
+Overfull \hbox (22.42464pt too wide) in paragraph at lines 1514--1515
+\T5/pcr/m/n/13 NetfilterQueue\T5/ptm/m/n/13 ), parse g‚i tin S7comm, tºm ^^_∏n 
+v‡ trΩ ch˘a gi° tr‡ \T5/pcr/m/n/13 Setpoint
+ []
+
+<../attacks/stuxnet_mitm_sim/image-18.png, id=1133, 261.97874pt x 152.06813pt>
+File: ../attacks/stuxnet_mitm_sim/image-18.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-18.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-18.png  used on inpu
+t line 1520.
+(pdftex.def)             Requested size: 362.77525pt x 210.58282pt.
+<../attacks/stuxnet_mitm_sim/image-28.png, id=1134, 417.56pt x 178.6675pt>
+File: ../attacks/stuxnet_mitm_sim/image-28.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-28.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-28.png  used on inpu
+t line 1532.
+(pdftex.def)             Requested size: 362.77525pt x 155.23499pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[73 <../attacks/stuxnet_mitm_sim/image-13.png> <../attacks/stuxnet_mitm_sim/ima
+ge-18.png>]
+<../attacks/stuxnet_mitm_sim/image-29.png, id=1143, 360.59718pt x 143.03438pt>
+File: ../attacks/stuxnet_mitm_sim/image-29.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-29.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-29.png  used on inpu
+t line 1541.
+(pdftex.def)             Requested size: 362.77525pt x 143.89828pt.
+<../attacks/stuxnet_mitm_sim/image-3.png, id=1144, 569.12625pt x 235.88126pt>
+File: ../attacks/stuxnet_mitm_sim/image-3.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-3.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-3.png  used on input
+ line 1551.
+(pdftex.def)             Requested size: 362.77525pt x 150.36241pt.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[74 <../attacks/stuxnet_mitm_sim/image-28.png (PNG copy)> <../attacks/stuxnet_m
+itm_sim/image-29.png> <../attacks/stuxnet_mitm_sim/image-3.png (PNG copy)>]
+Overfull \hbox (140.29478pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 subprocess.run("sysctl -w net.ipv4.ip_forward=1 > /dev/null", 
+shell=True)[] 
+ []
+
+
+Overfull \hbox (14.90974pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 # 2. T≠t RP Filter (Tr°nh rÓt g‚i tin chi∑u v∑ t¯ Router)[] 
+ []
+
+
+Overfull \hbox (211.49579pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 # Tr°nh kernel t¸ ^^_Îng drop g‚i tin l§ -> Cho ph≤p g‚i tin t
+¯ PLC v∑ ^^_˜Òc ph≤p qua[] 
+ []
+
+
+Overfull \hbox (202.86382pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 subprocess.run("sysctl -w net.ipv4.conf.all.rp_filter=0 > /dev
+/null", shell=True)[] 
+ []
+
+
+Overfull \hbox (233.56982pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 subprocess.run("sysctl -w net.ipv4.conf.default.rp_filter=0 > 
+/dev/null", shell=True)[] 
+ []
+
+
+Overfull \hbox (272.14084pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 subprocess.run(f"sysctl -w net.ipv4.conf.{INTERFACE}.rp_filter
+=0 > /dev/null", shell=True)[] 
+ []
+
+
+Overfull \hbox (187.82286pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 # KhÊng c‚ d·ng n†y s≥ g•y lÈi mßt k∏t nËi ngay l™p t˘c tr∂n H
+MI khi n‚ g˚i y∂u[] 
+ []
+
+
+Overfull \hbox (48.30678pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 print(f"[*] Th∂m tuy∏n ^^_˜Ìng tÓi {PLC_NET} qua {GATEWAY}..."
+)[] 
+ []
+
+
+Overfull \hbox (194.42677pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 subprocess.run(f"route add -net {PLC_NET} gw {GATEWAY} 2>/dev/
+null", shell=True)[] 
+ []
+
+
+Overfull \hbox (187.19879pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 subprocess.run("iptables -F", shell=True)               # X‚a 
+s§ch filter table[] 
+ []
+
+
+Overfull \hbox (195.08981pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 subprocess.run("iptables -t mangle -F", shell=True)      # X‚a
+ s§ch mangle table[] 
+ []
+
+
+Overfull \hbox (256.80078pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 subprocess.run("iptables -P FORWARD ACCEPT", shell=True) # ^^^
+£m b£o forward khÊng b‡ ch∞n[] 
+ []
+
+
+Overfull \hbox (257.8798pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 # ^^^∫ thay vº Kernel t¸ ^^_Îng drop g‚i tin, python app s≥ x˚
+ l˛ g‚i tin v† chuy∫n ti∏p l§i[] 
+ []
+
+
+Overfull \hbox (0.33673pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 subprocess.run(f"iptables -t mangle -A FORWARD -p tcp -
+ []
+
+
+Overfull \hbox (33.6948pt too wide) in paragraph at lines 1597--1597
+\T5/pcr/m/n/13 -dport 102 -j NFQUEUE --queue-num {QUEUE_NUM}", shell=True)[] 
+ []
+
+
+Overfull \hbox (0.33673pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 subprocess.run(f"iptables -t mangle -A FORWARD -p tcp -
+ []
+
+
+Overfull \hbox (33.6948pt too wide) in paragraph at lines 1597--1597
+\T5/pcr/m/n/13 -sport 102 -j NFQUEUE --queue-num {QUEUE_NUM}", shell=True)[] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[75]
+Overfull \hbox (164.8128pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 # Kernel s≥ t¸ g˚i RST (reset connection) n∏u nh™n g‚i t¯ port
+ n‚ khÊng bi∏t[] 
+ []
+
+
+Overfull \hbox (62.7108pt too wide) in paragraph at lines 1597--1597
+[]\T5/pcr/m/n/13 subprocess.run("iptables -I OUTPUT -p tcp --tcp-flags RST RST 
+-
+ []
+
+<../attacks/stuxnet_mitm_sim/Siemens_S7_protocol_stack.png, id=1155, 779.91376p
+t x 201.75375pt>
+File: ../attacks/stuxnet_mitm_sim/Siemens_S7_protocol_stack.png Graphic file (t
+ype png)
+<use ../attacks/stuxnet_mitm_sim/Siemens_S7_protocol_stack.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/Siemens_S7_protocol_stack.
+png  used on input line 1605.
+(pdftex.def)             Requested size: 384.1096pt x 99.36198pt.
+<../attacks/stuxnet_mitm_sim/image-19.png, id=1156, 1416.04031pt x 161.10187pt>
+
+File: ../attacks/stuxnet_mitm_sim/image-19.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-19.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-19.png  used on inpu
+t line 1619.
+(pdftex.def)             Requested size: 384.1096pt x 43.69965pt.
+<../attacks/stuxnet_mitm_sim/image-20.png, id=1157, 1346.78156pt x 155.07938pt>
+
+File: ../attacks/stuxnet_mitm_sim/image-20.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-20.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-20.png  used on inpu
+t line 1627.
+(pdftex.def)             Requested size: 384.1096pt x 44.22884pt.
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[76 <../attacks/stuxnet_mitm_sim/Siemens_S7_protocol_stack.png> <../attacks/stu
+xnet_mitm_sim/image-19.png> <../attacks/stuxnet_mitm_sim/image-20.png>]
+<../attacks/stuxnet_mitm_sim/image-25.png, id=1165, 1367.1075pt x 165.61874pt>
+File: ../attacks/stuxnet_mitm_sim/image-25.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-25.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-25.png  used on inpu
+t line 1644.
+(pdftex.def)             Requested size: 384.1096pt x 46.53214pt.
+<../attacks/stuxnet_mitm_sim/image-26.png, id=1166, 1429.59094pt x 141.52875pt>
+
+File: ../attacks/stuxnet_mitm_sim/image-26.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-26.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-26.png  used on inpu
+t line 1654.
+(pdftex.def)             Requested size: 384.1096pt x 38.02539pt.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[77 <../attacks/stuxnet_mitm_sim/image-25.png> <../attacks/stuxnet_mitm_sim/ima
+ge-26.png>]
+<../attacks/stuxnet_mitm_sim/image-22.png, id=1173, 1805.74625pt x 348.30125pt>
+
+File: ../attacks/stuxnet_mitm_sim/image-22.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-22.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-22.png  used on inpu
+t line 1702.
+(pdftex.def)             Requested size: 384.1096pt x 74.0861pt.
+<../attacks/stuxnet_mitm_sim/image-21.png, id=1174, 426.09187pt x 102.3825pt>
+File: ../attacks/stuxnet_mitm_sim/image-21.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-21.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-21.png  used on inpu
+t line 1717.
+(pdftex.def)             Requested size: 384.1096pt x 92.2996pt.
+<../attacks/stuxnet_mitm_sim/image-23.png, id=1175, 529.98pt x 440.39531pt>
+File: ../attacks/stuxnet_mitm_sim/image-23.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-23.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-23.png  used on inpu
+t line 1738.
+(pdftex.def)             Requested size: 384.1096pt x 319.1877pt.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[78 <../attacks/stuxnet_mitm_sim/image-22.png (PNG copy)> <../attacks/stuxnet_m
+itm_sim/image-21.png>]
+<../attacks/stuxnet_mitm_sim/image-24.png, id=1182, 830.10126pt x 435.6275pt>
+File: ../attacks/stuxnet_mitm_sim/image-24.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-24.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-24.png  used on inpu
+t line 1753.
+(pdftex.def)             Requested size: 384.1096pt x 201.57426pt.
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[79 <../attacks/stuxnet_mitm_sim/image-23.png> <../attacks/stuxnet_mitm_sim/ima
+ge-24.png>]
+Overfull \hbox (61.69576pt too wide) in paragraph at lines 1764--1765
+\T5/ptm/m/n/13 Parser n†o cho S7, chø duy nhßt c‚ mÎt bÎ Parser b¨ng C t§i http
+s://github.com/ricardojoserf/s7-
+ []
+
+
+Overfull \hbox (85.09679pt too wide) in paragraph at lines 1771--1771
+[]\T5/pcr/m/n/13 uv run .\s7_parser.py .\wincc_s300_setup-alarm-read-write.pcap
+ng 9[] 
+ []
+
+
+Overfull \hbox (197.2089pt too wide) in paragraph at lines 1841--1841
+[]\T5/pcr/m/n/13 ==============================================================
+==================[] 
+ []
+
+
+Overfull \hbox (197.2089pt too wide) in paragraph at lines 1841--1841
+[]\T5/pcr/m/n/13 ==============================================================
+==================[] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[80]
+Overfull \hbox (197.2089pt too wide) in paragraph at lines 1841--1841
+[]\T5/pcr/m/n/13 ==============================================================
+==================[] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[81]
+<../attacks/stuxnet_mitm_sim/image-16.png, id=1198, 925.20656pt x 590.95781pt>
+File: ../attacks/stuxnet_mitm_sim/image-16.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-16.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-16.png  used on inpu
+t line 1849.
+(pdftex.def)             Requested size: 384.1096pt x 245.3421pt.
+
+Overfull \hbox (14.31674pt too wide) in paragraph at lines 1871--1872
+[]\T5/ptm/m/n/13 G‚i tin tr£ lÌi cho lªnh ^^_Âc 1 bit \T5/pcr/m/n/13 bCentrifug
+eStatus \T5/ptm/m/n/13 t§i \T5/pcr/m/n/13 DB2.DBX0.0\T5/ptm/m/n/13 ; 
+ []
+
+
+Overfull \hbox (12.14165pt too wide) in paragraph at lines 1875--1879
+[]\T5/ptm/m/n/13 Ta lÂc ^^_∫ chø can thiªp v†o g‚i tin Response tr£ v∑ \T5/pcr/
+m/n/13 iSetpoint \T5/ptm/m/n/13 v† \T5/pcr/m/n/13 iSimSpeed\T5/ptm/m/n/13 .
+ []
+
+
+Overfull \hbox (44.18666pt too wide) in paragraph at lines 1875--1879
+\T5/ptm/m/n/13 G‚i tin n†y c‚ ^^_Î d†i 29 Byte, d†i hÏn g‚i tin Response tr£ v∑
+ \T5/pcr/m/n/13 bCentrifugeStatus\T5/ptm/m/n/13 .
+ []
+
+
+Overfull \hbox (24.45271pt too wide) in paragraph at lines 1875--1879
+\T5/ptm/m/n/13 V† vº theo cßu trÛc datablock DB1, ta bi∏t bi∏n \T5/pcr/m/n/13 i
+Setpoint \T5/ptm/m/n/13 n¨m sau \T5/pcr/m/n/13 iSimSpeed
+ []
+
+
+Underfull \vbox (badness 4981) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[82 <../attacks/stuxnet_mitm_sim/image-16.png>]
+<../attacks/stuxnet_mitm_sim/image-27.png, id=1209, 301.125pt x 247.67531pt>
+File: ../attacks/stuxnet_mitm_sim/image-27.png Graphic file (type png)
+<use ../attacks/stuxnet_mitm_sim/image-27.png>
+Package pdftex.def Info: ../attacks/stuxnet_mitm_sim/image-27.png  used on inpu
+t line 1891.
+(pdftex.def)             Requested size: 384.1096pt x 315.96135pt.
+)
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[83 <../attacks/stuxnet_mitm_sim/image-27.png>]
 CHAPTER 4.
-(Chapter/4_Theoretical_analysis.tex) [27
+(Chapter/4_Theoretical_analysis.tex
+
+LaTeX Warning: Reference `tab:s7-payload-offsets' on page 84 undefined on input
+ line 18.
+
+
+Overfull \hbox (0.97163pt too wide) in paragraph at lines 43--44
+[]\T5/ptm/m/n/13 H¶u h∏t lu™t °p dˆng bÎ lÂc n∑n sau ^^_∫ lo§i traffic TCP/102 
+khÊng ph£i S7comm: 
+ []
+
+[84
 
 ]
+Overfull \hbox (67.5338pt too wide) in paragraph at lines 48--48
+[]\T5/pcr/m/n/13 content:"|02 F0 80 32 01|"; offset:4; depth:5;   # Job (client
+ -
+ []
+
+
+Overfull \hbox (135.92392pt too wide) in paragraph at lines 54--55
+[]\T5/ptm/m/n/13 C°c lu™t h˜Óng tÓi PLC (\T5/pcr/m/n/13 any any -> $HOME_NET 10
+2\T5/ptm/m/n/13 ) dÚng \T5/pcr/m/n/13 flow:to_server,established
+ []
+
+
+Overfull \hbox (17.73073pt too wide) in paragraph at lines 54--55
+\T5/ptm/m/n/13 (\T5/pcr/m/n/13 $HOME_NET 102 -> any any\T5/ptm/m/n/13 ) dÚng \T
+5/pcr/m/n/13 flow:from_server,established\T5/ptm/m/n/13 .
+ []
+
+
+LaTeX Warning: Reference `tab:s7-function-codes' on page 85 undefined on input 
+line 56.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 70--71
+[]|\T5/ptm/m/n/13 Ghi \T5/pcr/m/n/13 DB1.DBW2
+ []
+
+
+LaTeX Warning: Reference `tab:rules-recon' on page 85 undefined on input line 9
+1.
+
+
+Underfull \hbox (badness 7344) in paragraph at lines 104--105
+[]|\T5/ptm/m/n/11.86258 Ph°t hiªn y∂u c¶u ^^_Âc SZL
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 106--107
+[]|\T5/ptm/m/n/11.86258 KhÓp fingerprint CPU/order
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--108
+[]|\T5/ptm/m/n/11.86258 Read SZL communication
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[85]
+Overfull \hbox (14.67491pt too wide) in paragraph at lines 115--116
+\T5/ptm/m/n/13 C°c lu™t SZL (\T5/pcr/m/n/13 1000002\T5/ptm/m/n/13 --\T5/pcr/m/n
+/13 1000004\T5/ptm/m/n/13 ) dÚng \T5/pcr/m/n/13 ROSCTR=0x07 \T5/ptm/m/n/13 v† m
+®u tham sË Userdata
+ []
+
+
+Overfull \hbox (12.75087pt too wide) in paragraph at lines 115--116
+\T5/pcr/m/n/13 |00 01 12 04 11 44 01 00| \T5/ptm/m/n/13 (nh‚m CPU functions, su
+bfunction Read SZL);
+ []
+
+
+Overfull \hbox (5.13377pt too wide) in paragraph at lines 124--124
+[]\T5/pcr/m/n/13 content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8;[] 
+ []
+
+
+LaTeX Warning: Reference `tab:rules-plc-control' on page 86 undefined on input 
+line 133.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[86]
+Overfull \hbox (32.61375pt too wide) in paragraph at lines 155--156
+[]\T5/ptm/m/n/13 Lu™t \T5/pcr/m/n/13 1000031 \T5/ptm/m/n/13 v† \T5/pcr/m/n/13 1
+000033 \T5/ptm/m/n/13 bÍ sung \T5/pcr/m/n/13 content:"P_PROGRAM"; distance:0;
+ []
+
+
+Overfull \hbox (0.71362pt too wide) in paragraph at lines 160--161
+\T5/ptm/m/n/13 Download, \T5/pcr/m/n/13 0x1b \T5/ptm/m/n/13 Download Block, \T5
+/pcr/m/n/13 0x1c\T5/ptm/m/n/13 --\T5/pcr/m/n/13 0x1f \T5/ptm/m/n/13 upload) tr∂
+n traffic Siemens ho∞c
+ []
+
+
+LaTeX Warning: Reference `tab:rules-block-transfer' on page 87 undefined on inp
+ut line 162.
+
+
+Underfull \hbox (badness 4266) in paragraph at lines 173--174
+[]|\T5/ptm/m/n/11.86258 Request Download (client $\OMS/cmsy/m/n/12 !$
+ []
+
+
+Underfull \hbox (badness 1701) in paragraph at lines 175--176
+[]|\T5/ptm/m/n/11.86258 PLC y∂u c¶u block (PLC $\OMS/cmsy/m/n/12 !$
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 177--178
+[]|\T5/ptm/m/n/11.86258 Client g˚i d˙ liªu block
+ []
+
+
+Overfull \hbox (6.3017pt too wide) in paragraph at lines 190--191
+[]\T5/ptm/m/n/13 ^^^i∫m c¶n l˜u ˛ khi vi∏t lu™t: \T5/pcr/m/n/13 Download Block 
+0x1b \T5/ptm/m/n/13 xußt hiªn  \T5/ptm/b/n/13 hai chi∑u\T5/ptm/m/n/13 ---
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[87]
+
+LaTeX Warning: Reference `tab:rules-write-mitm' on page 88 undefined on input l
+ine 199.
+
+
+Underfull \hbox (badness 2285) in paragraph at lines 214--215
+[]|\T5/ptm/m/n/11.86258 KhÓp payload tßn cÊng mÊ
+ []
+
+
+Underfull \hbox (badness 2237) in paragraph at lines 216--217
+[]|\T5/ptm/m/n/11.86258 HÈ trÒ ^^_i∑u tra MITM (c‚
+ []
+
+
+Overfull \hbox (3.69067pt too wide) in paragraph at lines 221--222
+\T5/ptm/m/n/13 (\T5/pcr/m/n/13 |00 01 84 00 00 10|\T5/ptm/m/n/13 : DB1, byte of
+fset 2 t˜Ïng ˘ng \T5/pcr/m/n/13 DBW2\T5/ptm/m/n/13 ). Lu™t \T5/pcr/m/n/13 10000
+12
+ []
+
+
+Overfull \hbox (32.87581pt too wide) in paragraph at lines 231--231
+[]\T5/pcr/m/n/13 # sid:1000012 (rÛt gÂn) ^^V ghi iSetpoint = 2000 t§i DB1.DBW2[
+] 
+ []
+
+
+LaTeX Warning: Reference `sec:rule-foundation' on page 88 undefined on input li
+ne 236.
+
+
+Overfull \hbox (1.76584pt too wide) in paragraph at lines 236--237
+\T5/ptm/m/n/13 ^^_‡nh h˜Óng th¸c nghiªm, ch˜a c‚ PCAP v† \T5/pcr/m/n/13 sid \T5
+/ptm/m/n/13 t˜Ïng ˘ng trong \T5/pcr/m/n/13 s7comm.rules\T5/ptm/m/n/13 .
+ []
+
+
+LaTeX Warning: Reference `tab:rules-master' on page 88 undefined on input line 
+241.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 258--258
+[]|\T5/ptm/m/n/11.86258 Stuxnet MITM
+ []
+
+
+Underfull \vbox (badness 7151) has occurred while \output is active []
+
+
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[88])
+
+Package fancyhdr Warning: \headheight is too small (10.0pt): 
+(fancyhdr)                Make it at least 15.59995pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.59995pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
+
+[89]
 CHAPTER 5.
-(Chapter/5_Numerical_results.tex) [28
+(Chapter/5_Numerical_results.tex) [90
 
 ]
 CHAPTER 6.
-(Chapter/6_Conclusions.tex) [29
+(Chapter/6_Conclusions.tex) [91
 
 ] (Chapter/7_Reference.tex
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 13.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 18.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 20.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 24.
+
+
 Overfull \hbox (4.59857pt too wide) in paragraph at lines 24--27
 []\T5/ptm/m/n/13 [[]12[]] M. Poesio and B. Di Eugenio, ``Discourse structure an
 d anaphoric accessibil-
@@ -2470,11 +4647,24 @@ e, discourse structure and discourse
  []
 
 
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 30.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 34.
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [30
+ [92
 
-])
+]
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 37.
+
+)
 
 Package fancyhdr Warning: \headheight is too small (10.0pt): 
 (fancyhdr)                Make it at least 15.59995pt, for example:
@@ -2482,10 +4672,14 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[31]
+[93]
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 299.
+
 
 Package biblatex Warning: Bibliography string 'urlseen' untranslated
-(biblatex)                at entry 'snap7_sharp7' on input line 298.
+(biblatex)                at entry 'snap7_sharp7' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2503,11 +4697,11 @@ Package biblatex Warning: Using fallback definition for \mkbibordinal.
 
 
 Package biblatex Warning: Bibliography string 'march' untranslated
-(biblatex)                at entry 'snap7_sharp7' on input line 298.
+(biblatex)                at entry 'snap7_sharp7' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'urlseen' untranslated
-(biblatex)                at entry 'snap7_s7protocol' on input line 298.
+(biblatex)                at entry 'snap7_s7protocol' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2525,10 +4719,10 @@ Package biblatex Warning: Using fallback definition for \mkbibordinal.
 
 
 Package biblatex Warning: Bibliography string 'march' untranslated
-(biblatex)                at entry 'snap7_s7protocol' on input line 298.
+(biblatex)                at entry 'snap7_s7protocol' on input line 299.
 
 
-Overfull \hbox (3.78935pt too wide) in paragraph at lines 299--299
+Overfull \hbox (3.78935pt too wide) in paragraph at lines 300--300
 []\T5/ptm/m/n/13 Snap7, \T5/ptm/m/it/13 S7 Protocol\T5/ptm/m/n/13 , []$\T5/pcr/
 m/n/13 https : / / snap7 . sourceforge . net / siemens _
  []
@@ -2536,7 +4730,7 @@ m/n/13 https : / / snap7 . sourceforge . net / siemens _
 
 Package biblatex Warning: Bibliography string 'urlseen' untranslated
 (biblatex)                at entry 'inprotech_s7comm_security' on input line 29
-8.
+9.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2555,17 +4749,17 @@ Package biblatex Warning: Using fallback definition for \mkbibordinal.
 
 Package biblatex Warning: Bibliography string 'march' untranslated
 (biblatex)                at entry 'inprotech_s7comm_security' on input line 29
-8.
+9.
 
 
-Overfull \hbox (15.04926pt too wide) in paragraph at lines 299--299
+Overfull \hbox (15.04926pt too wide) in paragraph at lines 300--300
 \T5/pcr/m/n/13 es / en / s7comm -[] protocol -[] security -[] analyzed/$[]\T5/p
 tm/m/n/13 . [] 18 []
  []
 
 
 Package biblatex Warning: Bibliography string 'and' untranslated
-(biblatex)                at entry 'veit2021ics_dissectors' on input line 298.
+(biblatex)                at entry 'veit2021ics_dissectors' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2576,7 +4770,7 @@ Package biblatex Warning: Using fallback definition for \mkbibdatelong.
 
 
 Package biblatex Warning: Bibliography string 'urlseen' untranslated
-(biblatex)                at entry 'veit2021ics_dissectors' on input line 298.
+(biblatex)                at entry 'veit2021ics_dissectors' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2594,15 +4788,15 @@ Package biblatex Warning: Using fallback definition for \mkbibordinal.
 
 
 Package biblatex Warning: Bibliography string 'march' untranslated
-(biblatex)                at entry 'veit2021ics_dissectors' on input line 298.
+(biblatex)                at entry 'veit2021ics_dissectors' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'url' untranslated
-(biblatex)                at entry 'veit2021ics_dissectors' on input line 298.
+(biblatex)                at entry 'veit2021ics_dissectors' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'and' untranslated
-(biblatex)                at entry 'rfc1006' on input line 298.
+(biblatex)                at entry 'rfc1006' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2613,7 +4807,7 @@ Package biblatex Warning: Using fallback definition for \mkbibdatelong.
 
 
 Package biblatex Warning: Bibliography string 'urlseen' untranslated
-(biblatex)                at entry 'rfc1006' on input line 298.
+(biblatex)                at entry 'rfc1006' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2631,11 +4825,11 @@ Package biblatex Warning: Using fallback definition for \mkbibordinal.
 
 
 Package biblatex Warning: Bibliography string 'march' untranslated
-(biblatex)                at entry 'rfc1006' on input line 298.
+(biblatex)                at entry 'rfc1006' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'url' untranslated
-(biblatex)                at entry 'rfc1006' on input line 298.
+(biblatex)                at entry 'rfc1006' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2646,7 +4840,7 @@ Package biblatex Warning: Using fallback definition for \mkbibdatelong.
 
 
 Package biblatex Warning: Bibliography string 'urlseen' untranslated
-(biblatex)                at entry 'rfc905' on input line 298.
+(biblatex)                at entry 'rfc905' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2664,15 +4858,15 @@ Package biblatex Warning: Using fallback definition for \mkbibordinal.
 
 
 Package biblatex Warning: Bibliography string 'march' untranslated
-(biblatex)                at entry 'rfc905' on input line 298.
+(biblatex)                at entry 'rfc905' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'url' untranslated
-(biblatex)                at entry 'rfc905' on input line 298.
+(biblatex)                at entry 'rfc905' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'and' untranslated
-(biblatex)                at entry 'rfc2126' on input line 298.
+(biblatex)                at entry 'rfc2126' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2683,7 +4877,7 @@ Package biblatex Warning: Using fallback definition for \mkbibdatelong.
 
 
 Package biblatex Warning: Bibliography string 'urlseen' untranslated
-(biblatex)                at entry 'rfc2126' on input line 298.
+(biblatex)                at entry 'rfc2126' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2701,15 +4895,15 @@ Package biblatex Warning: Using fallback definition for \mkbibordinal.
 
 
 Package biblatex Warning: Bibliography string 'march' untranslated
-(biblatex)                at entry 'rfc2126' on input line 298.
+(biblatex)                at entry 'rfc2126' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'url' untranslated
-(biblatex)                at entry 'rfc2126' on input line 298.
+(biblatex)                at entry 'rfc2126' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'urlseen' untranslated
-(biblatex)                at entry 'wireshark_s7comm' on input line 298.
+(biblatex)                at entry 'wireshark_s7comm' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2727,19 +4921,19 @@ Package biblatex Warning: Using fallback definition for \mkbibordinal.
 
 
 Package biblatex Warning: Bibliography string 'march' untranslated
-(biblatex)                at entry 'wireshark_s7comm' on input line 298.
+(biblatex)                at entry 'wireshark_s7comm' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'jourvol' untranslated
-(biblatex)                at entry 'hovy1993automated' on input line 298.
+(biblatex)                at entry 'hovy1993automated' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'number' untranslated
-(biblatex)                at entry 'hovy1993automated' on input line 298.
+(biblatex)                at entry 'hovy1993automated' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'pages' untranslated
-(biblatex)                at entry 'hovy1993automated' on input line 298.
+(biblatex)                at entry 'hovy1993automated' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2749,14 +4943,14 @@ Package biblatex Warning: Using fallback definition for \mkbibdatelong.
 (biblatex)                for \mkbibdatelong.
 
 
-Overfull \hbox (25.34402pt too wide) in paragraph at lines 299--299
-[]\T5/ptm/m/n/13 E. H. Hovy, ``Automated discourse generation using discourse s
-tructure relations,''
+Overfull \hbox (27.48883pt too wide) in paragraph at lines 300--300
+[]\T5/ptm/m/n/13 E. H. Hovy, \T5/ptm/b/n/13 ?  \T5/ptm/m/n/13 Automated discour
+se generation using discourse structure relations,\T5/ptm/b/n/13 ?
  []
 
 
 Package biblatex Warning: Bibliography string 'and' untranslated
-(biblatex)                at entry 'peterson2007computer' on input line 298.
+(biblatex)                at entry 'peterson2007computer' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2774,11 +4968,11 @@ Package biblatex Warning: Using fallback definition for \mkbibdatelong.
 
 
 Package biblatex Warning: Bibliography string 'and' untranslated
-(biblatex)                at entry 'poesio2001discourse' on input line 298.
+(biblatex)                at entry 'poesio2001discourse' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'in' untranslated
-(biblatex)                at entry 'poesio2001discourse' on input line 298.
+(biblatex)                at entry 'poesio2001discourse' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2789,16 +4983,16 @@ Package biblatex Warning: Using fallback definition for \mkbibdatelong.
 
 
 Package biblatex Warning: Bibliography string 'pages' untranslated
-(biblatex)                at entry 'poesio2001discourse' on input line 298.
+(biblatex)                at entry 'poesio2001discourse' on input line 299.
 
 
-Overfull \hbox (17.05003pt too wide) in paragraph at lines 299--299
-[]\T5/ptm/m/n/13 M. Poesio [] B. Di Eugenio, ``Discourse structure and anaphori
-c accessibility,''
+Overfull \hbox (19.19484pt too wide) in paragraph at lines 300--300
+[]\T5/ptm/m/n/13 M. Poesio [] B. Di Eugenio, \T5/ptm/b/n/13 ?  \T5/ptm/m/n/13 D
+iscourse structure and anaphoric accessibility,\T5/ptm/b/n/13 ?
  []
 
 
-Overfull \hbox (14.35576pt too wide) in paragraph at lines 299--299
+Overfull \hbox (14.35576pt too wide) in paragraph at lines 300--300
 []\T5/ptm/m/it/13 ESSLLI workshop on information structure, discourse structure
  and discourse
  []
@@ -2812,7 +5006,7 @@ Package biblatex Warning: Using fallback definition for \mkbibdatelong.
 
 
 Package biblatex Warning: Bibliography string 'urlseen' untranslated
-(biblatex)                at entry 'BernersTim' on input line 298.
+(biblatex)                at entry 'BernersTim' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2830,18 +5024,18 @@ Package biblatex Warning: Using fallback definition for \mkbibordinal.
 
 
 Package biblatex Warning: Bibliography string 'september' untranslated
-(biblatex)                at entry 'BernersTim' on input line 298.
+(biblatex)                at entry 'BernersTim' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'url' untranslated
-(biblatex)                at entry 'BernersTim' on input line 298.
+(biblatex)                at entry 'BernersTim' on input line 299.
 
-[32
+[94
 
 ]
 
 Package biblatex Warning: Bibliography string 'urlseen' untranslated
-(biblatex)                at entry 'LectureA' on input line 298.
+(biblatex)                at entry 'LectureA' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2859,19 +5053,19 @@ Package biblatex Warning: Using fallback definition for \mkbibordinal.
 
 
 Package biblatex Warning: Bibliography string 'september' untranslated
-(biblatex)                at entry 'LectureA' on input line 298.
+(biblatex)                at entry 'LectureA' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'url' untranslated
-(biblatex)                at entry 'LectureA' on input line 298.
+(biblatex)                at entry 'LectureA' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'and' untranslated
-(biblatex)                at entry 'scott2013sdn' on input line 298.
+(biblatex)                at entry 'scott2013sdn' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'in' untranslated
-(biblatex)                at entry 'scott2013sdn' on input line 298.
+(biblatex)                at entry 'scott2013sdn' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2882,23 +5076,23 @@ Package biblatex Warning: Using fallback definition for \mkbibdatelong.
 
 
 Package biblatex Warning: Bibliography string 'pages' untranslated
-(biblatex)                at entry 'scott2013sdn' on input line 298.
+(biblatex)                at entry 'scott2013sdn' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'andothers' untranslated
-(biblatex)                at entry 'ashton2009internet' on input line 298.
+(biblatex)                at entry 'ashton2009internet' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'jourvol' untranslated
-(biblatex)                at entry 'ashton2009internet' on input line 298.
+(biblatex)                at entry 'ashton2009internet' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'number' untranslated
-(biblatex)                at entry 'ashton2009internet' on input line 298.
+(biblatex)                at entry 'ashton2009internet' on input line 299.
 
 
 Package biblatex Warning: Bibliography string 'pages' untranslated
-(biblatex)                at entry 'ashton2009internet' on input line 298.
+(biblatex)                at entry 'ashton2009internet' on input line 299.
 
 
 Package biblatex Warning: Using fallback definition for \mkbibdatelong.
@@ -2908,9 +5102,10 @@ Package biblatex Warning: Using fallback definition for \mkbibdatelong.
 (biblatex)                for \mkbibdatelong.
 
 
-Overfull \hbox (24.0601pt too wide) in paragraph at lines 299--299
-[]\T5/ptm/m/n/13 K. Ashton [], ``That `internet of things' thing,'' \T5/ptm/m/i
-t/13 RFID journal\T5/ptm/m/n/13 , [] 22,
+Overfull \hbox (26.20897pt too wide) in paragraph at lines 300--300
+[]\T5/ptm/m/n/13 K. Ashton [], \T5/ptm/b/n/13 ?  \T5/ptm/m/n/13 That `internet 
+of things' thing,\T5/ptm/b/n/13 ? \T5/ptm/m/it/13 RFID journal\T5/ptm/m/n/13 , 
+[] 22,
  []
 
 
@@ -2920,14 +5115,14 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[33] [34
+[95] [96
 
 ]
 APPENDIX A.
 (Chapter/Appendix_A.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [35
+ [97
 
 ]
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -2940,7 +5135,7 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[36]
+[98]
 
 LaTeX Warning: File `Figure/IoT.png' not found on input line 81.
 
@@ -2958,14 +5153,22 @@ Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 93.
+
+
+Package csquotes Warning: No space factor codes for 'T5' encoding.
+(csquotes)                Punctuation tracker may fail on input line 93.
+
+
 Package fancyhdr Warning: \headheight is too small (10.0pt): 
 (fancyhdr)                Make it at least 15.59995pt, for example:
 (fancyhdr)                \setlength{\headheight}{15.59995pt}.
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[37]
-<Figure/Bia.PNG, id=739, 313.77225pt x 331.83975pt>
+[99]
+<Figure/Bia.PNG, id=1373, 313.77225pt x 331.83975pt>
 File: Figure/Bia.PNG Graphic file (type png)
 <use Figure/Bia.PNG>
 Package pdftex.def Info: Figure/Bia.PNG  used on input line 113.
@@ -2981,8 +5184,8 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[38]
-<Figure/GayBia.PNG, id=750, 420.97275pt x 479.99326pt>
+[100]
+<Figure/GayBia.PNG, id=1386, 420.97275pt x 479.99326pt>
 File: Figure/GayBia.PNG Graphic file (type png)
 <use Figure/GayBia.PNG>
 Package pdftex.def Info: Figure/GayBia.PNG  used on input line 125.
@@ -2995,7 +5198,7 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[39 <./Figure/Bia.PNG>]
+[101 <./Figure/Bia.PNG>]
 
 Package fancyhdr Warning: \headheight is too small (10.0pt): 
 (fancyhdr)                Make it at least 15.59995pt, for example:
@@ -3003,9 +5206,9 @@ Package fancyhdr Warning: \headheight is too small (10.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-5.59995pt}.
 
-[40 <./Figure/GayBia.PNG>]
+[102 <./Figure/GayBia.PNG>]
 APPENDIX B.
-(Chapter/Appendix_B.tex) [41
+(Chapter/Appendix_B.tex) [103
 
 ] (main.aux)
  ***********
@@ -3023,8 +5226,14 @@ LaTeX Warning: There were undefined references.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: CA5B83FA5FD83820D453C35774D1146C;9463.
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: 29EB05512AC01CCC93C8F8420D94D2FB;11999
+(rerunfilecheck)             After:  E79CCE09D71EA4CF5BF119FCD07EDAF2;14249.
 
 Package biblatex Warning: Please (re)run BibTeX on the file(s):
 (biblatex)                main
@@ -3035,31 +5244,56 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 34674 strings out of 467870
- 656878 string characters out of 5415451
- 1352069 words of memory out of 5000000
- 62792 multiletter control sequences out of 15000+600000
- 684373 words of font info for 103 fonts, out of 8000000 for 9000
+ 36038 strings out of 467870
+ 691144 string characters out of 5415451
+ 1374483 words of memory out of 5000000
+ 63893 multiletter control sequences out of 15000+600000
+ 686507 words of font info for 113 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 108i,14n,107p,2507b,1577s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
-ts/cm/cmex10.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/amsfonts/cm/cmmi12.pfb><C:/Users/chutrunganh/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/chutrunganh/AppData/Loc
-al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/chutrunga
-nh/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Us
-ers/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cm
-sy10.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/amsfonts/cm/cmsy9.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/font
-s/type1/vntex/urwvn/ucrr8v.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiK
-TeX/fonts/type1/vntex/urwvn/utmb8v.pfb><C:/Users/chutrunganh/AppData/Local/Prog
-rams/MiKTeX/fonts/type1/vntex/urwvn/utmbi8v.pfb><C:/Users/chutrunganh/AppData/L
-ocal/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/chutrunganh/App
-Data/Local/Programs/MiKTeX/fonts/type1/vntex/urwvn/utmr8v.pfb><C:/Users/chutrun
-ganh/AppData/Local/Programs/MiKTeX/fonts/type1/vntex/urwvn/utmri8v.pfb>
-Output written on main.pdf (53 pages, 8184228 bytes).
+ 108i,14n,107p,2507b,1573s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+pdfTeX warning (dest): name{figure.caption.111} has been referenced but does no
+t exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.110} has been referenced but does no
+t exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.107} has been referenced but does no
+t exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{section*.105} has been referenced but does not exis
+t, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{section*.104} has been referenced but does not exis
+t, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.3.3.10} has been referenced but does not
+ exist, replaced by a fixed one
+
+<C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
+/cm/cmex10.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/
+public/amsfonts/cm/cmmi12.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKT
+eX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/chutrunganh/AppData/Local
+/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/chutrunganh
+/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/User
+s/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy
+10.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
+msfonts/cm/cmsy9.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/
+type1/vntex/urwvn/ucrr8v.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTe
+X/fonts/type1/vntex/urwvn/ucrro8v.pfb><C:/Users/chutrunganh/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/vntex/urwvn/utmb8v.pfb><C:/Users/chutrunganh/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/vntex/urwvn/utmbi8v.pfb><C:/Users/chutrunganh/Ap
+pData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/chutrung
+anh/AppData/Local/Programs/MiKTeX/fonts/type1/vntex/urwvn/utmr8v.pfb><C:/Users/
+chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/vntex/urwvn/utmri8v.pfb>
+Output written on main.pdf (116 pages, 12397395 bytes).
 PDF statistics:
- 862 PDF objects out of 1000 (max. 8388607)
- 182 named destinations out of 1000 (max. 500000)
- 519 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1547 PDF objects out of 1728 (max. 8388607)
+ 384 named destinations out of 1000 (max. 500000)
+ 907 words of extra memory for PDF output out of 10000 (max. 10000000)
 

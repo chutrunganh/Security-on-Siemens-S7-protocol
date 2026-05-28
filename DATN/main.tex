@@ -51,7 +51,8 @@
 
 % ===================================================
 
-% \renewcommand{\bibname}{Danh_sach_tai_lieu_tham_khao} 
+% \renewcommand{\bibname}{Danh_sach_tai_lieu_tham_khao}
+\usepackage{csquotes}
 \usepackage[backend=bibtex,style=ieee]{biblatex}  %backend=biber is 'better'
 
 \addbibresource{reference.bib} % chèn file chứa danh mục tài liệu tham khảo vào
@@ -138,7 +139,7 @@
 	
 \usepackage[all]{hypcap} % Cho phép tham chiếu chính xác đến hình ảnh và bảng biểu
 
-\graphicspath{{figures/}{Figure/}{../figures/}{../docs/Report/}} % Thư mục chứa các hình ảnh
+\graphicspath{{figures/}{Figure/}{../figures/}{../docs/Report/}{../attacks/}{../attacks/reconnaissance/}{../attacks/start_stop_plc/}{../attacks/down_up_program/}{../attacks/stuxnet_mitm_sim/}} % Thư mục chứa các hình ảnh
 
 \counterwithin{figure}{chapter} % Đánh số hình ảnh kèm theo chapter. Ví dụ: Hình 1.1, 1.2,..
 

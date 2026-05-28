@@ -1,0 +1,100 @@
+\babel@toc {nil}{}\relax 
+\ttl@change@i {\@ne }{chapter}{0.0cm}{\bfseries \vspace {0.3cm}}{{\bfseries {\scshape } CHAPTER \thecontentslabel .\ }}{}{\titlerule *[0.3pc]{.}\contentspage }\relax 
+\ttl@change@v {chapter}{}{}{}\relax 
+\ttl@change@i {\@ne }{section}{0.0cm}{\vspace {0.3cm}}{\thecontentslabel \ }{}{\titlerule *[0.3pc]{.}\contentspage }\relax 
+\ttl@change@v {section}{}{}{}\relax 
+\ttl@change@i {\@ne }{subsection}{1.0cm}{\vspace {0.3cm}}{\thecontentslabel \ }{}{\titlerule *[0.3pc]{.}\contentspage }\relax 
+\ttl@change@v {subsection}{}{}{}\relax 
+\thispagestyle {empty}
+\contentsline {chapter}{\numberline {1}INTRODUCTION}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Đặt vấn đề}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Tổng quan và các vấn đề nghiên cứu}{2}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Mục tiêu nghiên cứu và định hướng giải pháp}{3}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Đóng góp của đồ án}{4}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Bố cục đồ án}{4}{section.1.5}%
+\contentsline {chapter}{\numberline {2}LITERATURE REVIEW}{6}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Tổng quan về hệ thống OT và ICS}{6}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Bộ điều khiển logic khả trình (PLC)}{9}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Khái niệm PLC}{9}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Cấu tạo PLC}{11}{subsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {a}Bộ xử lý trung tâm (CPU)}{11}{subsubsection.2.2.2.1}%
+\contentsline {subsubsection}{\numberline {b}Module đầu vào và đầu ra}{12}{subsubsection.2.2.2.2}%
+\contentsline {subsubsection}{\numberline {c}Bộ nhớ}{12}{subsubsection.2.2.2.3}%
+\contentsline {subsubsection}{\numberline {d}Các thành phần khác}{13}{subsubsection.2.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.3}Ngôn ngữ lập trình PLC}{14}{subsection.2.2.3}%
+\contentsline {section}{\numberline {2.3}Mô hình Purdue}{16}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Giao thức Siemens S7comm}{19}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Bối cảnh: Fieldbus và Ethernet công nghiệp}{19}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Cách đọc địa chỉ trong Siemens S7}{21}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}Cấu trúc gói tin S7comm}{22}{subsection.2.4.3}%
+\contentsline {subsubsection}{\numberline {a}Phần COTP và TPKT}{23}{subsubsection.2.4.3.1}%
+\contentsline {subsubsection}{\numberline {b}Phần S7 PDU}{24}{subsubsection.2.4.3.2}%
+\contentsline {subsection}{\numberline {2.4.4}Các bước thiết lập kết nối S7comm}{26}{subsection.2.4.4}%
+\contentsline {subsubsection}{\numberline {a}Thiết lập kết nối tới TCP 102 bằng Three-way Handshake của TCP}{26}{subsubsection.2.4.4.1}%
+\contentsline {subsubsection}{\numberline {b}Thiết lập kết nối COTP}{26}{subsubsection.2.4.4.2}%
+\contentsline {subsubsection}{\numberline {c}Thiết lập kết nối S7comm ban đầu}{29}{subsubsection.2.4.4.3}%
+\contentsline {subsubsection}{\numberline {d}Trao đổi dữ liệu S7}{31}{subsubsection.2.4.4.4}%
+\contentsline {subsection}{\numberline {2.4.5}Các thành phần trong giao tiếp S7}{31}{subsection.2.4.5}%
+\contentsline {section}{\numberline {2.5}Hệ thống phát hiện xâm nhập (IDS)}{34}{section.2.5}%
+\contentsline {chapter}{\numberline {3}METHODOLOGY}{35}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Tổng quan phương pháp nghiên cứu}{35}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Thiết lập môi trường thí nghiệm}{36}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Nguyên tắc triển khai}{36}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Nền tảng PLC và HMI}{36}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Công cụ tấn công, phân tích và giám sát}{37}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Kiến trúc mạng lab}{37}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}Thu thập dữ liệu thực nghiệm}{37}{subsection.3.2.5}%
+\contentsline {section}{\numberline {3.3}Kịch bản tấn công và phân tích lưu lượng}{38}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Quét thông qua Nmap cùng NSE Scripts}{38}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Quét bằng các công cụ khác dựa trên DCP}{46}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Quét các block trên PLC}{46}{subsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.3.4}4.3 Start/Stop PLC (Replay Attack)}{52}{subsection.3.3.4}%
+\contentsline {subsubsection}{\numberline {a}Payload đã capture}{52}{subsubsection.3.3.4.1}%
+\contentsline {paragraph}{Cấu trúc gói (tóm tắt)}{52}{paragraph*.55}%
+\contentsline {subsubsection}{\numberline {b}Sử dụng}{52}{subsubsection.3.3.4.2}%
+\contentsline {subsubsection}{\numberline {c}Luồng tấn công}{53}{subsubsection.3.3.4.3}%
+\contentsline {subsubsection}{\numberline {d}Lưu ý lab}{53}{subsubsection.3.3.4.4}%
+\contentsline {paragraph}{Lỗi `COTP connection failed`}{54}{paragraph*.56}%
+\contentsline {subsubsection}{\numberline {e}Tệp trong thư mục}{54}{subsubsection.3.3.4.5}%
+\contentsline {subsection}{\numberline {3.3.5}Upload và Download chương trình PLC}{55}{subsection.3.3.5}%
+\contentsline {subsubsection}{\numberline {a}Upload}{56}{subsubsection.3.3.5.1}%
+\contentsline {subsubsection}{\numberline {b}Download}{58}{subsubsection.3.3.5.2}%
+\contentsline {subsection}{\numberline {3.3.6}Mô phỏng traffic}{58}{subsection.3.3.6}%
+\contentsline {subsection}{\numberline {3.3.7}Mô phỏng tấn công Stuxnet (Man-in-the-Middle)}{63}{subsection.3.3.7}%
+\contentsline {subsection}{\numberline {3.3.8}Mô phỏng tấn công}{66}{subsection.3.3.8}%
+\contentsline {subsubsection}{\numberline {a}Thiết lập PLC}{67}{subsubsection.3.3.8.1}%
+\contentsline {subsubsection}{\numberline {b}Thiết lập HMI}{68}{subsubsection.3.3.8.2}%
+\contentsline {subsubsection}{\numberline {c}Attacker}{71}{subsubsection.3.3.8.3}%
+\contentsline {subsubsection}{\numberline {d}Phân tích tấn công}{75}{subsubsection.3.3.8.4}%
+\contentsline {subsection}{\numberline {3.3.9}References}{84}{subsection.3.3.9}%
+\contentsline {chapter}{\numberline {4}THEORETICAL ANALYSIS}{85}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Tên của kết quả phân tích số 1}{85}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Tên của kết quả phân tích số 2}{85}{section.4.2}%
+\contentsline {chapter}{\numberline {5}NUMERICAL RESULTS}{86}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Evaluation Parameters}{86}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Simulation Method}{86}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Tên của kết quả thí nghiệm 1}{86}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Tên của kết quả thí nghiệm 2}{86}{section.5.4}%
+\contentsline {chapter}{\numberline {6}CONCLUSIONS}{87}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Summary}{87}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Suggestion for Future Works }{87}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Giới hạn và tính bảo mật của IDS}{87}{subsection.6.2.1}%
+\contentsline {chapter}{REFERENCE}{90}{section*.105}%
+\contentsline {chapter}{APPENDIX}{91}{section*.106}%
+\ttl@change@i {\@ne }{chapter}{0.0cm}{\bfseries \vspace {0.3cm}}{{\bfseries {\scshape } \thecontentslabel .\ }}{}{\titlerule *[0.3pc]{.}\contentspage }\relax 
+\ttl@change@v {chapter}{}{}{}\relax 
+\contentsline {chapter}{\numberline {A}GRADUATION THESIS GUIDANCE}{91}{appendix.A}%
+\contentsline {section}{\numberline {A.1}General Regulations}{91}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Majoring}{92}{section.A.2}%
+\contentsline {section}{\numberline {A.3}Bulleting and Numbering}{92}{section.A.3}%
+\contentsline {section}{\numberline {A.4}Table insertion}{93}{section.A.4}%
+\contentsline {section}{\numberline {A.5}Figure Insertion}{93}{section.A.5}%
+\contentsline {section}{\numberline {A.6}Reference}{93}{section.A.6}%
+\contentsline {paragraph}{Listing}{93}{paragraph*.109}%
+\contentsline {paragraph}{Types of Reference}{93}{paragraph*.110}%
+\contentsline {section}{\numberline {A.7}Equations}{94}{section.A.7}%
+\contentsline {section}{\numberline {A.8}Qui cách đóng quyển}{94}{section.A.8}%
+\contentsline {chapter}{\numberline {B}USE CASE DESCRIPTIONS}{97}{appendix.B}%
+\contentsline {section}{\numberline {B.1}Đặc tả use case ``Thống kê tình hình mượn sách''}{97}{section.B.1}%
+\contentsline {section}{\numberline {B.2}Đặc tả use case ``Đăng ký làm thẻ mượn''}{97}{section.B.2}%
+\contentsfinish 

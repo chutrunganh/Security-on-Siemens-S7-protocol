@@ -1,5 +1,11 @@
 %\makeglossaries
-\makenoidxglossaries
+% Biên dịch chương lẻ (\documentclass{subfiles}): bỏ qua — không có \printnoidxglossaries.
+% Biên dịch main.tex (\documentclass{report}): khởi tạo glossary đầy đủ.
+\makeatletter
+\@ifclassloaded{subfiles}{}{%
+  \makenoidxglossaries
+}
+\makeatother
 
 % Danh mục thuật ngữ và từ viết tắt
 \newglossaryentry{OT}{

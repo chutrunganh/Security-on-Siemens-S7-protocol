@@ -48,9 +48,9 @@ Cú pháp:
 
 ```
 [Loại vùng nhớ] [Kích thước dữ liệu] [Địa chỉ byte].[Địa chỉ bit]
-            │           │           │           │
-            │           │           │           └── 0-7 (chỉ dùng khi đọc bit)
-            │           │           └────────────── offset tính từ đầu vùng
+            │           │                   │           │
+            │           │                   │           └── offset tính theo bit từ đầu Byte này
+            │           │                   └────────────── offset tính theo Byte từ đầu vùng nhớ này
             │           └────────────────────────── X(bit) B(byte) W(word) D(dword) đây là số lượng dữ liệu muốn đọc
             └────────────────────────────────────── I Q M DB T C
 ```
@@ -113,7 +113,7 @@ Các kiểu dữ liệu trong DB:
 
 Trong giao thức ISO TCP mà S7 chạy trên đó, để ISO có thể tương thích với TCP vốn là:
 
-1. Là giao thức hướng kết nối, trong khi ISO lại là giao thức không hướng kết nối (connectionless) -> Sử dụng thêm **COTP (Connection-Oriented Transport Protocol)**. COTP chịu trách nhiệm thiết lập kết nối logic giữa hai thực thể đầu cuối trước khi bất kỳ dữ liệu S7 nào được trao đổi giúp ISO TCP có khả năng định tuyến trên các mạng xa.
+1. Là giao thức hướng kết nối, trong khi ISO lại là giao thức không hướng kết nối (connectionless). Do đó ISO cần sử dụng thêm **COTP (Connection-Oriented Transport Protocol)**. COTP chịu trách nhiệm thiết lập kết nối logic giữa hai thực thể đầu cuối trước khi bất kỳ dữ liệu S7 nào được trao đổi giúp ISO TCP có khả năng định tuyến trên các mạng xa.
 
     Trong quá trình thiết lập kết nối COTP, tham số **TSAP (Transport Service Access Point)** đóng vai trò quan trọng trong việc định tuyến thông điệp đến đúng tiến trình bên trong CPU của PLC. Một TSAP thường bao gồm hai byte, trong đó cấu trúc của nó phản ánh loại giao tiếp và vị trí vật lý của CPU
 

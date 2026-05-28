@@ -1,17 +1,385 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 
-\textcolor{red}{Chú ý: Chương này là không bắt buộc. Nếu nghiên cứu chỉ có đánh giá thực nghiệm mà không có phần thích lý thuyết thì sinh viên không cần trình bày chương này.} 
+\section{Phương pháp xây dựng luật phát hiện S7comm}
+\label{sec:detection-overview}
 
-\section{Tên của kết quả phân tích số 1}
+Chương này trình bày thiết kế tập luật Suricata phát hiện hành vi tấn công trên giao thức Siemens S7comm, căn cứ phân tích lưu lượng ở Chương~\ref{sec:attack-scenarios}. Phương pháp thuộc nhóm \emph{phát hiện dựa trên chữ ký}: mỗi luật khớp tổ hợp byte cố định trong payload TCP/102 (TPKT, COTP, S7 Header, mã chức năng). 
 
-Nếu đồ án có phần phân tích lý thuyết thì sinh viên trình bày ở chương này. 
+Toàn bộ luật nằm tại \texttt{detect/rules/s7comm.rules}. Mã \texttt{sid} phân theo nhóm: \texttt{100000x} (thiết lập phiên, trinh sát), \texttt{100001x} (đọc ghi biến), \texttt{100002x} (download upload block), \texttt{100003x} (điều khiển Start/Stop).
 
-Kết quả lý thuyết có thể là phần tính toán về độ phức tạp tính toán của thuật toán hoặc chứng minh về tỉ số hiệu năng, \ldots
+\section{Cơ sở chữ ký trên payload S7comm}
+\label{sec:rule-foundation}
 
-Nếu đồ án không có phần phân tích lý thuyết thì sinh viên không cần viết chương này. 
+S7comm trên TCP/102 có cấu trúc TCP $\rightarrow$ TPKT $\rightarrow$ COTP $\rightarrow$ S7comm. Bảng~\ref{tab:s7-payload-offsets} liệt kê offset byte dùng trong luật.
 
-\section{Tên của kết quả phân tích số 2}
+\begin{table}[H]
+    \centering
+    \caption{Offset byte trong payload TCP/102 (S7comm Data TPDU)}
+    \label{tab:s7-payload-offsets}
+    \begin{tabular}{|c|c|p{7.2cm}|}
+        \hline
+        \textbf{Offset} & \textbf{Giá trị} & \textbf{Trường} \\
+        \hline
+        0--1 & \texttt{03 00} & TPKT \\
+        \hline
+        4--6 & \texttt{02 F0 80} & COTP Data TPDU \\
+        \hline
+        7 & \texttt{32} & S7 protocol id \\
+        \hline
+        8 & \texttt{01}/\texttt{03}/\texttt{07} & \texttt{ROSCTR}: Job / Ack\_Data / Userdata \\
+        \hline
+        17 & --- & Function code (Job, Userdata) \\
+        \hline
+        19 & --- & Function code (Ack\_Data) \\
+        \hline
+    \end{tabular}
+\end{table}
 
+Luật chiều client $\rightarrow$ PLC dùng \texttt{flow:to\_server,established} và \texttt{|02 F0 80 32 01|} tại offset~4 (\texttt{ROSCTR=Job}). Luật Userdata dùng \texttt{|02 F0 80 32 07|}. Luật chiều PLC $\rightarrow$ client dùng \texttt{flow:from\_server,established} và \texttt{|02 F0 80 32 03|} (\texttt{ROSCTR=Ack\_Data}); function code tại offset~19.
+
+\section{Luật theo kịch bản tấn công}
+\label{sec:rules-by-scenario}
+
+\subsection{Reconnaissance}
+\label{sec:rules-recon}
+
+Căn cứ Mục~\ref{sec:reconnaissance}: quét TCP/102 (Nmap \texttt{s7-info}), đọc SZL (\texttt{0x0011}, \texttt{0x001c}), liệt kê block (Snap7).
+
+\paragraph{Luật \texttt{sid:1000001}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Setup Communication to PLC";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|F0|";
+  offset:17; depth:1; sid:1000001; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:3;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Khớp Job (\texttt{ROSCTR=0x01}) với function \texttt{0xf0} (Setup Communication)---bước bắt buộc trước mọi thao tác S7comm trong các kịch bản Chương~3. \texttt{sid:1000001} không đủ để kết luận tấn công; dùng làm dấu hiệu mở phiên hoặc tương quan với các \texttt{sid} trinh sát tiếp theo.
+
+\paragraph{Luật \texttt{sid:1000002}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read SZL request - PLC
+  information enumeration"; flow:to_server,established; content:"|03 00|";
+  offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:4; depth:5;
+  content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8; sid:1000002; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+\texttt{ROSCTR=0x07} (Userdata) và mẫu \texttt{|00 01 12 04 11 44 01 00|} xác định nhóm CPU functions, subfunction Read SZL. \texttt{sid:1000002} phát hiện mọi yêu cầu đọc SZL; các \texttt{sid:1000003} và \texttt{sid:1000004} tinh chỉnh theo SZL-ID quan sát trong PCAP reconnaissance.
+
+\paragraph{Luật \texttt{sid:1000003}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read SZL module identification
+  0x0011"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 07|"; offset:4; depth:5;
+  content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8;
+  content:"|00 11 00 01|"; distance:0; within:12; sid:1000003; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Bổ sung \texttt{|00 11 00 01|} (SZL-ID \texttt{0x0011}, index \texttt{0x0001})---trường module identification (order number CPU) trong output Nmap \texttt{s7-info}. \texttt{sid:1000003} chứng minh fingerprint PLC cụ thể hơn \texttt{sid:1000002}.
+
+\paragraph{Luật \texttt{sid:1000004}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read SZL communication status
+  0x001c"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 07|"; offset:4; depth:5;
+  content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8;
+  content:"|00 1C 00 00|"; distance:0; within:12; sid:1000004; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Khớp SZL-ID \texttt{0x001c} (communication status): serial number, system name, module type---khớp bước thu thập metadata PLC trong reconnaissance.
+
+\paragraph{Luật \texttt{sid:1000005}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM List Blocks request - PLC block
+  inventory enumeration"; flow:to_server,established; content:"|03 00|";
+  offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:4; depth:5;
+  content:"|00 01 12 04 11 13 01 00|"; offset:17; depth:8; sid:1000005; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Mẫu \texttt{|00 01 12 04 11 13 01 00|}: function group Block functions, subfunction List blocks. Tương ứng \texttt{scanBlock.py} (\texttt{.list\_blocks()}). Đánh dấu giai đoạn kiểm kê OB/DB/FC/FB trước upload/download hoặc khai thác sâu.
+
+\subsection{Phát lại lệnh Start/Stop PLC}
+\label{sec:rules-start-stop}
+
+Căn cứ Mục~\ref{sec:start_stop_plc}: replay payload \texttt{PLC Control 0x28} và \texttt{PLC Stop 0x29}, PI-Service \texttt{P\_PROGRAM}.
+
+\paragraph{Luật \texttt{sid:1000030}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM PLC Control command";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|28|";
+  offset:17; depth:1; sid:1000030; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack plc_control; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Phát hiện mọi lệnh PLC Control (\texttt{0x28}): Start CPU, activate block, copy RAM to ROM, \ldots. \texttt{priority:1} phản ánh mức độ nghiêm trọng---ảnh hưởng trực tiếp trạng thái vận hành PLC.
+
+\paragraph{Luật \texttt{sid:1000031}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM replayed Start CPU P_PROGRAM";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|28|";
+  offset:17; depth:1; content:"P_PROGRAM"; distance:0; within:24;
+  sid:1000031; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack start_stop_replay; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Bổ sung chuỗi ASCII \texttt{P\_PROGRAM} trong 24 byte sau function code---khớp payload replay Start CPU từ PCAP TIA Portal. \texttt{sid:1000031} chuyên biệt hơn \texttt{sid:1000030} cho kịch bản replay đồ án.
+
+\paragraph{Luật \texttt{sid:1000032}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM PLC Stop command";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|29|";
+  offset:17; depth:1; sid:1000032; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack plc_stop; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Khớp function \texttt{0x29} (PLC Stop). Tương đương \texttt{sid:1000030} nhưng cho lệnh dừng CPU.
+
+\paragraph{Luật \texttt{sid:1000033}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM replayed Stop CPU P_PROGRAM";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|29|";
+  offset:17; depth:1; content:"P_PROGRAM"; distance:0; within:24;
+  sid:1000033; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack start_stop_replay; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Đối xứng \texttt{sid:1000031}: Stop CPU với PI-Service \texttt{P\_PROGRAM}. Khớp payload replay Stop trong lab.
+
+\subsection{Upload và Download block}
+\label{sec:rules-up-download}
+
+Căn cứ Mục~\ref{sec:down_up_program}: chuỗi function \texttt{0x1a}--\texttt{0x1f} trên traffic Siemens hoặc mô phỏng Wireshark.
+
+\paragraph{Luật \texttt{sid:1000020}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Request Download block to PLC";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1A|";
+  offset:17; depth:1; sid:1000020; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Khớp Request Download (\texttt{0x1a}): client yêu cầu PLC chuẩn bị nhận block chương trình.
+
+\paragraph{Luật \texttt{sid:1000021}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp $HOME_NET 102 -> any any (msg:"ICS S7COMM PLC requests Download Block data";
+  flow:from_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1B|";
+  offset:17; depth:1; sid:1000021; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Chiều PLC $\rightarrow$ client; Job \texttt{0x1b}: PLC chủ động yêu cầu block dữ liệu download. Khác \texttt{sid:1000026} về hướng và \texttt{ROSCTR}.
+
+\paragraph{Luật \texttt{sid:1000026}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM client sends Download Block data
+  to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 03|"; offset:4; depth:5; content:"|1B|";
+  offset:19; depth:1; sid:1000026; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Ack\_Data (\texttt{ROSCTR=0x03}), function \texttt{0x1b} tại offset~19: client gửi nội dung block xuống PLC. Cặp \texttt{sid:1000021}/\texttt{sid:1000026} mô tả hai chiều của giai đoạn Download Block.
+
+\paragraph{Luật \texttt{sid:1000022}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Download Ended";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1C|";
+  offset:17; depth:1; sid:1000022; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Kết thúc chuỗi download (\texttt{0x1c}).
+
+\paragraph{Luật \texttt{sid:1000023}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Start Upload block from PLC";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1D|";
+  offset:17; depth:1; sid:1000023; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Start Upload (\texttt{0x1d}): client yêu cầu lấy chương trình từ PLC.
+
+\paragraph{Luật \texttt{sid:1000024}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Upload Block request";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1E|";
+  offset:17; depth:1; sid:1000024; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Upload Block (\texttt{0x1e}): truyền từng block dữ liệu từ PLC về client.
+
+\paragraph{Luật \texttt{sid:1000025}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM End Upload";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1F|";
+  offset:17; depth:1; sid:1000025; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+End Upload (\texttt{0x1f}): kết thúc chuỗi upload.
+
+\subsection{Ghi biến quá trình và quan sát MITM}
+\label{sec:rules-stuxnet}
+
+Căn cứ Mục~\ref{sec:stuxnet_mitm_sim}: ghi \texttt{DB1.DBW2} (\texttt{iSetpoint}) \texttt{0x04b0}$\rightarrow$\texttt{0x07d0}; can thiệp \texttt{Ack\_Data} phía HMI.
+
+\paragraph{Luật \texttt{sid:1000010}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Write Var request to PLC";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|05|";
+  offset:17; depth:1; sid:1000010; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack modify_process_variable;
+  priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Function \texttt{0x05} (Write Var). Cảnh báo mọi ghi biến vào PLC---nền cho \texttt{sid:1000011} và \texttt{sid:1000012}.
+
+\paragraph{Luật \texttt{sid:1000011}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Write Var to DB1.DBW2 setpoint";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|05|";
+  offset:17; depth:1; content:"|12 0A 10|"; offset:19; depth:3;
+  content:"|00 01 84 00 00 10|"; offset:25; depth:6; sid:1000011; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack stuxnet_mitm_sim; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+\texttt{|12 0A 10|}: Any-type; \texttt{|00 01 84 00 00 10|}: DB1, area DB, bit offset \texttt{0x10} (byte~2, \texttt{DBW2}). Khớp địa chỉ \texttt{iSetpoint} trong mô phỏng.
+
+\paragraph{Luật \texttt{sid:1000012}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Write Var DB1.DBW2 setpoint to 2000";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|05|";
+  offset:17; depth:1; content:"|12 0A 10|"; offset:19; depth:3;
+  content:"|00 01 84 00 00 10|"; offset:25; depth:6;
+  content:"|00 04 00 10 07 D0|"; offset:31; depth:6; sid:1000012; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack stuxnet_mitm_sim; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+\texttt{|00 04 00 10 07 D0|}: transport size WORD, giá trị \texttt{0x07d0} (2000). Khớp payload tấn công ghi setpoint trong lab. Chuỗi \texttt{sid:1000010}$\rightarrow$\texttt{sid:1000011}$\rightarrow$\texttt{sid:1000012} tăng dần độ đặc hiệu.
+
+\paragraph{Luật \texttt{sid:1000013}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any 102 -> $HOME_NET any (msg:"ICS S7COMM suspicious Ack_Data response
+  to HMI/engineering station"; flow:from_server,established;
+  content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 03|";
+  offset:4; depth:5; sid:1000013; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack possible_mitm_observation;
+  threshold:type both, track by_src, count 60, seconds 10; priority:3;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Chiều PLC$\rightarrow$HMI, \texttt{ROSCTR=Ack\_Data}. Chữ ký không chứng minh sửa payload MITM; \texttt{threshold} (60 gói/10\,s) ghi nhận mật độ phản hồi cao. Cần tương quan với \texttt{sid:1000012} và phát hiện ARP/L2 (ngoài tập luật S7comm).
+
+\subsection{Kịch bản chưa có luật}
+\label{sec:rules-pending}
+
+Mục~\ref{sec:dos_plc} và Mục~\ref{sec:malformed_plc} chưa có PCAP và \texttt{sid} trong \texttt{s7comm.rules}. Khi xác định được byte đặc trưng, bổ sung nhóm \texttt{100004x} theo cùng schema offset ở Mục~\ref{sec:rule-foundation}.
+
+\section{Tổng hợp}
+\label{sec:rules-summary}
+
+\begin{table}[H]
+    \centering
+    \caption{Ánh xạ kịch bản Chương~3 và tập \texttt{sid}}
+    \label{tab:rules-master}
+    \small
+    \begin{tabular}{|p{3.4cm}|l|p{6.5cm}|}
+        \hline
+        \textbf{Kịch bản} & \textbf{\texttt{sid}} & \textbf{Chức năng phát hiện} \\
+        \hline
+        Trinh sát & 1000001--1000005 & Setup, SZL, List blocks \\
+        \hline
+        Start/Stop replay & 1000030--1000033 & \texttt{0x28}/\texttt{0x29}, \texttt{P\_PROGRAM} \\
+        \hline
+        Upload/Download & 1000020--1000026 & \texttt{0x1a}--\texttt{0x1f}, hai chiều \texttt{0x1b} \\
+        \hline
+        Stuxnet MITM & 1000010--1000013 & Write \texttt{DB1.DBW2}, quan sát Ack\_Data \\
+        \hline
+        DoS / Malformed & --- & Chưa triển khai \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\textbf{Hạn chế phương pháp chữ ký:} (i)~chỉ khớp biến thể đã mô tả; (ii)~offset trên payload TCP giả định PDU không bị phân mảnh; (iii)~lưu lượng HMI hợp lệ có thể kích hoạt \texttt{sid:1000001}, \texttt{sid:1000010}; (iv)~\texttt{sid:1000013} không chứng minh MITM độc lập. Các hạn chế này là tiền đề đánh giá thực nghiệm ở chương sau.
 
 \end{document}
