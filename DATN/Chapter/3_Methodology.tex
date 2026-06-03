@@ -20,11 +20,11 @@ Quy trình nghiên cứu được tổ chức thành năm bước liên tiếp n
 
     \textit{Ngoài ra trong một số kịch bản có sử dụng phần mềm TIA Portal + S7-PLCSIM Advanced + WinCC để mô phỏng PLC và HMI do giới hạn mô phỏng của OpenPLC Runtime v4.}
   
-    \item \textbf{Mô phỏng kịch bản tấn công}: thực hiện trinh sát, phát lại lệnh Start/Stop, thao tác upload/download và tấn công man-in-the-middle trên giao thức S7comm.
+    \item \textbf{Mô phỏng kịch bản tấn công}: thực hiện trinh sát, phát lại lệnh Start/Stop, thao tác upload/download, tấn công từ chối dịch vụ (DoS) trên kênh S7comm và tấn công man-in-the-middle trên giao thức S7comm.
     
     \item \textbf{Thu thập và phân tích lưu lượng}: thu thập lưu lượng mạng bằng Wireshark, phân tích cấu trúc gói tin S7comm để tạo cơ sở phục vụ xây dựng luật phát hiện bằng IDS Suricata.
     
-    \item \textbf{Xây dựng luật phát hiện}: chuyển các dấu hiệu đã quan sát thành chữ ký Suricata (file \texttt{detect/rules/s7comm.rules}), căn cứ offset byte và mã chức năng S7comm.
+    \item \textbf{Xây dựng luật phát hiện}: chuyển các dấu hiệu đã quan sát thành chữ ký Suricata (\texttt{detect/rules/s7comm.rules}, \texttt{detect/rules/ics\_dos.rules}), căn cứ offset byte, mã chức năng S7comm và ngưỡng tần suất (DoS).
     
     \item \textbf{Kiểm thử IDS}: chạy Suricata trên bản sao lưu lượng, đối chiếu cảnh báo với từng kịch bản đã mô phỏng.
     
@@ -846,8 +846,49 @@ Cấu trúc gói tin nhóm lệnh điều khiển chức năng PLC Control và P
 
 \end{itemize}
 
+\subsection{Tấn công từ chối dịch vụ (DoS) trên kênh S7comm}
+\label{sec:dos_s7comm}
 
+Trong môi trường OT, DoS nhằm làm gián đoạn vận hành an toàn: PLC không kịp xử lý lệnh điều khiển, HMI mất đồng bộ dữ liệu, hoặc engineering station không thiết lập được phiên S7. MITRE ATT\&CK for ICS xếp các hành vi này vào tactic \textbf{Impact}, ví dụ \textbf{T0814 Denial of Service}, \textbf{T0803 Block Command Message} và \textbf{T0804 Block Reporting Message}.
 
+Khác với DoS ứng dụng web (HTTP flood), DoS trên PLC Siemens qua Ethernet thường khai thác đặc thù cổng \textbf{TCP/102} và giao thức \textbf{S7comm}:
+
+\begin{enumerate}
+    \item \textbf{Cạn tài nguyên kết nối}: mở/đóng TCP tới cổng 102 với tần suất cao (connection churn), hoặc gửi nhiều gói SYN, làm đầy bảng phiên trên PLC/stack S7.
+    \item \textbf{Flood lệnh S7 hợp lệ}: lặp \texttt{Setup Communication} (\texttt{0xF0}), \texttt{Read SZL} (userdata CPU services) hoặc \texttt{Read/Write Var} --- không cần payload sai cú pháp vẫn gây tải CPU và hàng đợi xử lý.
+    \item \textbf{Lạm dụng trinh sát như vũ khí}: Read SZL / List Blocks ở tần suất cực cao vừa là recon vừa là DoS dịch vụ (tương tự quét SCADA quá mức).
+\end{enumerate}
+
+Ba kiểu trên được gói trong \textbf{một script duy nhất} \texttt{attacks/dos/s7comm\_dos.py}. Mặc định chế độ \texttt{--mode all} chạy tuần tự ba phase (\texttt{setup\_flood} $\rightarrow$ \texttt{tcp\_connect} $\rightarrow$ \texttt{szl\_flood}), mỗi phase khoảng 10\,s và nghỉ 8\,s giữa các phase để Suricata kịp ghi nhận alert trước khi chuyển kiểu flood tiếp theo (đủ cho cửa sổ \texttt{threshold} 10\,s trong \texttt{ics\_dos.rules}).
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+        \textbf{Phase (--mode all)} & \textbf{Mô tả} & \textbf{Luật Suricata} & \textbf{Workers mặc định} \\
+        \hline
+        1 -- \texttt{setup\_flood} & PDU Setup Communication lặp trên phiên TCP mới & \texttt{1000041}, \texttt{1000043} & 4 \\
+        \hline
+        2 -- \texttt{tcp\_connect} & Connect/disconnect nhanh :102 & \texttt{1000040} & 6 \\
+        \hline
+        3 -- \texttt{szl\_flood} & \texttt{read\_szl(0x0011)} qua Snap7 & \texttt{1000042} & 2 \\
+        \hline
+    \end{tabular}
+    \caption{Chuỗi DoS S7comm trong một lần chạy script (mặc định)}
+    \label{tab:dos-modes}
+\end{table}
+
+Triển khai lab (một lệnh):
+
+\begin{verbatim}
+python3 attacks/dos/s7comm_dos.py <IP_PLC>
+# tuong duong: --mode all --duration 10 --pause 8
+\end{verbatim}
+
+Có thể chạy riêng từng kiểu bằng \texttt{--mode setup\_flood} (hoặc \texttt{tcp\_connect}, \texttt{szl\_flood}) khi cần phân tích PCAP từng kịch bản.
+
+Lưu lượng được Suricata trên IDS bắt tại interface mirror. Phát hiện dùng \texttt{ics\_dos.rules} (\texttt{sid:1000040}--\texttt{1000043}): \texttt{threshold} với \texttt{track by\_src}, đếm gói hợp lệ S7 trong 10\,s---không cần payload malformed. Ngưỡng cần hiệu chỉnh theo baseline HMI để tránh báo nhầm.
 
 \subsection{Upload và Download chương trình PLC}
 \label{sec:down_up_program}
@@ -1898,11 +1939,6 @@ Tốc độ chỉnh sửa gói tin và gửi lại cần phải nhanh hơn tần
 
 % Kết thúc nhánh subsubsection của Stuxnet; các kịch bản dưới đây là \subsection riêng (cùng cấp Reconnaissance, Stuxnet).
 \setcounter{subsubsection}{0}
-
-\subsection{Tấn công DoS trên PLC}
-\label{sec:dos_plc}
-
-Pending\dots
 
 \subsection{Gửi gói tin malformed tới PLC}
 \label{sec:malformed_plc}

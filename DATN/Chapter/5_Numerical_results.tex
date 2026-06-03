@@ -1,20 +1,85 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 
-\textcolor{red}{Chú ý: Chương này là không bắt buộc. Nếu nghiên cứu chỉ có phân tích lý thuyết mà không có thực nghiệm thì sinh viên không cần trình bày chương này }
+\section{Thiết lập đánh giá trên môi trường lab}
+\label{sec:eval-setup}
 
-\section{Evaluation Parameters}
+Đánh giá được thực hiện trên môi trường mô phỏng đã trình bày ở Mục~\ref{sec:lab-setup}: PLC/OpenPLC lắng nghe cổng TCP/102, máy ảo IDS chạy Suricata bắt gói qua SPAN/mirror, máy attacker hoặc chính IDS thực thi script tấn công. Hai tệp luật được nạp đồng thời: \texttt{detect/rules/s7comm.rules} (nhận diện opcode và payload đặc trưng) và \texttt{detect/rules/ics\_dos.rules} (nhận diện flood theo \texttt{threshold}).
 
-Sinh viên trình bày cụ thể về các tham số dùng trong đánh giá 
+Tiêu chí đánh giá trong phạm vi đồ án:
+\begin{itemize}
+    \item \textbf{Khả năng sinh cảnh báo}: khi chạy kịch bản tấn công, Suricata có ghi nhận alert tương ứng trong \texttt{fast.log}/\texttt{eve.json} hay không.
+    \item \textbf{Khớp mã SID}: tên alert và \texttt{sid} có tương ứng với nhóm hành vi đã thiết kế (Chương~\ref{sec:detection-overview}).
+    \item \textbf{Điều kiện quan sát}: lưu lượng tấn công phải đi qua interface IDS đang bắt; nếu không, kịch bản vẫn thành công về mặt PLC nhưng không có alert---đây là giới hạn của triển khai mirror, không phải lỗi luật.
+\end{itemize}
 
-\section{Simulation Method}
+Kịch bản được tự động hóa bằng \texttt{detect/run\_attack\_tests.py} (triển khai luật, SSH vào IDS, lần lượt reconnaissance, ghi biến DB, DoS, Start/Stop) hoặc chạy thủ công từng script trong \texttt{attacks/}. Đối với DoS, khuyến nghị dùng \textbf{một lệnh} \texttt{attacks/dos/s7comm\_dos.py <IP\_PLC>} (mặc định \texttt{--mode all}).
 
-Sinh viên trình bày chi tiết cách thức tiến hành thí nghiệm, ví dụ: các baseline chọn để so sánh là gì? tại sao lại chọn các baseline đấy? Tiến hành bao nhiêu thí nghiệm? mỗi thí nghiệm được thực hiện bao nhiêu lần? Các tham số của thuật toán được chọn như thế nào? Kịch bản thí nghiệm được tạo ra sao? Dữ liệu xử lý thế nào? … Có thể chia  chương này thành các chương nhỏ hơn để tiện trình bày. 
+\section{Kết quả phát hiện tấn công DoS trên S7comm}
+\label{sec:eval-dos}
 
-\section{Tên của kết quả thí nghiệm 1}
+\subsection{Kịch bản và luật tương ứng}
 
-Các chương tiếp theo sinh viên trình bày các kết quả thí nghiệm thu được. Mỗi kết quả nên cho vào một chương. Đối với mỗi kết quả thí nghiệm, cần trình bày các bảng biểu, đồ thị minh hoạ cho kết quả thí nghiệm. Sinh viên cần nêu nhận xét chi tiết về kết quả thí nghiệm, so sánh các phương pháp với nhau, giải thích tại sao kết quả lại như vậy. 
+Script \texttt{s7comm\_dos.py} chạy tuần tự ba phase (mỗi phase khoảng 10\,s, nghỉ 8\,s giữa các phase) nhằm tách rõ dấu hiệu trên IDS và đủ thời gian cho cửa sổ \texttt{threshold} 10\,s trong \texttt{ics\_dos.rules}. Bảng~\ref{tab:dos-eval} ánh xạ phase, hành vi và \texttt{sid} kỳ vọng.
 
-\section{Tên của kết quả thí nghiệm 2}
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|c|l|l|l|}
+        \hline
+        \textbf{Bước} & \textbf{Phase} & \textbf{Hành vi} & \textbf{SID Suricata} \\
+        \hline
+        1 & \texttt{setup\_flood} & Lặp PDU Setup Communication trên phiên TCP mới & 1000041, 1000043 \\
+        \hline
+        2 & \texttt{tcp\_connect} & Connect/disconnect nhanh tới :102 & 1000040 \\
+        \hline
+        3 & \texttt{szl\_flood} & \texttt{read\_szl(0x0011)} qua Snap7 & 1000042 \\
+        \hline
+    \end{tabular}
+    \caption{Ánh xạ kịch bản DoS lab và luật phát hiện}
+    \label{tab:dos-eval}
+\end{table}
+
+Các luật đơn lẻ trong \texttt{s7comm.rules} (ví dụ \texttt{1000001} Setup Communication, \texttt{1000002} Read SZL) vẫn có thể kích hoạt trong từng phase; tuy nhiên \textbf{cảnh báo đặc thù DoS} là các \texttt{sid:1000040}--\texttt{1000043} vì chỉ chúng áp dụng ngưỡng tần suất.
+
+\subsection{Nhận xét kết quả}
+
+Trong các lần chạy lab khi lưu lượng được mirror tới IDS, script \texttt{--mode all} thường sinh đồng thời nhiều alert flood sau mỗi phase, ví dụ thông điệp dạng \emph{ICS S7COMM possible Setup Communication flood to PLC} (\texttt{1000041}) và \emph{ICS possible TCP SYN flood to ISO-TSAP port 102} (\texttt{1000040}). Điều này cho thấy lớp luật \texttt{threshold} bổ sung được cho opcode đơn lẻ: HMI hợp lệ thường không lặp Setup hoặc Read SZL với tần suất tương đương script lab.
+
+\textbf{Hạn chế đánh giá:}
+\begin{itemize}
+    \item Chưa đo chính xác tỷ lệ true positive/false positive trên lưu lượng HMI nền dài ngày; ngưỡng \texttt{count} trong \texttt{ics\_dos.rules} cần hiệu chỉnh theo từng nhà máy.
+    \item DoS mạnh có thể làm OpenPLC tạm thời chậm phản hồi; đồ án không coi đó là tiêu chí định lượng IDS mà chỉ xác nhận \emph{phát hiện được} hành vi flood trên wire.
+    \item Nếu chỉ chạy script trên máy không đi qua đoạn mạng được IDS bắt, sẽ không có alert dù PLC vẫn bị ảnh hưởng.
+\end{itemize}
+
+\section{Tổng hợp các nhóm kịch bản đã kiểm tra}
+\label{sec:eval-summary}
+
+Bảng~\ref{tab:attack-eval-summary} tóm tắt toàn bộ nhóm tấn công đã mô phỏng và tệp luật liên quan. Chi tiết kịch bản xem Mục~\ref{sec:attack-scenarios}; chi tiết từng \texttt{sid} xem Chương~\ref{sec:detection-overview}.
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Nhóm tấn công} & \textbf{Script / công cụ lab} & \textbf{Luật (ví dụ SID)} \\
+        \hline
+        Trinh sát S7 & \texttt{nmap s7-info}, \texttt{scanBlock.py} & 1000001--1000005 \\
+        \hline
+        Ghi biến quá trình (DB) & \texttt{test\_readwrite\_db\_via\_snap7.py} & 1000010, 1000011 \\
+        \hline
+        DoS S7comm & \texttt{s7comm\_dos.py} (\texttt{--mode all}) & 1000040--1000043 \\
+        \hline
+        Start/Stop replay & \texttt{start\_stop\_plc.py} & 1000030--1000033 \\
+        \hline
+        MITM (quan sát phụ) & \texttt{s7\_intercept.py} + ARP ngoài S7 & 1000013 (+ L2) \\
+        \hline
+        Up/Download & Chờ PCAP & 1000020--1000026 (luật sẵn) \\
+        \hline
+    \end{tabular}
+    \caption{Tóm tắt kịch bản lab và luật Suricata}
+    \label{tab:attack-eval-summary}
+\end{table}
 
 \end{document}

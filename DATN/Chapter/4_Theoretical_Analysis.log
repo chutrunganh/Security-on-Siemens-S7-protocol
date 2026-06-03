@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.24)  28 MAY 2026 23:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.24)  29 MAY 2026 06:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1636,385 +1636,375 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 14.
 (C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
+Overfull \hbox (31.93892pt too wide) in paragraph at lines 45--47
+[] []\T5/ptm/b/n/13 PDU Job --- chi·u client $\OMS/cmsy/m/n/12 !$ \T5/ptm/b/n/1
+3 PLC.[] \T5/ptm/m/n/13 C¡c thao t¡c client khði ph¡t (Setup Communication,
+ []
 
-LaTeX Warning: Reference `sec:reconnaissance' on page 1 undefined on input line
- 47.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 4
+7.
+(C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+) [1
+
+{C:/Users/chutrunganh/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/User
+s/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/vntex/t5.enc}{C:/Us
+ers/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}]
+
+LaTeX Warning: Reference `sec:reconnaissance' on page 2 undefined on input line
+ 67.
 
 
-Overfull \hbox (6.50885pt too wide) in paragraph at lines 47--48
+Overfull \hbox (6.50885pt too wide) in paragraph at lines 67--68
 []\T5/ptm/m/n/13 C«n cù Möc []: qu²t TCP/102 (Nmap \T5/pcr/m/n/13 s7-info\T5/pt
 m/m/n/13 ), ^^_åc SZL (\T5/pcr/m/n/13 0x0011\T5/ptm/m/n/13 , \T5/pcr/m/n/13 0x0
 01c\T5/ptm/m/n/13 ),
  []
 
 
-Overfull \hbox (91.64386pt too wide) in paragraph at lines 57--57
+Overfull \hbox (91.64386pt too wide) in paragraph at lines 77--77
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Setu
 p Communication to PLC";[] 
  []
 
 
-Overfull \hbox (2.88525pt too wide) in paragraph at lines 57--57
+Overfull \hbox (2.88525pt too wide) in paragraph at lines 77--77
 []  \T5/pcr/m/n/10.83347 flow:to_server,established; content:"|03 00|"; offset:
 0; depth:2;[] 
  []
 
-[1
 
-{C:/Users/chutrunganh/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/User
-s/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/vntex/t5.enc}]
-Overfull \hbox (96.43222pt too wide) in paragraph at lines 57--57
+Overfull \hbox (96.43222pt too wide) in paragraph at lines 77--77
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack rec
 onnaissance; priority:3;)[] 
  []
 
 
-Overfull \hbox (15.09163pt too wide) in paragraph at lines 60--62
+Overfull \hbox (15.09163pt too wide) in paragraph at lines 80--82
 \T5/ptm/b/n/13 Ph¥n t½ch. \T5/ptm/m/n/13 Khîp Job (\T5/pcr/m/n/13 ROSCTR=0x01\T
 5/ptm/m/n/13 ) vîi function \T5/pcr/m/n/13 0xf0 \T5/ptm/m/n/13 (Setup Communica
 tion)---
  []
 
 
-Overfull \hbox (27.88367pt too wide) in paragraph at lines 60--62
+Overfull \hbox (27.88367pt too wide) in paragraph at lines 80--82
 \T5/ptm/m/n/13 b÷îc b­t buëc tr÷îc måi thao t¡c S7comm trong c¡c kàch b£n Ch÷ìn
 g 3. \T5/pcr/m/n/13 sid:1000001
  []
 
 
-Overfull \hbox (27.5206pt too wide) in paragraph at lines 71--71
+Overfull \hbox (27.5206pt too wide) in paragraph at lines 91--91
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read
  SZL request -
  []
 
 
-Overfull \hbox (50.41167pt too wide) in paragraph at lines 71--71
+Overfull \hbox (50.41167pt too wide) in paragraph at lines 91--91
 []  \T5/pcr/m/n/10.83347 information enumeration"; flow:to_server,established; 
 content:"|03 00|";[] 
  []
 
 
-Overfull \hbox (2.09439pt too wide) in paragraph at lines 71--71
+Overfull \hbox (2.09439pt too wide) in paragraph at lines 91--91
 []  \T5/pcr/m/n/10.83347 offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:
 4; depth:5;[] 
  []
 
 
-Overfull \hbox (75.01445pt too wide) in paragraph at lines 71--71
+Overfull \hbox (75.01445pt too wide) in paragraph at lines 91--91
 []  \T5/pcr/m/n/10.83347 content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:
 8; sid:1000002; rev:1;[] 
  []
 
-
-Overfull \hbox (96.43222pt too wide) in paragraph at lines 71--71
+[2]
+Overfull \hbox (96.43222pt too wide) in paragraph at lines 91--91
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack rec
 onnaissance; priority:2;)[] 
  []
 
 
-Overfull \hbox (10.58072pt too wide) in paragraph at lines 74--76
+Overfull \hbox (10.58072pt too wide) in paragraph at lines 94--96
 \T5/ptm/b/n/13 Ph¥n t½ch. \T5/pcr/m/n/13 ROSCTR=0x07 \T5/ptm/m/n/13 (Userdata) 
 v  m¨u \T5/pcr/m/n/13 |00 01 12 04 11 44 01 00|
  []
 
 
-Overfull \hbox (104.94734pt too wide) in paragraph at lines 86--86
+Overfull \hbox (104.94734pt too wide) in paragraph at lines 106--106
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read
  SZL module identification[] 
  []
 
 
-Overfull \hbox (61.38594pt too wide) in paragraph at lines 86--86
+Overfull \hbox (61.38594pt too wide) in paragraph at lines 106--106
 []  \T5/pcr/m/n/10.83347 0x0011"; flow:to_server,established; content:"|03 00|"
 ; offset:0; depth:2;[] 
  []
 
 
-Overfull \hbox (18.63716pt too wide) in paragraph at lines 86--86
+Overfull \hbox (18.63716pt too wide) in paragraph at lines 106--106
 []  \T5/pcr/m/n/10.83347 content:"|00 11 00 01|"; distance:0; within:12; sid:10
 00003; rev:1;[] 
  []
 
 
-Overfull \hbox (96.43222pt too wide) in paragraph at lines 86--86
+Overfull \hbox (96.43222pt too wide) in paragraph at lines 106--106
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack rec
 onnaissance; priority:2;)[] 
  []
 
 
-Overfull \hbox (98.47977pt too wide) in paragraph at lines 101--101
+Overfull \hbox (98.47977pt too wide) in paragraph at lines 121--121
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read
  SZL communication status[] 
  []
 
 
-Overfull \hbox (61.38594pt too wide) in paragraph at lines 101--101
+Overfull \hbox (61.38594pt too wide) in paragraph at lines 121--121
 []  \T5/pcr/m/n/10.83347 0x001c"; flow:to_server,established; content:"|03 00|"
 ; offset:0; depth:2;[] 
  []
 
 
-Overfull \hbox (18.63716pt too wide) in paragraph at lines 101--101
+Overfull \hbox (18.63716pt too wide) in paragraph at lines 121--121
 []  \T5/pcr/m/n/10.83347 content:"|00 1C 00 00|"; distance:0; within:12; sid:10
 00004; rev:1;[] 
  []
 
 
-Overfull \hbox (96.43222pt too wide) in paragraph at lines 101--101
+Overfull \hbox (96.43222pt too wide) in paragraph at lines 121--121
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack rec
 onnaissance; priority:2;)[] 
  []
 
-[2]
-Overfull \hbox (46.84749pt too wide) in paragraph at lines 115--115
+
+Overfull \hbox (46.84749pt too wide) in paragraph at lines 135--135
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM List
  Blocks request -
  []
 
 
-Overfull \hbox (37.07568pt too wide) in paragraph at lines 115--115
+Overfull \hbox (37.07568pt too wide) in paragraph at lines 135--135
 []  \T5/pcr/m/n/10.83347 inventory enumeration"; flow:to_server,established; co
 ntent:"|03 00|";[] 
  []
 
 
-Overfull \hbox (2.09439pt too wide) in paragraph at lines 115--115
+Overfull \hbox (2.09439pt too wide) in paragraph at lines 135--135
 []  \T5/pcr/m/n/10.83347 offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:
 4; depth:5;[] 
  []
 
 
-Overfull \hbox (75.01445pt too wide) in paragraph at lines 115--115
+Overfull \hbox (75.01445pt too wide) in paragraph at lines 135--135
 []  \T5/pcr/m/n/10.83347 content:"|00 01 12 04 11 13 01 00|"; offset:17; depth:
 8; sid:1000005; rev:1;[] 
  []
 
 
-Overfull \hbox (96.43222pt too wide) in paragraph at lines 115--115
+Overfull \hbox (96.43222pt too wide) in paragraph at lines 135--135
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack rec
 onnaissance; priority:2;)[] 
  []
 
 
-Overfull \hbox (22.05965pt too wide) in paragraph at lines 118--120
+Overfull \hbox (22.05965pt too wide) in paragraph at lines 138--140
 \T5/ptm/b/n/13 Ph¥n t½ch. \T5/ptm/m/n/13 M¨u \T5/pcr/m/n/13 |00 01 12 04 11 13 
 01 00|\T5/ptm/m/n/13 : function group Block functions,
  []
 
 
-Overfull \hbox (3.69061pt too wide) in paragraph at lines 118--120
+Overfull \hbox (3.69061pt too wide) in paragraph at lines 138--140
 \T5/ptm/m/n/13 subfunction List blocks. T÷ìng ùng \T5/pcr/m/n/13 scanBlock.py \
 T5/ptm/m/n/13 (\T5/pcr/m/n/13 .list_blocks()\T5/ptm/m/n/13 ). ^^^¡nh
  []
 
 
 LaTeX Warning: Reference `sec:start_stop_plc' on page 3 undefined on input line
- 124.
+ 144.
 
-
-Overfull \hbox (46.67416pt too wide) in paragraph at lines 134--134
+[3]
+Overfull \hbox (46.67416pt too wide) in paragraph at lines 154--154
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM PLC 
 Control command";[] 
  []
 
 
-Overfull \hbox (2.88525pt too wide) in paragraph at lines 134--134
+Overfull \hbox (2.88525pt too wide) in paragraph at lines 154--154
 []  \T5/pcr/m/n/10.83347 flow:to_server,established; content:"|03 00|"; offset:
 0; depth:2;[] 
  []
 
 
-Overfull \hbox (76.85616pt too wide) in paragraph at lines 134--134
+Overfull \hbox (76.85616pt too wide) in paragraph at lines 154--154
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack plc
 _control; priority:1;)[] 
  []
 
 
-Overfull \hbox (104.1998pt too wide) in paragraph at lines 149--149
+Overfull \hbox (104.1998pt too wide) in paragraph at lines 169--169
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM repl
 ayed Start CPU P_PROGRAM";[] 
  []
 
 
-Overfull \hbox (2.88525pt too wide) in paragraph at lines 149--149
+Overfull \hbox (2.88525pt too wide) in paragraph at lines 169--169
 []  \T5/pcr/m/n/10.83347 flow:to_server,established; content:"|03 00|"; offset:
 0; depth:2;[] 
  []
 
 
-Overfull \hbox (114.00406pt too wide) in paragraph at lines 149--149
+Overfull \hbox (114.00406pt too wide) in paragraph at lines 169--169
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack sta
 rt_stop_replay; priority:1;)[] 
  []
 
 
-Overfull \hbox (26.76227pt too wide) in paragraph at lines 163--163
+Overfull \hbox (26.76227pt too wide) in paragraph at lines 183--183
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM PLC 
 Stop command";[] 
  []
 
 
-Overfull \hbox (2.88525pt too wide) in paragraph at lines 163--163
+Overfull \hbox (2.88525pt too wide) in paragraph at lines 183--183
 []  \T5/pcr/m/n/10.83347 flow:to_server,established; content:"|03 00|"; offset:
 0; depth:2;[] 
  []
 
-[3]
-Overfull \hbox (56.99843pt too wide) in paragraph at lines 163--163
+
+Overfull \hbox (56.99843pt too wide) in paragraph at lines 183--183
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack plc
 _stop; priority:1;)[] 
  []
 
 
-Overfull \hbox (97.30974pt too wide) in paragraph at lines 178--178
+Overfull \hbox (97.30974pt too wide) in paragraph at lines 198--198
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM repl
 ayed Stop CPU P_PROGRAM";[] 
  []
 
 
-Overfull \hbox (2.88525pt too wide) in paragraph at lines 178--178
+Overfull \hbox (2.88525pt too wide) in paragraph at lines 198--198
 []  \T5/pcr/m/n/10.83347 flow:to_server,established; content:"|03 00|"; offset:
 0; depth:2;[] 
  []
 
 
-Overfull \hbox (114.00406pt too wide) in paragraph at lines 178--178
+Overfull \hbox (114.00406pt too wide) in paragraph at lines 198--198
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack sta
 rt_stop_replay; priority:1;)[] 
  []
 
+[4]
 
-LaTeX Warning: Reference `sec:down_up_program' on page 4 undefined on input lin
-e 187.
+LaTeX Warning: Reference `sec:down_up_program' on page 5 undefined on input lin
+e 207.
 
 
-Overfull \hbox (111.44742pt too wide) in paragraph at lines 197--197
+Overfull \hbox (111.44742pt too wide) in paragraph at lines 217--217
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Requ
 est Download block to PLC";[] 
  []
 
 
-Overfull \hbox (2.88525pt too wide) in paragraph at lines 197--197
+Overfull \hbox (2.88525pt too wide) in paragraph at lines 217--217
 []  \T5/pcr/m/n/10.83347 flow:to_server,established; content:"|03 00|"; offset:
 0; depth:2;[] 
  []
 
 
-Overfull \hbox (109.07486pt too wide) in paragraph at lines 197--197
+Overfull \hbox (109.07486pt too wide) in paragraph at lines 217--217
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack pro
 gram_download; priority:1;)[] 
  []
 
 
-Overfull \hbox (131.18597pt too wide) in paragraph at lines 211--211
+Overfull \hbox (131.18597pt too wide) in paragraph at lines 231--231
 []\T5/pcr/m/n/10.83347 alert tcp $HOME_NET 102 -> any any (msg:"ICS S7COMM PLC 
 requests Download Block data";[] 
  []
 
 
-Overfull \hbox (16.10207pt too wide) in paragraph at lines 211--211
+Overfull \hbox (16.10207pt too wide) in paragraph at lines 231--231
 []  \T5/pcr/m/n/10.83347 flow:from_server,established; content:"|03 00|"; offse
 t:0; depth:2;[] 
  []
 
 
-Overfull \hbox (109.07486pt too wide) in paragraph at lines 211--211
+Overfull \hbox (109.07486pt too wide) in paragraph at lines 231--231
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack pro
 gram_download; priority:1;)[] 
  []
 
 
-Overfull \hbox (118.12083pt too wide) in paragraph at lines 225--225
+Overfull \hbox (118.12083pt too wide) in paragraph at lines 245--245
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM clie
 nt sends Download Block data[] 
  []
 
 
-Overfull \hbox (60.84427pt too wide) in paragraph at lines 225--225
+Overfull \hbox (60.84427pt too wide) in paragraph at lines 245--245
 []  \T5/pcr/m/n/10.83347 to PLC"; flow:to_server,established; content:"|03 00|"
 ; offset:0; depth:2;[] 
  []
 
-[4]
-Overfull \hbox (109.07486pt too wide) in paragraph at lines 225--225
+
+Overfull \hbox (109.07486pt too wide) in paragraph at lines 245--245
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack pro
 gram_download; priority:1;)[] 
  []
 
 
-Overfull \hbox (14.43379pt too wide) in paragraph at lines 239--239
+Overfull \hbox (14.43379pt too wide) in paragraph at lines 259--259
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Down
 load Ended";[] 
  []
 
 
-Overfull \hbox (2.88525pt too wide) in paragraph at lines 239--239
+Overfull \hbox (2.88525pt too wide) in paragraph at lines 259--259
 []  \T5/pcr/m/n/10.83347 flow:to_server,established; content:"|03 00|"; offset:
 0; depth:2;[] 
  []
 
-
-Overfull \hbox (109.07486pt too wide) in paragraph at lines 239--239
+[5]
+Overfull \hbox (109.07486pt too wide) in paragraph at lines 259--259
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack pro
 gram_download; priority:1;)[] 
  []
 
 
-Overfull \hbox (98.34975pt too wide) in paragraph at lines 253--253
+Overfull \hbox (98.34975pt too wide) in paragraph at lines 273--273
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Star
 t Upload block from PLC";[] 
  []
 
 
-Overfull \hbox (2.88525pt too wide) in paragraph at lines 253--253
+Overfull \hbox (2.88525pt too wide) in paragraph at lines 273--273
 []  \T5/pcr/m/n/10.83347 flow:to_server,established; content:"|03 00|"; offset:
 0; depth:2;[] 
  []
 
 
-Overfull \hbox (96.13971pt too wide) in paragraph at lines 253--253
+Overfull \hbox (96.13971pt too wide) in paragraph at lines 273--273
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack pro
 gram_upload; priority:1;)[] 
  []
 
 
-Overfull \hbox (53.5859pt too wide) in paragraph at lines 267--267
+Overfull \hbox (53.5859pt too wide) in paragraph at lines 287--287
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Uplo
 ad Block request";[] 
  []
 
 
-Overfull \hbox (2.88525pt too wide) in paragraph at lines 267--267
+Overfull \hbox (2.88525pt too wide) in paragraph at lines 287--287
 []  \T5/pcr/m/n/10.83347 flow:to_server,established; content:"|03 00|"; offset:
 0; depth:2;[] 
  []
 
 
-Overfull \hbox (96.13971pt too wide) in paragraph at lines 267--267
+Overfull \hbox (96.13971pt too wide) in paragraph at lines 287--287
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack pro
 gram_upload; priority:1;)[] 
- []
-
-
-Overfull \hbox (2.88525pt too wide) in paragraph at lines 281--281
-[]  \T5/pcr/m/n/10.83347 flow:to_server,established; content:"|03 00|"; offset:
-0; depth:2;[] 
- []
-
-
-Overfull \hbox (96.13971pt too wide) in paragraph at lines 281--281
-[]  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack pro
-gram_upload; priority:1;)[] 
- []
-
-
-LaTeX Warning: Reference `sec:stuxnet_mitm_sim' on page 5 undefined on input li
-ne 290.
-
-[5]
-Overfull \hbox (77.47365pt too wide) in paragraph at lines 301--301
-[]\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Writ
-e Var request to PLC";[] 
  []
 
 
@@ -2024,100 +2014,122 @@ Overfull \hbox (2.88525pt too wide) in paragraph at lines 301--301
  []
 
 
-Overfull \hbox (71.47194pt too wide) in paragraph at lines 301--301
+Overfull \hbox (96.13971pt too wide) in paragraph at lines 301--301
+[]  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack pro
+gram_upload; priority:1;)[] 
+ []
+
+
+LaTeX Warning: Reference `sec:stuxnet_mitm_sim' on page 6 undefined on input li
+ne 310.
+
+
+Overfull \hbox (77.47365pt too wide) in paragraph at lines 321--321
+[]\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Writ
+e Var request to PLC";[] 
+ []
+
+
+Overfull \hbox (2.88525pt too wide) in paragraph at lines 321--321
+[]  \T5/pcr/m/n/10.83347 flow:to_server,established; content:"|03 00|"; offset:
+0; depth:2;[] 
+ []
+
+
+Overfull \hbox (71.47194pt too wide) in paragraph at lines 321--321
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack mod
 ify_process_variable;[] 
  []
 
-
-Overfull \hbox (115.96494pt too wide) in paragraph at lines 316--316
+[6]
+Overfull \hbox (115.96494pt too wide) in paragraph at lines 336--336
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Writ
 e Var to DB1.DBW2 setpoint";[] 
  []
 
 
-Overfull \hbox (2.88525pt too wide) in paragraph at lines 316--316
+Overfull \hbox (2.88525pt too wide) in paragraph at lines 336--336
 []  \T5/pcr/m/n/10.83347 flow:to_server,established; content:"|03 00|"; offset:
 0; depth:2;[] 
  []
 
 
-Overfull \hbox (36.01399pt too wide) in paragraph at lines 316--316
+Overfull \hbox (36.01399pt too wide) in paragraph at lines 336--336
 []  \T5/pcr/m/n/10.83347 content:"|00 01 84 00 00 10|"; offset:25; depth:6; sid
 :1000011; rev:1;[] 
  []
 
 
-Overfull \hbox (109.10736pt too wide) in paragraph at lines 316--316
+Overfull \hbox (109.10736pt too wide) in paragraph at lines 336--336
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack stu
 xnet_mitm_sim; priority:1;)[] 
  []
 
 
-Overfull \hbox (148.46532pt too wide) in paragraph at lines 332--332
+Overfull \hbox (148.46532pt too wide) in paragraph at lines 352--352
 []\T5/pcr/m/n/10.83347 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Writ
 e Var DB1.DBW2 setpoint to 2000";[] 
  []
 
 
-Overfull \hbox (2.88525pt too wide) in paragraph at lines 332--332
+Overfull \hbox (2.88525pt too wide) in paragraph at lines 352--352
 []  \T5/pcr/m/n/10.83347 flow:to_server,established; content:"|03 00|"; offset:
 0; depth:2;[] 
  []
 
 
-Overfull \hbox (36.01399pt too wide) in paragraph at lines 332--332
+Overfull \hbox (36.01399pt too wide) in paragraph at lines 352--352
 []  \T5/pcr/m/n/10.83347 content:"|00 04 00 10 07 D0|"; offset:31; depth:6; sid
 :1000012; rev:1;[] 
  []
 
 
-Overfull \hbox (109.10736pt too wide) in paragraph at lines 332--332
+Overfull \hbox (109.10736pt too wide) in paragraph at lines 352--352
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack stu
 xnet_mitm_sim; priority:1;)[] 
  []
 
 
-Overfull \hbox (163.7358pt too wide) in paragraph at lines 335--337
+Overfull \hbox (163.7358pt too wide) in paragraph at lines 355--357
 \T5/ptm/m/n/13 (2000). Khîp payload t§n cæng ghi setpoint trong lab. Chuéi \T5/
 pcr/m/n/13 sid:1000010$\OMS/cmsy/m/n/12 !$\T5/pcr/m/n/13 sid:1000011$\OMS/cmsy/
 m/n/12 !$\T5/pcr/m/n/13 sid:1000012
  []
 
 
-Overfull \hbox (91.84969pt too wide) in paragraph at lines 347--347
+Overfull \hbox (91.84969pt too wide) in paragraph at lines 367--367
 []\T5/pcr/m/n/10.83347 alert tcp any 102 -> $HOME_NET any (msg:"ICS S7COMM susp
 icious Ack_Data response[] 
  []
 
 
-Overfull \hbox (3.14526pt too wide) in paragraph at lines 347--347
+Overfull \hbox (3.14526pt too wide) in paragraph at lines 367--367
 []  \T5/pcr/m/n/10.83347 content:"|03 00|"; offset:0; depth:2; content:"|02 F0 
 80 32 03|";[] 
  []
 
-[6]
-Overfull \hbox (85.24127pt too wide) in paragraph at lines 347--347
+
+Overfull \hbox (85.24127pt too wide) in paragraph at lines 367--367
 []  \T5/pcr/m/n/10.83347 metadata:service iso-tsap, protocol s7comm, attack pos
 sible_mitm_observation;[] 
  []
 
 
-Overfull \hbox (31.89731pt too wide) in paragraph at lines 347--347
+Overfull \hbox (31.89731pt too wide) in paragraph at lines 367--367
 []  \T5/pcr/m/n/10.83347 threshold:type both, track by_src, count 60, seconds 1
 0; priority:3;)[] 
  []
 
 
-LaTeX Warning: Reference `sec:dos_plc' on page 7 undefined on input line 356.
+LaTeX Warning: Reference `sec:dos_plc' on page 7 undefined on input line 376.
 
 
 LaTeX Warning: Reference `sec:malformed_plc' on page 7 undefined on input line 
-356.
+376.
 
-LaTeX Font Info:    Calculating math sizes for size <11.86258> on input line 36
+LaTeX Font Info:    Calculating math sizes for size <11.86258> on input line 38
 6.
-[7] (4_Theoretical_Analysis.aux)
+[7] [8] (4_Theoretical_Analysis.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
@@ -2139,38 +2151,31 @@ Package rerunfilecheck Warning: File `4_Theoretical_Analysis.out' has changed.
 (rerunfilecheck)                or use package `bookmark'.
 
 Package rerunfilecheck Info: Checksums for `4_Theoretical_Analysis.out':
-(rerunfilecheck)             Before: 299B128707D5158D5891FF6B09C8606D;2868
-(rerunfilecheck)             After:  B6F466B45B371AEE03750E72B8345A7B;1801.
+(rerunfilecheck)             Before: 48BEC5F105098E99AA29DFDB2AD71A0A;1899
+(rerunfilecheck)             After:  5258751079DF767481EEA91313E5773C;2191.
 Package logreq Info: Writing requests to '4_Theoretical_Analysis.run.xml'.
 \openout1 = `4_Theoretical_Analysis.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 34281 strings out of 467870
- 645755 string characters out of 5415451
+ 34308 strings out of 467870
+ 646167 string characters out of 5415451
  1368575 words of memory out of 5000000
- 62631 multiletter control sequences out of 15000+600000
- 656116 words of font info for 86 fonts, out of 8000000 for 9000
+ 62650 multiletter control sequences out of 15000+600000
+ 657508 words of font info for 88 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,10n,124p,2565b,757s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{subsection.0.2.2} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.0.2.1} has been referenced but does not 
-exist, replaced by a fixed one
-
-<C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
-/cm/cmsy10.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/
-vntex/urwvn/ucrb8v.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/font
-s/type1/vntex/urwvn/ucrr8v.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiK
-TeX/fonts/type1/vntex/urwvn/utmb8v.pfb><C:/Users/chutrunganh/AppData/Local/Prog
-rams/MiKTeX/fonts/type1/vntex/urwvn/utmr8v.pfb><C:/Users/chutrunganh/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/vntex/urwvn/utmri8v.pfb>
-Output written on 4_Theoretical_Analysis.pdf (7 pages, 135168 bytes).
+<C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
+ts/cm/cmsy10.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type
+1/vntex/urwvn/ucrb8v.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fo
+nts/type1/vntex/urwvn/ucrr8v.pfb><C:/Users/chutrunganh/AppData/Local/Programs/M
+iKTeX/fonts/type1/vntex/urwvn/utmb8v.pfb><C:/Users/chutrunganh/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/chutrunganh/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/vntex/urwvn/utmr8v.pfb><C:/Users/chutrunganh/Ap
+pData/Local/Programs/MiKTeX/fonts/type1/vntex/urwvn/utmri8v.pfb>
+Output written on 4_Theoretical_Analysis.pdf (8 pages, 142298 bytes).
 PDF statistics:
- 146 PDF objects out of 1000 (max. 8388607)
- 41 named destinations out of 1000 (max. 500000)
- 89 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 154 PDF objects out of 1000 (max. 8388607)
+ 43 named destinations out of 1000 (max. 500000)
+ 73 words of extra memory for PDF output out of 10000 (max. 10000000)
 

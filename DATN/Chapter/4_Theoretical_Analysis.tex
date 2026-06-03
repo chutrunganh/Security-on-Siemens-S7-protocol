@@ -6,9 +6,9 @@
 
 Chương này trình bày thiết kế tập luật Suricata phát hiện hành vi tấn công trên giao thức Siemens S7comm, căn cứ phân tích lưu lượng ở Chương~\ref{sec:attack-scenarios}. Phương pháp thuộc nhóm \emph{phát hiện dựa trên chữ ký}: mỗi luật khớp tổ hợp byte cố định trong payload TCP/102 (TPKT, COTP, S7 Header, mã chức năng). 
 
-Toàn bộ luật nằm tại \texttt{detect/rules/s7comm.rules}. Mã \texttt{sid} phân theo nhóm: \texttt{100000x} (thiết lập phiên, trinh sát), \texttt{100001x} (đọc ghi biến), \texttt{100002x} (download upload block), \texttt{100003x} (điều khiển Start/Stop).
+Toàn bộ luật nằm tại \texttt{detect/rules/s7comm.rules} và \texttt{detect/rules/ics\_dos.rules}. Mã \texttt{sid} phân theo nhóm: \texttt{100000x} (thiết lập phiên, trinh sát), \texttt{100001x} (đọc ghi biến), \texttt{100002x} (download upload block), \texttt{100003x} (điều khiển Start/Stop), \texttt{100004x} (DoS / flood tần suất).
 
-\section{Cơ sở chữ ký trên payload S7comm}
+\section{Luật chung để nhận diện giao thức S7comm}
 \label{sec:rule-foundation}
 
 S7comm trên TCP/102 có cấu trúc TCP $\rightarrow$ TPKT $\rightarrow$ COTP $\rightarrow$ S7comm. Bảng~\ref{tab:s7-payload-offsets} liệt kê offset byte dùng trong luật.
@@ -36,7 +36,28 @@ S7comm trên TCP/102 có cấu trúc TCP $\rightarrow$ TPKT $\rightarrow$ COTP $
     \end{tabular}
 \end{table}
 
-Luật chiều client $\rightarrow$ PLC dùng \texttt{flow:to\_server,established} và \texttt{|02 F0 80 32 01|} tại offset~4 (\texttt{ROSCTR=Job}). Luật Userdata dùng \texttt{|02 F0 80 32 07|}. Luật chiều PLC $\rightarrow$ client dùng \texttt{flow:from\_server,established} và \texttt{|02 F0 80 32 03|} (\texttt{ROSCTR=Ack\_Data}); function code tại offset~19.
+\subsection{Điều kiện về chiều truyền và loại PDU}
+\label{sec:rule-flow-pdu}
+
+Trong môi trường thí nghiệm, PLC lắng nghe cổng TCP/102 và được mô hình hóa là \emph{server}; trạm HMI và trạm tấn công đóng vai trò \emph{client}. Suricata phân biệt hai lớp điều kiện trước khi khớp mã chức năng cụ thể: (i)~điều kiện \texttt{flow}, xác định chiều truyền so với server TCP/102; (ii)~điều kiện \texttt{content}, xác định loại PDU S7comm (Job, Userdata hoặc Ack\_Data) và vị trí byte mã chức năng.
+
+\paragraph{PDU Job --- chiều client $\rightarrow$ PLC.}
+Các thao tác client init (Setup Communication, Write Var, Request Download, PLC Control, \ldots) được đóng gói dưới dạng Job với \texttt{ROSCTR=0x01}. Luật tương ứng áp dụng:
+\begin{itemize}
+    \item \texttt{flow:to\_server,established}: giới hạn phạm vi tới gói tin client gửi tới cổng 102 của \texttt{\$HOME\_NET}, trong phiên TCP đã thiết lập;
+    \item \texttt{content:"|02 F0 80 32 01|"; offset:4; depth:5}: xác nhận header COTP Data TPDU (\texttt{02 F0 80}), mã giao thức S7 (\texttt{32}) và trường \texttt{ROSCTR} mang giá trị Job (\texttt{0x01}).
+\end{itemize}
+Đối với nhóm lệnh Userdata (Read SZL, List blocks), trường \texttt{ROSCTR} nhận giá trị \texttt{0x07}; mẫu tại offset~4 tương ứng là \texttt{|02 F0 80 32 07|}. Với cả Job và Userdata, byte mã chức năng nằm tại offset~17 (Bảng~\ref{tab:s7-payload-offsets}).
+
+\paragraph{PDU Ack\_Data --- chiều PLC $\rightarrow$ client.}
+Phản hồi của PLC (xác nhận ghi, trả dữ liệu block, \ldots) sử dụng \texttt{ROSCTR=0x03}. Luật tương ứng áp dụng:
+\begin{itemize}
+    \item \texttt{flow:from\_server,established}: giới hạn phạm vi tới gói tin phát sinh từ cổng 102 của PLC;
+    \item \texttt{content:"|02 F0 80 32 03|"; offset:4; depth:5}: xác nhận PDU thuộc loại Ack\_Data.
+\end{itemize}
+Khác với Job/Userdata, phần Parameter của Ack\_Data đứng sau hai byte \emph{error class} và \emph{error code}; do đó mã chức năng được đặt tại offset~19 thay vì offset~17. Quy ước này được sử dụng thống nhất trong các luật quan sát chiều phản hồi (ví dụ \texttt{sid:1000026}, \texttt{sid:1000013}).
+
+Ba nguyên tắc trên nhằm loại bỏ lưu lượng TCP/102 không mang S7comm, phân tách rõ chiều yêu cầu và chiều phản hồi, đồng thời đặt điều kiện \texttt{content} tại offset phù hợp trước khi định nghĩa chữ ký cho từng kịch bản tấn công ở Mục~\ref{sec:rules-by-scenario}.
 
 \section{Luật theo kịch bản tấn công}
 \label{sec:rules-by-scenario}
@@ -58,7 +79,7 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Setup Communication to PLC";
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Khớp Job (\texttt{ROSCTR=0x01}) với function \texttt{0xf0} (Setup Communication)---bước bắt buộc trước mọi thao tác S7comm trong các kịch bản Chương~3. \texttt{sid:1000001} không đủ để kết luận tấn công; dùng làm dấu hiệu mở phiên hoặc tương quan với các \texttt{sid} trinh sát tiếp theo.
+Mục tiêu: ghi nhận thiết lập phiên S7comm. Điều kiện then chốt là byte \texttt{0xf0} tại offset~17 trên PDU Job. Hành vi này xuất hiện trước mọi bước trinh sát (Nmap, Snap7) nhưng không đủ để kết luận tấn công; dùng làm ngữ cảnh cho các \texttt{sid:1000002}--\texttt{sid:1000005}.
 
 \paragraph{Luật \texttt{sid:1000002}.}
 \begin{footnotesize}
@@ -72,7 +93,7 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read SZL request - PLC
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-\texttt{ROSCTR=0x07} (Userdata) và mẫu \texttt{|00 01 12 04 11 44 01 00|} xác định nhóm CPU functions, subfunction Read SZL. \texttt{sid:1000002} phát hiện mọi yêu cầu đọc SZL; các \texttt{sid:1000003} và \texttt{sid:1000004} tinh chỉnh theo SZL-ID quan sát trong PCAP reconnaissance.
+Mục tiêu: phát hiện truy vấn Read SZL (Userdata, \texttt{ROSCTR=0x07}). Điều kiện then chốt là khối tham số \texttt{|00 01 12 04 11 44 01 00|} (CPU functions, subfunction Read SZL). Đây là dấu hiệu thu thập thông tin hệ thống PLC; tương ứng bước Nmap \texttt{s7-info} sau Setup Communication trong Mục~\ref{sec:reconnaissance}.
 
 \paragraph{Luật \texttt{sid:1000003}.}
 \begin{footnotesize}
@@ -87,7 +108,7 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read SZL module identificati
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Bổ sung \texttt{|00 11 00 01|} (SZL-ID \texttt{0x0011}, index \texttt{0x0001})---trường module identification (order number CPU) trong output Nmap \texttt{s7-info}. \texttt{sid:1000003} chứng minh fingerprint PLC cụ thể hơn \texttt{sid:1000002}.
+Mục tiêu: phát hiện đọc SZL \emph{module identification}. Điều kiện bổ sung \texttt{|00 11 00 01|} (SZL-ID \texttt{0x0011}, index \texttt{0x0001}) so với \texttt{sid:1000002}; phân biệt truy vấn lấy order number/loại CPU---trường xuất hiện trong output Nmap khi fingerprint thiết bị Siemens.
 
 \paragraph{Luật \texttt{sid:1000004}.}
 \begin{footnotesize}
@@ -102,7 +123,7 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read SZL communication statu
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Khớp SZL-ID \texttt{0x001c} (communication status): serial number, system name, module type---khớp bước thu thập metadata PLC trong reconnaissance.
+Mục tiêu: phát hiện đọc SZL \emph{communication status}. Điều kiện bổ sung \texttt{|00 1C 00 00|} (SZL-ID \texttt{0x001c}) so với \texttt{sid:1000002}; nhận diện truy vấn serial number, system name và module type---metadata phục vụ định danh PLC trong giai đoạn trinh sát.
 
 \paragraph{Luật \texttt{sid:1000005}.}
 \begin{footnotesize}
@@ -116,7 +137,7 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM List Blocks request - PLC bl
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Mẫu \texttt{|00 01 12 04 11 13 01 00|}: function group Block functions, subfunction List blocks. Tương ứng \texttt{scanBlock.py} (\texttt{.list\_blocks()}). Đánh dấu giai đoạn kiểm kê OB/DB/FC/FB trước upload/download hoặc khai thác sâu.
+Mục tiêu: phát hiện liệt kê block chương trình trên PLC. Điều kiện then chốt \texttt{|00 01 12 04 11 13 01 00|} (Block functions, subfunction List blocks), tương ứng lệnh \texttt{.list\_blocks()} trong \texttt{scanBlock.py} (Mục~\ref{sec:reconnaissance}). Cho biết attacker đang dựng bản đồ OB/DB/FC/FB trước thao tác upload/download.
 
 \subsection{Phát lại lệnh Start/Stop PLC}
 \label{sec:rules-start-stop}
@@ -135,7 +156,7 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM PLC Control command";
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Phát hiện mọi lệnh PLC Control (\texttt{0x28}): Start CPU, activate block, copy RAM to ROM, \ldots. \texttt{priority:1} phản ánh mức độ nghiêm trọng---ảnh hưởng trực tiếp trạng thái vận hành PLC.
+Mục tiêu: phát hiện mọi lệnh PLC Control (\texttt{0x28}) từ client tới PLC. Không ràng buộc tham số PI-Service; bao trùm Start CPU, activate block, copy RAM to ROM, v.v. Độ đặc hiệu thấp hơn \texttt{sid:1000031}; dùng khi chưa khớp payload replay đầy đủ.
 
 \paragraph{Luật \texttt{sid:1000031}.}
 \begin{footnotesize}
@@ -150,7 +171,7 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM replayed Start CPU P_PROGRAM
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Bổ sung chuỗi ASCII \texttt{P\_PROGRAM} trong 24 byte sau function code---khớp payload replay Start CPU từ PCAP TIA Portal. \texttt{sid:1000031} chuyên biệt hơn \texttt{sid:1000030} cho kịch bản replay đồ án.
+Mục tiêu: phát hiện replay Start CPU trong lab. Kế thừa \texttt{0x28} của \texttt{sid:1000030}; thêm \texttt{P\_PROGRAM} trong 24 byte kề function code (PI-Service khởi động chương trình). Khớp payload bắt từ TIA Portal (Mục~\ref{sec:start_stop_plc}); phân biệt rõ với các lệnh Control khác.
 
 \paragraph{Luật \texttt{sid:1000032}.}
 \begin{footnotesize}
@@ -164,7 +185,7 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM PLC Stop command";
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Khớp function \texttt{0x29} (PLC Stop). Tương đương \texttt{sid:1000030} nhưng cho lệnh dừng CPU.
+Mục tiêu: phát hiện mọi lệnh PLC Stop (\texttt{0x29}) từ client tới PLC. Tương tự \texttt{sid:1000030}, không lọc PI-Service; cảnh báo sớm khi CPU bị yêu cầu dừng, trước khi khớp payload replay cụ thể (\texttt{sid:1000033}).
 
 \paragraph{Luật \texttt{sid:1000033}.}
 \begin{footnotesize}
@@ -179,7 +200,7 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM replayed Stop CPU P_PROGRAM"
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Đối xứng \texttt{sid:1000031}: Stop CPU với PI-Service \texttt{P\_PROGRAM}. Khớp payload replay Stop trong lab.
+Mục tiêu: phát hiện replay Stop CPU trong lab. Kế thừa \texttt{0x29} của \texttt{sid:1000032}; thêm \texttt{P\_PROGRAM} trong 24 byte kề function code. Khớp payload replay Stop trong Mục~\ref{sec:start_stop_plc}; độ tin cậy cao hơn \texttt{sid:1000032} nhờ ràng buộc PI-Service.
 
 \subsection{Upload và Download block}
 \label{sec:rules-up-download}
@@ -198,7 +219,7 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Request Download block to PL
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Khớp Request Download (\texttt{0x1a}): client yêu cầu PLC chuẩn bị nhận block chương trình.
+Mục tiêu: phát hiện bước mở đầu chuỗi download block. Điều kiện then chốt function \texttt{0x1a} (Request Download) trên PDU Job, offset~17. Đánh dấu client yêu cầu PLC chuẩn bị nhận block chương trình---giai đoạn đầu của kịch bản thay/thêm logic PLC (Mục~\ref{sec:down_up_program}).
 
 \paragraph{Luật \texttt{sid:1000021}.}
 \begin{footnotesize}
@@ -212,7 +233,7 @@ alert tcp $HOME_NET 102 -> any any (msg:"ICS S7COMM PLC requests Download Block 
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Chiều PLC $\rightarrow$ client; Job \texttt{0x1b}: PLC chủ động yêu cầu block dữ liệu download. Khác \texttt{sid:1000026} về hướng và \texttt{ROSCTR}.
+Mục tiêu: phát hiện PLC chủ động yêu cầu block dữ liệu download. Chiều \texttt{from\_server}; function \texttt{0x1b} trên PDU Job (offset~17). Phân biệt với \texttt{sid:1000026}: cùng opcode \texttt{0x1b} nhưng hướng PLC$\rightarrow$client và \texttt{ROSCTR=0x01}, thể hiện bước bắt tay giữa hai bên trong chuỗi download.
 
 \paragraph{Luật \texttt{sid:1000026}.}
 \begin{footnotesize}
@@ -226,7 +247,7 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM client sends Download Block 
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Ack\_Data (\texttt{ROSCTR=0x03}), function \texttt{0x1b} tại offset~19: client gửi nội dung block xuống PLC. Cặp \texttt{sid:1000021}/\texttt{sid:1000026} mô tả hai chiều của giai đoạn Download Block.
+Mục tiêu: phát hiện client gửi nội dung block xuống PLC. Chiều \texttt{to\_server}; \texttt{ROSCTR=0x03} (Ack\_Data) và function \texttt{0x1b} tại offset~19. Đây là gói mang byte chương trình thực sự; cặp \texttt{sid:1000021}/\texttt{sid:1000026} mô tả hai chiều của giai đoạn truyền block trong download.
 
 \paragraph{Luật \texttt{sid:1000022}.}
 \begin{footnotesize}
@@ -240,7 +261,7 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Download Ended";
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Kết thúc chuỗi download (\texttt{0x1c}).
+Mục tiêu: phát hiện kết thúc chuỗi download. Điều kiện then chốt function \texttt{0x1c} (Download Ended) trên PDU Job. Báo hiệu client hoàn tất đẩy block; thường xuất hiện sau \texttt{sid:1000020}--\texttt{sid:1000026} trong cùng phiên S7comm.
 
 \paragraph{Luật \texttt{sid:1000023}.}
 \begin{footnotesize}
@@ -254,7 +275,7 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Start Upload block from PLC"
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Start Upload (\texttt{0x1d}): client yêu cầu lấy chương trình từ PLC.
+Mục tiêu: phát hiện bước mở đầu chuỗi upload block. Điều kiện then chốt function \texttt{0x1d} (Start Upload) trên PDU Job. Đánh dấu client yêu cầu trích xuất chương trình từ PLC---hành vi đọc/trích logic điều khiển (Mục~\ref{sec:down_up_program}).
 
 \paragraph{Luật \texttt{sid:1000024}.}
 \begin{footnotesize}
@@ -268,7 +289,7 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Upload Block request";
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Upload Block (\texttt{0x1e}): truyền từng block dữ liệu từ PLC về client.
+Mục tiêu: phát hiện yêu cầu truyền từng block trong upload. Điều kiện then chốt function \texttt{0x1e} (Upload Block) trên PDU Job. Gói này lặp trong phiên upload; cho biết dữ liệu block đang được kéo từ PLC về engineering station.
 
 \paragraph{Luật \texttt{sid:1000025}.}
 \begin{footnotesize}
@@ -282,12 +303,12 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM End Upload";
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-End Upload (\texttt{0x1f}): kết thúc chuỗi upload.
+Mục tiêu: phát hiện kết thúc chuỗi upload. Điều kiện then chốt function \texttt{0x1f} (End Upload) trên PDU Job. Đóng phiên trích xuất chương trình; thường đi sau chuỗi \texttt{sid:1000023}--\texttt{sid:1000024}.
 
 \subsection{Ghi biến quá trình và quan sát MITM}
 \label{sec:rules-stuxnet}
 
-Căn cứ Mục~\ref{sec:stuxnet_mitm_sim}: ghi \texttt{DB1.DBW2} (\texttt{iSetpoint}) \texttt{0x04b0}$\rightarrow$\texttt{0x07d0}; can thiệp \texttt{Ack\_Data} phía HMI.
+Căn cứ Mục~\ref{sec:stuxnet_mitm_sim}: ghi biến quá trình qua \texttt{Write Var} (ví dụ \texttt{DB1.DBW2}, \texttt{iSetpoint} \texttt{0x04b0}$\rightarrow$\texttt{0x07d0}); can thiệp \texttt{Ack\_Data} phía HMI. Luật \texttt{sid:1000011} khớp mọi ghi vào vùng DB, không gắn một địa chỉ DB cố định.
 
 \paragraph{Luật \texttt{sid:1000010}.}
 \begin{footnotesize}
@@ -302,38 +323,24 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Write Var request to PLC";
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Function \texttt{0x05} (Write Var). Cảnh báo mọi ghi biến vào PLC---nền cho \texttt{sid:1000011} và \texttt{sid:1000012}.
+Mục tiêu: phát hiện mọi thao tác ghi biến qua S7comm. Điều kiện then chốt function \texttt{0x05} (Write Var) trên PDU Job. Cảnh báo rộng mọi sửa giá trị process trên PLC (M, I, Q, DB, \ldots); làm lớp nền cho \texttt{sid:1000011}.
 
 \paragraph{Luật \texttt{sid:1000011}.}
 \begin{footnotesize}
 \begin{verbatim}
-alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Write Var to DB1.DBW2 setpoint";
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Write Var to DB memory area";
   flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
   content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|05|";
-  offset:17; depth:1; content:"|12 0A 10|"; offset:19; depth:3;
-  content:"|00 01 84 00 00 10|"; offset:25; depth:6; sid:1000011; rev:1;
-  metadata:service iso-tsap, protocol s7comm, attack stuxnet_mitm_sim; priority:1;)
+  offset:17; depth:1; content:"|12|"; offset:19; depth:1;
+  content:"|10|"; offset:21; depth:1; content:"|84|";
+  distance:5; within:1; sid:1000011; rev:2;
+  metadata:service iso-tsap, protocol s7comm, attack modify_process_variable;
+  priority:1;)
 \end{verbatim}
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-\texttt{|12 0A 10|}: Any-type; \texttt{|00 01 84 00 00 10|}: DB1, area DB, bit offset \texttt{0x10} (byte~2, \texttt{DBW2}). Khớp địa chỉ \texttt{iSetpoint} trong mô phỏng.
-
-\paragraph{Luật \texttt{sid:1000012}.}
-\begin{footnotesize}
-\begin{verbatim}
-alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Write Var DB1.DBW2 setpoint to 2000";
-  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
-  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|05|";
-  offset:17; depth:1; content:"|12 0A 10|"; offset:19; depth:3;
-  content:"|00 01 84 00 00 10|"; offset:25; depth:6;
-  content:"|00 04 00 10 07 D0|"; offset:31; depth:6; sid:1000012; rev:1;
-  metadata:service iso-tsap, protocol s7comm, attack stuxnet_mitm_sim; priority:1;)
-\end{verbatim}
-\end{footnotesize}
-
-\noindent\textbf{Phân tích.}
-\texttt{|00 04 00 10 07 D0|}: transport size WORD, giá trị \texttt{0x07d0} (2000). Khớp payload tấn công ghi setpoint trong lab. Chuỗi \texttt{sid:1000010}$\rightarrow$\texttt{sid:1000011}$\rightarrow$\texttt{sid:1000012} tăng dần độ đặc hiệu.
+Mục tiêu: phát hiện ghi biến quá trình vào vùng nhớ \textbf{Data Block}. Điều kiện bổ sung \texttt{|12|}/\texttt{|10|} (request item Any-type) và \texttt{|84|} tại byte \texttt{Area} (\texttt{0x84} = DB), \texttt{distance:5} sau \texttt{Syntax ID}---không ràng buộc số DB hay offset. Thu hẹp từ \texttt{sid:1000010}; ví dụ lab Stuxnet ghi \texttt{DB1.DBW2} vẫn khớp. Không khớp ghi vào M/I/Q (\texttt{0x83}, \texttt{0x81}, \texttt{0x82}).
 
 \paragraph{Luật \texttt{sid:1000013}.}
 \begin{footnotesize}
@@ -348,38 +355,67 @@ alert tcp any 102 -> $HOME_NET any (msg:"ICS S7COMM suspicious Ack_Data response
 \end{footnotesize}
 
 \noindent\textbf{Phân tích.}
-Chiều PLC$\rightarrow$HMI, \texttt{ROSCTR=Ack\_Data}. Chữ ký không chứng minh sửa payload MITM; \texttt{threshold} (60 gói/10\,s) ghi nhận mật độ phản hồi cao. Cần tương quan với \texttt{sid:1000012} và phát hiện ARP/L2 (ngoài tập luật S7comm).
+Mục tiêu: ghi nhận mật độ cao phản hồi Ack\_Data từ PLC về HMI/engineering station. Chiều \texttt{from\_server}, \texttt{ROSCTR=0x03}; không khớp opcode function cụ thể. \texttt{threshold} (60 gói/10\,s) chỉ đo tần suất---không chứng minh sửa payload MITM. Dùng bổ trợ tương quan với \texttt{sid:1000011} và phát hiện L2/ARP (ngoài tập luật S7comm).
 
-\subsection{Kịch bản chưa có luật}
-\label{sec:rules-pending}
+\subsection{Từ chối dịch vụ (DoS) trên kênh S7comm}
+\label{sec:rules-dos}
 
-Mục~\ref{sec:dos_plc} và Mục~\ref{sec:malformed_plc} chưa có PCAP và \texttt{sid} trong \texttt{s7comm.rules}. Khi xác định được byte đặc trưng, bổ sung nhóm \texttt{100004x} theo cùng schema offset ở Mục~\ref{sec:rule-foundation}.
+Căn cứ Mục~\ref{sec:dos_s7comm}: script \texttt{s7comm\_dos.py} (--mode all) lần lượt flood Setup Communication, TCP connect churn và Read SZL, có \texttt{--pause} giữa các phase. Khác các luật opcode đơn lẻ, nhóm \texttt{100004x} trong \texttt{ics\_dos.rules} dùng \texttt{threshold} để báo khi \emph{một nguồn} vượt ngưỡng trong 10\,s.
 
-\section{Tổng hợp}
-\label{sec:rules-summary}
+\paragraph{Luật \texttt{sid:1000040}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS possible TCP SYN flood to ISO-TSAP port 102";
+  flow:to_server; flags:S;
+  threshold:type both, track by_src, count 40, seconds 10; sid:1000040; rev:1;
+  metadata:attack dos_connection_flood; priority:1;)
+\end{verbatim}
+\end{footnotesize}
 
-\begin{table}[H]
-    \centering
-    \caption{Ánh xạ kịch bản Chương~3 và tập \texttt{sid}}
-    \label{tab:rules-master}
-    \small
-    \begin{tabular}{|p{3.4cm}|l|p{6.5cm}|}
-        \hline
-        \textbf{Kịch bản} & \textbf{\texttt{sid}} & \textbf{Chức năng phát hiện} \\
-        \hline
-        Trinh sát & 1000001--1000005 & Setup, SZL, List blocks \\
-        \hline
-        Start/Stop replay & 1000030--1000033 & \texttt{0x28}/\texttt{0x29}, \texttt{P\_PROGRAM} \\
-        \hline
-        Upload/Download & 1000020--1000026 & \texttt{0x1a}--\texttt{0x1f}, hai chiều \texttt{0x1b} \\
-        \hline
-        Stuxnet MITM & 1000010--1000013 & Write \texttt{DB1.DBW2}, quan sát Ack\_Data \\
-        \hline
-        DoS / Malformed & --- & Chưa triển khai \\
-        \hline
-    \end{tabular}
-\end{table}
+\noindent\textbf{Phân tích.}
+Mục tiêu: phát hiện dấu hiệu connection flood tới cổng ISO-TSAP. Đếm gói TCP có cờ SYN tới \texttt{\$HOME\_NET:102}. Khớp kịch bản \texttt{tcp\_connect} trong lab; có thể trùng với quét cổng nhanh nên cần tương quan thêm.
 
-\textbf{Hạn chế phương pháp chữ ký:} (i)~chỉ khớp biến thể đã mô tả; (ii)~offset trên payload TCP giả định PDU không bị phân mảnh; (iii)~lưu lượng HMI hợp lệ có thể kích hoạt \texttt{sid:1000001}, \texttt{sid:1000010}; (iv)~\texttt{sid:1000013} không chứng minh MITM độc lập. Các hạn chế này là tiền đề đánh giá thực nghiệm ở chương sau.
+\paragraph{Luật \texttt{sid:1000041}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM possible Setup Communication flood to PLC";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|F0|"; offset:17; depth:1;
+  threshold:type both, track by_src, count 25, seconds 10; sid:1000041; rev:1;
+  metadata:attack dos_s7comm_setup_flood; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Mục tiêu: flood thiết lập phiên S7. Kế thừa dấu hiệu \texttt{sid:1000001} (Setup \texttt{0xF0}) nhưng chỉ cảnh báo khi $\geq 25$ lần/10\,s từ cùng nguồn. HMI hợp lệ thường Setup một lần mỗi phiên.
+
+\paragraph{Luật \texttt{sid:1000042}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM possible Read SZL flood - PLC service load";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 07|"; offset:4; depth:5;
+  content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8;
+  threshold:type both, track by_src, count 25, seconds 10; sid:1000042; rev:1;
+  metadata:attack dos_s7comm_szl_flood; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Mục tiêu: flood Read SZL (userdata \texttt{ROSCTR=0x07}). Khớp phần đầu \texttt{sid:1000002}; tần suất cao gây tải CPU PLC và có thể che khuất trinh sát \texttt{nmap s7-info} nếu không đặt ngưỡng.
+
+\paragraph{Luật \texttt{sid:1000043}.}
+\begin{footnotesize}
+\begin{verbatim}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM possible S7 Job request flood to PLC";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5;
+  threshold:type both, track by_src, count 80, seconds 10; sid:1000043; rev:1;
+  metadata:attack dos_s7comm_job_flood; priority:1;)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Phân tích.}
+Mục tiêu: bão PDU Job (\texttt{ROSCTR=0x01}) tổng quát---bao gồm Setup, Write Var, Download, \ldots\ Kịch bản \texttt{setup\_flood}/\texttt{job\_flood} kích hoạt luật này; ngưỡng 80/10\,s rộng hơn \texttt{sid:1000041} để bắt mix nhiều opcode Job.
 
 \end{document}

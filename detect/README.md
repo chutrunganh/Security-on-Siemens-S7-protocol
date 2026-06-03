@@ -1,17 +1,21 @@
 # Phát hiện tấn công S7comm bằng Suricata
 
+**Hướng dẫn chạy lab (ngắn gọn):** xem [`HUONG_DAN_CHAY_KICH_BAN.md`](HUONG_DAN_CHAY_KICH_BAN.md) — cách chạy từng kịch bản, lệnh xem alert, và phần Upload/Download (luật có sẵn, chờ PCAP).
+
 Thư mục này chứa các luật Suricata để phát hiện các hành vi S7comm đã mô phỏng trong phần `attacks`:
 
 - Reconnaissance: quét TCP/102, thiết lập S7, đọc SZL, liệt kê block.
-- Ghi biến quá trình: ghi `DB1.DBW2` để đổi `iSetpoint` từ `1200` lên `2000`.
+- Ghi biến quá trình: lệnh `Write Var` ghi vào vùng nhớ DB (Data Block); ví dụ lab Stuxnet ghi `DB1.DBW2` (`iSetpoint`).
 - Up/Download chương trình: các lệnh truyền block `0x1a` đến `0x1f`.
 - Start/Stop PLC replay: phát lại payload `PLC Control 0x28` và `PLC Stop 0x29`.
 - MITM Stuxnet mô phỏng: sửa dữ liệu trả về cho HMI. Phần S7comm có thể quan sát bằng luật phản hồi `Ack_Data`; phần ARP spoofing nên kết hợp thêm phát hiện ARP bất thường hoặc log switch vì bản chất cần tương quan trạng thái L2.
+- **DoS S7comm**: một script `attacks/dos/s7comm_dos.py` (mặc định chạy đủ phase, có pause cho IDS).
 
-File luật chính:
+File luật:
 
 ```text
-detect/rules/s7comm.rules
+detect/rules/s7comm.rules    # opcode / payload (sid 1000001–1000033)
+detect/rules/ics_dos.rules   # rate-based flood (sid 1000040–1000043)
 ```
 
 ## Cách nạp luật
@@ -20,13 +24,16 @@ Copy hoặc include file luật vào cấu hình Suricata:
 
 ```yaml
 rule-files:
-  - detect/rules/s7comm.rules
+  - s7comm.rules
+  - ics_dos.rules
 ```
+
+Hoặc dùng `python detect/deploy_ids.py` / `python detect/run_attack_tests.py` (tự upload lên IDS).
 
 Sau đó chạy kiểm tra cú pháp:
 
 ```bash
-suricata -T -c /etc/suricata/suricata.yaml -S detect/rules/s7comm.rules
+suricata -T -c /etc/suricata/suricata.yaml
 ```
 
 Khi chạy trong lab, nên cấu hình `HOME_NET` trỏ đúng tới IP PLC hoặc dải PLC, ví dụ:
@@ -73,7 +80,7 @@ Các mã chức năng được lấy từ bài viết `gmiru.com/article/s7comm-
 |---:|---|---|
 | `0xf0` | Setup Communication | Bước đầu của mọi phiên S7comm |
 | `0x04` | Read Var | HMI đọc `DB1`, `DB2`; attacker đọc lại trạng thái |
-| `0x05` | Write Var | Attacker ghi `DB1.DBW2` |
+| `0x05` | Write Var | Attacker ghi biến (ví dụ vào DB) |
 | `0x1a` | Request Download | Chuẩn bị tải block xuống PLC |
 | `0x1b` | Download Block | Truyền block xuống PLC |
 | `0x1c` | Download Ended | Kết thúc download |
@@ -173,44 +180,32 @@ Tham số chính:
 - Có client đang kiểm kê block chương trình trên PLC.
 - Đây thường là bước reconnaissance sâu hơn so với chỉ quét cổng TCP/102.
 
-### 4. Write Var và ghi setpoint trong mô phỏng Stuxnet
+### 4. Write Var và ghi vùng nhớ DB
 
 Luật:
 
 ```suricata
 sid:1000010  Write Var request to PLC
-sid:1000011  Write Var to DB1.DBW2 setpoint
-sid:1000012  Write Var DB1.DBW2 setpoint to 2000
+sid:1000011  Write Var to DB memory area
 ```
 
 Lý do xây dựng:
 
-- Trong mô phỏng Stuxnet MITM, attacker ghi `iSetpoint` tại `DB1.DBW2` từ `1200` (`0x04b0`) thành `2000` (`0x07d0`).
+- Ghi biến quá trình (setpoint, ngưỡng, trạng thái trong Data Block) thường dùng `Write Var` tới vùng nhớ DB (`area = 0x84`), không nhất thiết cùng số DB hay offset.
+- Trong mô phỏng Stuxnet MITM, ví dụ attacker ghi `iSetpoint` tại `DB1.DBW2` từ `1200` thành `2000`; luật `sid:1000011` vẫn khớp vì payload mang `area` DB.
 - S7comm cổ điển không có xác thực hoặc toàn vẹn đủ mạnh, nên nếu attacker tới được TCP/102 thì có thể gửi `Write Var`.
 - Ghi biến quá trình là hành vi nguy hiểm hơn đọc biến vì nó làm thay đổi logic vận hành.
 
 Tham số chính:
 
 - `content:"|05|"; offset:17; depth:1`: function code `Write Var`.
-- `content:"|12 0A 10|"; offset:19; depth:3`:
-  - `12`: variable specification.
-  - `0A`: độ dài request item kiểu any-type.
-  - `10`: syntax id any-type.
-- `content:"|00 01 84 00 00 10|"; offset:25; depth:6`:
-  - `00 01`: DB number 1.
-  - `84`: memory area DB.
-  - `00 00 10`: địa chỉ bit offset `0x10` = `16` bit = byte offset `2`, tức `DBW2`.
-- `content:"|00 04 00 10 07 D0|"; offset:31; depth:6`:
-  - `00`: return code trong Write Request.
-  - `04`: transport size BYTE/WORD/DWORD.
-  - `00 10`: độ dài 16 bit = 2 byte.
-  - `07 D0`: giá trị `2000`.
+- `content:"|12|"; offset:19` và `content:"|10|"; offset:21`: request item kiểu Any-type (`Spec Type` `0x12`, `Syntax ID` `0x10`).
+- `content:"|84|"; distance:5; within:1`: byte `Area` trong item Any-type — `0x84` là Data Block; hai byte trước đó là số DB (bất kỳ), ba byte sau là địa chỉ bit trong DB.
 
 Ý nghĩa cảnh báo:
 
-- `sid:1000010`: có bất kỳ lệnh ghi biến nào vào PLC. Trong môi trường vận hành ổn định, lệnh này nên rất hiếm và cần điều tra.
-- `sid:1000011`: có ghi đúng địa chỉ `DB1.DBW2`, là biến `iSetpoint` của mô phỏng.
-- `sid:1000012`: có ghi đúng giá trị `2000`, khớp payload làm máy ly tâm vượt ngưỡng trong kịch bản Stuxnet mô phỏng.
+- `sid:1000010`: có bất kỳ lệnh ghi biến nào vào PLC (M, I, Q, DB, …). Trong môi trường vận hành ổn định, lệnh này nên rất hiếm và cần điều tra.
+- `sid:1000011`: thu hẹp từ `sid:1000010` tới ghi qua Any-type vào vùng DB — phù hợp phát hiện sửa setpoint/biến quá trình lưu trong Data Block.
 
 ### 5. Ack_Data bất thường chiều PLC về HMI
 
@@ -236,7 +231,7 @@ Tham số chính:
 Ý nghĩa cảnh báo:
 
 - Không khẳng định MITM một mình.
-- Có giá trị khi đi kèm cảnh báo ARP spoofing, thay đổi MAC bất thường trên switch, hoặc cảnh báo `Write Var DB1.DBW2`.
+- Có giá trị khi đi kèm cảnh báo ARP spoofing, thay đổi MAC bất thường trên switch, hoặc cảnh báo `Write Var` vào DB (`sid:1000011`).
 
 ### 6. Up/Download chương trình
 
@@ -302,6 +297,29 @@ Tham số chính:
 - `sid:1000031` và `sid:1000033` bám sát payload replay trong lab, giúp chứng minh tấn công Start/Stop CPU.
 - Đây là nhóm cảnh báo nghiêm trọng vì có thể trực tiếp đổi trạng thái RUN/STOP của PLC.
 
+### 7. DoS trên kênh S7comm
+
+Luật (`ics_dos.rules`):
+
+```suricata
+sid:1000040  TCP SYN flood to port 102
+sid:1000041  Setup Communication flood
+sid:1000042  Read SZL flood
+sid:1000043  S7 Job request flood
+```
+
+Lý do xây dựng:
+
+- OT DoS thường dùng lệnh S7 **hợp lệ** lặp nhanh thay vì chỉ gói malformed.
+- `threshold: track by_src, count N, seconds 10` phát hiện một nguồn gửi bất thường so với HMI định kỳ.
+- Script lab: `attacks/dos/s7comm_dos.py` — **mặc định `--mode all`**: ba phase + `--pause` giữa các phase.
+
+Ý nghĩa cảnh báo:
+
+- `1000040`: dấu hiệu connection/SYN flood tới ISO-TSAP.
+- `1000041` / `1000042`: flood thiết lập phiên hoặc SZL — tải CPU PLC.
+- `1000043`: bão PDU Job tổng quát (Setup, Write, Download, …).
+
 ## Lưu ý về độ chính xác
 
 Các luật này cố ý viết tường minh bằng `content`, `offset`, `depth`, `distance`, `within` để dễ giải thích và đối chiếu trong Wireshark. Cách này phù hợp cho lab và luận văn vì chỉ rõ byte nào tạo nên cảnh báo.
@@ -311,5 +329,5 @@ Trong hệ thống thực tế cần bổ sung:
 - Danh sách engineering station hợp lệ, HMI hợp lệ và PLC hợp lệ.
 - Cửa sổ thời gian bảo trì được phép nạp chương trình.
 - Phát hiện ARP spoofing hoặc duplicate IP/MAC ở switch/Zeek/Suricata EVE.
-- Tương quan nhiều cảnh báo: ví dụ `Write Var DB1.DBW2` + nhiều `Ack_Data` + ARP bất thường sẽ mạnh hơn một cảnh báo đơn lẻ.
+- Tương quan nhiều cảnh báo: ví dụ `Write Var` vào DB + nhiều `Ack_Data` + ARP bất thường sẽ mạnh hơn một cảnh báo đơn lẻ.
 - Kiểm tra TCP segmentation. Nếu S7 PDU bị chia nhỏ bất thường, luật offset tuyệt đối có thể bỏ sót; khi đó nên dùng app-layer parser, Lua detection hoặc tiền xử lý PCAP để normalize.

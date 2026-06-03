@@ -3,7 +3,9 @@
 
 \section{Summary}
 
-Sinh viên nhắc lại các vấn đề mà đồ án đã giải quyết được, cũng như những vấn đề còn tồn đọng của đồ án.  
+Đồ án đã xây dựng môi trường lab và tập luật Suricata cho các hành vi S7comm điển hình: trinh sát, ghi biến vào Data Block, DoS (flood TCP/102 và lệnh S7 hợp lệ qua \texttt{ics\_dos.rules}), Start/Stop replay và quan sát MITM. Kịch bản DoS được triển khai bằng một script (\texttt{s7comm\_dos.py}, \texttt{--mode all}) với khoảng nghỉ giữa các phase để IDS kịp sinh alert. Kết quả lab (Chương~\ref{sec:eval-dos}) cho thấy các \texttt{sid:1000040}--\texttt{1000043} có thể kích hoạt khi lưu lượng được mirror tới Suricata.
+
+Hạn chế chính: luật dựa chữ ký và ngưỡng cố định cần hiệu chỉnh theo HMI thật; chưa đánh giá định lượng false positive dài hạn; phụ thuộc vị trí bắt gói của IDS.  
 
 \section{Suggestion for Future Works }
 

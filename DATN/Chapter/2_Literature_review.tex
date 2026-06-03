@@ -693,8 +693,12 @@ Tuy nhiên do giới hạn thời gian và nguồn lực, đồ án này sẽ ch
 \item Read SZL/Write SZL \texttt{0x06}/\texttt{0x07} được trình bày trong mục thực nghiệm tấn công
 \item Download Block/Upload Block \texttt{0x1A}--\texttt{0x1F} được trình bày trong mục thực nghiệm tấn công
 \item PLC Control/PLC Stop \texttt{0x28}/\texttt{0x29} được trình bày trong mục thực nghiệm tấn công
+\item Từ chối dịch vụ (DoS) trên cổng TCP/102: flood kết nối hoặc lệnh S7 hợp lệ lặp nhanh (Mục~\ref{sec:dos_s7comm}, luật \texttt{sid:1000040}--\texttt{1000043})
 
 \end{itemize}
+
+\paragraph{Rủi ro DoS trên kênh S7.}
+PLC và CP xử lý số lượng phiên S7 đồng thời có hạn. Attacker trên cùng VLAN có thể gửi hàng loạt \texttt{Setup Communication} hoặc \texttt{Read SZL} mà không cần đăng nhập, làm trễ hoặc từ chối giao tiếp của HMI/engineering station---hành vi thuộc tactic \textbf{Impact} (ICS ATT\&CK \textbf{T0814}). Phát hiện phù hợp kết hợp chữ ký opcode (luật đơn lẻ) với luật \textbf{tần suất} trên nguồn gửi (Chương~\ref{sec:rules-dos}).
 
 \item \textbf{Payload}:
 
@@ -944,8 +948,7 @@ Hoặc PLC cũng có thể đóng vai trò là Client khi nó cần giao tiếp 
 \section{Hệ thống phát hiện xâm nhập (IDS)}
 \label{sec:ids}
 
-
-Pending \ldots
+IDS thụ động quan sát lưu lượng (SPAN/mirror) phù hợp OT vì không chèn inline vào vòng điều khiển. Với S7comm, có hai lớp luật bổ trợ: (i)~khớp \textbf{mã chức năng} và vùng nhớ trong PDU (\texttt{s7comm.rules}); (ii)~khớp \textbf{mật độ} gói tới PLC (\texttt{ics\_dos.rules}, dùng \texttt{threshold}) khi một host gửi quá nhiều lệnh S7 hoặc SYN tới cổng 102 trong thời gian ngắn. Chi tiết từng \texttt{sid} ở Chương~\ref{sec:detection-overview}.
 
 Chương này đã trình bày nền tảng về OT/ICS, PLC, mô hình Purdue, giao thức S7comm và IDS --- các khái niệm cần thiết để hiểu môi trường mạng công nghiệp, cấu trúc gói tin S7 và cơ sở xây dựng luật phát hiện ở các chương sau.
 
