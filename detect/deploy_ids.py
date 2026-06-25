@@ -8,13 +8,13 @@ import textwrap
 
 import paramiko
 
-HOST = "172.16.16.143"
+HOST = "172.16.16.7"
 USER = "lubuntu"
 PASSWORD = "lubuntu"
 RULES_DIR = os.path.join(os.path.dirname(__file__), "rules")
-RULE_FILES = ("s7comm.rules", "ics_dos.rules")
-CAPTURE_IFACE = "ens37"
-HOME_NET = "[172.16.16.0/24,192.168.50.0/24,192.168.60.0/24]"
+RULE_FILES = ("s7comm.rules", "ics_dos.rules", "s7comm_malformed.rules")
+CAPTURE_IFACE = "ens33"
+HOME_NET = "[192.168.50.0/24,192.168.60.0/24]"
 
 
 def connect() -> paramiko.SSHClient:

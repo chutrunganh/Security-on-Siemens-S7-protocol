@@ -119,7 +119,7 @@ def snap7_cpu_state(ip: str, rack: int, slot: int) -> str:
         import snap7
     except ImportError as exc:
         raise RuntimeError(
-            "snap7 not installed. From repo root run: uv sync  (or: pip install python-snap7)"
+            "snap7 not installed. On Attacker: .venv/bin/pip install python-snap7 (see deploy_attacker.py)"
         ) from exc
 
     client = snap7.client.Client()
@@ -209,11 +209,6 @@ def run(
                     "S7 Ack succeeded; runtime may differ from Siemens PLC."
                 )
                 return 1
-    else:
-        print(
-            "[*] Tip: add --verify to confirm CPU Run/Stop via snap7 "
-            "(requires: uv sync at repo root)."
-        )
 
     return 0
 

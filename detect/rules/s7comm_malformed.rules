@@ -1,0 +1,27 @@
+# Malformed / anomalous S7comm payloads on TCP/102 (thesis lab).
+# Paired with attacks/malformed/s7comm_malformed.py (--mode all).
+# Layout: TPKT@0, COTP DT@4 (02 F0 80), S7@7 (32), ROSCTR@8, Job func@17.
+#
+# SID 1000050-1000056 : encapsulation (TPKT / COTP)
+# SID 1000052-1000053 : S7 header
+# SID 1000054-1000057 : function / semantic
+# SID 1000055        : truncation
+# SID 1000058        : TPKT length understated vs TCP payload
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM invalid TPKT version on ISO-TSAP"; flow:to_server,established; dsize:>4; content:!|03 00|; offset:0; depth:2; sid:1000050; rev:1; metadata:service iso-tsap, protocol s7comm, attack malformed_tpkt_version; priority:2;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM TPKT length exceeds TCP payload"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; byte_test:2,>,dsize,2,big,0; sid:1000051; rev:1; metadata:service iso-tsap, protocol s7comm, attack malformed_tpkt_length; priority:2;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM TPKT length smaller than TCP payload"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; dsize:>12; byte_test:2,<,dsize,2,big,0; sid:1000058; rev:1; metadata:service iso-tsap, protocol s7comm, attack malformed_tpkt_length_short; priority:2;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM invalid COTP DT header toward PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; dsize:>7; content:!|02 F0 80|; offset:4; depth:3; sid:1000056; rev:1; metadata:service iso-tsap, protocol s7comm, attack malformed_cotp; priority:2;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM invalid S7 protocol id"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80|"; offset:4; depth:3; content:!|32|"; offset:7; depth:1; sid:1000052; rev:1; metadata:service iso-tsap, protocol s7comm, attack malformed_s7_protocol_id; priority:2;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM invalid ROSCTR value"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 FF|"; offset:4; depth:5; sid:1000053; rev:1; metadata:service iso-tsap, protocol s7comm, attack malformed_s7_rosctr; priority:2;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM invalid Job function code"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|FF|"; offset:17; depth:1; sid:1000054; rev:1; metadata:service iso-tsap, protocol s7comm, attack malformed_s7_function; priority:2;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM truncated S7 Job PDU toward PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; dsize:>6; dsize:<18; sid:1000055; rev:1; metadata:service iso-tsap, protocol s7comm, attack malformed_truncated_pdu; priority:2;)
+
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM malformed Write Var PDU (too short)"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|05|"; offset:17; depth:1; dsize:>10; dsize:<25; sid:1000057; rev:1; metadata:service iso-tsap, protocol s7comm, attack malformed_write_var; priority:1;)

@@ -1,0 +1,438 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.24)  25 JUN 2026 18:05
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**\documentclass[a4paper,13pt,3p,twoside]{report}\usepackage{subfiles}\begin{do
+cument}\subfile{Chapter/4_Theoretical_Analysis}\end{document}
+(C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/base\report.cls
+Document Class: report 2025/01/22 v1.4n Standard LaTeX document class
+(C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/base\size10.clo
+File: size10.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count275
+\c@chapter=\count276
+\c@section=\count277
+\c@subsection=\count278
+\c@subsubsection=\count279
+\c@paragraph=\count280
+\c@subparagraph=\count281
+\c@figure=\count282
+\c@table=\count283
+\abovecaptionskip=\skip49
+\belowcaptionskip=\skip50
+\bibindent=\dimen148
+)
+(C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/subfiles\subfiles
+.sty
+Package: subfiles 2020/11/14 v2.2 Multi-file projects (package)
+
+(C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/import\import.sty
+Package: import 2020/04/01  v 6.2
+))
+(C:\Users\chutrunganh\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backe
+nd-pdftex.def
+File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count284
+)
+
+LaTeX Warning: Unused global option(s):
+    [13pt,3p].
+
+No file ch4_test.aux.
+\openout1 = `ch4_test.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 0.
+LaTeX Font Info:    ... okay on input line 0.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 0.
+LaTeX Font Info:    ... okay on input line 0.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 0.
+LaTeX Font Info:    ... okay on input line 0.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 0.
+LaTeX Font Info:    ... okay on input line 0.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 0.
+LaTeX Font Info:    ... okay on input line 0.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 0.
+LaTeX Font Info:    ... okay on input line 0.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 0.
+LaTeX Font Info:    ... okay on input line 0.
+(Chapter/4_Theoretical_Analysis.tex
+
+LaTeX Warning: Reference `sec:attack-scenarios' on page 1 undefined on input li
+ne 7.
+
+
+Overfull \hbox (10.19443pt too wide) in paragraph at lines 9--10
+[]\OT1/cmr/m/n/10 All rules live in \OT1/cmtt/m/n/10 detect/rules/s7comm.rules\
+OT1/cmr/m/n/10 , \OT1/cmtt/m/n/10 detect/rules/ics[]dos.rules\OT1/cmr/m/n/10 ,
+ []
+
+
+Overfull \hbox (11.3607pt too wide) in paragraph at lines 9--10
+\OT1/cmr/m/n/10 ables), \OT1/cmtt/m/n/10 100002x \OT1/cmr/m/n/10 (down-load/upl
+oad blocks), \OT1/cmtt/m/n/10 100003x \OT1/cmr/m/n/10 (Start/Stop con-trol), \O
+T1/cmtt/m/n/10 100004x
+ []
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 11.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 11.
+
+LaTeX Warning: Reference `sec:attack-scenarios' on page 1 undefined on input li
+ne 19.
+
+
+LaTeX Warning: Reference `sec:rules-malformed' on page 1 undefined on input lin
+e 21.
+
+
+Overfull \hbox (39.10527pt too wide) in paragraph at lines 23--24
+\OT1/cmr/m/n/10 bytes pre-cede the pa-ram-e-ter block. Suri-cata \OT1/cmtt/m/n/
+10 flow:to[]server \OT1/cmr/m/n/10 or \OT1/cmtt/m/n/10 flow:from[]server
+ []
+
+[1
+
+{C:/Users/chutrunganh/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
+Overfull \hbox (51.83105pt too wide) in paragraph at lines 27--28
+[]\OT1/cmr/m/n/10 Validate of-fline with \OT1/cmtt/m/n/10 suricata -r scenario.
+pcap -S detect/rules/s7comm.rules
+ []
+
+
+LaTeX Warning: Reference `sec:down_up_program' on page 2 undefined on input lin
+e 30.
+
+
+LaTeX Warning: Reference `tab:s7-payload-offsets' on page 2 undefined on input 
+line 35.
+
+
+! LaTeX Error: Unknown float option `H'.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.37 \begin{table}[H]
+                     
+Option `H' ignored and `p' used.
+
+
+Overfull \hbox (1.64023pt too wide) in paragraph at lines 70--71
+[]\OT1/cmtt/m/n/10 flow:to[]server,established\OT1/cmr/m/n/10 : limit in-spec-t
+ion to pack-ets the client sends
+ []
+
+
+Overfull \hbox (3.08145pt too wide) in paragraph at lines 71--72
+[]\OT1/cmtt/m/n/10 content:"|02 F0 80 32 01|"; offset:4; depth:5\OT1/cmr/m/n/10
+ : con-firm the COTP
+ []
+
+
+LaTeX Warning: Reference `tab:s7-payload-offsets' on page 2 undefined on input 
+line 73.
+
+[2]
+Overfull \hbox (12.7926pt too wide) in paragraph at lines 79--80
+[]\OT1/cmtt/m/n/10 content:"|02 F0 80 32 03|"; offset:4; depth:5\OT1/cmr/m/n/10
+ : con-firm an Ack[]Data
+ []
+
+
+LaTeX Warning: Reference `sec:rules-by-scenario' on page 3 undefined on input l
+ine 83.
+
+
+LaTeX Warning: Reference `sec:reconnaissance' on page 3 undefined on input line
+ 91.
+
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 98.
+[3]
+
+LaTeX Warning: Reference `sec:reconnaissance' on page 4 undefined on input line
+ 122.
+
+
+Overfull \hbox (21.5121pt too wide) in paragraph at lines 122--123
+ \OT1/cmr/bx/n/10 From traf-fic to rule.[] \OT1/cmr/m/n/10 Wire-shark de-codes 
+Read SZL as User-data with \OT1/cmtt/m/n/10 ROSCTR=0x07
+ []
+
+
+Overfull \hbox (3.505pt too wide) in paragraph at lines 133--133
+[]\OT1/cmtt/m/n/8 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read SZL 
+module identification[] 
+ []
+
+
+LaTeX Warning: Reference `sec:reconnaissance' on page 4 undefined on input line
+ 137.
+
+
+Overfull \hbox (7.75507pt too wide) in paragraph at lines 162--162
+[]\OT1/cmtt/m/n/8 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM List Bloc
+ks request - PLC block[] 
+ []
+
+[4]
+
+LaTeX Warning: Reference `sec:start_stop_plc' on page 5 undefined on input line
+ 171.
+
+
+LaTeX Warning: Reference `sec:start_stop_plc' on page 5 undefined on input line
+ 174.
+
+
+Overfull \hbox (23.1848pt too wide) in paragraph at lines 174--175
+\OT1/cmr/m/n/10 were ex-ported as fixed hex strings in Sec-tion []. Both be-gin
+ with \OT1/cmtt/m/n/10 0300...02f0803201
+ []
+
+
+Overfull \hbox (3.505pt too wide) in paragraph at lines 199--199
+[]\OT1/cmtt/m/n/8 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM replayed 
+Start CPU P_PROGRAM";[] 
+ []
+
+
+Overfull \hbox (12.00513pt too wide) in paragraph at lines 199--199
+[]  \OT1/cmtt/m/n/8 metadata:service iso-tsap, protocol s7comm, attack start_st
+op_replay; priority:1;)[] 
+ []
+
+[5]
+
+LaTeX Warning: Reference `sec:start_stop_plc' on page 6 undefined on input line
+ 203.
+
+
+Overfull \hbox (12.00513pt too wide) in paragraph at lines 228--228
+[]  \OT1/cmtt/m/n/8 metadata:service iso-tsap, protocol s7comm, attack start_st
+op_replay; priority:1;)[] 
+ []
+
+
+LaTeX Warning: Reference `sec:start_stop_plc' on page 6 undefined on input line
+ 232.
+
+
+LaTeX Warning: Reference `sec:down_up_program' on page 6 undefined on input lin
+e 237.
+
+
+LaTeX Warning: Reference `sec:down_up_program' on page 6 undefined on input lin
+e 240.
+
+[6]
+Overfull \hbox (7.75507pt too wide) in paragraph at lines 250--250
+[]\OT1/cmtt/m/n/8 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Request D
+ownload block to PLC";[] 
+ []
+
+
+Overfull \hbox (7.75507pt too wide) in paragraph at lines 250--250
+[]  \OT1/cmtt/m/n/8 metadata:service iso-tsap, protocol s7comm, attack program_
+download; priority:1;)[] 
+ []
+
+
+Overfull \hbox (20.50525pt too wide) in paragraph at lines 264--264
+[]\OT1/cmtt/m/n/8 alert tcp $HOME_NET 102 -> any any (msg:"ICS S7COMM PLC reque
+sts Download Block data";[] 
+ []
+
+
+Overfull \hbox (7.75507pt too wide) in paragraph at lines 264--264
+[]  \OT1/cmtt/m/n/8 metadata:service iso-tsap, protocol s7comm, attack program_
+download; priority:1;)[] 
+ []
+
+
+Overfull \hbox (12.00513pt too wide) in paragraph at lines 278--278
+[]\OT1/cmtt/m/n/8 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM client se
+nds Download Block data[] 
+ []
+
+
+Overfull \hbox (7.75507pt too wide) in paragraph at lines 278--278
+[]  \OT1/cmtt/m/n/8 metadata:service iso-tsap, protocol s7comm, attack program_
+download; priority:1;)[] 
+ []
+
+
+LaTeX Warning: Reference `sec:down_up_program' on page 7 undefined on input lin
+e 282.
+
+[7]
+Overfull \hbox (7.75507pt too wide) in paragraph at lines 292--292
+[]  \OT1/cmtt/m/n/8 metadata:service iso-tsap, protocol s7comm, attack program_
+download; priority:1;)[] 
+ []
+
+
+Overfull \hbox (2.1829pt too wide) in paragraph at lines 296--297
+\OT1/cmr/m/n/10 gram push. A sin-gle \OT1/cmtt/m/n/10 sid:1000020 \OT1/cmr/m/n/
+10 with-out follow-up \OT1/cmtt/m/n/10 sid:1000026\OT1/cmr/m/n/10 /\OT1/cmtt/m/
+n/10 sid:1000022
+ []
+
+
+LaTeX Warning: Reference `sec:down_up_program' on page 8 undefined on input lin
+e 338.
+
+
+LaTeX Warning: Reference `sec:stuxnet_mitm_sim' on page 8 undefined on input li
+ne 343.
+
+[8] [9]
+
+LaTeX Warning: Reference `sec:stuxnet_mitm_sim' on page 10 undefined on input l
+ine 393.
+
+
+LaTeX Warning: Reference `sec:dos_s7comm' on page 10 undefined on input line 39
+8.
+
+
+LaTeX Warning: Reference `sec:dos_s7comm' on page 10 undefined on input line 40
+1.
+
+
+LaTeX Warning: Reference `tab:dos-modes' on page 10 undefined on input line 401
+.
+
+
+Overfull \hbox (37.5055pt too wide) in paragraph at lines 410--410
+[]\OT1/cmtt/m/n/8 alert tcp any any -> $HOME_NET 102 (msg:"ICS possible TCP SYN
+ flood to ISO-TSAP port 102";[] 
+ []
+
+! Misplaced alignment tab character &.
+<argument> tcp.flags.syn==1 &
+                             & tcp.dstport==102
+l.414 ...ttt{tcp.flags.syn==1 && tcp.dstport==102}
+                                                   show bursts of SYN packet...
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Misplaced alignment tab character &.
+<argument> tcp.flags.syn==1 &&
+                               tcp.dstport==102
+l.414 ...ttt{tcp.flags.syn==1 && tcp.dstport==102}
+                                                   show bursts of SYN packet...
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+
+Overfull \hbox (9.28578pt too wide) in paragraph at lines 414--415
+\OT1/cmr/m/n/10 rapidly; Wire-shark fil-ters on \OT1/cmtt/m/n/10 tcp.flags.syn=
+=1  tcp.dstport==102 \OT1/cmr/m/n/10 show bursts
+ []
+
+
+Overfull \hbox (58.7558pt too wide) in paragraph at lines 424--424
+[]\OT1/cmtt/m/n/8 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM possible 
+Setup Communication flood to PLC";[] 
+ []
+
+
+Overfull \hbox (12.00513pt too wide) in paragraph at lines 424--424
+[]  \OT1/cmtt/m/n/8 content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|F0
+|"; offset:17; depth:1;[] 
+ []
+
+[10]
+Overfull \hbox (4.27757pt too wide) in paragraph at lines 428--429
+\OT1/cmr/m/n/10 mal Setup Communication---the same \OT1/cmtt/m/n/10 |F0| \OT1/c
+mr/m/n/10 at off-set 17 matched by \OT1/cmtt/m/n/10 sid:1000001\OT1/cmr/m/n/10 
+.
+ []
+
+
+Overfull \hbox (63.00586pt too wide) in paragraph at lines 439--439
+[]\OT1/cmtt/m/n/8 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM possible 
+Read SZL flood - PLC service load";[] 
+ []
+
+
+Overfull \hbox (37.5055pt too wide) in paragraph at lines 453--453
+[]\OT1/cmtt/m/n/8 alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM possible 
+S7 Job request flood to PLC";[] 
+ []
+
+
+LaTeX Warning: Reference `sec:malformed_plc' on page 11 undefined on input line
+ 462.
+
+
+LaTeX Warning: Reference `tab:s7-payload-offsets' on page 11 undefined on input
+ line 462.
+
+
+LaTeX Warning: Reference `tab:malformed-phases' on page 11 undefined on input l
+ine 465.
+
+
+LaTeX Warning: Reference `sec:malformed_plc' on page 11 undefined on input line
+ 465.
+
+
+Overfull \hbox (54.0522pt too wide) in paragraph at lines 465--466
+\OT1/cmr/m/n/10 (\OT1/cmtt/m/n/10 0300001e02f08032010000050000140000f0000000000
+00000000000000000000000000000\OT1/cmr/m/n/10 ).
+ []
+
+[11] [12]
+
+LaTeX Warning: Reference `sec:eval-malformed' on page 13 undefined on input lin
+e 496.
+
+) [13] [14] (ch4_test.aux)
+ ***********
+LaTeX2e <2025-11-01>
+L3 programming layer <2025-12-24>
+ ***********
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ 
+Here is how much of TeX's memory you used:
+ 610 strings out of 467870
+ 11979 string characters out of 5415451
+ 448733 words of memory out of 5000000
+ 29554 multiletter control sequences out of 15000+600000
+ 630506 words of font info for 50 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 41i,11n,51p,1122b,519s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ <C:\Users\chutrunganh\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\
+tctt1000.pk> <C:\Users\chutrunganh\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappe
+n/ec/dpi600\tcrm1000.pk><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fon
+ts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/chutrunganh/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/chutrunganh/App
+Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/c
+hutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.
+pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
+onts/cm/cmtt10.pfb><C:/Users/chutrunganh/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/public/amsfonts/cm/cmtt8.pfb>
+Output written on ch4_test.pdf (14 pages, 148832 bytes).
+PDF statistics:
+ 88 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+

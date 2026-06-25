@@ -6,7 +6,7 @@
 
 Chương này trình bày thiết kế tập luật Suricata phát hiện hành vi tấn công trên giao thức Siemens S7comm, căn cứ phân tích lưu lượng ở Chương~\ref{sec:attack-scenarios}. Phương pháp thuộc nhóm \emph{phát hiện dựa trên chữ ký}: mỗi luật khớp tổ hợp byte cố định trong payload TCP/102 (TPKT, COTP, S7 Header, mã chức năng). 
 
-Toàn bộ luật nằm tại \texttt{detect/rules/s7comm.rules} và \texttt{detect/rules/ics\_dos.rules}. Mã \texttt{sid} phân theo nhóm: \texttt{100000x} (thiết lập phiên, trinh sát), \texttt{100001x} (đọc ghi biến), \texttt{100002x} (download upload block), \texttt{100003x} (điều khiển Start/Stop), \texttt{100004x} (DoS / flood tần suất).
+Toàn bộ luật nằm tại \texttt{detect/rules/s7comm.rules}, \texttt{detect/rules/ics\_dos.rules} và \texttt{detect/rules/s7comm\_malformed.rules}. Mã \texttt{sid} phân theo nhóm: \texttt{100000x} (thiết lập phiên, trinh sát), \texttt{100001x} (đọc ghi biến), \texttt{100002x} (download upload block), \texttt{100003x} (điều khiển Start/Stop), \texttt{100004x} (DoS / flood tần suất), \texttt{100005x} (malformed / bất thường cú pháp).
 
 \section{Luật chung để nhận diện giao thức S7comm}
 \label{sec:rule-foundation}
@@ -417,5 +417,29 @@ alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM possible S7 Job request floo
 
 \noindent\textbf{Phân tích.}
 Mục tiêu: bão PDU Job (\texttt{ROSCTR=0x01}) tổng quát---bao gồm Setup, Write Var, Download, \ldots\ Kịch bản \texttt{setup\_flood}/\texttt{job\_flood} kích hoạt luật này; ngưỡng 80/10\,s rộng hơn \texttt{sid:1000041} để bắt mix nhiều opcode Job.
+
+\subsection{Gói tin malformed và PDU bất thường}
+\label{sec:rules-malformed}
+
+Các luật trong \texttt{s7comm\_malformed.rules} bổ sung lớp phát hiện \textbf{không dựa trên opcode nguy hiểm} mà dựa trên \textbf{cấu trúc payload} bất thường trên TCP/102. Thiết kế ghép với script \texttt{s7comm\_malformed.py} (Mục~\ref{sec:malformed_plc}): mỗi \texttt{--mode} tạo một dạng lỗi cụ thể; luật tương ứng dùng \texttt{content}, \texttt{byte\_test} hoặc \texttt{dsize} tại offset đã thống nhất ở Bảng~\ref{tab:s7-payload-offsets}.
+
+\paragraph{Nhóm 1 --- TPKT / COTP (\texttt{sid:1000050}, \texttt{1000051}, \texttt{1000058}, \texttt{1000056}).}
+
+\texttt{1000050}: \texttt{content:!|03 00|} tại offset~0---bắt version TPKT khác chuẩn (script gửi \texttt{0x02 00}). \texttt{1000051}: sau khi xác nhận \texttt{03 00}, \texttt{byte\_test} so sánh length TPKT (big-endian, offset~2) với \texttt{dsize}---kích hoạt khi length \emph{lớn hơn} payload TCP (script đặt \texttt{0x0100}). \texttt{1000058}: cùng ý tưởng nhưng length \emph{nhỏ hơn} payload thực (\texttt{0x0008} với body Setup đầy đủ). \texttt{1000056}: có TPKT hợp lệ nhưng thiếu COTP \texttt{02 F0 80} tại offset~4.
+
+\paragraph{Nhóm 2 --- Header S7 (\texttt{sid:1000052}, \texttt{1000053}).}
+
+\texttt{1000052}: đã có COTP DT nhưng byte Protocol ID tại offset~7 khác \texttt{0x32}. \texttt{1000053}: khớp cụ thể \texttt{|02 F0 80 32 FF|} tại offset~4 (ROSCTR \texttt{0xFF} do script \texttt{s7\_bad\_rosctr}); có thể mở rộng thêm giá trị lạ khác bằng luật phụ nếu cần.
+
+\paragraph{Nhóm 3 --- Function / tham số (\texttt{sid:1000054}, \texttt{1000057}).}
+
+\texttt{1000054}: Job (\texttt{32 01}) với function \texttt{0xFF} tại offset~17---opcode không thuộc tập lệnh lab. \texttt{1000057}: vẫn là Job và có \texttt{0x05} (Write Var) nhưng \texttt{dsize<25}: PDU quá ngắn so với Write Var hợp lệ (script \texttt{write\_var\_malformed}).
+
+\paragraph{Nhóm 4 --- Truncation (\texttt{sid:1000055}).}
+
+\texttt{1000055}: có header \texttt{02 F0 80 32 01} nhưng \texttt{dsize<18}---gói không đủ dài để chứa function byte tại offset~17 (Setup bị cắt 14 byte). Đây là chữ ký ``thiếu byte'' độc lập với opcode cụ thể.
+
+\noindent\textbf{Lưu ý chung.}
+Luật malformed \textbf{không thay thế} luật DoS (\texttt{100004x}): flood gói \textbf{hợp lệ} vẫn cần \texttt{threshold}. Ngược lại, một vài gói malformed có thể không kích hoạt \texttt{1000001} (Setup) vì không còn \texttt{0xF0} tại offset~17. Trong đánh giá lab (Chương~\ref{sec:eval-malformed}), tiêu chí thành công là xuất hiện alert \texttt{100005x} sau khi chạy \texttt{--mode all}, không yêu cầu PLC chuyển trạng thái RUN/STOP.
 
 \end{document}

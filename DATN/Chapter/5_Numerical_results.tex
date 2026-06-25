@@ -1,26 +1,150 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 
+\section{Mục tiêu và phạm vi đánh giá tập luật}
+\label{sec:eval-objectives}
+
+Chương này trình bày \textbf{đánh giá định lượng và định tính} tập luật Suricata (\texttt{s7comm.rules}, \texttt{ics\_dos.rules}, \texttt{s7comm\_malformed.rules}) trên môi trường lab Mục~\ref{sec:lab-setup}. Mục tiêu trả lời các câu hỏi phản biện thường gặp:
+
+\begin{enumerate}
+    \item \textbf{Luật có ảnh hưởng vận hành PLC không?} --- IDS ở chế độ thụ động (mirror), không chặn hoặc sửa gói; tác động trực tiếp tới quá trình điều khiển là \emph{không}. Tác động gián tiếp chỉ xảy ra nếu vận hành viên phản ứng theo alert (triage), ngoài phạm vi đồ án.
+    \item \textbf{Tỷ lệ false positive (FP) ra sao?} --- Đo \emph{mật độ alert trên lưu lượng baseline} (thao tác Snap7 đọc-only định kỳ, không chạy script tấn công) và phân loại theo SID.
+    \item \textbf{Hiệu quả phát hiện?} --- Tỷ lệ kịch bản tấn công có $\geq 1$ SID kỳ vọng trong \texttt{fast.log} sau khi lưu lượng được mirror tới IDS.
+    \item \textbf{Hiệu năng IDS?} --- CPU/RAM Suricata và \texttt{capture.kernel\_drops} trên VM IDS tại baseline và khi chạy DoS.
+\end{enumerate}
+
+\textbf{Phạm vi}: lab quy mô nhỏ (một PLC OpenPLC, một Attacker, một IDS); chưa mô phỏng HMI poll 24/7 như nhà máy thật. Kết quả số liệu mang tính \emph{minh chứng có thể lặp lại}, không khẳng định tuyệt đối cho mọi triển khai OT.
+
 \section{Thiết lập đánh giá trên môi trường lab}
 \label{sec:eval-setup}
 
-Đánh giá được thực hiện trên môi trường mô phỏng đã trình bày ở Mục~\ref{sec:lab-setup}: PLC/OpenPLC lắng nghe cổng TCP/102, máy ảo IDS chạy Suricata bắt gói qua SPAN/mirror, máy attacker hoặc chính IDS thực thi script tấn công. Hai tệp luật được nạp đồng thời: \texttt{detect/rules/s7comm.rules} (nhận diện opcode và payload đặc trưng) và \texttt{detect/rules/ics\_dos.rules} (nhận diện flood theo \texttt{threshold}).
+\subsection{Topology và vai trò từng máy ảo}
 
-Tiêu chí đánh giá trong phạm vi đồ án:
+Lưu lượng S7comm giữa Attacker và PLC (\texttt{192.168.50.10}:102) đi qua LAN Segment Controller (\texttt{192.168.50.0/24}) được mirror tới interface \texttt{ens33} trên IDS. Suricata chỉ phân tích bản sao gói; Attacker (\texttt{172.16.16.5}) thực thi script tấn công qua SSH; IDS (\texttt{172.16.16.7}) ghi alert và thống kê hiệu năng. \texttt{HOME\_NET} = \texttt{[192.168.50.0/24,192.168.60.0/24]}; mạng quản lý NAT \texttt{172.16.16.0/24} \textbf{không} nằm trong \texttt{HOME\_NET}.
+
+Bảng~\ref{tab:eval-lab-setup} tóm tắt tham số lab. Các bảng số liệu~\ref{tab:eval-baseline}--\ref{tab:eval-performance} được sinh tự động bởi script \texttt{detect/eval\_rules.py} (có thể chạy lại sau khi chỉnh luật).
+
+\IfFileExists{../../detect/eval_results/eval_tables.tex}{%
+  \input{../../detect/eval_results/eval_tables.tex}%
+}{%
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Thành phần} & \textbf{Giá trị lab} \\
+        \hline
+        IDS (Suricata) & 172.16.16.7 (lubuntu), mirror ens33 \\
+        Attacker & 172.16.16.5 (ubuntu), repo /home/ubuntu/Thesis \\
+        PLC (OpenPLC :102) & 192.168.50.10 (rack 0, slot 2) \\
+        HOME\_NET & 192.168.50.0/24, 192.168.60.0/24 \\
+        \hline
+    \end{tabular}
+    \caption{Thiết lập môi trường đánh giá (chạy \texttt{python detect/eval\_rules.py} để cập nhật bảng động)}
+    \label{tab:eval-lab-setup}
+\end{table}
+}
+
+\subsection{Ba lớp tiêu chí đánh giá}
+
+Đồ án dùng \textbf{ba lớp} tiêu chí bổ trợ nhau:
+
+\paragraph{Lớp 1 — Phát hiện tấn công (Detection).}
+Với mỗi kịch bản trong \texttt{attacks/}, kiểm tra Suricata có ghi $\geq 1$ alert thuộc tập SID kỳ vọng (Bảng~\ref{tab:attack-eval-summary}) trong \texttt{/var/log/suricata/fast.log} hay không. Tiêu chí ``đạt'' cho một kịch bản: \texttt{detected = true} (giao của SID quan sát và SID kỳ vọng khác rỗng).
+
+\paragraph{Lớp 2 — False positive vận hành (Baseline).}
+Trong khoảng thời gian $T$ (mặc định 90\,s), script chỉ gọi \texttt{scanBlock.py --list-only} định kỳ (đọc Snap7 hợp lệ), \textbf{không} chạy nmap, write, DoS hay malformed. Mọi alert mới trong cửa sổ này được coi là \textbf{alert vận hành / FP tiềm năng}, phân bố theo SID. Chỉ số báo cáo:
+\begin{equation}
+    \rho_{\mathrm{baseline}} = \frac{N_{\mathrm{alert\,baseline}}}{T} \times 3600 \quad \mathrm{(alert/giờ)}.
+\end{equation}
+Luật opcode đơn lẻ (Setup \texttt{1000001}, List Blocks \texttt{1000005}) thường kích hoạt khi Snap7 mở phiên --- đây là \emph{phát hiện đúng giao thức} nhưng \emph{không đồng nghĩa tấn công}; cần triage trong SOC thực tế.
+
+\paragraph{Lớp 3 — Hiệu năng IDS (Performance).}
+Đọc \texttt{stats.log} và \texttt{top}: \texttt{capture.kernel\_drops}, \texttt{decoder.pkts}, CPU/RAM process Suricata. Nếu \texttt{kernel\_drops = 0} tại tải lab, IDS chưa bị ``ngạt''; khi chạy DoS, quan sát biến thiên CPU và drops (giới hạn đã nêu ở Chương~6).
+
+\subsection{Tự động hóa thu thập số liệu}
+
+Toàn bộ quy trình được gói trong \texttt{detect/eval\_rules.py}:
+\begin{enumerate}
+    \item SSH tới IDS và Attacker; kiểm tra PLC mở cổng 102 từ Attacker.
+    \item \textbf{Baseline}: $T$ giây + đọc Snap7 định kỳ; đếm alert mới.
+    \item \textbf{Kịch bản tấn công} (thứ tự cố định): recon nmap, recon blocks, write DB, DoS all, malformed all, PLC stop, PLC start --- lệnh giống GUI Attack Tool (\texttt{.venv/bin/python} trên Attacker).
+    \item Xuất \texttt{eval\_report.json}, \texttt{eval\_detection.csv}, \texttt{eval\_tables.tex}, \texttt{eval\_report.md} vào \texttt{detect/eval\_results/}.
+\end{enumerate}
+
+Lệnh:
+\begin{verbatim}
+python detect/deploy_ids.py          # một lần, sau khi sửa luật
+python detect/eval_rules.py          # baseline 90s + 7 kịch bản
+python detect/eval_rules.py --baseline-sec 120 --skip-baseline  # chỉ tấn công
+\end{verbatim}
+
+Kiểm tra nhanh từng kịch bản: \texttt{python detect/run\_attack\_tests.py -s dos\_all}.
+
+\section{Ảnh hưởng tới hoạt động bình thường}
+\label{sec:eval-normal-impact}
+
+\paragraph{Không ảnh hưởng trực tiếp tới PLC.}
+Suricata không inline; OpenPLC tiếp tục xử lý gói S7comm từ Attacker/HMI bất kể IDS có alert hay không. Thí nghiệm DoS \emph{có thể} làm PLC chậm do \emph{tấn công}, không do rule.
+
+\paragraph{Alert trên thao tác hợp lệ.}
+Các luật \texttt{1000010}, \texttt{1000011} (Write Var), \texttt{1000030}--\texttt{1000033} (Start/Stop) khớp cả operator hợp lệ. Trong baseline chỉ đọc block, FP chủ yếu từ \texttt{1000001} (Setup) và \texttt{1000005} (List Blocks) nếu có. Đây là hạn chế của chữ ký tĩnh; giảm thiểu bằng whitelist IP engineering station, correlation thời gian, hoặc tắt luật vận hành thường ngày trên HMI cố định.
+
+\paragraph{Luật DoS \texttt{threshold}.}
+Chỉ alert khi vượt ngưỡng trong cửa sổ 10\,s (Bảng~\ref{tab:eval-dos-thresholds}). HMI poll chậm thường \textbf{dưới} ngưỡng lab; FP DoS trong baseline \emph{không kỳ vọng} nếu ngưỡng được hiệu chỉnh theo baseline thực tế.
+
+\section{Kết quả baseline và false positive}
+\label{sec:eval-fp}
+
+Lần chạy tự động gần nhất (\texttt{eval\_rules.py}, baseline 60\,s, hai lần \texttt{scanBlock --list-only}):
 \begin{itemize}
-    \item \textbf{Khả năng sinh cảnh báo}: khi chạy kịch bản tấn công, Suricata có ghi nhận alert tương ứng trong \texttt{fast.log}/\texttt{eve.json} hay không.
-    \item \textbf{Khớp mã SID}: tên alert và \texttt{sid} có tương ứng với nhóm hành vi đã thiết kế (Chương~\ref{sec:detection-overview}).
-    \item \textbf{Điều kiện quan sát}: lưu lượng tấn công phải đi qua interface IDS đang bắt; nếu không, kịch bản vẫn thành công về mặt PLC nhưng không có alert---đây là giới hạn của triển khai mirror, không phải lỗi luật.
+    \item \textbf{3 alert} mới, mật độ $\rho_{\mathrm{baseline}} = 180$ alert/giờ (quy đổi từ 60\,s).
+    \item Toàn bộ alert baseline là SID \texttt{1000001} (Setup Communication) --- \emph{phát hiện đúng giao thức} khi Snap7 mở phiên, không phải tấn công; xếp loại FP vận hành.
+    \item Không có alert nhóm DoS (\texttt{100004x}) trong baseline $\Rightarrow$ ngưỡng \texttt{threshold} cao hơn tần suất đọc block định kỳ.
 \end{itemize}
 
-Kịch bản được tự động hóa bằng \texttt{detect/run\_attack\_tests.py} (triển khai luật, SSH vào IDS, lần lượt reconnaissance, ghi biến DB, DoS, Start/Stop) hoặc chạy thủ công từng script trong \texttt{attacks/}. Đối với DoS, khuyến nghị dùng \textbf{một lệnh} \texttt{attacks/dos/s7comm\_dos.py <IP\_PLC>} (mặc định \texttt{--mode all}).
+\section{Ma trận phát hiện tấn công}
+\label{sec:eval-detection}
+
+Trên bảy kịch bản tự động, \textbf{$R_{\mathrm{det}} = 7/7 = 100\%$}: mỗi kịch bản có ít nhất một SID kỳ vọng trong \texttt{fast.log}. DoS sinh hàng nghìn alert (\texttt{1000040}, \texttt{1000042}, \ldots); malformed sinh \texttt{1000053}, \texttt{1000054} (một số phase chưa khớp đủ 9 SID do payload/timeout OpenPLC). Bảng~\ref{tab:eval-performance}: \texttt{capture.kernel\_packets} tăng từ $\approx 1{,}13 \times 10^5$ (baseline) lên $\approx 1{,}58 \times 10^5$ (sau tấn công); không ghi nhận \texttt{kernel\_drops} trên IDS --- Suricata xử lý hết gói mirror tại tải lab.
+
+\textbf{Tỷ lệ phát hiện kịch bản}:
+\begin{equation}
+    R_{\mathrm{det}} = \frac{\#\{\text{kịch bản có detected=true}\}}{N_{\mathrm{kịch bản}}}.
+\end{equation}
+
+Ánh xạ kịch bản -- luật tóm tắt ở Bảng~\ref{tab:attack-eval-summary}. Chi tiết DoS từng phase: Bảng~\ref{tab:dos-eval}.
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Nhóm tấn công} & \textbf{Script / công cụ lab} & \textbf{Luật (SID kỳ vọng)} \\
+        \hline
+        Trinh sát S7 & \texttt{nmap s7-info}, \texttt{scanBlock.py} & 1000001--1000005 \\
+        \hline
+        Ghi biến quá trình (DB) & \texttt{test\_readwrite\_db\_via\_snap7.py} & 1000010, 1000011 \\
+        \hline
+        DoS S7comm & \texttt{s7comm\_dos.py --mode all} & 1000040--1000043 \\
+        \hline
+        Malformed S7comm & \texttt{s7comm\_malformed.py --mode all} & 1000050--1000058 \\
+        \hline
+        Start/Stop replay & \texttt{start\_stop\_plc.py} & 1000030--1000033 \\
+        \hline
+        MITM (quan sát phụ) & \texttt{s7\_intercept.py} + ARP & 1000013 (+ L2) \\
+        \hline
+        Up/Download & Chờ PCAP & 1000020--1000026 (luật sẵn) \\
+        \hline
+    \end{tabular}
+    \caption{Tóm tắt kịch bản lab và luật Suricata}
+    \label{tab:attack-eval-summary}
+\end{table}
 
 \section{Kết quả phát hiện tấn công DoS trên S7comm}
 \label{sec:eval-dos}
 
-\subsection{Kịch bản và luật tương ứng}
-
-Script \texttt{s7comm\_dos.py} chạy tuần tự ba phase (mỗi phase khoảng 10\,s, nghỉ 8\,s giữa các phase) nhằm tách rõ dấu hiệu trên IDS và đủ thời gian cho cửa sổ \texttt{threshold} 10\,s trong \texttt{ics\_dos.rules}. Bảng~\ref{tab:dos-eval} ánh xạ phase, hành vi và \texttt{sid} kỳ vọng.
+Script \texttt{s7comm\_dos.py --mode all} chạy ba phase (\texttt{setup\_flood}, \texttt{tcp\_connect}, \texttt{szl\_flood}), mỗi phase $\approx$10\,s, nghỉ 8\,s. Luật đặc thù DoS là \texttt{sid:1000040}--\texttt{1000043} (ngưỡng \texttt{threshold}); opcode đơn lẻ (\texttt{1000001}, \texttt{1000002}) có thể đồng thời xuất hiện nhưng không thay thế cảnh báo flood.
 
 \begin{table}[H]
     \centering
@@ -29,57 +153,41 @@ Script \texttt{s7comm\_dos.py} chạy tuần tự ba phase (mỗi phase khoảng
         \hline
         \textbf{Bước} & \textbf{Phase} & \textbf{Hành vi} & \textbf{SID Suricata} \\
         \hline
-        1 & \texttt{setup\_flood} & Lặp PDU Setup Communication trên phiên TCP mới & 1000041, 1000043 \\
+        1 & \texttt{setup\_flood} & Lặp PDU Setup trên phiên TCP mới & 1000041, 1000043 \\
         \hline
-        2 & \texttt{tcp\_connect} & Connect/disconnect nhanh tới :102 & 1000040 \\
+        2 & \texttt{tcp\_connect} & Connect/disconnect nhanh :102 & 1000040 \\
         \hline
-        3 & \texttt{szl\_flood} & \texttt{read\_szl(0x0011)} qua Snap7 & 1000042 \\
+        3 & \texttt{szl\_flood} & \texttt{read\_szl(0x0011)} & 1000042 \\
         \hline
     \end{tabular}
     \caption{Ánh xạ kịch bản DoS lab và luật phát hiện}
     \label{tab:dos-eval}
 \end{table}
 
-Các luật đơn lẻ trong \texttt{s7comm.rules} (ví dụ \texttt{1000001} Setup Communication, \texttt{1000002} Read SZL) vẫn có thể kích hoạt trong từng phase; tuy nhiên \textbf{cảnh báo đặc thù DoS} là các \texttt{sid:1000040}--\texttt{1000043} vì chỉ chúng áp dụng ngưỡng tần suất.
+\section{Kết quả phát hiện gói tin malformed}
+\label{sec:eval-malformed}
 
-\subsection{Nhận xét kết quả}
+Kịch bản \texttt{s7comm\_malformed.py --mode all}: chín phase TPKT/COTP, header S7, function, truncation; \texttt{--repeats 2}, \texttt{--pause 6}s. Tiêu chí đạt: $\geq 1$ SID \texttt{100005x} tương ứng phase. Hạn chế: \texttt{1000050} có thể khớp traffic không-S7 trên cổng 102 nếu \texttt{HOME\_NET} quá rộng --- cần thu hẹp trong triển khai thực tế.
 
-Trong các lần chạy lab khi lưu lượng được mirror tới IDS, script \texttt{--mode all} thường sinh đồng thời nhiều alert flood sau mỗi phase, ví dụ thông điệp dạng \emph{ICS S7COMM possible Setup Communication flood to PLC} (\texttt{1000041}) và \emph{ICS possible TCP SYN flood to ISO-TSAP port 102} (\texttt{1000040}). Điều này cho thấy lớp luật \texttt{threshold} bổ sung được cho opcode đơn lẻ: HMI hợp lệ thường không lặp Setup hoặc Read SZL với tần suất tương đương script lab.
+\section{Hiệu năng Suricata trên IDS}
+\label{sec:eval-performance}
 
-\textbf{Hạn chế đánh giá:}
+Hiệu năng được lấy snapshot tại: đầu/cuối baseline, trước chuỗi tấn công, trong/ sau DoS, cuối chuỗi (Bảng~\ref{tab:eval-performance} trong \texttt{eval\_tables.tex}). Tiêu chí lab:
 \begin{itemize}
-    \item Chưa đo chính xác tỷ lệ true positive/false positive trên lưu lượng HMI nền dài ngày; ngưỡng \texttt{count} trong \texttt{ics\_dos.rules} cần hiệu chỉnh theo từng nhà máy.
-    \item DoS mạnh có thể làm OpenPLC tạm thời chậm phản hồi; đồ án không coi đó là tiêu chí định lượng IDS mà chỉ xác nhận \emph{phát hiện được} hành vi flood trên wire.
-    \item Nếu chỉ chạy script trên máy không đi qua đoạn mạng được IDS bắt, sẽ không có alert dù PLC vẫn bị ảnh hưởng.
+    \item \texttt{capture.kernel\_drops = 0} tại baseline và tải thường: IDS không mất gói do quá tải CPU/kernel.
+    \item Khi DoS: CPU tăng nhưng Suricata vẫn ghi alert flood --- xác nhận rule \texttt{threshold} hoạt động dưới stress vừa phải.
+    \item Lab chưa đo throughput tối đa (Mbps/pps); ngoài phạm vi đồ án tốt nghiệp.
 \end{itemize}
 
-\section{Tổng hợp các nhóm kịch bản đã kiểm tra}
-\label{sec:eval-summary}
+\section{Thảo luận và hạn chế}
+\label{sec:eval-discussion}
 
-Bảng~\ref{tab:attack-eval-summary} tóm tắt toàn bộ nhóm tấn công đã mô phỏng và tệp luật liên quan. Chi tiết kịch bản xem Mục~\ref{sec:attack-scenarios}; chi tiết từng \texttt{sid} xem Chương~\ref{sec:detection-overview}.
-
-\begin{table}[H]
-    \centering
-    \footnotesize
-    \begin{tabular}{|l|l|l|}
-        \hline
-        \textbf{Nhóm tấn công} & \textbf{Script / công cụ lab} & \textbf{Luật (ví dụ SID)} \\
-        \hline
-        Trinh sát S7 & \texttt{nmap s7-info}, \texttt{scanBlock.py} & 1000001--1000005 \\
-        \hline
-        Ghi biến quá trình (DB) & \texttt{test\_readwrite\_db\_via\_snap7.py} & 1000010, 1000011 \\
-        \hline
-        DoS S7comm & \texttt{s7comm\_dos.py} (\texttt{--mode all}) & 1000040--1000043 \\
-        \hline
-        Start/Stop replay & \texttt{start\_stop\_plc.py} & 1000030--1000033 \\
-        \hline
-        MITM (quan sát phụ) & \texttt{s7\_intercept.py} + ARP ngoài S7 & 1000013 (+ L2) \\
-        \hline
-        Up/Download & Chờ PCAP & 1000020--1000026 (luật sẵn) \\
-        \hline
-    \end{tabular}
-    \caption{Tóm tắt kịch bản lab và luật Suricata}
-    \label{tab:attack-eval-summary}
-\end{table}
+\begin{itemize}
+    \item \textbf{Mirror path}: nếu tấn công không đi qua SPAN, FN do triển khai, không do luật sai.
+    \item \textbf{FP dài hạn}: baseline 90--120\,s không thay thế HMI poll 24/7; $\rho_{\mathrm{baseline}}$ là ước lượng thấp.
+    \item \textbf{Luật vận hành nhạy cảm}: Write/Start/Stop cần quy trình triage, không dùng block tự động.
+    \item \textbf{Up/Download}: luật \texttt{1000020}--\texttt{1000026} chưa kiểm chứng bằng PCAP trong lab.
+    \item \textbf{Lặp lại}: mọi số liệu có thể tái tạo bằng \texttt{eval\_rules.py} sau khi đồng bộ luật (\texttt{deploy\_ids.py}).
+\end{itemize}
 
 \end{document}

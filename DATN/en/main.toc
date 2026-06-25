@@ -1,0 +1,171 @@
+\babel@toc {english}{}\relax 
+\ttl@change@i {\@ne }{chapter}{0.0cm}{\bfseries \vspace {0.3cm}}{{\bfseries {\scshape } CHAPTER \thecontentslabel .\ }}{}{{\titlerule *[0.3pc]{.}\contentspage }}\relax 
+\ttl@change@v {chapter}{}{}{}\relax 
+\ttl@change@i {\@ne }{section}{0.0cm}{\vspace {0.3cm}}{\thecontentslabel \ }{}{{\titlerule *[0.3pc]{.}\contentspage }}\relax 
+\ttl@change@v {section}{}{}{}\relax 
+\ttl@change@i {\@ne }{subsection}{1.0cm}{\vspace {0.3cm}}{\thecontentslabel \ }{}{{\titlerule *[0.3pc]{.}\contentspage }}\relax 
+\ttl@change@v {subsection}{}{}{}\relax 
+\thispagestyle {empty}
+\contentsline {chapter}{\numberline {1}INTRODUCTION}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Problem statement}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Overview and research issues}{2}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Research objectives and solution direction}{3}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Contributions of the thesis}{4}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Thesis organization}{4}{section.1.5}%
+\contentsline {chapter}{\numberline {2}LITERATURE REVIEW}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Overview of OT and ICS systems}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.2}PLC}{8}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}PLC concept}{8}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}PLC structure}{8}{subsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {a}CPU}{9}{subsubsection.2.2.2.1}%
+\contentsline {subsubsection}{\numberline {b}Input and output modules}{9}{subsubsection.2.2.2.2}%
+\contentsline {subsubsection}{\numberline {c}Memory}{10}{subsubsection.2.2.2.3}%
+\contentsline {subsubsection}{\numberline {d}Other components}{11}{subsubsection.2.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.3}PLC programming languages}{11}{subsection.2.2.3}%
+\contentsline {section}{\numberline {2.3}Purdue model}{13}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Siemens S7comm protocol}{16}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Background: Fieldbus and industrial Ethernet}{16}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}How to read addresses in Siemens S7}{17}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}S7comm packet structure}{19}{subsection.2.4.3}%
+\contentsline {subsubsection}{\numberline {a}COTP and TPKT section}{19}{subsubsection.2.4.3.1}%
+\contentsline {subsubsection}{\numberline {b}S7 PDU section}{20}{subsubsection.2.4.3.2}%
+\contentsline {paragraph}{DoS risk on the S7 channel.}{22}{paragraph*.31}%
+\contentsline {subsection}{\numberline {2.4.4}S7comm connection setup steps}{22}{subsection.2.4.4}%
+\contentsline {subsubsection}{\numberline {a}TCP connection setup to port 102 using TCP Three-way Handshake}{22}{subsubsection.2.4.4.1}%
+\contentsline {subsubsection}{\numberline {b}COTP connection setup}{23}{subsubsection.2.4.4.2}%
+\contentsline {subsubsection}{\numberline {c}Initial S7comm connection setup}{25}{subsubsection.2.4.4.3}%
+\contentsline {subsubsection}{\numberline {d}S7 data exchange}{27}{subsubsection.2.4.4.4}%
+\contentsline {subsection}{\numberline {2.4.5}Components in S7 communication}{27}{subsection.2.4.5}%
+\contentsline {section}{\numberline {2.5}IDS}{30}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Types and deployment}{30}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Detection methods}{31}{subsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.5.3}Alerts, logging, and operation}{32}{subsection.2.5.3}%
+\contentsline {subsection}{\numberline {2.5.4}Suricata}{32}{subsection.2.5.4}%
+\contentsline {chapter}{\numberline {3}METHODOLOGY}{34}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Research methodology overview}{34}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Experimental environment setup}{35}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Deployment principles}{35}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Tools used}{35}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Lab GUI tools}{37}{subsection.3.2.3}%
+\contentsline {section}{\numberline {3.3}Attack scenarios and traffic analysis}{38}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Reconnaissance}{39}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Scanning with other tools based on DCP}{44}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Scanning PLC blocks}{45}{subsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.3.4}4.3 Start/Stop PLC (Replay Attack)}{49}{subsection.3.3.4}%
+\contentsline {subsubsection}{\numberline {a}Captured payload}{49}{subsubsection.3.3.4.1}%
+\contentsline {subsection}{\numberline {3.3.5}DoS attack on the S7comm channel}{51}{subsection.3.3.5}%
+\contentsline {subsection}{\numberline {3.3.6}PLC Program Upload and Download}{52}{subsection.3.3.6}%
+\contentsline {subsubsection}{\numberline {a}Upload}{52}{subsubsection.3.3.6.1}%
+\contentsline {subsubsection}{\numberline {b}Download}{54}{subsubsection.3.3.6.2}%
+\contentsline {subsection}{\numberline {3.3.7}Traffic simulation}{54}{subsection.3.3.7}%
+\contentsline {subsection}{\numberline {3.3.8}Stuxnet attack simulation (MITM)}{59}{subsection.3.3.8}%
+\contentsline {subsubsection}{\numberline {a}PLC setup}{61}{subsubsection.3.3.8.1}%
+\contentsline {subsubsection}{\numberline {b}HMI setup}{62}{subsubsection.3.3.8.2}%
+\contentsline {subsubsection}{\numberline {c}Attacker}{65}{subsubsection.3.3.8.3}%
+\contentsline {subsubsection}{\numberline {d}Attack analysis}{70}{subsubsection.3.3.8.4}%
+\contentsline {subsection}{\numberline {3.3.9}Sending malformed packets to the PLC}{77}{subsection.3.3.9}%
+\contentsline {paragraph}{Four commonly used malformed groups.}{77}{paragraph*.104}%
+\contentsline {paragraph}{Representative samples selected for the lab.}{79}{paragraph*.105}%
+\contentsline {paragraph}{Script deployment.}{79}{paragraph*.107}%
+\contentsline {paragraph}{Expected behavior on the lab PLC and limitations.}{79}{paragraph*.108}%
+\contentsline {chapter}{\numberline {4}THEORETICAL ANALYSIS}{80}{chapter.4}%
+\contentsline {section}{\numberline {4.1}S7comm detection rule design approach}{80}{section.4.1}%
+\contentsline {section}{\numberline {4.2}From captured traffic to Suricata signatures}{80}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Common rules for identifying the S7comm protocol}{81}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Flow direction and PDU type conditions}{82}{subsection.4.3.1}%
+\contentsline {paragraph}{Job PDU --- client $\rightarrow $ PLC.}{82}{paragraph*.110}%
+\contentsline {paragraph}{Ack\_Data PDU --- PLC $\rightarrow $ client.}{82}{paragraph*.111}%
+\contentsline {section}{\numberline {4.4}Rules by attack scenario}{82}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Reconnaissance}{82}{subsection.4.4.1}%
+\contentsline {paragraph}{Link to Chapter~3 traffic.}{82}{paragraph*.112}%
+\contentsline {paragraph}{Rule \texttt {sid:1000001}.}{83}{paragraph*.113}%
+\contentsline {paragraph}{From traffic to rule.}{83}{paragraph*.114}%
+\contentsline {paragraph}{Rule \texttt {sid:1000002}.}{83}{paragraph*.115}%
+\contentsline {paragraph}{From traffic to rule.}{83}{paragraph*.116}%
+\contentsline {paragraph}{Rule \texttt {sid:1000003}.}{84}{paragraph*.117}%
+\contentsline {paragraph}{From traffic to rule.}{84}{paragraph*.118}%
+\contentsline {paragraph}{Rule \texttt {sid:1000004}.}{84}{paragraph*.119}%
+\contentsline {paragraph}{From traffic to rule.}{84}{paragraph*.120}%
+\contentsline {paragraph}{Rule \texttt {sid:1000005}.}{84}{paragraph*.121}%
+\contentsline {paragraph}{From traffic to rule.}{84}{paragraph*.122}%
+\contentsline {subsection}{\numberline {4.4.2}Start/Stop PLC command replay}{85}{subsection.4.4.2}%
+\contentsline {paragraph}{Link to Chapter~3 traffic.}{85}{paragraph*.123}%
+\contentsline {paragraph}{Rule \texttt {sid:1000030}.}{85}{paragraph*.124}%
+\contentsline {paragraph}{From traffic to rule.}{85}{paragraph*.125}%
+\contentsline {paragraph}{Rule \texttt {sid:1000031}.}{85}{paragraph*.126}%
+\contentsline {paragraph}{From traffic to rule.}{86}{paragraph*.127}%
+\contentsline {paragraph}{Rule \texttt {sid:1000032}.}{86}{paragraph*.128}%
+\contentsline {paragraph}{From traffic to rule.}{86}{paragraph*.129}%
+\contentsline {paragraph}{Rule \texttt {sid:1000033}.}{86}{paragraph*.130}%
+\contentsline {paragraph}{From traffic to rule.}{86}{paragraph*.131}%
+\contentsline {subsection}{\numberline {4.4.3}Block upload and download}{86}{subsection.4.4.3}%
+\contentsline {paragraph}{Link to Chapter~3 traffic.}{87}{paragraph*.132}%
+\contentsline {paragraph}{Rule \texttt {sid:1000020}.}{87}{paragraph*.133}%
+\contentsline {paragraph}{From traffic to rule.}{87}{paragraph*.134}%
+\contentsline {paragraph}{Rule \texttt {sid:1000021}.}{87}{paragraph*.135}%
+\contentsline {paragraph}{From traffic to rule.}{87}{paragraph*.136}%
+\contentsline {paragraph}{Rule \texttt {sid:1000026}.}{87}{paragraph*.137}%
+\contentsline {paragraph}{From traffic to rule.}{88}{paragraph*.138}%
+\contentsline {paragraph}{Rule \texttt {sid:1000022}.}{88}{paragraph*.139}%
+\contentsline {paragraph}{From traffic to rule.}{88}{paragraph*.140}%
+\contentsline {paragraph}{Rule \texttt {sid:1000023}.}{88}{paragraph*.141}%
+\contentsline {paragraph}{From traffic to rule.}{88}{paragraph*.142}%
+\contentsline {paragraph}{Rule \texttt {sid:1000024}.}{88}{paragraph*.143}%
+\contentsline {paragraph}{From traffic to rule.}{89}{paragraph*.144}%
+\contentsline {paragraph}{Rule \texttt {sid:1000025}.}{89}{paragraph*.145}%
+\contentsline {paragraph}{From traffic to rule.}{89}{paragraph*.146}%
+\contentsline {subsection}{\numberline {4.4.4}Process variable writes and MITM observation}{89}{subsection.4.4.4}%
+\contentsline {paragraph}{Link to Chapter~3 traffic.}{89}{paragraph*.147}%
+\contentsline {paragraph}{Rule \texttt {sid:1000010}.}{89}{paragraph*.148}%
+\contentsline {paragraph}{From traffic to rule.}{90}{paragraph*.149}%
+\contentsline {paragraph}{Rule \texttt {sid:1000011}.}{90}{paragraph*.150}%
+\contentsline {paragraph}{From traffic to rule.}{90}{paragraph*.151}%
+\contentsline {paragraph}{Rule \texttt {sid:1000013}.}{90}{paragraph*.152}%
+\contentsline {paragraph}{From traffic to rule.}{90}{paragraph*.153}%
+\contentsline {subsection}{\numberline {4.4.5}Denial of service on the S7comm channel}{91}{subsection.4.4.5}%
+\contentsline {paragraph}{Link to Chapter~3 traffic.}{91}{paragraph*.154}%
+\contentsline {paragraph}{Rule \texttt {sid:1000040}.}{91}{paragraph*.155}%
+\contentsline {paragraph}{From traffic to rule.}{91}{paragraph*.156}%
+\contentsline {paragraph}{Rule \texttt {sid:1000041}.}{91}{paragraph*.157}%
+\contentsline {paragraph}{From traffic to rule.}{92}{paragraph*.158}%
+\contentsline {paragraph}{Rule \texttt {sid:1000042}.}{92}{paragraph*.159}%
+\contentsline {paragraph}{From traffic to rule.}{92}{paragraph*.160}%
+\contentsline {paragraph}{Rule \texttt {sid:1000043}.}{92}{paragraph*.161}%
+\contentsline {paragraph}{From traffic to rule.}{92}{paragraph*.162}%
+\contentsline {subsection}{\numberline {4.4.6}Malformed packets and abnormal PDUs}{92}{subsection.4.4.6}%
+\contentsline {paragraph}{Link to Chapter~3 traffic.}{93}{paragraph*.163}%
+\contentsline {paragraph}{Group 1 --- TPKT / COTP (\texttt {sid:1000050}, \texttt {1000051}, \texttt {1000058}, \texttt {1000056}).}{93}{paragraph*.164}%
+\contentsline {paragraph}{From traffic to rule.}{93}{paragraph*.165}%
+\contentsline {paragraph}{Group 2 --- S7 header (\texttt {sid:1000052}, \texttt {1000053}).}{93}{paragraph*.166}%
+\contentsline {paragraph}{From traffic to rule.}{93}{paragraph*.167}%
+\contentsline {paragraph}{Group 3 --- Function / parameters (\texttt {sid:1000054}, \texttt {1000057}).}{94}{paragraph*.168}%
+\contentsline {paragraph}{From traffic to rule.}{94}{paragraph*.169}%
+\contentsline {paragraph}{Group 4 --- Truncation (\texttt {sid:1000055}).}{94}{paragraph*.170}%
+\contentsline {paragraph}{From traffic to rule.}{94}{paragraph*.171}%
+\contentsline {paragraph}{General note.}{94}{paragraph*.172}%
+\contentsline {chapter}{\numberline {5}NUMERICAL RESULTS}{95}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Evaluation objectives and rule-set scope}{95}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Evaluation setup on the lab environment}{95}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Topology and role of each virtual machine}{95}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Three layers of evaluation criteria}{97}{subsection.5.2.2}%
+\contentsline {paragraph}{Layer 1 --- Scenario detection rate.}{97}{paragraph*.180}%
+\contentsline {paragraph}{Layer 2 --- Baseline alert density and operational false positives.}{97}{paragraph*.181}%
+\contentsline {paragraph}{Layer 3 --- Capture and processing performance.}{97}{paragraph*.182}%
+\contentsline {subsection}{\numberline {5.2.3}Automated data collection}{98}{subsection.5.2.3}%
+\contentsline {section}{\numberline {5.3}Impact on normal operation}{98}{section.5.3}%
+\contentsline {paragraph}{No inline effect on the PLC.}{98}{paragraph*.183}%
+\contentsline {paragraph}{Signatures that also match legitimate engineering traffic.}{98}{paragraph*.184}%
+\contentsline {paragraph}{Rate-based DoS rules.}{99}{paragraph*.185}%
+\contentsline {section}{\numberline {5.4}Baseline and operational false-positive results}{99}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Attack detection matrix}{99}{section.5.5}%
+\contentsline {section}{\numberline {5.6}DoS detection results on S7comm}{100}{section.5.6}%
+\contentsline {section}{\numberline {5.7}Malformed packet detection results}{100}{section.5.7}%
+\contentsline {section}{\numberline {5.8}Suricata performance on the IDS}{100}{section.5.8}%
+\contentsline {section}{\numberline {5.9}Discussion and limitations}{101}{section.5.9}%
+\contentsline {chapter}{\numberline {6}CONCLUSIONS}{102}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Summary}{102}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Future Work}{102}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Limitations and security of IDS}{102}{subsection.6.2.1}%
+\contentsline {chapter}{\numberline {A}STUXNET MITM SIMULATION DETAILS}{104}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Stuxnet MITM simulation --- supplementary reference}{104}{section.A.1}%
+\contentsfinish 

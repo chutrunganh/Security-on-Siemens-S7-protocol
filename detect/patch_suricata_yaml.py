@@ -15,7 +15,7 @@ text = re.sub(
     count=1,
 )
 
-for rules_name in ("s7comm.rules", "ics_dos.rules"):
+for rules_name in ("s7comm.rules", "ics_dos.rules", "s7comm_malformed.rules"):
     if rules_name not in text:
         text = re.sub(
             r"(?m)^(rule-files:\s*)$",

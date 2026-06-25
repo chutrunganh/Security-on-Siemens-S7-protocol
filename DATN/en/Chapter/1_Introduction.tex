@@ -1,0 +1,66 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+\section{Problem statement}
+\label{sec:dvd}
+
+ICS play an important role in many areas of life, such as manufacturing, energy, water treatment, transportation, and technical infrastructure. Because they must run continuously for long periods and need high stability, traditional industrial systems are usually designed with a focus on availability, reliability, and real-time response. To achieve these goals, industrial protocols are often proprietary or partially open but tightly controlled by long-established industrial vendors and tied to their hardware for reliability. Examples include Siemens S7comm (Germany) and Mitsubishi MC (Japan). These protocols typically do not include encryption, authentication, or integrity mechanisms to keep real-time performance. At first, strong security was not required because the plant OT network was often isolated from the outside world, so the attack surface was almost zero for external attackers. However, to manage increasingly complex production, the OT network must connect to centralized monitoring (SCADA), MES, and the enterprise IT network to coordinate production with other activities such as finance and supply chain, logistics, auditing, etc. This has changed the attack surface of OT environments. When connectivity is higher, attackers have more ways to reach the plant OT network.
+
+In Vietnam for specific and in South Asia for general, factories and major national projects widely use equipment from Siemens (Germany). Communication between Siemens devices is mostly done through the proprietary S7comm protocol or its improved version S7comm Plus. This protocol lets components such as Simatic HMI, Tia Portal (or older called Step7) programming software, S7-300/400/1200/1500 PLCs, drives, and other Siemens ecosystem devices exchange data for monitoring, configuration, and control. However, in traditional S7comm setups, operations such as reading data, writing data, or sending control commands can be performed if a device on the network has enough information about the PLC address and memory layout. In a factory, this information is often not treated as a security priority and can be accessed by any engineer on the shop floor. This creates risk for attacks such as device scanning, system information collection, unauthorized writes to process values, overloading the S7 service (DoS), replaying control commands, or interfering with communication between the PLC and the monitoring station often without significant difficulty.
+
+The problem is to find a method that helps detect abnormal behavior in industrial communication without affecting control system operation, because this is the highest requirement in a factory. Any security measure that slows the line or, worse, stops production has little practical value. Therefore, research on passive monitoring based on network traffic is meaningful for improving security visibility in industrial systems without disrupting production.
+
+\section{Overview and research issues}
+\label{sec:giaiphap}
+
+ICS protection today is often deployed in several layers. At the network architecture layer, the system can be segmented using the Purdue model, industrial firewalls, DMZ zones, and access control to limit unnecessary connections between IT and OT networks. At the field device layer, measures such as access rights configuration, software updates, disabling unused services, device hardening, and limiting communication functions can reduce exploitation risk. At the monitoring layer, centralized systems such as SCADA monitor operating parameters, and IDS analyze network traffic to recognize attack patterns and alert on abnormal behavior.
+
+Among all the approached listed above, passive monitoring prove be be the most suitable for depolying in sites that already in production, meaning they are not secure by design from the early building stages and have not downtime to implement new solution. To implement passive monitoring, network-based intrusion detection is considered the most suitable approach for industrial environments. Instead of directly changing devices running on the production line, IDS can be deployed in passive mode by copying traffic from a switch using SPAN/mirror ports or dedicated hardware such as a TAP. This lets the monitoring system observe exchanges between network components without changing traffic, reconfiguring existing devices, or causing downtime during deployment.
+
+While some already existed enterprise solutions for passive monitoring specified for OT environments, for example the two most well-know are Armis and Claroty, are extramly high cost which may over budget and over complicate when deploying in small and medium site, there are some open-source solutions that can be used with same functionality in some limited aspect. Open-source tools such as Suricata can be used to build signature-based detection. With this approach, detection rules are built from protocol features, function codes, packet structure, or characteristic byte strings in network traffic. For S7comm, fields such as TPKT, COTP, the S7 protocol identifier, and function codes can be used to recognize read, write, program transfer, or PLC state control operations. This method is clear, easy to verify, and suitable for known attack scenarios.
+
+However, signature-based detection also has limits. First, the system detects well only behaviors already described in rules, while new attack variants or abnormal process-level behavior may be hard to detect using fixed packet patterns alone. Second, in industrial environments, some operations that are technically valid can still be risky if they occur at the wrong time, from the wrong source, or at an abnormal rate, specially when new lines are built and put into production. Third, building detection rules requires a clear understanding of protocol structure and the specific system's operating characteristics to limit false alerts.
+
+From these issues, this thesis focuses on detecting typical attack behaviors on S7comm in a simulation environment. The scope is not to build a complete protection system for every industrial network type, but to simulate, analyze, and build detection rules for a set of representative behaviors. This helps clarify the link between protocol weaknesses, how attacks appear in network traffic, and what passive IDS can detect.
+
+\section{Research objectives and solution direction}
+
+The main objective of this thesis is to research and build a passive IDS for a number of attack behaviors on S7comm in a simulated ICS environment. To achieve this, the thesis first studies OT concepts, ICS characteristics, the Purdue network model, the role of the PLC, and how the S7comm protocol works. On that basis, the thesis analyzes security risks that arise when industrial protocols lack full authentication and data protection.
+
+The solution direction is to build a simulation environment that can produce both normal traffic and attack traffic. Selected attack scenarios reflect common behavior groups when exploiting PLC systems, including information gathering, process data manipulation, denial of service on the S7comm channel, control command replay, and communication interference. Simulating these scenarios provides an experimental basis to observe packet structure, identify indicators, and evaluate detection capability.
+
+After traffic data is available, the thesis uses the Suricata IDS to build matching detection rules. The rulea are based on the characteristics of the S7comm protocol and opcode related to group of attack behaviors. The solution is deployed passively: the detection system only observes network traffic and generates alerts when it finds matching behavior patterns. Tihs approach fits industrial requirements because OT devices often do not receive frequent updates, are installed by many contractors from many countries, and changing operational configuration carries large compatibility and recovery risks.
+
+Besides building detection rules, the thesis also aims to evaluate rule behavior in each simulated scenario. Evaluation focuses on whether the system correctly recognizes simulated attacks and on situations that may cause false alerts. From this, the thesis draws conclusions on the strengths, limits, and application scope of signature-based detection for S7comm.
+
+\section{Contributions of the thesis}
+
+This thesis has the following main contributions:
+
+\begin{enumerate}
+    \item The thesis presents an overview of OT/ICS, some information security issues in ICS, focusing on risks from the S7comm protocol in PLC communication environments.
+
+    \item The thesis builds a simulation environment for studying typical attack behaviors on S7comm, including reconnaissance, data manipulation, S7comm DoS, malformed packets, Start/Stop replay, and MITM observation.
+
+    \item The thesis analyzes network traffic characteristics of the simulated attack scenarios and identifies signs that can be used for IDS detection.
+
+    \item The thesis builds a Suricata detection rule set for a number of S7comm attack behaviors and tests alert generation in the experimental environment.
+
+    \item The thesis provides comments on applicability, strengths, and limits of passive signature-based IDS in ICS network contexts.
+\end{enumerate}
+
+\section{Thesis organization}
+
+The rest of this graduation thesis is organized as follows.
+
+Chapter 2 presents related theory on ICS, OT network architecture, PLCs, and the S7comm communication protocol. This chapter also introduces basic concepts of information security in industrial environments and network-based IDS. It provides the foundation for analyzing security risks and building detection solutions in later chapters.
+
+Chapter 3 presents the simulation environment and attack scenarios used in the thesis. Scenarios are chosen to show behaviors that pose risk to PLC systems, including information gathering, process data change, DoS, malformed packets, control command replay, and communication interference. This chapter explains how experimental data is created for analysis and detection.
+
+Chapter 4 presents the method for detecting S7comm attack behaviors using Suricata IDS: packet structure analysis, indicator selection, and rule building.
+
+Chapter 5 presents the lab evaluation setup and test results, 
+
+Chapter 6 summarizes, states limitations, and suggests future work.
+
+\end{document}

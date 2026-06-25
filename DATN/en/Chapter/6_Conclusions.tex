@@ -1,0 +1,31 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+\section{Summary}
+
+The thesis built a lab environment and a Suricata rule set for typical S7comm behaviors: reconnaissance, writing variables to DBs, DoS (\texttt{ics\_dos.rules}), malformed packets (\texttt{s7comm\_malformed.rules}), Start/Stop replay, and MITM observation. Automated evaluation (\texttt{detect/eval\_rules.py}) on seven scenarios yielded $R_{\mathrm{det}} = 100\%$; a 60\,s baseline produced 3 alerts/hour when scaled (only SID \texttt{1000001} from valid Snap7 traffic); Suricata had no kernel packet drops at lab load.
+
+Main limitations: signature and fixed-threshold rules need tuning for real HMIs; FP and performance evaluation were done at lab scale (short baseline, \texttt{eval\_rules.py} script) rather than over long-running production traffic; detection depends on where the IDS captures packets.
+
+\section{Future Work}
+
+The author suggests the following directions for further research.
+
+\subsection{Limitations and security of IDS}
+
+An IDS is an important component but not an ``all-in-one'' solution in network infrastructure. Even a strong NIDS is limited by three factors:
+
+\begin{itemize}
+    \item \textbf{Visibility}: does the IDS actually observe all traffic? Attackers can route traffic around the IDS.
+    \item \textbf{Load (performance)}: when traffic is very high (for example during DoS), the IDS may become saturated and miss malicious packets.
+    \item \textbf{Analysis depth}: deeper analysis costs more resources; an inefficient parser becomes a bottleneck, while shallow analysis may miss sophisticated attacks.
+\end{itemize}
+
+\textbf{Deployment flaws}: an IDS is complex software and can have vulnerabilities. Parser bugs may hang the IDS on unusual packets. IDS engines are often written in C/C++ for speed, which makes buffer overflows (\textit{buffer overflow}) more likely; if compromised, an attacker gains a favorable position on the network. Mitigations include:
+\begin{itemize}
+    \item Using memory-safe languages (\textit{memory-safe languages}). Instead of C/C++, parts of the stack can move to Rust --- Suricata is gradually migrating protocol parsing to Rust to reduce buffer-overflow bugs.
+    \item \textbf{Fuzzing}: feeding malformed input to the IDS to find bugs before attackers exploit them.
+    \item \textbf{Sanitizing}: behavioral analysis to block unauthorized execution from input data.
+\end{itemize}
+
+\end{document}

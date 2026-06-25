@@ -10,12 +10,14 @@ Thư mục này chứa các luật Suricata để phát hiện các hành vi S7c
 - Start/Stop PLC replay: phát lại payload `PLC Control 0x28` và `PLC Stop 0x29`.
 - MITM Stuxnet mô phỏng: sửa dữ liệu trả về cho HMI. Phần S7comm có thể quan sát bằng luật phản hồi `Ack_Data`; phần ARP spoofing nên kết hợp thêm phát hiện ARP bất thường hoặc log switch vì bản chất cần tương quan trạng thái L2.
 - **DoS S7comm**: một script `attacks/dos/s7comm_dos.py` (mặc định chạy đủ phase, có pause cho IDS).
+- **Malformed S7comm**: `attacks/malformed/s7comm_malformed.py` — PDU sai TPKT/COTP, header S7, function hoặc cắt cụt.
 
 File luật:
 
 ```text
-detect/rules/s7comm.rules    # opcode / payload (sid 1000001–1000033)
-detect/rules/ics_dos.rules   # rate-based flood (sid 1000040–1000043)
+detect/rules/s7comm.rules           # opcode / payload (sid 1000001–1000033)
+detect/rules/ics_dos.rules          # rate-based flood (sid 1000040–1000043)
+detect/rules/s7comm_malformed.rules # malformed / syntax (sid 1000050–1000058)
 ```
 
 ## Cách nạp luật
@@ -26,9 +28,19 @@ Copy hoặc include file luật vào cấu hình Suricata:
 rule-files:
   - s7comm.rules
   - ics_dos.rules
+  - s7comm_malformed.rules
 ```
 
-Hoặc dùng `python detect/deploy_ids.py` / `python detect/run_attack_tests.py` (tự upload lên IDS).
+Deploy luật: `python detect/deploy_ids.py` (một lần). Chạy kịch bản: `python detect/run_attack_tests.py -s write_db` (xem `--list`).
+
+**Đánh giá tập luật (baseline + ma trận phát hiện + LaTeX cho Chương 5):**
+
+```bash
+python detect/eval_rules.py
+python detect/eval_rules.py --baseline-sec 120 --skip-baseline   # chỉ tấn công
+```
+
+Kết quả: `detect/eval_results/eval_report.json`, `eval_tables.tex` ( `\input` trong `DATN/Chapter/5_Numerical_results.tex` ), `eval_detection.csv`.
 
 Sau đó chạy kiểm tra cú pháp:
 
@@ -319,6 +331,33 @@ Lý do xây dựng:
 - `1000040`: dấu hiệu connection/SYN flood tới ISO-TSAP.
 - `1000041` / `1000042`: flood thiết lập phiên hoặc SZL — tải CPU PLC.
 - `1000043`: bão PDU Job tổng quát (Setup, Write, Download, …).
+
+### 8. Gói tin malformed (PDU bất thường)
+
+Luật (`s7comm_malformed.rules`):
+
+```suricata
+sid:1000050  Invalid TPKT version
+sid:1000051  TPKT length > TCP payload
+sid:1000058  TPKT length < TCP payload
+sid:1000056  Invalid COTP DT header
+sid:1000052  Invalid S7 protocol id (not 0x32)
+sid:1000053  Invalid ROSCTR (lab: 0xFF)
+sid:1000054  Invalid Job function (0xFF)
+sid:1000057  Write Var PDU too short
+sid:1000055  Truncated S7 Job PDU
+```
+
+Script: `attacks/malformed/s7comm_malformed.py` — mặc định `--mode all` (9 phase, `--pause 6`).
+
+| Nhóm | Ý nghĩa | `--mode` (ví dụ) |
+|------|---------|------------------|
+| 1 TPKT/COTP | Vỏ ISO-on-TCP sai | `tpkt_bad_version`, `tpkt_len_gt_payload`, `cotp_invalid` |
+| 2 S7 header | Protocol ID / ROSCTR | `s7_bad_protocol_id`, `s7_bad_rosctr` |
+| 3 Function | Opcode / Write Var lỗi | `job_bad_opcode`, `write_var_malformed` |
+| 4 Truncation | Cắt cụt Setup | `setup_truncated` |
+
+Khác DoS: **không** dùng `threshold` — mỗi gói malformed đủ lạ có thể sinh alert ngay.
 
 ## Lưu ý về độ chính xác
 

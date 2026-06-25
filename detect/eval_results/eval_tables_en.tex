@@ -1,0 +1,137 @@
+% English tables for DATN/en — data from eval_rules.py run 2026-06-25
+% Regenerate Vietnamese tables with: python detect/eval_rules.py
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Component} & \textbf{Lab value} \\
+        \hline
+        IDS (Suricata) & 172.16.16.7 (lubuntu), mirror ens33 \\
+        Attacker (runs scenarios) & 172.16.16.5 (ubuntu) \\
+        PLC (OpenPLC :102) & 192.168.50.10 (rack 0, slot 2) \\
+        HOME\_NET & \texttt{192.168.50.0/24,192.168.60.0/24} \\
+        \hline
+    \end{tabular}
+    \caption{Rule-set evaluation lab setup}
+    \label{tab:eval-lab-setup}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|p{8.5cm}|}
+        \hline
+        \textbf{Metric} & \textbf{Definition in this thesis} \\
+        \hline
+        Scenario detection rate & Scenarios with $\geq 1$ expected SID / total scenarios \\
+        \hline
+        Baseline alert density & Suricata alerts during periodic read-only Snap7 only (no attack scripts) \\
+        \hline
+        Operational FP (baseline) & Alerts during baseline, grouped by SID (Setup, List Blocks, \ldots) \\
+        \hline
+        kernel\_drops & Packets dropped by the kernel on the IDS; $=0$ means no overload at lab load \\
+        \hline
+    \end{tabular}
+    \caption{Evaluation metrics for detection and false positives}
+    \label{tab:eval-metrics-def}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|r|}
+        \hline
+        \textbf{Baseline} & \textbf{Value} \\
+        \hline
+        Observation window & 60\,s (two Snap7 reads) \\
+        New alerts & 3 \\
+        Alert density & 180.00 alerts/hour \\
+        \hline
+    \end{tabular}
+    \caption{Baseline results --- legitimate operational traffic}
+    \label{tab:eval-baseline}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|r|r|l|}
+        \hline
+        \textbf{SID} & \textbf{Alert count} & \textbf{Note} \\
+        \hline
+        1000001 & 3 & Setup Communication --- valid Snap7 session \\
+        \hline
+    \end{tabular}
+    \caption{SID distribution in baseline (operational false positives)}
+    \label{tab:eval-baseline-sid}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \scriptsize
+    \begin{tabular}{|l|l|c|c|l|}
+        \hline
+        \textbf{ID} & \textbf{Scenario} & \textbf{Alerts} & \textbf{OK?} & \textbf{SIDs observed} \\
+        \hline
+        \texttt{recon\_nmap} & Reconnaissance --- nmap s7-info & 6 & \checkmark & \texttt{1000001, 1000002, 1000003} \\
+        \hline
+        \texttt{recon\_blocks} & Reconnaissance --- list blocks (Snap7) & 1 & \checkmark & \texttt{1000001} \\
+        \hline
+        \texttt{write\_db} & Modify process --- Write Var DB & 5 & \checkmark & \texttt{1000001, 1000010, 1000011} \\
+        \hline
+        \texttt{dos\_all} & DoS --- setup / tcp / szl (all phases) & 5850 & \checkmark & \texttt{1000001, 1000002, 1000040, 1000042} \\
+        \hline
+        \texttt{malformed\_all} & Malformed S7comm --- all phases & 14 & \checkmark & \texttt{1000001, 1000053, 1000054} \\
+        \hline
+        \texttt{plc\_stop} & Start/Stop replay --- PLC Stop & 3 & \checkmark & \texttt{1000001, 1000032, 1000033} \\
+        \hline
+        \texttt{plc\_start} & Start/Stop replay --- PLC Start & 3 & \checkmark & \texttt{1000001, 1000030, 1000031} \\
+        \hline
+    \end{tabular}
+    \caption{Attack detection matrix (7/7 scenarios, 100\%)}
+    \label{tab:eval-detection-matrix}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|c|c|r|r|r|}
+        \hline
+        \textbf{Snapshot} & \textbf{CPU (\%)} & \textbf{RAM (\%)} & \textbf{kernel\_pkts} & \textbf{drops} & \textbf{detect.alert} \\
+        \hline
+        baseline\_start & --- & --- & 159318 & 0 & 17467 \\
+        \hline
+        baseline\_end & --- & --- & 159318 & 0 & 17467 \\
+        \hline
+        before\_attacks & --- & --- & 159318 & 0 & 17467 \\
+        \hline
+        under\_dos & --- & --- & 159318 & 0 & 17467 \\
+        \hline
+        after\_attacks & --- & --- & 159318 & 0 & 17467 \\
+        \hline
+    \end{tabular}
+    \caption{Suricata performance on the IDS (stats.log / top)}
+    \label{tab:eval-performance}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|r|r|r|l|}
+        \hline
+        \textbf{SID} & \textbf{Threshold} & \textbf{Window (s)} & \textbf{Description} \\
+        \hline
+        1000040 & 40 & 10 & TCP SYN flood :102 \\
+        \hline
+        1000041 & 25 & 10 & Setup Communication flood \\
+        \hline
+        1000042 & 25 & 10 & Read SZL flood \\
+        \hline
+        1000043 & 80 & 10 & S7 Job request flood \\
+        \hline
+    \end{tabular}
+    \caption{DoS rule thresholds (ics\_dos.rules) --- must exceed HMI baseline}
+    \label{tab:eval-dos-thresholds}
+\end{table}

@@ -1,0 +1,238 @@
+{
+  "generated_at": "2026-06-25T08:21:31.229323+00:00",
+  "ids_host": "172.16.16.7",
+  "attacker_host": "172.16.16.5",
+  "plc_ip": "192.168.50.10",
+  "home_net": "[192.168.50.0/24,192.168.60.0/24]",
+  "capture_iface": "ens33",
+  "baseline_duration_sec": 60,
+  "baseline_alerts": 3,
+  "baseline_alerts_per_hour": 180.0,
+  "baseline_by_sid": {
+    "1000001": 3
+  },
+  "benign_runs": 2,
+  "scenario_results": [
+    {
+      "scenario_id": "recon_nmap",
+      "title": "Reconnaissance — nmap s7-info",
+      "category": "reconnaissance",
+      "exit_code": 0,
+      "expected_sids": [
+        "1000001",
+        "1000002",
+        "1000003",
+        "1000004",
+        "1000005"
+      ],
+      "observed_sids": [
+        "1000001",
+        "1000002",
+        "1000003"
+      ],
+      "missing_sids": [
+        "1000004",
+        "1000005"
+      ],
+      "detected": true,
+      "new_alerts": 6,
+      "duration_sec": 4.3
+    },
+    {
+      "scenario_id": "recon_blocks",
+      "title": "Reconnaissance — list blocks (Snap7)",
+      "category": "reconnaissance",
+      "exit_code": 0,
+      "expected_sids": [
+        "1000001",
+        "1000005"
+      ],
+      "observed_sids": [
+        "1000001"
+      ],
+      "missing_sids": [
+        "1000005"
+      ],
+      "detected": true,
+      "new_alerts": 1,
+      "duration_sec": 4.1
+    },
+    {
+      "scenario_id": "write_db",
+      "title": "Modify process — Write Var DB",
+      "category": "modify",
+      "exit_code": 0,
+      "expected_sids": [
+        "1000010",
+        "1000011"
+      ],
+      "observed_sids": [
+        "1000001",
+        "1000010",
+        "1000011"
+      ],
+      "missing_sids": [],
+      "detected": true,
+      "new_alerts": 5,
+      "duration_sec": 11.2
+    },
+    {
+      "scenario_id": "dos_all",
+      "title": "DoS — setup / tcp / szl (all phases)",
+      "category": "dos",
+      "exit_code": 0,
+      "expected_sids": [
+        "1000040",
+        "1000041",
+        "1000042",
+        "1000043"
+      ],
+      "observed_sids": [
+        "1000001",
+        "1000002",
+        "1000040",
+        "1000042"
+      ],
+      "missing_sids": [
+        "1000041",
+        "1000043"
+      ],
+      "detected": true,
+      "new_alerts": 5850,
+      "duration_sec": 52.6
+    },
+    {
+      "scenario_id": "malformed_all",
+      "title": "Malformed S7comm — all phases",
+      "category": "malformed",
+      "exit_code": 0,
+      "expected_sids": [
+        "1000050",
+        "1000051",
+        "1000052",
+        "1000053",
+        "1000054",
+        "1000055",
+        "1000056",
+        "1000057",
+        "1000058"
+      ],
+      "observed_sids": [
+        "1000001",
+        "1000053",
+        "1000054"
+      ],
+      "missing_sids": [
+        "1000050",
+        "1000051",
+        "1000052",
+        "1000055",
+        "1000056",
+        "1000057",
+        "1000058"
+      ],
+      "detected": true,
+      "new_alerts": 14,
+      "duration_sec": 75.4
+    },
+    {
+      "scenario_id": "plc_stop",
+      "title": "Start/Stop replay — PLC Stop",
+      "category": "plc_control",
+      "exit_code": 0,
+      "expected_sids": [
+        "1000032",
+        "1000033"
+      ],
+      "observed_sids": [
+        "1000001",
+        "1000032",
+        "1000033"
+      ],
+      "missing_sids": [],
+      "detected": true,
+      "new_alerts": 3,
+      "duration_sec": 4.1
+    },
+    {
+      "scenario_id": "plc_start",
+      "title": "Start/Stop replay — PLC Start",
+      "category": "plc_control",
+      "exit_code": 0,
+      "expected_sids": [
+        "1000030",
+        "1000031"
+      ],
+      "observed_sids": [
+        "1000001",
+        "1000030",
+        "1000031"
+      ],
+      "missing_sids": [],
+      "detected": true,
+      "new_alerts": 3,
+      "duration_sec": 4.1
+    }
+  ],
+  "performance": [
+    {
+      "label": "baseline_start",
+      "suricata_active": true,
+      "cpu_percent": null,
+      "mem_percent": null,
+      "kernel_packets": 112212,
+      "kernel_drops": null,
+      "decoder_pkts": 112212,
+      "detect_alerts": 11580,
+      "capture_errors": null
+    },
+    {
+      "label": "baseline_end",
+      "suricata_active": true,
+      "cpu_percent": null,
+      "mem_percent": null,
+      "kernel_packets": 112864,
+      "kernel_drops": null,
+      "decoder_pkts": 112864,
+      "detect_alerts": 11583,
+      "capture_errors": null
+    },
+    {
+      "label": "before_attacks",
+      "suricata_active": true,
+      "cpu_percent": null,
+      "mem_percent": null,
+      "kernel_packets": 112864,
+      "kernel_drops": null,
+      "decoder_pkts": 112864,
+      "detect_alerts": 11583,
+      "capture_errors": null
+    },
+    {
+      "label": "under_dos",
+      "suricata_active": true,
+      "cpu_percent": null,
+      "mem_percent": null,
+      "kernel_packets": 155583,
+      "kernel_drops": null,
+      "decoder_pkts": 155669,
+      "detect_alerts": 17446,
+      "capture_errors": null
+    },
+    {
+      "label": "after_attacks",
+      "suricata_active": true,
+      "cpu_percent": null,
+      "mem_percent": null,
+      "kernel_packets": 158128,
+      "kernel_drops": null,
+      "decoder_pkts": 158128,
+      "detect_alerts": 17466,
+      "capture_errors": null
+    }
+  ],
+  "detection_rate": 1.0,
+  "scenarios_tested": 7,
+  "scenarios_detected": 7,
+  "notes": []
+}

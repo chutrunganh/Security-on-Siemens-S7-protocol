@@ -1,0 +1,105 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{none/global//global/global/global}
+  \entry{snap7_sharp7}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=S}{%
+         family={{Snap7}},
+         familyi={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{S1}
+    \strng{fullhash}{S1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{\url{https://snap7.sourceforge.net/sharp7.html}}
+    \field{title}{Sharp7}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{snap7_s7protocol}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=S}{%
+         family={{Snap7}},
+         familyi={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{S1}
+    \strng{fullhash}{S1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{\url{https://snap7.sourceforge.net/siemens_comm.html}}
+    \field{title}{S7 Protocol}
+    \field{urlday}{12}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{inprotech_s7comm_security}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=I}{%
+         family={{Inprotech}},
+         familyi={I\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{I1}
+    \strng{fullhash}{I1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://inprotech.es/en/s7comm-protocol-security-analyzed/}}
+    \field{title}{{S7Comm} Protocol Security Analyzed}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{veit2021ics_dissectors}{thesis}{}{}
+    \name{author}{1}{}{%
+      {{hash=VMF}{%
+         family={Veit},
+         familyi={V\bibinitperiod},
+         given={M.\bibnamedelima F.},
+         giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{VMF1}
+    \strng{fullhash}{VMF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{{ICS} Protocol Dissectors for Signature-Based {NIDS}}
+    \verb{url}
+    \verb https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/ICS/Masterarbeit_
+    \verb ICS_protocol_dissectors_for_signature_based_NIDS.pdf
+    \endverb
+    \list{institution}{2}{%
+      {Department of Informatics, Institute of Telematics, Decentralized
+  Systems}%
+      {Network Services Research Group, in cooperation with Federal Office for
+  Information Security (BSI)}%
+    }
+    \field{type}{mathesis}
+    \field{year}{2021}
+    \field{urlday}{12}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+\enddatalist
+\endinput

@@ -1,0 +1,793 @@
+Attack process:
+
+
+\begin{enumerate}
+    \item Windows infection: It infects a computer on the internal network through a USB left by an insider. It then spreads across the internal network using four Windows zero-day vulnerabilities and sends information to the attacker's Command and Control (C\&C) servers [[1]].
+\end{enumerate}
+
+
+
+\begin{enumerate}
+    \item Infection of Siemens Step 7 software (*): On each Windows machine, it scans for Siemens Step 7 software. It hooks into Step 7's communication library \texttt{s7otbxdx.dll} to intercept and modify traffic between Step 7 and the PLC:
+\end{enumerate}
+
+
+
+Normal communications between Step 7 and a Siemens PLC
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-9} shows normal communications between Step 7 and a Siemens PLC.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-9.png}
+    \caption{Normal communications between Step 7 and a Siemens PLC}
+    \label{fig:stuxnet_mitm_sim-image-9}
+\end{figure}
+
+Stuxnet hijacking communication between Step 7 software and a Siemens PLC
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-10} shows stuxnet hijacking communication between Step 7 software and a Siemens PLC.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-10.png}
+    \caption{Stuxnet hijacking communication between Step 7 software and a Siemens PLC}
+    \label{fig:stuxnet_mitm_sim-image-10}
+\end{figure}
+
+
+    In essence, this is a software-layer man-in-the-middle attack.
+
+
+\begin{enumerate}
+    \item Centrifuge control interference: Stuxnet interferes with centrifuge control by modifying PLC code to increase the centrifuge rotation speed above normal levels. Specifically, Stuxnet hooks into Step 7 to send malicious code that raises the rotation speed to the PLC -> the PLC executes the code and sends control signals to the variable frequency drive (VFD) -> the drive adjusts the centrifuge rotation speed -> damaging the centrifuge.
+\end{enumerate}
+
+
+Figure~\ref{fig:stuxnetmitmsimimage11png} shows stuxnet attack chain affecting the centrifuge via the VFD.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-11.png}
+    \caption{Stuxnet attack chain affecting the centrifuge via the VFD}
+    \label{fig:stuxnetmitmsimimage11png}
+\end{figure}
+
+
+    At the same time, Stuxnet also intercepts PLC output to send falsified data to HMI WinCC about the centrifuge status, so engineers do not realize the centrifuge is being damaged.
+
+
+
+However, what is sophisticated here is that Stuxnet selects targets very carefully. If a target does not meet the requirements, Stuxnet goes dormant to reduce its presence. It only attacks PLCs controlling drives with the following characteristics:
+
+
+\begin{itemize}
+    \item Siemens S7-300 series
+\end{itemize}
+
+
+\begin{itemize}
+    \item Drive manufacturer is Vacon (Finland) or Fararo Paya (Iran)
+\end{itemize}
+
+
+\begin{itemize}
+    \item Operating frequency in the range \textbf{807} Hz to \textbf{1210} Hz. This rotation speed is much higher than that of most industrial machines, except gas centrifuges.
+\end{itemize}
+
+
+When conditions are met, Stuxnet changes the output frequency in short stages to disrupt system operation, with commonly cited levels of 1410 Hz, 2 Hz, and 1064 Hz. In this way, it changes the centrifuge rotation speed and can cause physical damage while monitoring data remains concealed.
+
+
+Stuxnet was not widely discovered until 2010, when its third version had already spread worldwide. A Belarusian cybersecurity company found it on a computer in Iran. Security researchers then analyzed it and identified Stuxnet as part of a sophisticated cyber campaign targeting Iran's nuclear program.
+
+
+\textit{In the attack simulation of this thesis, to fit time and resource constraints, we simplify the man-in-the-middle attack scenario above at the network protocol layer rather than at the DLL layer as Stuxnet did in reality.}
+
+
+(*) \textit{TIA Portal is Siemens' proprietary software suite for working with its PLC lines (S7-300, S7-400, S7-1200, S7-1500), including: STEP 7 for programming and configuring PLCs, WinCC for HMI/SCADA design, S7-PLCSIM / S7 PLCSIM Advanced for simulating PLC operation on a computer without real hardware, and Startdrive for configuring drives and motors.}
+
+
+\noindent Attack simulation.\par
+\medskip
+
+\begin{packetdump}
+![alt text](<Stuxnet (1).svg>)
+\end{packetdump}
+
+
+\textit{The attack goal is to change the value of a variable in a PLC datablock, thereby changing the behavior of the control system. At the same time, it intercepts data transmission so the HMI does not detect this change.}
+
+
+\subsubsection{PLC setup}
+
+
+Import the project into OpenPLC Editor from this folder (\url{./plc_server_code/}). The program running on the PLC is structured as follows
+
+
+\begin{itemize}
+    \item With the following datablock configuration for PLC inputs (DB1) and outputs (DB2):
+\end{itemize}
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-1} shows datablock configuration for PLC inputs (DB1) and outputs (DB2).
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-1.png}
+    \caption{Datablock configuration for PLC inputs (DB1) and outputs (DB2)}
+    \label{fig:stuxnet_mitm_sim-image-1}
+\end{figure}
+
+Declaration of two datablocks because each datablock in OpenPLC allows only one data type
+
+
+\begin{itemize}
+    \item Tag and logic program declaration (written in Structured Text). The program simulates motor rotation speed oscillating around the setpoint \texttt{iSetpoint} specified as \texttt{1200}:
+\end{itemize}
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-2} shows tag and logic program declaration in Structured Text.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-2.png}
+    \caption{Tag and logic program declaration in Structured Text}
+    \label{fig:stuxnet_mitm_sim-image-2}
+\end{figure}
+
+Tag and logic program declaration (written in Structured Text)
+
+
+    Tags included (similar to binding variables in IT):
+
+
+\begin{itemize}
+    \item \texttt{iSimSpeed}: actual machine rotation speed, stored in \texttt{DB1}, 2 bytes from offset 0
+    \item \texttt{iSetpoint}: threshold speed around which the machine oscillates, stored in \texttt{DB1}, 2 bytes from offset 2
+    \item \texttt{iCounter}: used to generate simulated oscillation.
+    \item \texttt{bCentrifugeStatus}: centrifuge operating status with 0 for normal and 1 for overspeed, stored in \texttt{DB2}, 1 byte from offset 0. Here we simulate damage when rotation speed exceeds 1500 Hz.
+\end{itemize}
+
+
+
+
+\subsubsection{HMI setup}
+
+
+Import the project into FUXA from this folder (\url{./hmi/fuxa_hmi_design.json}):
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-8} shows fUXA HMI project import and tag configuration.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-8.png}
+    \caption{FUXA HMI project import and tag configuration}
+    \label{fig:stuxnet_mitm_sim-image-8}
+\end{figure}
+
+Declaration of HMI tags corresponding to the PLC tags to be monitored
+
+
+HMI interface; the machine is currently operating around 1200, so it displays in green
+
+
+The OpenPLC Editor Debugger also shows similar information:
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-17} shows similar information in the OpenPLC Editor Debugger.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-17.png}
+    \caption{Similar information in the OpenPLC Editor Debugger}
+    \label{fig:stuxnet_mitm_sim-image-17}
+\end{figure}
+
+Similar information in the OpenPLC Editor Debugger
+
+
+\textit{OpenPLC Editor should be kept open to verify that the program has been downloaded to the PLC before connecting to the HMI or reading/writing to the PLC.}
+
+
+Packet capture on the HMI machine shows that HMI--PLC communication consists of repeated pairs of the following two request--response exchanges:
+
+
+\begin{itemize}
+    \item The first pair is a request to read 4 bytes at DB1 starting at bit 0 of byte 0, corresponding to variables \texttt{iSimSpeed} and \texttt{iSetpoint}:
+\end{itemize}
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-4} shows request to read 4 bytes at DB1 from bit 0 of byte 0 for \texttt{iSimSpeed} and \texttt{iSetpoint}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-4.png}
+    \caption{Request to read 4 bytes at DB1 from bit 0 of byte 0 for \texttt{iSimSpeed} and \texttt{iSetpoint}}
+    \label{fig:stuxnet_mitm_sim-image-4}
+\end{figure}
+
+Request to read 4 bytes at DB1 from bit 0 of byte 0, corresponding to variables \texttt{iSimSpeed} and \texttt{iSetpoint}
+
+
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-5} shows response returning values of \texttt{iSimSpeed} and \texttt{iSetpoint}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-5.png}
+    \caption{Response returning values of \texttt{iSimSpeed} and \texttt{iSetpoint}}
+    \label{fig:stuxnet_mitm_sim-image-5}
+\end{figure}
+
+Response returning values of \texttt{iSimSpeed} and \texttt{iSetpoint}
+
+
+    Variable \texttt{iSimSpeed} is \texttt{042d} because it comes first in the PLC tag configuration; variable \texttt{iSetpoint} is \texttt{04b0}. S7 uses little endian, so value \texttt{042d} corresponds to \texttt{1069} and \texttt{04b0} corresponds to \texttt{1200}.
+
+
+\begin{itemize}
+    \item The second pair is a request to read 1 byte at DB2 starting at bit 0 of byte 0, corresponding to variable \texttt{bCentrifugeStatus}:
+\end{itemize}
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-6} shows request to read 1 byte at DB2 from bit 0 of byte 0 for \texttt{bCentrifugeStatus}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-6.png}
+    \caption{Request to read 1 byte at DB2 from bit 0 of byte 0 for \texttt{bCentrifugeStatus}}
+    \label{fig:stuxnet_mitm_sim-image-6}
+\end{figure}
+
+Request to read 1 byte at DB2 from bit 0 of byte 0, corresponding to variable \texttt{bCentrifugeStatus}
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-7} shows response returning the value of \texttt{bCentrifugeStatus}; currently 0, meaning normal operation.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-7.png}
+    \caption{Response returning the value of \texttt{bCentrifugeStatus}; currently 0, meaning normal operation}
+    \label{fig:stuxnet_mitm_sim-image-7}
+\end{figure}
+
+Response returning the value of \texttt{bCentrifugeStatus}. Currently 0, meaning the machine is operating normally
+
+
+\subsubsection{Attacker}
+
+
+From the attacker machine, the following actions are performed simultaneously:
+
+
+\begin{enumerate}
+    \item Create a write command to write the value of a variable in a PLC datablock using the Snap7 or Python S7 Comm library. This write is easy because the S7 protocol has no authentication mechanism. Here we change variable \texttt{Setpoint} at location \texttt{DB1.DBW2} from \texttt{1200} to \texttt{2000}. Script here (Snap7 library version) (\url{./attacker/test_readwrite_db_via_snap7.py}) or here (S7 Comm library version) (\url{./attacker/test_readwrite_db_via_pythonS7comm.py}). Output:
+\end{enumerate}
+
+
+\begin{packetdump}
+    Current Speed  | Setpoint Speed    | Centrifuge Status
+    --------------------------------------------------
+    b'\x03\xc1'    |    b'\x04\xb0'    |    b'\x00'
+    b'\x07\xe4'    |    b'\x07\xd0'    |    b'\x01'
+\end{packetdump}
+
+
+    \texttt{iSetpoint} changed from \texttt{1200} (0x04b0) to \texttt{2000} (0x07d0), and at this point \texttt{bCentrifugeStatus} changed from \texttt{0} to \texttt{1}. If the interception script has not been run yet, the HMI will show the machine oscillating around 2000:
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-14} shows machine oscillating around 2000, displayed in red because it exceeds the 1500 Hz threshold.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-14.png}
+    \caption{Machine oscillating around 2000, displayed in red because it exceeds the 1500 Hz threshold}
+    \label{fig:stuxnet_mitm_sim-image-14}
+\end{figure}
+
+Machine oscillating around 2000, displayed in red because it exceeds the 1500 Hz threshold
+
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-15} shows pLC-to-HMI packets showing \texttt{iSetpoint} changed to \texttt{2000} (0x07d0).
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-15.png}
+    \caption{PLC-to-HMI packets showing \texttt{iSetpoint} changed to \texttt{2000} (0x07d0)}
+    \label{fig:stuxnet_mitm_sim-image-15}
+\end{figure}
+
+Inspect PLC-to-HMI packets to confirm that \texttt{iSetpoint} has been changed to \texttt{2000} (0x07d0)
+
+
+    The attack successfully changed the PLC value; next we intercept HMI--PLC communication so the HMI does not detect this change.
+
+
+
+
+\begin{enumerate}
+    \item Man-in-the-middle attack using ARP spoofing between the router port (\texttt{.60.1}) and the HMI (\texttt{.60.10}) via the Bettercap tool:
+\end{enumerate}
+
+
+
+\begin{packetdump}
+    # Run on attacker machine
+    sudo bettercap -iface ens33 
+
+    # Scan network for devices
+    net.probe on
+
+    # Show network devices
+    net.show
+\end{packetdump}
+
+
+    Ensure Bettercap has discovered all devices on the network:
+
+
+\begin{packetdump}
+    +---------------+-------------------+---------+--------------+-------+--------+----------+
+    |     IP ^      |        MAC        |  Name   |    Vendor    | Sent  | Recvd  |   Seen   |
+    +---------------+-------------------+---------+--------------+-------+--------+----------+
+    | 192.168.60.20 | 00:0c:29:a6:c0:b0 | ens33   | VMware, Inc. | 0 B   | 0 B    | 14:52:24 |
+    | 192.168.60.1  | 00:0c:29:f1:b8:5e | gateway | VMware, Inc. | 816 B | 0 B    | 14:52:24 |
+    |               |                   |         |              |       |        |          |
+    | 192.168.60.10 | 00:0c:29:2f:0d:bb |         | VMware, Inc. | 16 kB | 8.3 kB | 14:53:43 |
+    +---------------+-------------------+---------+--------------+-------+--------+----------+
+\end{packetdump}
+
+
+\begin{packetdump}
+    # Specify IP of Router gateway and HMI as targets
+    set arp.spoof.targets 192.168.60.1, 192.168.60.10
+    
+    # Enable internal ARP spoofing
+    set arp.spoof.internal true
+    # Enable full duplex ARP spoofing since we need to ensure HMI -> PLC direction is still working
+    set arp.spoof.fullduplex true
+    
+    # Start ARP spoofing
+    arp.spoof on
+\end{packetdump}
+
+
+    At this point, packet capture on the HMI shows S7 packets interleaved with ARP spoofing packets:
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-13} shows S7comm and ARP spoofing packets interleaved.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-13.png}
+    \caption{S7comm and ARP spoofing packets interleaved}
+    \label{fig:stuxnet_mitm_sim-image-13}
+\end{figure}
+
+S7comm and ARP spoofing packets interleaved
+
+
+\begin{enumerate}
+    \item Modify S7comm packets sent from the PLC to the HMI to change the \texttt{Setpoint} value from \texttt{2000} to \texttt{1200}. After Bettercap has redirected packets between the router gateway and the router, push these packets into the OS NFQUEUE (because we want to process packets rather than let the OS forward them automatically) and use a Python script to retrieve packets from NFQUEUE (via the \texttt{NetfilterQueue} library), parse S7comm packets, locate the \texttt{Setpoint} value at \texttt{DB1.DBW2}, and change this value from \texttt{2000} to \texttt{1200} before pushing the packet back to NFQUEUE for forwarding. Script here (\url{./attacker/mitm/s7_intercept.py}).
+\end{enumerate}
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-18} shows successful attack: machine actually running above 1500 Hz (red), but Setpoint still displayed as 1200.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-18.png}
+    \caption{Successful attack: machine actually running above 1500 Hz (red), but Setpoint still displayed as 1200}
+    \label{fig:stuxnet_mitm_sim-image-18}
+\end{figure}
+
+Attack succeeded when the machine is actually running above 1500 Hz (red), but Setpoint still displays as 1200
+
+
+Inspect packets:
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-28} shows pLC-to-HMI packet with forged \texttt{iSetpoint} = 1200 (\texttt{04b0}).
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-28.png}
+    \caption{PLC-to-HMI packet with forged \texttt{iSetpoint} = 1200 (\texttt{04b0})}
+    \label{fig:stuxnet_mitm_sim-image-28}
+\end{figure}
+
+The \texttt{iSetpoint} value in the packet to the HMI is 1200 (04b0)
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-29} shows pLC-to-HMI packet with \texttt{bCentrifugeStatus} = 01 (overspeed).
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-29.png}
+    \caption{PLC-to-HMI packet with \texttt{bCentrifugeStatus} = 01 (overspeed)}
+    \label{fig:stuxnet_mitm_sim-image-29}
+\end{figure}
+
+The \texttt{bCentrifugeStatus} value in the packet to the HMI is 01
+
+
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-3} shows openPLC Editor debugger showing actual process speed near 2000.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../attacks/stuxnet_mitm_sim/image-3.png}
+    \caption{OpenPLC Editor debugger showing actual process speed near 2000}
+    \label{fig:stuxnet_mitm_sim-image-3}
+\end{figure}
+
+Checking the OpenPLC Editor debugger also shows that the machine is actually running at around 2000
+
+
+\subsubsection{Attack analysis}
+
+
+The hardest part of this attack is modifying packets and then forwarding them again. To maintain speed, ARP spoofing with Bettercap is used here to redirect packets to the attacker machine. There, packets are pushed into NFQUEUE so a Python application can process them instead of letting the OS kernel forward them automatically.
+
+
+\textit{One reason is that Bettercap only supports packet editing when intercepting via JavaScript, which is not suitable for implementing an S7 parser, so this approach was required}
+
+
+\begin{packetdump}
+# 1. Enable IP forwarding
+subprocess.run("sysctl -w net.ipv4.ip_forward=1 > /dev/null", shell=True)
+
+# 2. Disable RP filter (avoid dropping return packets from the router)
+# Prevent the kernel from automatically dropping unexpected packets -> allow packets from the PLC to pass through
+subprocess.run("sysctl -w net.ipv4.conf.all.rp_filter=0 > /dev/null", shell=True)
+subprocess.run("sysctl -w net.ipv4.conf.default.rp_filter=0 > /dev/null", shell=True)
+subprocess.run(f"sysctl -w net.ipv4.conf.{INTERFACE}.rp_filter=0 > /dev/null", shell=True)
+
+# 3. Add a route to the PLC subnet via the real gateway
+# Without this line, the HMI loses connectivity immediately when it sends a read-var request to the PLC
+print(f"[*] Adding route to {PLC_NET} via {GATEWAY}...")
+subprocess.run(f"route add -net {PLC_NET} gw {GATEWAY} 2>/dev/null", shell=True)
+
+# 4. Configure iptables
+print("[*] Setting up iptables NFQUEUE...")
+subprocess.run("iptables -F", shell=True)               # Clear the filter table
+subprocess.run("iptables -t mangle -F", shell=True)      # Clear the mangle table
+subprocess.run("iptables -P FORWARD ACCEPT", shell=True) # Ensure forwarding is not blocked
+
+# Trap S7 traffic (port 102) into the queue
+# Instead of the kernel dropping packets automatically, the Python app processes and forwards them
+subprocess.run(f"iptables -t mangle -A FORWARD -p tcp --dport 102 -j NFQUEUE --queue-num {QUEUE_NUM}", shell=True)
+subprocess.run(f"iptables -t mangle -A FORWARD -p tcp --sport 102 -j NFQUEUE --queue-num {QUEUE_NUM}", shell=True)
+
+# Block RST packets generated by the kernel (avoid disconnection)
+# The kernel sends RST (reset connection) if it receives a packet on a port it does not recognize
+subprocess.run("iptables -I OUTPUT -p tcp --tcp-flags RST RST -j DROP", shell=True)
+\end{packetdump}
+
+
+Once the required packets are available, modification can begin. The S7 packet structure is as follows:
+
+
+Figure~\ref{fig:iemensS7protocolstackpng} shows siemens S7 protocol stack.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/Siemens_S7_protocol_stack.png}
+    \caption{Siemens S7 protocol stack}
+    \label{fig:iemensS7protocolstackpng}
+\end{figure}
+
+
+Where:
+
+
+\begin{itemize}
+    \item \texttt{TPKT Header}: Fixed at 4 bytes, as described in the S7 protocol theory section.
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-19} shows tPKT header.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-19.png}
+    \caption{TPKT header}
+    \label{fig:stuxnet_mitm_sim-image-19}
+\end{figure}
+
+    \item \texttt{COTP Header}: Fixed at 3 bytes, as described in the S7 protocol theory section.
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-20} shows COTP header.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-20.png}
+    \caption{COTP header}
+    \label{fig:stuxnet_mitm_sim-image-20}
+\end{figure}
+
+    \item \texttt{S7 Header}: The first byte is always \texttt{0x32}; this byte is used to distinguish S7comm packets from other packets. In addition, one field of interest is \texttt{ROSCTR}---\texttt{ROS Control}, which determines the type of S7comm command sent by the PLC. Specifically:
+    \begin{itemize}
+        \item \texttt{0x01}: Job
+        \item \texttt{0x02}: Ack
+        \item \texttt{0x03}: Ack\_Data
+    \end{itemize}
+\end{itemize}
+
+
+    In this case, a Read Var Request packet is observed to have \texttt{ROSCTR} set to \texttt{Job}
+
+Figure~\ref{fig:stuxnetmitmsimimage25png} shows read Var Request with ROSCTR = Job.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-25.png}
+    \caption{Read Var Request with ROSCTR = Job}
+    \label{fig:stuxnetmitmsimimage25png}
+\end{figure}
+
+
+    while a Read Var Response packet has \texttt{ROSCTR} set to \texttt{Ack\_Data}.
+
+Figure~\ref{fig:stuxnetmitmsimimage26png} shows read Var Response with ROSCTR = Ack\_Data.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-26.png}
+    \caption{Read Var Response with ROSCTR = Ack\_Data}
+    \label{fig:stuxnetmitmsimimage26png}
+\end{figure}
+
+
+    The remaining fields in the header are not important for this project.
+
+
+\begin{itemize}
+    \item The \texttt{Param} and \texttt{Data} sections depend on the S7comm command type in use, for example Setup Communication, Read Var, Write Var, \ldots
+\end{itemize}
+
+
+Here, only the \texttt{Param} and \texttt{Data} sections of the Read Var command [[2]] are considered. First, variable addressing: S7 provides three ways to locate variables:
+
+
+\begin{itemize}
+    \item Any-type: Specifies \texttt{area} (e.g.\ \texttt{DB}, \texttt{M}, \texttt{I}, \texttt{Q}), \texttt{address} (which byte), and data type. For example, reading variable \texttt{DB1.DBX0.0} yields \texttt{area = DB}, \texttt{address = 1} (byte 1), and data type bit. In this case, the \texttt{Param} structure is:
+\end{itemize}
+
+
+    For a Read Var request:
+
+
+\begin{packetdump}
+![alt text](AnyTypeStruct.svg)
+\end{packetdump}
+
+
+\begin{itemize}
+    \item \texttt{Function Code}: \texttt{0x04} because this is a Read Var command (other addressing types such as DB-Type and Symbolic use the same field because they belong to the read/write variable command group (\texttt{0x04}/\texttt{0x05}).)
+    \item \texttt{Item count}: The number of items specified in this packet (other addressing types such as DB-Type and Symbolic use the same field). In the figure, there are 2 items.
+\end{itemize}
+
+
+\begin{itemize}
+    \item Addressing types differ only in the structure of the \texttt{Request Item}:
+    \item \texttt{Spec Type}: Always \texttt{0x12}
+    \item \texttt{Length}: Length of this item
+    \item \texttt{Syntax ID}: \texttt{0x10} for Any-type, \texttt{0xb0} for DB-Type
+\end{itemize}
+
+
+            Wireshark traffic captures show that both sides in the project communicate using Any-type \texttt{0x10}:
+
+Figure~\ref{fig:stuxnetmitmsimimage22png} shows any-type addressing in captured traffic.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-22.png}
+    \caption{Any-type addressing in captured traffic}
+    \label{fig:stuxnetmitmsimimage22png}
+\end{figure}
+
+
+\begin{itemize}
+    \item \texttt{Variable Type}: Defines the data type and length of the variable (typically S7 types such as REAL, BIT, BYTE, WORD, DWORD, COUNTER, \ldots).
+    \item \texttt{Count}: An entire array of variables of the same type can be selected using a single struct item. These variables must share the same type, be contiguous in memory, and the \texttt{Count} field defines the size of this array. It is set to 1 when reading or writing a single variable.
+    \item The remaining fields identify the read/write address according to the Any-type structure, with \texttt{DB Number} (present only when \texttt{area} is DB) for the datablock to read, \texttt{Area} for the memory area (DB, M, I, Q), and \texttt{Address} for the specific address within that area. This 3-byte \texttt{Address} field encodes the bit offset in big-endian form.
+\end{itemize}
+
+
+Figure~\ref{fig:stuxnetmitmsimimage21png} shows any-type request item fields.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-21.png}
+    \caption{Any-type request item fields}
+    \label{fig:stuxnetmitmsimimage21png}
+\end{figure}
+
+
+    For a Read Var response, the structure is similar, except the \texttt{Request Item} is replaced by a \texttt{Data Item}:
+
+
+\begin{packetdump}
+![alt text](ReadVarResponse.svg)
+\end{packetdump}
+
+
+\begin{itemize}
+    \item \texttt{Error Code}: \texttt{0xff} for success
+    \item \texttt{Variable Type} and \texttt{Count} are the same as in the Request Item
+    \item \texttt{Data}: Returns data for the items requested in the Request Item.
+
+Figure~\ref{fig:stuxnet_mitm_sim-image-23} shows read Var response data item.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-23.png}
+    \caption{Read Var response data item}
+    \label{fig:stuxnet_mitm_sim-image-23}
+\end{figure}
+
+\end{itemize}
+
+
+
+\begin{itemize}
+    \item DB-Type: Used specifically for the DB area; more compact than Any-type. It is not analyzed here because this project does not use it. The Request Item and Response Item structures are as follows:
+\end{itemize}
+
+
+Figure~\ref{fig:stuxnetmitmsimimage24png} shows dB-Type request and response items.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-24.png}
+    \caption{DB-Type request and response items}
+    \label{fig:stuxnetmitmsimimage24png}
+\end{figure}
+
+
+\begin{itemize}
+    \item Symbolic: Instead of a byte address, a variable name defined in the PLC program can be used. For example: \texttt{DB1.CustomProperty1}. The parameters then include the variable name and data type. This method is supported only on S7-1200/1500 series PLCs. It is not analyzed here because this project does not use it.
+\end{itemize}
+
+
+The packet structure was analyzed because no ready-made S7 parser could be found online; the only available parser is a C implementation at \url{https://github.com/ricardojoserf/s7-parser}. However, it cannot parse the \texttt{Data} field in the \texttt{Response Item} of S7 packets, so the project reimplemented the parser in Python and extended it to parse this \texttt{Data} section. The script is located at (\url{./attacker/mitm/s7_parser.py}).
+
+
+The parser was tested by running it on a PCAP file and specifying the packet to extract (packet number 9 in this case):
+
+\begin{packetdump}
+uv run .\s7_parser.py .\wincc_s300_setup-alarm-read-write.pcapng 9
+\end{packetdump}
+
+
+Output:
+
+
+\begin{packetdump}
+Analyzing S7 packet #9:
+
+================================================================================
+S7 Protocol Packet Detected
+================================================================================
+
+S7 Communication
+  Header: (Ack_Data)
+    Protocol Id: 0x32
+    ROSCTR: Ack_Data (3)
+    Redundancy Identification (Reserved): 0x0000
+    Protocol Data Unit Reference: 2
+    Parameter length: 2
+    Data length: 52
+    Error class: No error (0x00)
+    Error code: 0x00
+  Parameter: (Read Var)
+    Function: Read Var (0x04)
+    Item count: 8
+  Data
+    Item [1]: (Success)
+      Return code: Success (0xff)
+      Transport size: BIT (0x03)
+      Length: 1
+      Data: 01
+    Item [2]: (Success)
+      Return code: Success (0xff)
+      Transport size: REAL (0x07)
+      Length: 4
+      Data: aabbccdd
+    Item [3]: (Success)
+      Return code: Success (0xff)
+      Transport size: BYTE/WORD/DWORD (0x04)
+      Length: 4
+      Data: feadbeef
+    Item [4]: (Success)
+      Return code: Success (0xff)
+      Transport size: BYTE/WORD/DWORD (0x04)
+      Length: 2
+      Data: babe
+    Item [5]: (Success)
+      Return code: Success (0xff)
+      Transport size: BIT (0x03)
+      Length: 1
+      Data: 01
+    Item [6]: (Success)
+      Return code: Success (0xff)
+      Transport size: BIT (0x03)
+      Length: 1
+      Data: 01
+    Item [7]: (Success)
+      Return code: Success (0xff)
+      Transport size: OCTET STRING (0x09)
+      Length: 2
+      Data: 2504
+    Item [8]: (Success)
+      Return code: Success (0xff)
+      Transport size: OCTET STRING (0x09)
+      Length: 2
+      Data: 0011
+
+================================================================================
+
+\end{packetdump}
+
+
+This matches the packet parsed in Wireshark:
+
+
+Figure~\ref{fig:stuxnetmitmsimimage16png} shows S7 packet parsed in Wireshark.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-16.png}
+    \caption{S7 packet parsed in Wireshark}
+    \label{fig:stuxnetmitmsimimage16png}
+\end{figure}
+
+
+
+The role of \texttt{s7\_intercept.py} (\url{./attacker/mitm/s7_intercept.py}) is as follows:
+
+\begin{enumerate}
+    \item Retrieve S7 packets from NFQUEUE; each packet is passed to the \texttt{process\_packet} function for processing.
+
+    \item The \texttt{process\_packet} function checks whether the packet is an S7comm packet by verifying sequentially:
+    \begin{itemize}
+        \item TPKT byte: \texttt{payload[0] == 0x03};
+        \item COTP: \texttt{payload[4] == 0x02};
+        \item S7 header: \texttt{payload[7] == 0x32};
+        \item ROSCTR: \texttt{payload[8] == 0x03} (i.e.\ a response packet from the PLC to the HMI).
+    \end{itemize}
+
+    \item If the packet is S7comm and is a response from the PLC to the HMI, two cases arise (corresponding to the two request--response pairs mentioned earlier):
+    \begin{itemize}
+        \item A response to the command that reads 1 bit \texttt{bCentrifugeStatus} at \texttt{DB2.DBX0.0};
+        \item A response to the 4-byte read of \texttt{iSetpoint} and \texttt{iSimSpeed} at \texttt{DB1.DBW2}.
+    \end{itemize}
+
+    Filtering is applied so that only the response returning \texttt{iSetpoint} and \texttt{iSimSpeed} is modified.
+    This packet is 29 bytes long, longer than the response returning \texttt{bCentrifugeStatus}.
+    Because the DB1 datablock layout places \texttt{iSetpoint} after \texttt{iSimSpeed}, its value lies at offsets 27 and 28.
+    Overwriting these two bytes with the new value completes the modification.
+
+    \item Clear checksums so that Scapy recalculates them.
+
+    \item Push the packet back to NFQUEUE for forwarding.
+\end{enumerate}
+
+
+When configuring polling parameters on the Fuxa HMI:
+
+
+Figure~\ref{fig:stuxnetmitmsimimage27png} shows fuxa HMI polling configuration.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/stuxnet_mitm_sim/image-27.png}
+    \caption{Fuxa HMI polling configuration}
+    \label{fig:stuxnetmitmsimimage27png}
+\end{figure}
+
+
