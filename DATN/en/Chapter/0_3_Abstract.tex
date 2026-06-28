@@ -6,17 +6,21 @@
 \end{center}
 \vspace{1cm}
 
-In modern industry, the convergence of IT and OT networks, driven by the need to manage large-scale production, has also increased new cyber threats against ICS. Attacks on OT can cause real-world impact, from relatively low severity such as stopping a production line and causing economic loss to the highest severity such as risk to human life for workers on the line. Because OT devices are designed from the start with one main goal: stability, real-time response, and long service life so they can run 24/7 over a plant lifecycle of over 20 to30 years, many systems today, such as Siemens S7-300/400 PLCs, still use the legacy S7comm protocol without built-in authentication or encryption. At the same time, traditional IT security tools that work against IT network attacks are often less effective against the special, proprietary and closed industrial protocols used in OT.
+In modern industry, the convergence of IT and OT networks, driven by the need to manage large-scale production, has also increased new cyber threats against ICS. Attacks on OT can cause real-world impact, from relatively low severity such as stopping a production line and causing economic loss to the highest severity such as risk to human life for workers on the line. Because OT devices are designed from the start with one main goal: stability, real-time response, and long service life so they can run 24/7 over a plant lifecycle of over 20 to 30 years, many systems today, such as Siemens S7-300/400 PLCs, still use the legacy S7comm protocol without built-in authentication or encryption. At the same time, traditional IT security tools that work against IT network attacks are often less effective against the special, proprietary and closed industrial protocols used in OT.
 
-Therefore, this thesis chooses a passive IDS approach based on network traffic of the S7comm protocol. This approach fits OT environments because it does not directly interfere with the control process, while still allowing observation and analysis of abnormal behavior in communication between system components. It can also be tuned to work well on the Siemens S7 industrial protocol. On that basis, the thesis builds an industrial network simulation environment and typical attack scenarios on S7comm: reconnaissance, writing process variables, DoS, malformed packets, Start/Stop replay, and MITM observation. From these scenarios, the thesis analyzes the network traffic characteristics and identifies signs that can be used for IDS detection. Based on the analysis of the network traffic characteristics, the thesis builds a Suricata detection rule set based on function codes, byte offsets of S7 protocol.
+Therefore, this thesis chooses a passive IDS approach based on network traffic of the S7comm protocol. This approach fits OT environments because it does not directly interfere with the control process, while still allowing observation and analysis of abnormal behavior in communication between system components. It can also be tuned to work well on the Siemens S7 industrial protocol. On that basis, the thesis builds an industrial network simulation environment and typical attack scenarios on S7comm: reconnaissance, writing process variables, DoS, malformed packets, Start/Stop replay, and MITM observation. From these scenarios, the thesis analyzes the network traffic characteristics and identifies signs that can be used for IDS detection. Based on the analysis of the network traffic characteristics, the thesis builds a Suricata detection rule set based on function codes, byte offsets of S7 protocol then evaluates the rule set on the simulated traffic.
 
-The main contribution is a systematic description of S7comm attack techniques in the lab and an explicit, verifiable rule set for Suricata. Results show that the IDS can be used to detect precise attacks on S7comm, improving the overall network security of the ICS with minimal impact on production when deployed in passive mode.
+The main contribution is a systematic description of S7comm attack techniques in the lab and an explicit, verifiable rule set for Suricata. Results show that the IDS can be used to detect precise attacks on S7comm, improving the overall network security of the ICS with minimal impact on production operations.
 
 
 \begin{flushright}
 \begin{tabular}{@{}c@{}}
 Student\\
-\textit{(Signature and full name)}
+\textit{(Signature and full name)} \\
+\vspace{1cm}
+\textit{Anh} \\
+\vspace{1cm}
+\textit{Chu Trung Anh} \\
 \end{tabular}
 \end{flushright}
 

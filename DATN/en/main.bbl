@@ -17,6 +17,208 @@
 \endgroup
 
 \datalist[entry]{none/global//global/global/global}
+  \entry{inprotech_s7comm_security}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=I}{%
+         family={{Inprotech}},
+         familyi={I\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{I2}
+    \strng{fullhash}{I2}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://inprotech.es/en/s7comm-protocol-security-analyzed/}}
+    \field{title}{{S7Comm} Protocol Security Analyzed}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{nist_sp800_82}{report}{}{}
+    \name{author}{1}{}{%
+      {{hash=N}{%
+         family={{National Institute of Standards and Technology}},
+         familyi={N\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{N1}
+    \strng{fullhash}{N1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{number}{SP 800-82 Rev.~3}
+    \field{title}{Guide to Industrial Control Systems ({ICS}) Security}
+    \verb{url}
+    \verb https://csrc.nist.gov/publications/detail/sp/800/82/rev-3/final
+    \endverb
+    \list{institution}{1}{%
+      {NIST}%
+    }
+    \field{type}{techreport}
+    \field{year}{2023}
+    \field{urlday}{12}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{falliere2010stuxnet}{report}{}{}
+    \name{author}{3}{}{%
+      {{hash=FN}{%
+         family={Falliere},
+         familyi={F\bibinitperiod},
+         given={Nicolas},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=MLO}{%
+         family={Murchu},
+         familyi={M\bibinitperiod},
+         given={Liam\bibnamedelima O},
+         giveni={L\bibinitperiod\bibinitdelim O\bibinitperiod},
+      }}%
+      {{hash=CE}{%
+         family={Chien},
+         familyi={C\bibinitperiod},
+         given={Eric},
+         giveni={E\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{FN+1}
+    \strng{fullhash}{FNMLOCE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{W32.{Stuxnet} Dossier}
+    \verb{url}
+    \verb https://www.wired.com/images_blogs/threatlevel/2010/11/w32_stuxnet_do
+    \verb ssier.pdf
+    \endverb
+    \list{institution}{1}{%
+      {Symantec Security Response}%
+    }
+    \field{type}{techreport}
+    \field{year}{2010}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{langner2011stuxnet}{article}{}{}
+    \name{author}{1}{}{%
+      {{hash=LR}{%
+         family={Langner},
+         familyi={L\bibinitperiod},
+         given={Ralph},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LR1}
+    \strng{fullhash}{LR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{number}{3}
+    \field{pages}{49\bibrangedash 51}
+    \field{title}{Stuxnet: Dissecting a Cyberwarfare Weapon}
+    \field{volume}{9}
+    \field{journaltitle}{IEEE Security \& Privacy}
+    \field{year}{2011}
+  \endentry
+
+  \entry{ics_attacks_impact2024}{misc}{}{}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://www.sciencedirect.com/science/article/pii/S2405896324002660}}
+    \field{title}{Impact of cyber attacks on industrial control systems}
+    \field{year}{2024}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{williams1994purdue}{article}{}{}
+    \name{author}{1}{}{%
+      {{hash=WTJ}{%
+         family={Williams},
+         familyi={W\bibinitperiod},
+         given={Theodore\bibnamedelima J.},
+         giveni={T\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WTJ1}
+    \strng{fullhash}{WTJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{number}{1-3}
+    \field{pages}{141\bibrangedash 158}
+    \field{title}{The {Purdue} enterprise reference architecture}
+    \field{volume}{24}
+    \field{journaltitle}{Computers in Industry}
+    \field{year}{1994}
+  \endentry
+
+  \entry{iec62443}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=I}{%
+         family={{ISA/IEC}},
+         familyi={I\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{I3}
+    \strng{fullhash}{I3}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{International Standard}
+    \field{title}{{IEC} 62443: Security for industrial automation and control
+  systems}
+    \field{year}{2021}
+  \endentry
+
+  \entry{suricata_oisf}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=O}{%
+         family={{Open Information Security Foundation (OISF)}},
+         familyi={O\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{O1}
+    \strng{fullhash}{O1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{\url{https://suricata.io/}}
+    \field{title}{{Suricata} Intrusion Detection and Prevention System}
+    \field{urlday}{12}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{veit2021ics_dissectors}{thesis}{}{}
+    \name{author}{1}{}{%
+      {{hash=VMF}{%
+         family={Veit},
+         familyi={V\bibinitperiod},
+         given={M.\bibnamedelima F.},
+         giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{VMF1}
+    \strng{fullhash}{VMF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{{ICS} Protocol Dissectors for Signature-Based {NIDS}}
+    \verb{url}
+    \verb https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/ICS/Masterarbeit_
+    \verb ICS_protocol_dissectors_for_signature_based_NIDS.pdf
+    \endverb
+    \list{institution}{2}{%
+      {Department of Informatics, Institute of Telematics, Decentralized
+  Systems}%
+      {Network Services Research Group, in cooperation with Federal Office for
+  Information Security (BSI)}%
+    }
+    \field{type}{mathesis}
+    \field{year}{2021}
+    \field{urlday}{12}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
   \entry{snap7_sharp7}{misc}{}{}
     \name{author}{1}{}{%
       {{hash=S}{%
@@ -53,10 +255,198 @@
     \field{urlyear}{2026}
   \endentry
 
-  \entry{inprotech_s7comm_security}{misc}{}{}
+  \entry{rfc905}{misc}{}{}
     \name{author}{1}{}{%
       {{hash=I}{%
-         family={{Inprotech}},
+         family={{ISO}},
+         familyi={I\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{I4}
+    \strng{fullhash}{I4}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{RFC 905}
+    \field{title}{{ISO} Transport Protocol Specification for Computer Systems}
+    \verb{url}
+    \verb https://www.rfc-editor.org/rfc/rfc905
+    \endverb
+    \field{year}{1984}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{rfc1006}{misc}{}{}
+    \name{author}{2}{}{%
+      {{hash=RMT}{%
+         family={Rose},
+         familyi={R\bibinitperiod},
+         given={M.\bibnamedelima T.},
+         giveni={M\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+      {{hash=CDE}{%
+         family={Cass},
+         familyi={C\bibinitperiod},
+         given={D.\bibnamedelima E.},
+         giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{RMTCDE1}
+    \strng{fullhash}{RMTCDE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{RFC 1006}
+    \field{title}{ISO Transport Service on Top of the {TCP}}
+    \verb{url}
+    \verb https://www.rfc-editor.org/rfc/rfc1006
+    \endverb
+    \field{year}{1987}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{rfc2126}{misc}{}{}
+    \name{author}{4}{}{%
+      {{hash=KM}{%
+         family={Kubica},
+         familyi={K\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=DD}{%
+         family={Dalgi},
+         familyi={D\bibinitperiod},
+         given={D.},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=CD}{%
+         family={Cass},
+         familyi={C\bibinitperiod},
+         given={D.},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=KF}{%
+         family={Kastenholz},
+         familyi={K\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{KM+1}
+    \strng{fullhash}{KMDDCDKF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{RFC 2126}
+    \field{title}{{ISO} Transport Service on Top of {TCP} ({ITOT})}
+    \verb{url}
+    \verb https://www.rfc-editor.org/rfc/rfc2126
+    \endverb
+    \field{year}{1997}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{mitre_ics_attack}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=M}{%
+         family={{MITRE}},
+         familyi={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{M1}
+    \strng{fullhash}{M1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{\url{https://attack.mitre.org/matrices/ics/}}
+    \field{title}{{ATT\&CK} for {ICS}}
+    \field{urlday}{12}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{wireshark_s7comm}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=W}{%
+         family={{Wireshark Foundation}},
+         familyi={W\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{W1}
+    \strng{fullhash}{W1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{\url{https://wiki.wireshark.org/S7comm}}
+    \field{title}{{S7comm} --- Wireshark Wiki}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{autonomylogic_openplc}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=A}{%
+         family={{Autonomy Logic}},
+         familyi={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{A1}
+    \strng{fullhash}{A1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{\url{https://autonomylogic.com/runtime}}
+    \field{title}{{OpenPLC} Runtime v4}
+    \field{urlday}{12}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{openplc_s7_driver}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=T}{%
+         family={{TECTONIC-OT Project}},
+         familyi={T\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{T1}
+    \strng{fullhash}{T1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://gitlab.fing.edu.uy/gsi/tectonic-ot/openplcmd/-/blob/main/documentation/S7-Protocol/Siemens-Protocol-driver-for-OpenPLC.pdf}}
+    \field{note}{GitLab documentation mirror of the OpenPLC S7 driver
+  specification}
+    \field{title}{Siemens Protocol Driver for {OpenPLC}}
+    \field{urlday}{12}
+    \field{urlmonth}{04}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{nmap}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=LGF}{%
+         family={Lyon},
+         familyi={L\bibinitperiod},
+         given={Gordon\bibnamedelima {Fyodor}},
+         giveni={G\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LGF1}
+    \strng{fullhash}{LGF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{\url{https://nmap.org/}}
+    \field{title}{{Nmap}: The Network Mapper}
+    \field{urlday}{21}
+    \field{urlmonth}{04}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{industrialmonitordirect_s7comm_plus}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=I}{%
+         family={{Industrial Monitor Direct}},
          familyi={I\bibinitperiod},
       }}%
     }
@@ -64,40 +454,58 @@
     \strng{fullhash}{I1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
-  \field{howpublished}{\url{https://inprotech.es/en/s7comm-protocol-security-analyzed/}}
-    \field{title}{{S7Comm} Protocol Security Analyzed}
+  \field{howpublished}{\url{https://industrialmonitordirect.com/blogs/knowledgebase/s7comm-vs-s7comm-plus-switching-protocol-in-s7-1500-hmi-communication}}
+    \field{title}{{S7comm} vs {S7comm-plus}: Switching Protocol in {S7-1500}
+  {HMI} Communication}
     \field{urlday}{18}
     \field{urlmonth}{03}
     \field{urlyear}{2026}
   \endentry
 
-  \entry{veit2021ics_dissectors}{thesis}{}{}
+  \entry{stuxnet_work_details}{misc}{}{}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{Project documentation}
+    \field{note}{Available in repository at docs/Research
+  papers/Stuxnet\_work\_in\_details.pdf}
+    \field{title}{Detailed Analysis of {Stuxnet} Mechanism}
+    \field{year}{2025}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{gmiru_s7comm_part2}{misc}{}{}
     \name{author}{1}{}{%
-      {{hash=VMF}{%
-         family={Veit},
-         familyi={V\bibinitperiod},
-         given={M.\bibnamedelima F.},
-         giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod},
+      {{hash=g}{%
+         family={{gmiru.com}},
+         familyi={g\bibinitperiod},
       }}%
     }
-    \strng{namehash}{VMF1}
-    \strng{fullhash}{VMF1}
+    \strng{namehash}{g1}
+    \strng{fullhash}{g1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
-    \field{title}{{ICS} Protocol Dissectors for Signature-Based {NIDS}}
-    \verb{url}
-    \verb https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/ICS/Masterarbeit_
-    \verb ICS_protocol_dissectors_for_signature_based_NIDS.pdf
-    \endverb
-    \list{institution}{2}{%
-      {Department of Informatics, Institute of Telematics, Decentralized
-  Systems}%
-      {Network Services Research Group, in cooperation with Federal Office for
-  Information Security (BSI)}%
+    \field{howpublished}{\url{http://gmiru.com/article/s7comm-part2/}}
+    \field{title}{{S7comm} Part 2: Read/Write Variable}
+    \field{urlday}{18}
+    \field{urlmonth}{03}
+    \field{urlyear}{2026}
+  \endentry
+
+  \entry{s7_parser_github}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=r}{%
+         family={ricardojoserf},
+         familyi={r\bibinitperiod},
+      }}%
     }
-    \field{type}{mathesis}
-    \field{year}{2021}
-    \field{urlday}{12}
+    \strng{namehash}{r1}
+    \strng{fullhash}{r1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{\url{https://github.com/ricardojoserf/s7-parser}}
+    \field{title}{s7-parser}
+    \field{urlday}{18}
     \field{urlmonth}{03}
     \field{urlyear}{2026}
   \endentry

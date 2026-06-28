@@ -1,0 +1,96 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+\section{Upload and Download traffic sources}
+\label{app:upload-download-traffic}
+
+Chapter~\ref{sec:down_up_program} describes Upload and Download at the S7comm protocol level. This appendix records why live block-transfer traffic was not captured in the lab and which reference PCAP source was used for rule development instead.
+
+Attempts to simulate program upload and download in the available tooling were unsuccessful because of limitations in the simulation software.
+
+When uploading program code from OpenPLC Editor to OpenPLC Runtime, the program is sent through the OpenPLC Runtime RESTful API rather than using the standard S7comm structure.
+
+Figure~\ref{fig:ksdownupprogramimage5png} shows uploading a program from OpenPLC Editor to OpenPLC Runtime via RESTful API.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-5.png}
+    \caption{Uploading a program from OpenPLC Editor to OpenPLC Runtime via RESTful API}
+    \label{fig:ksdownupprogramimage5png}
+\end{figure}
+
+OpenPLC Runtime does not support loading programs in the usual Siemens S7comm way.
+
+Another approach is to simulate program transfer on a Siemens PLC through PLCSIM Advanced. In that setup, the program would use the standard S7comm block-transfer sequence.
+
+\textbf{Step 1} --- Set up a virtual switch for Siemens virtual devices:
+
+Figure~\ref{fig:ksdownupprogramimage2png} shows virtual switch setup for Siemens virtual devices.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-2.png}
+    \caption{Virtual switch setup for Siemens virtual devices}
+    \label{fig:ksdownupprogramimage2png}
+\end{figure}
+
+\textbf{Step 2} --- Run a Siemens PLC in PLCSIM Advanced on the same network as the virtual switch. PLCSIM Advanced only supports simulating Siemens S7-1500 PLCs.
+
+Figure~\ref{fig:cksdownupprogramimagepng} shows a Siemens PLC running in PLCSIM Advanced.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image.png}
+    \caption{Siemens PLC running in PLCSIM Advanced}
+    \label{fig:cksdownupprogramimagepng}
+\end{figure}
+
+\textbf{Step 3} --- Connect the PLC to a WinCC HMI through an IE General connection:
+
+Figure~\ref{fig:ksdownupprogramimage1png} shows the PLC connected to WinCC HMI via an IE General connection card.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-1.png}
+    \caption{PLC connected to HMI WinCC via IE general connection card}
+    \label{fig:ksdownupprogramimage1png}
+\end{figure}
+
+\textbf{Step 4} --- Create a PLC program, download it to the PLC, and run a test:
+
+Figure~\ref{fig:ksdownupprogramimage3png} shows the PLC program in RUN mode with PLCSIM Advanced and WinCC HMI.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-3.png}
+    \caption{PLC program in running mode with PLCSIM Advanced and HMI WinCC}
+    \label{fig:ksdownupprogramimage3png}
+\end{figure}
+
+The screenshot shows the PLC program in RUN mode, the PLC instance in PLCSIM Advanced, and WinCC HMI displaying PLC variable values.
+
+However, when observing packets in Wireshark, Wireshark could not parse S7comm payloads. Investigation showed that S7-1500 uses the S7comm-plus protocol and cannot be forced to use classic S7comm. According to \url{https://industrialmonitordirect.com/blogs/knowledgebase/s7comm-vs-s7comm-plus-switching-protocol-in-s7-1500-hmi-communication}, enabling \texttt{Permit access with PUT/GET communication from remote partners} only allows legacy clients to read selected data; Wireshark still cannot dissect S7comm-plus payloads.
+
+Figure~\ref{fig:ksdownupprogramimage6png} shows Wireshark unable to parse S7comm-plus packets.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-6.png}
+    \caption{Wireshark unable to parse S7comm plus packets}
+    \label{fig:ksdownupprogramimage6png}
+\end{figure}
+
+Figure~\ref{fig:ksdownupprogramimage4png} shows Wireshark identifying only the outer COTP layer of S7comm-plus packets.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-4.png}
+    \caption{Wireshark identifying only the outer COTP layer of S7comm plus packets}
+    \label{fig:ksdownupprogramimage4png}
+\end{figure}
+
+Wireshark can identify the outer COTP envelope but cannot parse the S7comm-plus PDU carried inside it.
+
+For Upload/Download rule tuning, this project therefore relies on documented sample captures from \url{https://wiki.wireshark.org/S7comm} rather than on lab-generated block-transfer PCAPs.
+
+\end{document}

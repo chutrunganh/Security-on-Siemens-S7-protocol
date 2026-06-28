@@ -1,0 +1,96 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+\section{Nguồn traffic Upload và Download}
+\label{app:upload-download-traffic}
+
+Mục~\ref{sec:down_up_program} trình bày Upload và Download ở mức giao thức S7comm. Phụ lục này ghi lại lý do không thu được lưu lượng chuyển block trực tiếp trong lab và nguồn PCAP tham chiếu dùng để phát triển luật phát hiện.
+
+Đã thử mô phỏng việc download và upload chương trình điều khiển PLC trong các công cụ hiện có nhưng không thành công do giới hạn phần mềm mô phỏng.
+
+Khi upload code chương trình từ OpenPLC Editor vào OpenPLC Runtime, chương trình được gửi qua RESTful API của OpenPLC Runtime thay vì theo cấu trúc chuẩn S7comm.
+
+Hình~\ref{fig:ksdownupprogramimage5png} minh họa upload chương trình từ OpenPLC Editor lên OpenPLC Runtime qua RESTful API.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-5.png}
+    \caption{Upload chương trình từ OpenPLC Editor lên OpenPLC Runtime qua RESTful API}
+    \label{fig:ksdownupprogramimage5png}
+\end{figure}
+
+OpenPLC Runtime không hỗ trợ nạp chương trình theo cách S7comm thông thường của Siemens.
+
+Một hướng khác là mô phỏng trên PLC Siemens qua PLCSIM Advanced, khi đó chương trình sẽ đi theo chuỗi block-transfer S7comm chuẩn.
+
+\textbf{Bước 1} --- Thiết lập virtual switch cho thiết bị ảo Siemens:
+
+Hình~\ref{fig:ksdownupprogramimage2png} minh họa thiết lập virtual switch cho thiết bị ảo Siemens.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-2.png}
+    \caption{Thiết lập virtual switch cho thiết bị ảo Siemens}
+    \label{fig:ksdownupprogramimage2png}
+\end{figure}
+
+\textbf{Bước 2} --- Chạy PLC Siemens trong PLCSIM Advanced trên cùng mạng với switch ảo. PLCSIM Advanced chỉ hỗ trợ mô phỏng PLC S7-1500.
+
+Hình~\ref{fig:cksdownupprogramimagepng} minh họa PLC Siemens chạy trên PLCSIM Advanced.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image.png}
+    \caption{PLC Siemens chạy trên PLCSIM Advanced}
+    \label{fig:cksdownupprogramimagepng}
+\end{figure}
+
+\textbf{Bước 3} --- Kết nối PLC với HMI WinCC qua card IE General:
+
+Hình~\ref{fig:ksdownupprogramimage1png} minh họa PLC kết nối HMI WinCC qua card IE General.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-1.png}
+    \caption{PLC kết nối HMI WinCC qua card IE general}
+    \label{fig:ksdownupprogramimage1png}
+\end{figure}
+
+\textbf{Bước 4} --- Tạo chương trình PLC, nạp xuống PLC và chạy thử:
+
+Hình~\ref{fig:ksdownupprogramimage3png} minh họa chương trình PLC ở chế độ RUN với PLCSIM Advanced và HMI WinCC.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-3.png}
+    \caption{Chương trình PLC ở chế độ RUN với PLCSIM Advanced và HMI WinCC}
+    \label{fig:ksdownupprogramimage3png}
+\end{figure}
+
+Ảnh chụp gồm chương trình PLC ở chế độ RUN, instance PLC trong PLCSIM Advanced và HMI WinCC hiển thị giá trị biến PLC.
+
+Tuy nhiên, khi quan sát lưu lượng trên Wireshark, công cụ không parse được payload S7comm. Nguyên nhân là S7-1500 dùng giao thức S7comm-plus và không thể ép về S7comm cổ điển. Theo \url{https://industrialmonitordirect.com/blogs/knowledgebase/s7comm-vs-s7comm-plus-switching-protocol-in-s7-1500-hmi-communication}, tùy chọn \texttt{Permit access with PUT/GET communication from remote partners} chỉ tạo tương thích đọc dữ liệu cho client legacy; Wireshark vẫn không dissect được S7comm-plus.
+
+Hình~\ref{fig:ksdownupprogramimage6png} minh họa Wireshark không parse được gói S7comm-plus.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-6.png}
+    \caption{Wireshark không parse được gói S7comm plus}
+    \label{fig:ksdownupprogramimage6png}
+\end{figure}
+
+Hình~\ref{fig:ksdownupprogramimage4png} minh họa Wireshark chỉ nhận diện lớp COTP bên ngoài gói S7comm-plus.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-4.png}
+    \caption{Wireshark chỉ nhận diện lớp COTP bên ngoài gói S7comm plus}
+    \label{fig:ksdownupprogramimage4png}
+\end{figure}
+
+Wireshark chỉ nhận diện được lớp COTP bên ngoài, không parse sâu PDU S7comm-plus bên trong.
+
+Để hiệu chỉnh luật Upload/Download, đồ án sử dụng bộ capture mẫu tại \url{https://wiki.wireshark.org/S7comm} thay cho PCAP block-transfer tạo trực tiếp trong lab.
+
+\end{document}

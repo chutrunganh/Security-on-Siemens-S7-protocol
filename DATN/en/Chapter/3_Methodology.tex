@@ -6,7 +6,7 @@
 \section{Research methodology overview}
 \label{sec:methodology-overview}
 
-This chapter presents the experimental methodology of the thesis: building a simulated industrial control system environment, reproducing typical attack behaviors on the S7comm protocol, analyzing the captured network traffic, and creating a basis for building detection rules with the Suricata IDS in later chapters.
+This chapter presents the experimental methodology of the thesis: building a simulated industrial control system environment, reproducing typical attack behaviors on the S7comm protocol, analyzing the captured network traffic, and creating a basis for building detection rules with the Suricata IDS~\cite{suricata_oisf} in later chapters.
 
 The research process is organized into five consecutive steps as follows.
 
@@ -61,22 +61,22 @@ The scope of this chapter stops at traffic analysis and scenario description; wr
 
 \subsection{Deployment principles}
 
-The lab environment is designed as a controlled simulation on virtual machines. All virtual machines are deployed using VMware LAN Segment objects (two LAN segments are used: 192.168.50.0/24 for the Controller Layer and 192.168.60.0/24 for the Superuser Layer). The IDS is deployed in passive mode by placing it in the same LAN segment. Figure~\ref{fig:lab-topology} shows how the two segments are connected and which hosts carry S7comm traffic in the default lab layout.
+The lab environment is designed as a controlled simulation on virtual machines. All virtual machines are deployed using VMware LAN Segment objects: \texttt{192.168.50.0/24} for the Controller Layer (OpenPLC at \texttt{192.168.50.10}) and \texttt{192.168.60.0/24} for the Supervisory Layer (FUXA at \texttt{192.168.60.10}). A virtual router at \texttt{192.168.50.1}/\texttt{192.168.60.1} routes between the segments. In Figure~\ref{fig:lab-topology}, black arrows mark HMI Read Var traffic; red arrows mark attacker Write Var and forged Read Var responses in the MITM scenario (Section~\ref{sec:stuxnet_mitm_sim}). The IDS VM (\texttt{172.16.16.7}) shares the Controller segment in promiscuous mode but is omitted from the diagram for clarity.
 
 Because of how VMware vSwitch behaves like a conventional hub rather than a switch, placing the IDS in the same LAN segment and enabling promiscuous mode on the network interface is equivalent to a SPAN/mirror port on a physically deployed switch.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.95\textwidth]{Figure/lab_topology.png}
-    \caption{Lab topology on VMware LAN Segments. \textbf{Controller Layer} (\texttt{192.168.50.0/24}): OpenPLC RUNTIME at \texttt{192.168.50.10}. \textbf{Superuser Layer} (\texttt{192.168.60.0/24}): FUXA EDITOR at \texttt{192.168.60.10}. A virtual router (\texttt{192.168.50.1}/\texttt{192.168.60.1}) routes between the segments. Black arrows: HMI Read Var request/response; red arrows: attacker Write Var and modified Read Var response (MITM scenario, Section~\ref{sec:stuxnet_mitm_sim}). The IDS VM (\texttt{172.16.16.7}) shares the Controller segment in promiscuous mode and is omitted from the diagram for clarity.}
+    \caption{Lab topology on VMware LAN segments}
     \label{fig:lab-topology}
 \end{figure}
 
 \subsection{Tools used}
 
-OpenPLC is an open-source platform that simulates a physical PLC on a computer. The software runs on Windows, Linux, macOS, and Raspberry Pi. It supports control programs under the IEC 61131-3 standard and can connect to SCADA, HMI, or other industrial devices. OpenPLC has two main components:
+OpenPLC is an open-source platform that simulates a physical PLC on a computer~\cite{autonomylogic_openplc,openplc_s7_driver}. The software runs on Windows, Linux, macOS, and Raspberry Pi. It supports control programs under the IEC 61131-3 standard and can connect to SCADA, HMI, or other industrial devices. OpenPLC has two main components:
 
-- \href{https://autonomylogic.com/runtime}{OpenPLC Runtime}: the PLC engine that simulates a physical PLC. OpenPLC Runtime V4 supports several industrial protocols, including Siemens S7comm. When this protocol is enabled on OpenPLC Runtime V4, the runtime listens on port 102 and serves the Siemens S7comm protocol through the internal Snap7 driver. This thesis uses OpenPLC Runtime V4.
+- \href{https://autonomylogic.com/runtime}{OpenPLC Runtime}: the PLC engine that simulates a physical PLC. OpenPLC Runtime V4 supports several industrial protocols, including Siemens S7comm. When this protocol is enabled on OpenPLC Runtime V4, the runtime listens on port 102 and serves the Siemens S7comm protocol through the internal Snap7 driver~\cite{openplc_s7_driver}. This thesis uses OpenPLC Runtime V4.
 
 Figure~\ref{fig:S7_on_OpenPLC} shows S7comm enabled on OpenPLC Runtime V4.
 
@@ -95,7 +95,7 @@ Figure~\ref{fig:OpenPLC_Editor} shows openPLC Editor for writing, compiling, loa
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.78\textwidth]{Figure/OpenPLC_Editor.png}
-    \caption{OpenPLC Editor for writing, compiling, loading, and debugging programs}
+    \caption{OpenPLC Editor interface}
     \label{fig:OpenPLC_Editor}
 \end{figure}
 
@@ -106,12 +106,12 @@ Figure~\ref{fig:FUXA} shows fUXA for designing and displaying the HMI interface.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.78\textwidth]{Figure/FUXA.png}
-    \caption{FUXA for designing and displaying the HMI interface}
+    \caption{FUXA HMI interface}
     \label{fig:FUXA}
 \end{figure}
 
 
-Snap7 is an open-source library developed to connect to, transmit data with, and control automation devices. It is one of the most widely used open-source libraries in the automation industry.
+Snap7 is an open-source library developed to connect to, transmit data with, and control automation devices~\cite{snap7_s7protocol,snap7_sharp7}. It is one of the most widely used open-source libraries in the automation industry.
 
 Snap7 supports Siemens S7 communication protocols (S7comm) to connect and exchange data with Siemens automation devices. Its main features include:
 
@@ -141,7 +141,7 @@ Figure~\ref{fig:demo-attack-recon} shows an example run: a reconnaissance scenar
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.82\textwidth]{Figure/Demo1.png}
-    \caption{Attack Tool: scenario selection, PLC/Attacker settings, and live execution log.}
+    \caption{Attack Tool main window}
     \label{fig:demo-attack-recon}
 \end{figure}
 
@@ -152,14 +152,14 @@ Figure~\ref{fig:demo-rules-editor} shows the rule editor; Figure~\ref{fig:demo-r
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.82\textwidth]{Figure/Demo2.png}
-    \caption{Suricata Rules Tool: rule list, metadata, and editable signature text.}
+    \caption{Suricata Rules Tool: rule editor}
     \label{fig:demo-rules-editor}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.82\textwidth]{Figure/Demo3.png}
-    \caption{Suricata Rules Tool: live alert stream while attack traffic is mirrored to the IDS.}
+    \caption{Suricata Rules Tool: alert panel}
     \label{fig:demo-rules-alerts}
 \end{figure}
 
@@ -174,7 +174,7 @@ The following sections describe the simulated scenarios in detail.
 \subsection{Reconnaissance}
 \label{sec:reconnaissance}
 
-Nmap is used with NSE scripts to discover devices in a network range. These scripts use S7comm-specific scanning techniques to avoid overloading devices in the OT network.
+Nmap is used with NSE scripts to discover devices in a network range~\cite{nmap}. These scripts use S7comm-specific scanning techniques to avoid overloading devices in the OT network.
 
 \begin{packetdump}
 nmap -p 102 --script s7-info <IP_ADDRESS>
@@ -222,7 +222,7 @@ Figure~\ref{fig:sreconnaissanceimage2png} shows TCP SYN scan to discover hosts i
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.9\textwidth]{../attacks/reconnaissance/image-2.png}
-    \caption{TCP SYN scan to discover hosts in the network range}
+    \caption{TCP SYN host discovery}
     \label{fig:sreconnaissanceimage2png}
 \end{figure}
 
@@ -242,7 +242,7 @@ Figure~\ref{fig:sreconnaissanceimage5png} shows stages of the port 102 scan.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.9\textwidth]{../attacks/reconnaissance/image-5.png}
-    \caption{Stages of the port 102 scan}
+    \caption{Port 102 scan stages}
     \label{fig:sreconnaissanceimage5png}
 \end{figure}
 
@@ -323,7 +323,7 @@ S7 Communication
 \end{packetdump}
 
 
-This request asks the PLC to return object management system status through the SZL read function. The read is requested at SZL-ID \texttt{0x0011} and Index \texttt{0x0001}. This part of the SZL returns \texttt{Diagnostic type: CPU, Number of the partial list extract}. Specifically:
+This request asks the PLC to return object management system status through the SZL read function. The read is requested at SZL-ID \texttt{0x0011} and Index \texttt{0x0001}. This part of the SZL returns \texttt{Diagnostic type: CPU, Number of the partial list extract}~\cite{inprotech_s7comm_security}. Specifically:
 
 
 
@@ -513,7 +513,7 @@ However, scanning OpenPLC with these methods in this project did not detect the 
 \subsection{Scanning PLC blocks}
 
 
-After scanning PLC information, PLC blocks can be scanned to obtain information about control program blocks using Snap7 \texttt{.list\_blocks()} and \texttt{.list\_blocks\_of\_type(type)}. The script is available here (\url{./scanBlock.py}).
+After scanning PLC information, PLC blocks can be scanned to obtain information about control program blocks using Snap7 \texttt{.list\_blocks()} and \texttt{.list\_blocks\_of\_type(type)}. The scan result is as follows:
 
 
 \begin{packetdump}
@@ -559,6 +559,15 @@ DB 2:
 \end{packetdump}
 
 
+Figure~\ref{fig:ksreconnaissanceimagepng} shows PLC block that actually configured on the PLC.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../attacks/reconnaissance/image.png}
+    \caption{Configured PLC blocks}
+    \label{fig:ksreconnaissanceimagepng}
+\end{figure}
+
+
 A PLC includes the following blocks:
 
 
@@ -584,17 +593,6 @@ A PLC includes the following blocks:
 
 However, due to OpenPLC Runtime simulation limits, only datablock \texttt{DB: 2} is shown even though the PLC is running a control program (in that case, the program OB would differ from 0).
 
-
-Figure~\ref{fig:ksreconnaissanceimagepng} shows pLC block scan result.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/reconnaissance/image.png}
-    \caption{PLC block scan result}
-    \label{fig:ksreconnaissanceimagepng}
-\end{figure}
-
-
 For each datablock, the following information is obtained:
 
 
@@ -617,9 +615,6 @@ DB 1:
     Family: b''                      
     Header: b''                     
 \end{packetdump}
-
-
-\textit{See parameters in S7\_constants.txt (\url{../../docs/Report/S7_constants.txt}).}
 
 
 Observe packets during block scanning:
@@ -774,7 +769,7 @@ This matches the information obtained from the \texttt{scanBlock.py} script.
 \end{enumerate}
 
 
-\subsection{4.3 Start/Stop PLC (Replay Attack)}
+\subsection{Start/Stop PLC (Replay Attack)}
 \label{sec:start_stop_plc}
 
 
@@ -863,39 +858,10 @@ Unlike web application DoS (HTTP flood), DoS against Siemens PLCs over Ethernet 
 \begin{enumerate}
     \item Connection resource exhaustion: open/close TCP connections to port 102 at high frequency (connection churn), or send many SYN packets, filling the session table on the PLC/S7 stack.
     \item Valid S7 command flood: repeat \texttt{Setup Communication} (\texttt{0xF0}), \texttt{Read SZL} (userdata CPU services), or \texttt{Read/Write Var}---syntactically valid payloads still load the CPU and processing queue.
-    \item Reconnaissance abuse as a weapon: Read SZL / List Blocks at very high frequency serves both reconnaissance and service DoS (similar to excessive SCADA scanning).
+    \item High-frequency reconnaissance requests: repeated \texttt{Read SZL} or \texttt{List Blocks} commands at excessive rates combine inventory gathering with service degradation on the PLC, comparable to aggressive SCADA polling or OT asset scanning.
 \end{enumerate}
 
-All three types are implemented in a single script, \texttt{attacks/dos/s7comm\_dos.py}. By default, \texttt{--mode all} runs three phases sequentially (\texttt{setup\_flood} $\rightarrow$ \texttt{tcp\_connect} $\rightarrow$ \texttt{szl\_flood}), each lasting about 10\,s with an 8\,s pause between phases so Suricata can record alerts before the next flood type (matching the \texttt{threshold} 10\,s window in \texttt{ics\_dos.rules}).
-
-\begin{table}[H]
-    \centering
-    \footnotesize
-    \begin{tabular}{|l|l|l|l|}
-        \hline
-        Phase (--mode all) & Description & Suricata rule & Default workers \\
-        \hline
-        1 -- \texttt{setup\_flood} & Repeated Setup Communication PDU on new TCP sessions & \texttt{1000041}, \texttt{1000043} & 4 \\
-        \hline
-        2 -- \texttt{tcp\_connect} & Fast connect/disconnect on :102 & \texttt{1000040} & 6 \\
-        \hline
-        3 -- \texttt{szl\_flood} & \texttt{read\_szl(0x0011)} via Snap7 & \texttt{1000042} & 2 \\
-        \hline
-    \end{tabular}
-    \caption{S7comm DoS sequence in one script run (default)}
-    \label{tab:dos-modes}
-\end{table}
-
-Lab deployment (single command):
-
-\begin{packetdump}
-python3 attacks/dos/s7comm_dos.py <IP_PLC>
-# equivalent: --mode all --duration 10 --pause 8
-\end{packetdump}
-
-Each mode can be run separately with \texttt{--mode setup\_flood} (or \texttt{tcp\_connect}, \texttt{szl\_flood}) when analyzing PCAP per scenario.
-
-Traffic is captured by Suricata on the IDS at the mirror interface. Detection uses \texttt{ics\_dos.rules} (\texttt{sid:1000040}--\texttt{1000043}): \texttt{threshold} with \texttt{track by\_src}, counting valid S7 packets within 10\,s---no malformed payload required. Thresholds should be tuned against the HMI baseline to avoid false positives.
+Detection rules for these three patterns are defined in Section~\ref{sec:rules-dos}.
 
 \subsection{PLC Program Upload and Download}
 \label{sec:down_up_program}
@@ -913,52 +879,26 @@ In Siemens terminology, the meaning is opposite to common IT usage:
 \end{itemize}
 
 
-The control program source and most program data are stored as blocks. Block types in Siemens devices include:
-
-
-\begin{itemize}
-    \item \textbf{OB}: The main block for organizing the control program. Similar to \texttt{main () \{\}} in C++.
-\end{itemize}
-
-
-\begin{itemize}
-    \item \textbf{(S)DB}: Contains data used by the control program. DB is a user-created data block; SDB is a system data block created by Siemens.
-\end{itemize}
-
-
-\begin{itemize}
-    \item \textbf{(S)FC}: Contains reusable functions for the control program. FC is stateless: it does not store state and has no dedicated memory.
-\end{itemize}
-
-
-\begin{itemize}
-    \item \textbf{(S)FB}: Similar to FC but stateful. It is usually linked to a DB to store its state.
-\end{itemize}
+The control program source and most program data are stored as blocks. Block types in Siemens devices include OB, (S)DB, (S)FC, and (S)FB as mentioned earlier.
 
 
 
 \subsubsection{Upload}
 
+\input{../../Chapter/s7_sequence_diagrams.tex}
 
-\begin{packetdump}
-%%{init: {'sequence': {'messageMargin': 60}} }%%
-sequenceDiagram
-    participant Workstation
-    participant PLC
+Figure~\ref{fig:s7-upload-sequence} summarises the S7comm Upload message exchange between the engineering workstation and the PLC.
 
-    Workstation->>PLC: Job - Start Upload: Block Address
-    PLC->>Workstation: Ack Data - Start Upload: Block Length
-
-    Workstation-->>PLC: Job - Upload Block
-    PLC-->>Workstation: Ack Data - Upload Block: Block Data
-
-    Workstation->>PLC: Job - End Upload
-    PLC->>Workstation: Ack Data - End Upload
-\end{packetdump}
+\begin{figure}[htbp]
+    \centering
+    \SSevenUploadSequence
+    \caption{S7comm Upload sequence}
+    \label{fig:s7-upload-sequence}
+\end{figure}
 
 
 \begin{enumerate}
-    \item Start Upload: The client sends a command requesting the control program the PLC is running (\textcolor{blue}{Job} Start Upload), and the PLC responds to that request (\textcolor{green}{ACK} Start Upload). This command includes the following fields in order:
+    \item Start Upload: The client sends a command requesting the control program the PLC is running (Job Start Upload), and the PLC responds to that request (Ack Data Start Upload). This command includes the following fields in order:
 \end{enumerate}
 
 
@@ -967,7 +907,7 @@ sequenceDiagram
     \footnotesize
     \begin{tabular}{|l|l|l|}
         \hline
-        Field & \textcolor{blue}{Job} Start Upload & \textcolor{green}{ACK} Start Upload \\
+        Field & Job Start Upload & Ack Data Start Upload \\
         \hline
         \texttt{Function Code} (1 byte) & Fixed \texttt{0x1d} & Same \\
         \hline
@@ -1046,7 +986,7 @@ sequenceDiagram
     \footnotesize
     \begin{tabular}{|l|l|l|}
         \hline
-        Field & \textcolor{blue}{Job} Upload Block & \textcolor{green}{ACK} Upload Block \\
+        Field & Job Upload Block & Ack Data Upload Block \\
         \hline
         \texttt{Function Code} (1 byte) & Fixed \texttt{0x1e} & Same \\
         \hline
@@ -1072,7 +1012,7 @@ sequenceDiagram
     \footnotesize
     \begin{tabular}{|l|l|l|}
         \hline
-        Field & \textcolor{blue}{Job} End Upload & \textcolor{green}{ACK} End Upload \\
+        Field & Job End Upload & Ack Data End Upload \\
         \hline
         \texttt{Function Code} (1 byte) & Fixed \texttt{0x1f} & Same \\
         \hline
@@ -1082,27 +1022,18 @@ sequenceDiagram
 
 \subsubsection{Download}
 
+Figure~\ref{fig:s7-download-sequence} summarises the S7comm Download message exchange.
 
-\begin{packetdump}
-%%{init: {'sequence': {'messageMargin': 60}} }%%
-sequenceDiagram
-    participant Workstation
-    participant PLC
-
-    Workstation->>PLC: Job - Request Download: Block Address, Length
-    PLC->>Workstation: Ack Data - Request Download
-    
-  
-    PLC-->>Workstation: Job - Download Block: Block Address
-    Workstation-->>PLC: Ack Data - Download Block: Block Data
-
-    Workstation->>PLC: Job - Download Ended
-    PLC->>Workstation: Ack Data - Download Ended
-\end{packetdump}
+\begin{figure}[htbp]
+    \centering
+    \SSevenDownloadSequence
+    \caption{S7comm Download sequence}
+    \label{fig:s7-download-sequence}
+\end{figure}
 
 
 \begin{enumerate}
-    \item \textbf{Start Download}: The client sends a command to request that the PLC prepare to receive a new control program (\textcolor{blue}{Job} Request Download), and the PLC responds to that request (\textcolor{green}{ACK} Request Download). The \textcolor{blue}{Job} Request Download packet adds two fields: \texttt{Block Length}, which indicates the length of the data block the client will send, and \texttt{Payload Length}, which works similarly but does not include the block header length.
+    \item \textbf{Start Download}: The client sends a command to request that the PLC prepare to receive a new control program (Job Request Download), and the PLC responds to that request (Ack Data Request Download). The Job Request Download packet adds two fields: \texttt{Block Length}, which indicates the length of the data block the client will send, and \texttt{Payload Length}, which works similarly but does not include the block header length.
 \end{enumerate}
 
 
@@ -1114,118 +1045,14 @@ sequenceDiagram
 
 The remaining fields are identical to those in the Upload section. One note during Download: \texttt{Session ID} is always \texttt{0x00000000} and is not used; instead, Download uses \texttt{Filename} to identify items within a Download session.
 
-
-\subsection{Traffic simulation}
-
-
-In this section, we attempted to simulate downloading and uploading PLC control programs but were unsuccessful due to limitations of the simulation software.
-
-
-When uploading program code from OpenPLC Editor to OpenPLC Runtime, the program is sent through the OpenPLC Runtime RESTful API rather than using the standard S7comm structure.
-
-
-Figure~\ref{fig:ksdownupprogramimage5png} shows uploading a program from OpenPLC Editor to OpenPLC Runtime via RESTful API.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-5.png}
-    \caption{Uploading a program from OpenPLC Editor to OpenPLC Runtime via RESTful API}
-    \label{fig:ksdownupprogramimage5png}
-\end{figure}
-
-
-OpenPLC Runtime does not support loading programs in the usual Siemens S7comm way.
-
-
-Another approach is to simulate program upload on a Siemens PLC through PLC Sim Advance. In this approach, the program is sent using the standard S7comm structure.
-
-
-Step 1: Set up a virtual switch for Siemens virtual devices to use:
-
-
-Figure~\ref{fig:ksdownupprogramimage2png} shows virtual switch setup for Siemens virtual devices.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-2.png}
-    \caption{Virtual switch setup for Siemens virtual devices}
-    \label{fig:ksdownupprogramimage2png}
-\end{figure}
-
-
-Step 2: Run a Siemens PLC in PLC Sim Advance on the same network as the virtual switch. However, PLC Sim Advance only supports simulating Siemens S7-1500 PLCs.
-
-
-Figure~\ref{fig:cksdownupprogramimagepng} shows siemens PLC running in PLC Sim Advance.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image.png}
-    \caption{Siemens PLC running in PLC Sim Advance}
-    \label{fig:cksdownupprogramimagepng}
-\end{figure}
-
-
-Step 3: Connect the PLC to an HMI WinCC through an IE general connection card
-
-
-Figure~\ref{fig:ksdownupprogramimage1png} shows pLC connected to HMI WinCC via IE general connection card.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-1.png}
-    \caption{PLC connected to HMI WinCC via IE general connection card}
-    \label{fig:ksdownupprogramimage1png}
-\end{figure}
-
-
-Step 4: Create a PLC program, download it to the PLC, and run a test:
-
-
-Figure~\ref{fig:ksdownupprogramimage3png} shows pLC program in running mode with PLC Sim Advance and HMI WinCC.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-3.png}
-    \caption{PLC program in running mode with PLC Sim Advance and HMI WinCC}
-    \label{fig:ksdownupprogramimage3png}
-\end{figure}
-
-
-The screenshot shows the PLC program in running mode, the PLC running in PLC Sim Advance, and HMI WinCC displaying PLC variable values.
-
-
-However, when observing packets in Wireshark, Wireshark could not parse S7comm packets. After investigation, this is because S7-1500 uses the S7comm plus protocol and there is no way to force S7-1500 to use standard S7comm (according to this article (\url{https://industrialmonitordirect.com/blogs/knowledgebase/s7comm-vs-s7comm-plus-switching-protocol-in-s7-1500-hmi-communication}), enabling the option \texttt{Permit access with PUT/GET communication from remote partners} only provides compatibility so other machines can read information from S7comm plus as if it were standard S7comm; Wireshark still cannot parse S7comm plus packets.
-
-
-Figure~\ref{fig:ksdownupprogramimage6png} shows wireshark unable to parse S7comm plus packets.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-6.png}
-    \caption{Wireshark unable to parse S7comm plus packets}
-    \label{fig:ksdownupprogramimage6png}
-\end{figure}
-
-
-Figure~\ref{fig:ksdownupprogramimage4png} shows wireshark identifying only the outer COTP layer of S7comm plus packets.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-4.png}
-    \caption{Wireshark identifying only the outer COTP layer of S7comm plus packets}
-    \label{fig:ksdownupprogramimage4png}
-\end{figure}
-
-
-Wireshark can only identify the COTP layer on the outside of S7comm plus packets and cannot parse the S7comm plus packet wrapped inside this COTP packet.
-
-
-
-Therefore, in this project we will use simulated traffic from the following page: https://wiki.wireshark.org/S7comm
+Live block-transfer traffic was not captured in the lab because of simulator constraints (OpenPLC REST loading, S7-1500 S7comm-plus on PLCSIM Advanced~\cite{industrialmonitordirect_s7comm_plus}). Block-transfer rules were developed from the reference Siemens capture on the Wireshark wiki~\cite{wireshark_s7comm} instead of live lab traffic.
 
 \subsection{Stuxnet attack simulation (MITM)}
 \label{sec:stuxnet_mitm_sim}
+
+Stuxnet, widely reported from 2010, is among the best-known incidents of malware aimed at industrial control systems~\cite{falliere2010stuxnet,langner2011stuxnet,stuxnet_work_details}. It spread on Windows engineering networks, modified logic on Siemens S7-300 PLCs driving high-speed centrifuges, and returned falsified values to WinCC so operators still saw nominal readings while the physical process was harmed.
+
+In the real campaign, that behaviour relied on hooking Step~7 communication libraries on engineering workstations. This thesis reproduces the same operational effect at the S7comm network layer on the lab in Figure~\ref{fig:lab-topology}: an unauthorized write changes a process setpoint on the PLC, while a man-in-the-middle restores the value displayed to the HMI. The paragraphs below summarise the historical attack chain from open sources; the OpenPLC/FUXA lab setup and packet captures follow.
 
 \input{stuxnet_mitm_body.tex}
 
@@ -1236,7 +1063,7 @@ Therefore, in this project we will use simulated traffic from the following page
 
 Malformed packets (syntactically or semantically invalid packets) on the S7comm channel target the parser and protocol stack on the PLC or CP, rather than sending valid control commands at high frequency as in DoS (Section~\ref{sec:dos_s7comm}). In practice and in ICS fuzzing documentation, attackers often send PDUs with length fields that do not match the payload, invalid S7 headers, or Job/Userdata parameters with missing bytes---to cause temporary denial of service, close TCP/102 sessions, or (in rare cases) exploit memory bugs on weaker stacks.
 
-This thesis does not aim to cover every infinite fuzz variant. Instead, it systematizes representative malformed groups commonly encountered when pentesting or fuzzing S7comm, then selects one or two representative samples per group to build lab payloads and corresponding Suricata rules (\texttt{detect/rules/s7comm\_malformed.rules}).
+This thesis does not aim to cover every infinite fuzz variant. Instead, it systematizes representative malformed groups commonly encountered when pentesting or fuzzing S7comm, then selects one or two representative samples per group to build lab payloads and corresponding Suricata rules.
 
 \paragraph{Four commonly used malformed groups.}
 
@@ -1247,58 +1074,43 @@ This thesis does not aim to cover every infinite fuzz variant. Instead, it syste
     \item Group 4---Truncation: sending only the beginning of a PDU (e.g.\ Setup Communication) without enough bytes to reach the function offset (\texttt{17}). This is a common ``missing-byte'' malformed pattern in random fuzzing or when a proxy truncates packets.
 \end{enumerate}
 
-\paragraph{Representative samples selected for the lab.}
+\paragraph{Representative packet modifications.}
 
-Table~\ref{tab:malformed-phases} lists sample payloads, scripts, and Suricata \texttt{sid} values. Each sample starts from a valid Setup Communication PDU (same hex as \texttt{s7comm\_dos.py}) and modifies only one field (or truncates) so students can compare easily in Wireshark.
+Each lab sample starts from a valid Setup Communication PDU (same hex template as in the DoS script) and changes only one field or truncates the PDU so faults are easy to compare in Wireshark. Table~\ref{tab:malformed-changes} summarizes the modifications used in this thesis; Suricata SID mapping is given in Section~\ref{sec:rules-malformed}.
 
 \begin{table}[H]
     \centering
     \footnotesize
-    \begin{tabular}{|l|l|l|l|}
+    \begin{tabular}{|l|l|}
         \hline
-        Group & \texttt{--mode} script & Change vs.\ valid Setup & SID \\
+        Group & Modification vs.\ valid Setup \\
         \hline
-        1 & \texttt{tpkt\_bad\_version} & TPKT byte 0 = \texttt{0x02} & 1000050 \\
+        1 & TPKT byte 0 = \texttt{0x02} (invalid version) \\
         \hline
-        1 & \texttt{tpkt\_len\_gt\_payload} & TPKT length = \texttt{0x0100}, body $\approx$ 36 B & 1000051 \\
+        1 & TPKT length = \texttt{0x0100}, TCP payload $\approx$ 36 B (length larger than body) \\
         \hline
-        1 & \texttt{tpkt\_len\_lt\_payload} & TPKT length = \texttt{0x0008}, full Setup body & 1000058 \\
+        1 & TPKT length = \texttt{0x0008}, full Setup body still sent (length smaller than body) \\
         \hline
-        1 & \texttt{cotp\_invalid} & Replace \texttt{02 F0 80} with \texttt{01 00 00} & 1000056 \\
+        1 & Replace COTP \texttt{02 F0 80} with \texttt{01 00 00} \\
         \hline
-        2 & \texttt{s7\_bad\_protocol\_id} & Byte 7 = \texttt{0x31} & 1000052 \\
+        2 & S7 Protocol ID at byte 7 = \texttt{0x31} (instead of \texttt{0x32}) \\
         \hline
-        2 & \texttt{s7\_bad\_rosctr} & Byte 8 = \texttt{0xFF} & 1000053 \\
+        2 & \texttt{ROSCTR} at byte 8 = \texttt{0xFF} \\
         \hline
-        3 & \texttt{job\_bad\_opcode} & Byte 17 = \texttt{0xFF} (instead of \texttt{0xF0}) & 1000054 \\
+        3 & Function byte at offset 17 = \texttt{0xFF} (instead of \texttt{0xF0}) \\
         \hline
-        3 & \texttt{write\_var\_malformed} & Job \texttt{0x05}, 20 B PDU (missing item) & 1000057 \\
+        3 & Job \texttt{0x05} (Write Var), 20-byte PDU missing item structure \\
         \hline
-        4 & \texttt{setup\_truncated} & Send only the first 14 bytes & 1000055 \\
+        4 & Send only the first 14 bytes (truncated before offset 17) \\
         \hline
     \end{tabular}
-    \caption{Representative malformed samples and detection rule mapping}
-    \label{tab:malformed-phases}
+    \caption{Malformed packet modifications}
+    \label{tab:malformed-changes}
 \end{table}
 
-\paragraph{Script deployment.}
-
-All scenarios are implemented in \texttt{attacks/malformed/s7comm\_malformed.py}. By default, \texttt{--mode all} runs 9 phases sequentially; each phase sends \texttt{--repeats} times (default 3) on a new TCP session to port 102, then waits \texttt{--pause} seconds (default 6) before the next phase---similar to DoS but without flooding: the goal is to produce clear malformed alerts in \texttt{fast.log}.
-
-\begin{packetdump}
-python3 attacks/malformed/s7comm_malformed.py <IP_PLC>
-# equivalent to: --mode all --repeats 3 --pause 6
-python3 attacks/malformed/s7comm_malformed.py <IP_PLC> --mode s7_bad_rosctr
-\end{packetdump}
-
-Processing on the wire: attacker $\rightarrow$ TCP/102 $\rightarrow$ mirror $\rightarrow$ Suricata. Unlike \texttt{ics\_dos.rules}, malformed rules do not use thresholds: each packet matching an anomalous signature may generate one alert (\texttt{sid:1000050}--\texttt{1000058}).
+Lab commands and wire processing are implemented in \texttt{attacks/malformed/s7comm\_malformed.py}.
 
 \paragraph{Expected behavior on the lab PLC and limitations.}
-
-On simulated OpenPLC / S7 servers, the samples above usually lead to connection refusal, timeout, or TCP closure---rarely changing RUN/STOP state as in Start/Stop replay. Real Siemens PLCs typically have more robust stacks; this thesis treats malformed traffic as a means to detect anomalous behavior on the network, not as confirmed RCE exploitation. Some rules (e.g.\ \texttt{1000050} for invalid TPKT version) may trigger on non-S7 traffic on port 102; in the lab, narrow \texttt{HOME\_NET} and run scripts only against test PLCs.
-
-
-
 
 \end{document}
 

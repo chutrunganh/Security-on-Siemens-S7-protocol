@@ -1,0 +1,365 @@
+\subsection{Reconnaissance}
+\label{sec:rules-recon}
+
+Based on Section~\ref{sec:reconnaissance}: TCP/102 scanning (Nmap \texttt{s7-info}), Read SZL (\texttt{0x0011}, \texttt{0x001c}), and block listing (Snap7).
+
+\paragraph{Link to Chapter~3 traffic.}
+After TCP and COTP setup, Nmap and Snap7 both send Setup Communication with function \texttt{0xF0} at offset~17 on a Job PDU---the reconnaissance PCAP shows the anchor \texttt{0300...02f0803201...f0}. Read SZL requests follow as Userdata (\texttt{ROSCTR=0x07}) with parameter head \texttt{00 01 12 04 11 44 01 00} at offset~17 (Wireshark: CPU functions / Read SZL). Nmap \texttt{s7-info} reads SZL-ID \texttt{0x0011} (module identification, data bytes \texttt{00 11 00 01}) and \texttt{0x001c} (communication status, \texttt{00 1C 00 00}), which map to Nmap fields Module, Serial Number, and System Name. Block inventory from \texttt{scanBlock.py} uses subfunction List blocks with parameter block \texttt{00 01 12 04 11 13 01 00} instead of \texttt{...44...}. These byte strings are stable across OpenPLC and commercial S7 stacks and therefore become \texttt{content} anchors rather than IP-based rules.
+
+\paragraph{Rule \texttt{sid:1000001}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Setup Communication to PLC";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|F0|";
+  offset:17; depth:1; sid:1000001; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:3;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+In the reconnaissance PCAP, the first S7comm Job after COTP setup carries \texttt{0xF0} at offset~17 while bytes 4--8 read \texttt{02 F0 80 32 01}. That byte is the Setup Communication function code, required before any SZL or block query. The rule chains TPKT, Job header, and \texttt{|F0|} with \texttt{flow:to\_server} because only the scanner client sends this PDU to the PLC. It fires on every new session setup, including legitimate HMI connections, so it is a context alert (priority~3) rather than a standalone attack indicator.
+
+\paragraph{Rule \texttt{sid:1000002}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read SZL request - PLC
+  information enumeration"; flow:to_server,established; content:"|03 00|";
+  offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:4; depth:5;
+  content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8; sid:1000002; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+Wireshark decodes Read SZL as Userdata with \texttt{ROSCTR=0x07} and an eight-byte parameter prefix \texttt{00 01 12 04 11 44 01 00} (method \texttt{0x11}, function group CPU functions, subfunction Read SZL). Nmap \texttt{s7-info} emits this pattern immediately after Setup Communication in Section~\ref{sec:reconnaissance}. Matching the full eight-byte block at offset~17 avoids confusing Read SZL with other Userdata services that share \texttt{32 07} but use a different subfunction byte. The rule does not distinguish which SZL-ID is requested; that refinement is left to \texttt{sid:1000003} and \texttt{sid:1000004}.
+
+\paragraph{Rule \texttt{sid:1000003}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read SZL module identification
+  0x0011"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 07|"; offset:4; depth:5;
+  content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8;
+  content:"|00 11 00 01|"; distance:0; within:12; sid:1000003; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+In packet~1048 of the Nmap capture (Section~\ref{sec:reconnaissance}), the data section after the Read SZL parameter contains SZL-ID \texttt{0x0011} and index \texttt{0x0001}, which Wireshark shows as \texttt{|00 11 00 01|} within twelve bytes of the parameter head. That read returns the module order number that appears in Nmap output as \texttt{Module: 6ES7 315-2EH14-0AB0}. The rule adds this four-byte constraint with \texttt{distance:0; within:12} so generic Read SZL probes (\texttt{sid:1000002}) and module-fingerprint reads are separated. Engineering tools may also read \texttt{0x0011} during commissioning, so the alert should be correlated with source address and timing.
+
+\paragraph{Rule \texttt{sid:1000004}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Read SZL communication status
+  0x001c"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 07|"; offset:4; depth:5;
+  content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8;
+  content:"|00 1C 00 00|"; distance:0; within:12; sid:1000004; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+The next Nmap probe in the same session requests SZL-ID \texttt{0x001c} (communication status partial list), encoded as \texttt{|00 1C 00 00|} after the Read SZL parameter block. The PLC reply supplies serial number, system name, and module type strings that Nmap prints in its \texttt{s7-info} table. This rule targets that specific enumeration step rather than every SZL read. It will not fire on \texttt{0x0011} reads matched by \texttt{sid:1000003}, but any tool that reads \texttt{0x001c} for diagnostics will also match.
+
+\paragraph{Rule \texttt{sid:1000005}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM List Blocks request - PLC block
+  inventory enumeration"; flow:to_server,established; content:"|03 00|";
+  offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:4; depth:5;
+  content:"|00 01 12 04 11 13 01 00|"; offset:17; depth:8; sid:1000005; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+Snap7 \texttt{.list\_blocks()} in \texttt{scanBlock.py} sends Userdata with function group Block functions and subfunction List blocks; the eight-byte parameter at offset~17 is \texttt{|00 01 12 04 11 13 01 00|}, differing from Read SZL only in the subfunction byte (\texttt{0x13} vs \texttt{0x44}). Wireshark labels this as a block inventory request. An attacker mapping OB/DB/FC/FB before upload or download will trigger this rule after Setup Communication. TIA Portal block browsing uses the same S7comm service, so the alert alone does not prove malicious intent.
+
+\subsection{Start/Stop PLC command replay}
+\label{sec:rules-start-stop}
+
+Based on Section~\ref{sec:start_stop_plc}: replay of \texttt{PLC Control 0x28} and \texttt{PLC Stop 0x29} payloads with PI-Service \texttt{P\_PROGRAM}.
+
+\paragraph{Link to Chapter~3 traffic.}
+TIA Portal Start CPU and Stop CPU packets were exported as fixed hex strings in Section~\ref{sec:start_stop_plc}. Both begin with \texttt{0300...02f0803201} (TPKT + COTP + Job header). At offset~17, Start uses function \texttt{0x28} and Stop uses \texttt{0x29}. The ASCII string \texttt{P\_PROGRAM} (\texttt{50 5F 50 52 4F 47 52 41 4D} in hex) appears in the PI-Service data within 24 bytes after the function byte---visible in Wireshark as the program name field. Replay on OpenPLC sends the same bytes without TIA authentication. Rules \texttt{sid:1000030}/\texttt{sid:1000032} match only the function byte; \texttt{sid:1000031}/\texttt{sid:1000033} add the \texttt{P\_PROGRAM} string to match the lab replay payloads exactly.
+
+\paragraph{Rule \texttt{sid:1000030}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM PLC Control command";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|28|";
+  offset:17; depth:1; sid:1000030; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack plc_control; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+The captured Start CPU payload places \texttt{0x28} (PLC Control) at offset~17 on a Job PDU directed to port~102. The same function code is used for several PI-Services besides cold start---activate block, copy RAM to ROM, and others---so the rule intentionally omits parameter bytes. It gives early warning whenever any Control command reaches the PLC from an unexpected client. Legitimate engineering stations also send \texttt{0x28} during commissioning, which limits specificity compared to \texttt{sid:1000031}.
+
+\paragraph{Rule \texttt{sid:1000031}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM replayed Start CPU P_PROGRAM";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|28|";
+  offset:17; depth:1; content:"P_PROGRAM"; distance:0; within:24;
+  sid:1000031; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack start_stop_replay; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+The lab Start replay hex string in Section~\ref{sec:start_stop_plc} contains \texttt{0x28} followed within 24 bytes by the ASCII PI-Service name \texttt{P\_PROGRAM}, which selects the CPU program for start. Wireshark shows this as PLC Control with program name \texttt{P\_PROGRAM}. The rule inherits the \texttt{0x28} match from \texttt{sid:1000030} and adds a string match for the replay payload copied from TIA Portal. Other Control commands that use a different PI-Service name will not match, which reduces false positives from benign \texttt{0x28} traffic.
+
+\paragraph{Rule \texttt{sid:1000032}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM PLC Stop command";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|29|";
+  offset:17; depth:1; sid:1000032; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack plc_stop; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+Stop CPU replay uses function \texttt{0x29} (PLC Stop) at offset~17 on the same Job header pattern \texttt{02 F0 80 32 01}. In the Stop hex dump (\texttt{0300002102f080...29...}), byte~17 is \texttt{0x29} regardless of PI-Service details. This rule alerts on any Stop request from client to PLC before checking whether the payload matches the recorded TIA Portal replay. Emergency stop from an authorized engineering station will also trigger it.
+
+\paragraph{Rule \texttt{sid:1000033}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM replayed Stop CPU P_PROGRAM";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|29|";
+  offset:17; depth:1; content:"P_PROGRAM"; distance:0; within:24;
+  sid:1000033; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack start_stop_replay; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+The Stop replay payload in Section~\ref{sec:start_stop_plc} pairs \texttt{0x29} with \texttt{P\_PROGRAM} in the same relative position as the Start packet---Wireshark shows \texttt{param\_length = 6} and the program name field. Matching both bytes narrows the alert to the lab replay script rather than any Stop command. If an attacker replays a Stop PDU without the \texttt{P\_PROGRAM} string, only \texttt{sid:1000032} fires.
+
+\subsection{Block upload and download}
+\label{sec:rules-up-download}
+
+Based on Section~\ref{sec:down_up_program}: function sequence \texttt{0x1a}--\texttt{0x1f} on Siemens traffic or Wireshark simulation.
+
+\paragraph{Link to Chapter~3 traffic.}
+Upload and download sessions in Section~\ref{sec:down_up_program} follow the Siemens function sequence visible in Wireshark: Request Download \texttt{0x1a}, Download Block \texttt{0x1b}, Download Ended \texttt{0x1c}, Start Upload \texttt{0x1d}, Upload Block \texttt{0x1e}, End Upload \texttt{0x1f}. Each opcode appears at offset~17 on Job PDUs from client to PLC, except when the PLC returns block data---then the client sends Ack\_Data (\texttt{ROSCTR=0x03}) and \texttt{0x1b} moves to offset~19 (\texttt{sid:1000026}). The simulated capture also shows the PLC initiating Download Block (\texttt{0x1b}, Job, \texttt{from\_server}) in \texttt{sid:1000021}. Because live block-transfer PCAPs were not obtained in the lab (Appendix~\ref{app:upload-download-traffic}), these rules were tuned on the Wireshark sample captures and documented hex sequences.
+
+\paragraph{Rule \texttt{sid:1000020}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Request Download block to PLC";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1A|";
+  offset:17; depth:1; sid:1000020; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+The first Job in a download sequence carries function \texttt{0x1a} (Request Download) at offset~17 after the standard \texttt{02 F0 80 32 01} header. Wireshark labels this as the client asking the PLC to prepare for incoming block data. The rule uses \texttt{flow:to\_server} because only the engineering station sends Request Download. Normal program loads from TIA Portal begin with the same byte, so source IP and session context matter for interpretation.
+
+\paragraph{Rule \texttt{sid:1000021}.}
+\begin{packetdump}
+alert tcp $HOME_NET 102 -> any any (msg:"ICS S7COMM PLC requests Download Block data";
+  flow:from_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1B|";
+  offset:17; depth:1; sid:1000021; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+During download, the PLC sometimes sends a Job PDU with \texttt{0x1b} (Download Block request) from port~102 toward the client---the opposite direction of \texttt{sid:1000026}. Wireshark shows this as the PLC asking for the next chunk of program data. The rule reverses source and destination (\texttt{\$HOME\_NET 102 -> any any}) and uses \texttt{flow:from\_server} with \texttt{ROSCTR=0x01} and offset~17. Without the direction constraint, the same \texttt{0x1b} byte would match both handshake legs.
+
+\paragraph{Rule \texttt{sid:1000026}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM client sends Download Block data
+  to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 03|"; offset:4; depth:5; content:"|1B|";
+  offset:19; depth:1; sid:1000026; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+When the client pushes block bytes to the PLC, the PDU type switches to Ack\_Data (\texttt{32 03}) and the function \texttt{0x1b} shifts to offset~19 because of the two-byte error header. This packet carries the actual program content in the data section. The pair \texttt{sid:1000021}/\texttt{sid:1000026} mirrors the two directions observed in the download sequence diagram of Section~\ref{sec:down_up_program}. The rule does not inspect block content---only the presence of a Download Block transfer.
+
+\paragraph{Rule \texttt{sid:1000022}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Download Ended";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1C|";
+  offset:17; depth:1; sid:1000022; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+Download Ended (\texttt{0x1c}) closes the download session on a Job PDU from client to PLC. In Wireshark it appears after one or more Download Block exchanges. Matching \texttt{|1C|} at offset~17 marks completion of a program push. A single \texttt{sid:1000020} without follow-up \texttt{sid:1000026}/\texttt{sid:1000022} may be an aborted download rather than a full compromise.
+
+\paragraph{Rule \texttt{sid:1000023}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Start Upload block from PLC";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1D|";
+  offset:17; depth:1; sid:1000023; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+Start Upload (\texttt{0x1d}) opens an upload session: the client requests a block name such as \texttt{\_0800001P} from the PLC. The function byte at offset~17 is \texttt{0x1d} on a Job PDU. This is the first step when an attacker extracts logic from the device. Authorized backup operations from TIA Portal send the same PDU, so the alert indicates exfiltration only when the source is not the known engineering station.
+
+\paragraph{Rule \texttt{sid:1000024}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Upload Block request";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1E|";
+  offset:17; depth:1; sid:1000024; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+Upload Block (\texttt{0x1e}) repeats while the client pulls data chunks from the PLC; each request is a Job with \texttt{0x1e} at offset~17. Wireshark shows multiple \texttt{0x1e}/Ack\_Data pairs until the block is complete. The rule counts each request separately, so a full upload generates many alerts. It does not read the ASCII block data returned by the PLC.
+
+\paragraph{Rule \texttt{sid:1000025}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM End Upload";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1F|";
+  offset:17; depth:1; sid:1000025; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+End Upload (\texttt{0x1f}) terminates the upload session on a Job PDU. It typically follows a burst of \texttt{sid:1000024} alerts in the same TCP session. Together, \texttt{sid:1000023}--\texttt{sid:1000025} outline the upload timeline visible in Section~\ref{sec:down_up_program}. The rule alone does not reveal which block was copied.
+
+\subsection{Process variable writes and MITM observation}
+\label{sec:rules-stuxnet}
+
+Based on Section~\ref{sec:stuxnet_mitm_sim}: process writes via Write Var (for example \texttt{DB1.DBW2}, \texttt{iSetpoint} \texttt{0x04b0}$\rightarrow$\texttt{0x07d0}); Ack\_Data interception toward the HMI. Rule \texttt{sid:1000011} matches any write to the DB memory area without fixing a DB number.
+
+\paragraph{Link to Chapter~3 traffic.}
+The Stuxnet lab script sends Write Var (\texttt{0x05} at offset~17) to change \texttt{iSetpoint} at \texttt{DB1.DBW2} from 1200 (\texttt{0x04b0}) to 2000 (\texttt{0x07d0}). In the Snap7 PCAP, the Job PDU contains \texttt{05} followed by request items: Transport size \texttt{0x12}, length \texttt{0x10}, and area byte \texttt{0x84} (DB area) at a fixed offset after the function code---the pattern \texttt{|12|...|10|...|84|} used in \texttt{sid:1000011}. The MITM leg does not alter request opcodes; Bettercap and \texttt{s7\_intercept.py} rewrite Read Var responses on the PLC$\rightarrow$HMI path, increasing the rate of Ack\_Data (\texttt{ROSCTR=0x03}) from port~102 without a single suspicious function byte. That traffic pattern motivates \texttt{sid:1000013} with a threshold rather than a content match on modified payload bytes.
+
+\paragraph{Rule \texttt{sid:1000010}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Write Var request to PLC";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|05|";
+  offset:17; depth:1; sid:1000010; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack modify_process_variable;
+  priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+Every Snap7 or HMI write in the lab places function \texttt{0x05} (Write Var) at offset~17 on a Job PDU to port~102. Wireshark expands the following bytes as variable items (area, DB number, address, data). The rule matches only the function byte, so it covers writes to M, I, Q, and DB alike. It is the broad base layer beneath the DB-specific \texttt{sid:1000011} and will fire on normal HMI setpoint updates unless filtered by source IP.
+
+\paragraph{Rule \texttt{sid:1000011}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Write Var to DB memory area";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|05|";
+  offset:17; depth:1; content:"|12|"; offset:19; depth:1;
+  content:"|10|"; offset:21; depth:1; content:"|84|";
+  distance:5; within:1; sid:1000011; rev:2;
+  metadata:service iso-tsap, protocol s7comm, attack modify_process_variable;
+  priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+In the Write Var PDU for \texttt{DB1.DBW2}, Wireshark shows an Any-type request item with Transport size \texttt{0x12}, length \texttt{0x10}, and area code \texttt{0x84} (S7 DB area) five bytes after the Syntax ID field. The rule checks \texttt{|12|}, \texttt{|10|}, and \texttt{|84|} at offsets 19--21 plus \texttt{distance:5; within:1} for the area byte without hard-coding DB number or offset. The lab Stuxnet write to \texttt{DB1.DBW2} matches; writes to M/I/Q using area \texttt{0x83}/\texttt{0x81}/\texttt{0x82} do not. It still cannot tell legitimate DB tuning from the attack write without context.
+
+\paragraph{Rule \texttt{sid:1000013}.}
+\begin{packetdump}
+alert tcp any 102 -> $HOME_NET any (msg:"ICS S7COMM suspicious Ack_Data response
+  to HMI/engineering station"; flow:from_server,established;
+  content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 03|";
+  offset:4; depth:5; sid:1000013; rev:1;
+  metadata:service iso-tsap, protocol s7comm, attack possible_mitm_observation;
+  threshold:type both, track by_src, count 60, seconds 10; priority:3;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+During Bettercap MITM (Section~\ref{sec:stuxnet_mitm_sim}), the HMI still polls the PLC and receives Ack\_Data PDUs (\texttt{02 F0 80 32 03}) from port~102; the interceptor may rewrite payload bytes, but the header pattern stays valid. Counting more than 60 such responses in ten seconds from one PLC source flags unusually heavy read traffic toward the HMI subnet. The rule does not inspect modified values and cannot prove payload tampering---it supports correlation with \texttt{sid:1000011} and L2/ARP alerts outside the S7comm rule set.
+
+\subsection{Denial of service on the S7comm channel}
+\label{sec:rules-dos}
+
+Based on Section~\ref{sec:dos_s7comm}: script \texttt{s7comm\_dos.py} (--mode all) floods Setup Communication, TCP connect churn, and Read SZL in sequence, with \texttt{--pause} between phases. Unlike single-opcode rules, the \texttt{100004x} group in \texttt{ics\_dos.rules} uses \texttt{threshold} to alert when one source exceeds a limit within ten seconds.
+
+\paragraph{Link to Chapter~3 traffic.}
+The DoS PCAP from Section~\ref{sec:dos_s7comm} contains three distinguishable phases. Phase~1 (\texttt{setup\_flood}) repeats the same Setup PDU as reconnaissance (\texttt{0xF0} at offset~17, often on new TCP sessions) at high rate---Wireshark shows dense \texttt{0xF0} Jobs but each individual packet is valid. Phase~2 (\texttt{tcp\_connect}) produces many TCP SYN packets to port~102 without completing S7comm. Phase~3 (\texttt{szl\_flood}) reuses the Read SZL byte string from \texttt{sid:1000002} (\texttt{|00 01 12 04 11 44 01 00|}) at 25+ times per ten seconds. A generic Job flood mixes multiple opcodes under \texttt{32 01}. Thresholds were chosen from the lab script defaults (4--6 workers, 10\,s phases) so legitimate HMI traffic stays below the alert counts defined in the rules below.
+
+\paragraph{Rule \texttt{sid:1000040}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS possible TCP SYN flood to ISO-TSAP port 102";
+  flow:to_server; flags:S;
+  threshold:type both, track by_src, count 40, seconds 10; sid:1000040; rev:1;
+  metadata:attack dos_connection_flood; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+The \texttt{tcp\_connect} phase opens and closes TCP sessions rapidly; Wireshark filters on \texttt{tcp.flags.syn==1 \&\& tcp.dstport==102} show bursts of SYN packets without a full S7comm handshake. This rule counts SYN segments to \texttt{\$HOME\_NET:102} per source and fires above 40 in ten seconds. It does not inspect S7 payload at all. Fast port scans or misconfigured clients can produce similar SYN rates, so the alert needs correlation with phases~1 or~3 on the same source IP.
+
+\paragraph{Rule \texttt{sid:1000041}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM possible Setup Communication flood to PLC";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|F0|"; offset:17; depth:1;
+  threshold:type both, track by_src, count 25, seconds 10; sid:1000041; rev:1;
+  metadata:attack dos_s7comm_setup_flood; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+Each packet in \texttt{setup\_flood} is byte-identical to a normal Setup Communication---the same \texttt{|F0|} at offset~17 matched by \texttt{sid:1000001}. Wireshark cannot separate flood from a single setup on one packet alone. The threshold requires 25 or more Setup PDUs from one source in ten seconds, which the lab script produces but a single HMI session does not. Reconnect loops on a faulty client could approach the threshold and need baseline tuning.
+
+\paragraph{Rule \texttt{sid:1000042}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM possible Read SZL flood - PLC service load";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 07|"; offset:4; depth:5;
+  content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8;
+  threshold:type both, track by_src, count 25, seconds 10; sid:1000042; rev:1;
+  metadata:attack dos_s7comm_szl_flood; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+The \texttt{szl\_flood} phase sends the same Read SZL Userdata header observed in reconnaissance; only the rate differs. At 25+ requests per ten seconds the PLC CPU spends measurable time building SZL lists. The content match is copied from \texttt{sid:1000002}; the threshold distinguishes attack from a single Nmap \texttt{s7-info} run. Aggressive monitoring tools that poll SZL periodically could false-positive if their interval is misconfigured.
+
+\paragraph{Rule \texttt{sid:1000043}.}
+\begin{packetdump}
+alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM possible S7 Job request flood to PLC";
+  flow:to_server,established; content:"|03 00|"; offset:0; depth:2;
+  content:"|02 F0 80 32 01|"; offset:4; depth:5;
+  threshold:type both, track by_src, count 80, seconds 10; sid:1000043; rev:1;
+  metadata:attack dos_s7comm_job_flood; priority:1;)
+\end{packetdump}
+
+\paragraph{From traffic to rule.}
+When the script mixes Setup, Write, or other Job opcodes under \texttt{ROSCTR=0x01}, no single function byte is stable enough for a narrow signature. Wireshark still shows \texttt{02 F0 80 32 01} on every Job flood packet. This rule counts 80 such PDUs per ten seconds without checking offset~17, covering \texttt{setup\_flood} and generic Job spam. The higher count avoids overlap with \texttt{sid:1000041} on Setup-only floods but may miss slow-rate abuse below 80 packets.
+
+\subsection{Malformed packets and abnormal PDUs}
+\label{sec:rules-malformed}
+
+Rules in \texttt{s7comm\_malformed.rules} detect abnormal payload structure on TCP/102, not dangerous opcodes alone. The design pairs with script \texttt{s7comm\_malformed.py} (Appendix~\ref{app:malformed-script-deploy}): each \texttt{--mode} injects one specific fault; the matching rule uses \texttt{content}, \texttt{byte\_test}, or \texttt{dsize} at the offsets in Table~\ref{tab:s7-payload-offsets}.
+
+\paragraph{Link to Chapter~3 traffic.}
+Table~\ref{tab:malformed-phases} in Appendix~\ref{app:malformed-script-deploy} lists the exact byte change for each script mode against a valid Setup Communication template (\texttt{0300001e02f08032010000050000140000f000000000000000000000000000000000000000}). In Wireshark, \texttt{tpkt\_bad\_version} shows \texttt{02 00} instead of \texttt{03 00} at offset~0; length mismatch modes leave bytes 2--3 at \texttt{01 00} or \texttt{00 08} while the TCP segment is longer or shorter than declared; \texttt{cotp\_invalid} replaces \texttt{02 F0 80} with \texttt{01 00 00}; header modes change byte~7 to \texttt{0x31} or byte~8 to \texttt{0xFF}; function modes set offset~17 to \texttt{0xFF} or send a 20-byte Write Var stub; truncation sends only 14 bytes so offset~17 never arrives. Each fault is visible in the hex dump before the PLC closes the session.
+
+\paragraph{Group 1 --- TPKT / COTP (\texttt{sid:1000050}, \texttt{1000051}, \texttt{1000058}, \texttt{1000056}).}
+
+\texttt{1000050}: \texttt{content:!|03 00|} at offset~0---catches non-standard TPKT version (script sends \texttt{0x02 00}). \texttt{1000051}: after confirming \texttt{03 00}, \texttt{byte\_test} compares TPKT length (big-endian, offset~2) against \texttt{dsize}---fires when length is larger than the TCP payload (script sets \texttt{0x0100}). \texttt{1000058}: same idea but length is smaller than the actual payload (\texttt{0x0008} with a full Setup body). \texttt{1000056}: valid TPKT but missing COTP \texttt{02 F0 80} at offset~4.
+
+\paragraph{From traffic to rule.}
+Wireshark marks Group~1 faults at the outer encapsulation: wrong TPKT version breaks the dissector tree immediately; inflated or deflated length fields disagree with the TCP segment size shown in the status bar; missing COTP prevents S7comm parsing altogether. These rules use negated content, \texttt{byte\_test}, or absence of \texttt{02 F0 80} rather than function opcodes because malformed packets may never reach offset~17. They can also match non-S7 traffic on port~102 if \texttt{HOME\_NET} is wide.
+
+\paragraph{Group 2 --- S7 header (\texttt{sid:1000052}, \texttt{1000053}).}
+
+\texttt{1000052}: COTP DT is present but Protocol ID byte at offset~7 is not \texttt{0x32}. \texttt{1000053}: matches \texttt{|02 F0 80 32 FF|} at offset~4 (\texttt{ROSCTR} \texttt{0xFF} from script \texttt{s7\_bad\_rosctr}); additional invalid \texttt{ROSCTR} values can be added with separate rules if needed.
+
+\paragraph{From traffic to rule.}
+Once TPKT and COTP look valid, bytes~7--8 still identify S7comm. The \texttt{s7\_bad\_protocol\_id} PCAP shows \texttt{0x31} instead of \texttt{0x32} at offset~7; \texttt{s7\_bad\_rosctr} sets byte~8 to \texttt{0xFF}, which Wireshark flags as an unknown PDU type. Matching these fixed patterns catches header fuzzing before any function code is evaluated. Valid engineering traffic always uses \texttt{0x32} and a known \texttt{ROSCTR}, so false positives are rare on pure S7 sessions.
+
+\paragraph{Group 3 --- Function / parameters (\texttt{sid:1000054}, \texttt{1000057}).}
+
+\texttt{1000054}: Job (\texttt{32 01}) with function \texttt{0xFF} at offset~17---opcode outside the lab command set. \texttt{1000057}: still a Job with \texttt{0x05} (Write Var) but \texttt{dsize<25}: PDU too short for a valid Write Var (script \texttt{write\_var\_malformed}).
+
+\paragraph{From traffic to rule.}
+Group~3 packets pass header checks but fail semantic validation on the PLC. Wireshark may decode \texttt{0xFF} at offset~17 as an unknown function; the truncated Write Var PDU shows \texttt{0x05} with no item structure and total length below 25 bytes. \texttt{sid:1000054} uses a content match on \texttt{|FF|} at offset~17; \texttt{sid:1000057} uses \texttt{dsize} because the anomaly is overall length rather than a single byte value. Neither rule fires on the valid Write Var from the Stuxnet scenario.
+
+\paragraph{Group 4 --- Truncation (\texttt{sid:1000055}).}
+
+\texttt{1000055}: header \texttt{02 F0 80 32 01} is present but \texttt{dsize<18}---packet too short to contain the function byte at offset~17 (Setup truncated to 14 bytes). This is a ``missing byte'' signature independent of the specific opcode.
+
+\paragraph{From traffic to rule.}
+The \texttt{setup\_truncated} mode sends only the first 14 bytes of a Setup PDU; Wireshark shows an incomplete S7comm tree and no byte at offset~17. \texttt{dsize<18} detects any Job header without a reachable function field, including random truncation by a proxy. It does not say which opcode was intended---only that the PDU is structurally incomplete.
+
+\paragraph{General note.}
+Malformed rules do not replace DoS rules (\texttt{100004x}): flooding valid PDUs still requires \texttt{threshold}. Conversely, some malformed packets will not trigger \texttt{1000001} (Setup) because \texttt{0xF0} is missing or offset~17 is unreachable. In the lab evaluation (Chapter~\ref{sec:eval-malformed}), success is defined as a \texttt{100005x} alert after running \texttt{--mode all}, without requiring the PLC to change RUN/STOP state.
+
+\end{document}

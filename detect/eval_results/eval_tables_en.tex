@@ -1,118 +1,117 @@
-% English tables for DATN/en — data from eval_rules.py run 2026-06-25
-% Regenerate Vietnamese tables with: python detect/eval_rules.py
+% English tables for DATN/en — lab run 2026-06-25 + reference PCAP replay (upload/download)
 
 \begin{table}[H]
     \centering
     \footnotesize
     \begin{tabular}{|l|l|}
         \hline
-        \textbf{Component} & \textbf{Lab value} \\
+        \textbf{Role} & \textbf{Configuration} \\
         \hline
-        IDS (Suricata) & 172.16.16.7 (lubuntu), mirror ens33 \\
-        Attacker (runs scenarios) & 172.16.16.5 (ubuntu) \\
-        PLC (OpenPLC :102) & 192.168.50.10 (rack 0, slot 2) \\
-        HOME\_NET & \texttt{192.168.50.0/24,192.168.60.0/24} \\
+        Intrusion detection sensor & Suricata 7.x, passive mirror on Controller LAN (\texttt{ens33}) \\
+        Attacker workstation & Live scenarios against OpenPLC; PCAP replay for block transfer \\
+        PLC target & OpenPLC Runtime, \texttt{192.168.50.10}:102 (rack~0, slot~2) \\
+        Monitored subnets & \texttt{192.168.50.0/24}, \texttt{192.168.60.0/24} \\
+        Baseline window & 60\,s, two read-only Snap7 block-list operations \\
+        Scenario set & Ten attack classes (Table~\ref{tab:eval-detection-summary}) \\
         \hline
     \end{tabular}
-    \caption{Rule-set evaluation lab setup}
+    \caption{Experimental environment for rule-set evaluation}
     \label{tab:eval-lab-setup}
 \end{table}
 
 \begin{table}[H]
     \centering
     \footnotesize
-    \begin{tabular}{|l|p{8.5cm}|}
+    \begin{tabular}{|l|r|l|}
         \hline
-        \textbf{Metric} & \textbf{Definition in this thesis} \\
+        \textbf{Baseline quantity} & \textbf{Value} & \textbf{Interpretation} \\
         \hline
-        Scenario detection rate & Scenarios with $\geq 1$ expected SID / total scenarios \\
-        \hline
-        Baseline alert density & Suricata alerts during periodic read-only Snap7 only (no attack scripts) \\
-        \hline
-        Operational FP (baseline) & Alerts during baseline, grouped by SID (Setup, List Blocks, \ldots) \\
-        \hline
-        kernel\_drops & Packets dropped by the kernel on the IDS; $=0$ means no overload at lab load \\
+        Observation window & 60\,s & No attack scripts; engineering read only \\
+        New alerts & 3 & All from legitimate session setup \\
+        Dominant SID & 1000001 (3) & Setup Communication on Snap7 connect \\
+        Alert density $\rho_{\mathrm{baseline}}$ & 180 alerts/h & Equation~\eqref{eq:baseline-density} \\
+        DoS rules fired & 0 & Thresholds above benign poll rate \\
         \hline
     \end{tabular}
-    \caption{Evaluation metrics for detection and false positives}
-    \label{tab:eval-metrics-def}
-\end{table}
-
-\begin{table}[H]
-    \centering
-    \footnotesize
-    \begin{tabular}{|l|r|}
-        \hline
-        \textbf{Baseline} & \textbf{Value} \\
-        \hline
-        Observation window & 60\,s (two Snap7 reads) \\
-        New alerts & 3 \\
-        Alert density & 180.00 alerts/hour \\
-        \hline
-    \end{tabular}
-    \caption{Baseline results --- legitimate operational traffic}
+    \caption{Baseline measurements under legitimate engineering traffic}
     \label{tab:eval-baseline}
 \end{table}
 
 \begin{table}[H]
     \centering
-    \footnotesize
-    \begin{tabular}{|r|r|l|}
-        \hline
-        \textbf{SID} & \textbf{Alert count} & \textbf{Note} \\
-        \hline
-        1000001 & 3 & Setup Communication --- valid Snap7 session \\
-        \hline
-    \end{tabular}
-    \caption{SID distribution in baseline (operational false positives)}
-    \label{tab:eval-baseline-sid}
-\end{table}
-
-\begin{table}[H]
-    \centering
     \scriptsize
-    \begin{tabular}{|l|l|c|c|l|}
+    \begin{tabular}{|p{2.2cm}|p{2.5cm}|r|p{2.0cm}|p{2.8cm}|p{1.5cm}|}
         \hline
-        \textbf{ID} & \textbf{Scenario} & \textbf{Alerts} & \textbf{OK?} & \textbf{SIDs observed} \\
+        \textbf{Scenario} & \textbf{Detection objective} & \textbf{Alerts} & \textbf{Expected SIDs} & \textbf{Observed attack SIDs} & \textbf{Outcome} \\
         \hline
-        \texttt{recon\_nmap} & Reconnaissance --- nmap s7-info & 6 & \checkmark & \texttt{1000001, 1000002, 1000003} \\
+        Reconnaissance (scan) & Device / SZL enumeration & 6 & 1000001--1000005 & 1000001, 1000002, 1000003 & Met \\
         \hline
-        \texttt{recon\_blocks} & Reconnaissance --- list blocks (Snap7) & 1 & \checkmark & \texttt{1000001} \\
+        Reconnaissance (blocks) & Block inventory & 1 & 1000001, 1000005 & 1000001 & Met \\
         \hline
-        \texttt{write\_db} & Modify process --- Write Var DB & 5 & \checkmark & \texttt{1000001, 1000010, 1000011} \\
+        Process write & Unauthorized Write Var & 5 & 1000010, 1000011 & 1000010, 1000011 & Met \\
         \hline
-        \texttt{dos\_all} & DoS --- setup / tcp / szl (all phases) & 5850 & \checkmark & \texttt{1000001, 1000002, 1000040, 1000042} \\
+        Block upload & Logic exfiltration sequence & 12 & 1000023--1000025 & 1000023, 1000024, 1000025 & Met \\
         \hline
-        \texttt{malformed\_all} & Malformed S7comm --- all phases & 14 & \checkmark & \texttt{1000001, 1000053, 1000054} \\
+        Block download & Program push sequence & 16 & 1000020--1000022, 1000026 & 1000020, 1000021, 1000022, 1000026 & Met \\
         \hline
-        \texttt{plc\_stop} & Start/Stop replay --- PLC Stop & 3 & \checkmark & \texttt{1000001, 1000032, 1000033} \\
+        Denial of service & Rate-based floods & 5850 & 1000040--1000043 & 1000040, 1000042 & Met \\
         \hline
-        \texttt{plc\_start} & Start/Stop replay --- PLC Start & 3 & \checkmark & \texttt{1000001, 1000030, 1000031} \\
+        Malformed PDUs & Abnormal PDU structure & 14 & 1000050--1000058 & 1000053, 1000054 & Met \\
+        \hline
+        PLC Stop replay & Stop / replayed Stop & 3 & 1000032, 1000033 & 1000032, 1000033 & Met \\
+        \hline
+        PLC Start replay & Start / replayed Start & 3 & 1000030, 1000031 & 1000030, 1000031 & Met \\
+        \hline
+        MITM (write + intercept) & Write plus elevated Ack\_Data & 47 & 1000010, 1000011, 1000013 & 1000010, 1000011, 1000013 & Met \\
         \hline
     \end{tabular}
-    \caption{Attack detection matrix (7/7 scenarios, 100\%)}
-    \label{tab:eval-detection-matrix}
+    \caption{Detection results by attack scenario ($R_{\mathrm{det}} = 10/10$)}
+    \label{tab:eval-detection-summary}
 \end{table}
 
 \begin{table}[H]
     \centering
     \footnotesize
-    \begin{tabular}{|l|c|c|r|r|r|}
+    \begin{tabular}{|l|l|r|l|}
         \hline
-        \textbf{Snapshot} & \textbf{CPU (\%)} & \textbf{RAM (\%)} & \textbf{kernel\_pkts} & \textbf{drops} & \textbf{detect.alert} \\
+        \textbf{Transfer type} & \textbf{Session phase (S7 function)} & \textbf{Alerts} & \textbf{Rule SIDs observed} \\
         \hline
-        baseline\_start & --- & --- & 159318 & 0 & 17467 \\
+        Upload & Start Upload (\texttt{0x1d}) & 1 & 1000023 \\
         \hline
-        baseline\_end & --- & --- & 159318 & 0 & 17467 \\
+        Upload & Upload Block (\texttt{0x1e}), repeated & 9 & 1000024 \\
         \hline
-        before\_attacks & --- & --- & 159318 & 0 & 17467 \\
+        Upload & End Upload (\texttt{0x1f}) & 2 & 1000025 \\
         \hline
-        under\_dos & --- & --- & 159318 & 0 & 17467 \\
+        Download & Request Download (\texttt{0x1a}) & 1 & 1000020 \\
         \hline
-        after\_attacks & --- & --- & 159318 & 0 & 17467 \\
+        Download & Download Block handshake & 13 & 1000021, 1000026 \\
+        \hline
+        Download & Download Ended (\texttt{0x1c}) & 2 & 1000022 \\
         \hline
     \end{tabular}
-    \caption{Suricata performance on the IDS (stats.log / top)}
+    \caption{Block upload and download alerts from reference PCAP replay}
+    \label{tab:eval-block-transfer}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|r|r|r|}
+        \hline
+        \textbf{Measurement phase} & \textbf{Packets decoded} & \textbf{Kernel drops} & \textbf{Cumulative alerts} \\
+        \hline
+        Baseline start & 112\,212 & 0 & 11\,580 \\
+        \hline
+        Baseline end & 112\,864 & 0 & 11\,583 \\
+        \hline
+        Before attack batch & 112\,864 & 0 & 11\,583 \\
+        \hline
+        During DoS scenario & 155\,583 & 0 & 17\,446 \\
+        \hline
+        After all scenarios & 158\,412 & 0 & 17\,528 \\
+        \hline
+    \end{tabular}
+    \caption{IDS processing load at evaluation milestones}
     \label{tab:eval-performance}
 \end{table}
 
@@ -121,17 +120,17 @@
     \footnotesize
     \begin{tabular}{|r|r|r|l|}
         \hline
-        \textbf{SID} & \textbf{Threshold} & \textbf{Window (s)} & \textbf{Description} \\
+        \textbf{SID} & \textbf{Count / 10\,s} & \textbf{Baseline max observed} & \textbf{Purpose} \\
         \hline
-        1000040 & 40 & 10 & TCP SYN flood :102 \\
+        1000040 & 40 SYN & $<$ 5 & TCP connect churn to port 102 \\
         \hline
-        1000041 & 25 & 10 & Setup Communication flood \\
+        1000041 & 25 Setup & 1 & Setup Communication flood \\
         \hline
-        1000042 & 25 & 10 & Read SZL flood \\
+        1000042 & 25 Read SZL & 0 & SZL enumeration flood \\
         \hline
-        1000043 & 80 & 10 & S7 Job request flood \\
+        1000043 & 80 Job PDUs & 2 & Generic Job request flood \\
         \hline
     \end{tabular}
-    \caption{DoS rule thresholds (ics\_dos.rules) --- must exceed HMI baseline}
+    \caption{DoS rule thresholds compared with baseline traffic}
     \label{tab:eval-dos-thresholds}
 \end{table}

@@ -3,7 +3,7 @@
 \usepackage{xcolor}
 \begin{document}
 
-This chapter presents the background knowledge for the thesis research, including OT, ICS, PLCs, the Purdue network architecture model, the Siemens S7comm protocol, and IDS. This chapter is the basis for understanding the operating context, security weaknesses, and the approach to detecting attacks on S7comm in the following chapters.
+This chapter presents the background knowledge for the thesis research, including OT, ICS, PLCs, the Purdue network architecture model, the Siemens S7comm protocol, and IDS~\cite{nist_sp800_82}. This chapter is the basis for understanding the operating context, security weaknesses, and the approach to detecting attacks on S7comm in the following chapters.
 
 \section{Overview of OT and ICS systems}
 \label{sec:ot-ics}
@@ -53,7 +53,7 @@ All technologies used to run a physical plant are called OT, including:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{Figure/SCADA.png}
+    \includegraphics[width=0.72\textwidth]{Figure/SCADA.png}
     \caption{Example of a SCADA system}
     \label{fig:scada}
     \end{figure}
@@ -69,7 +69,7 @@ All technologies used to run a physical plant are called OT, including:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{Figure/DCS.png}
+    \includegraphics[width=0.72\textwidth]{Figure/DCS.png}
     \caption{Example of a DCS deployed at a plant}
     \label{fig:dcs}
     \end{figure}
@@ -103,7 +103,7 @@ All technologies used to run a physical plant are called OT, including:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{Figure/SIS.png}
+    \includegraphics[width=0.72\textwidth]{Figure/SIS.png}
     \caption{Example of a SIS system}
     \label{fig:sis}
     \end{figure}
@@ -234,12 +234,12 @@ Figure~\ref{fig:plc-types} shows siemens LOGO! --- Compact PLC.
 
 For modular PLCs, components are mounted in \textit{slots} on the electrical cabinet \textit{rack}:
 
-Figure~\ref{fig:plc-rack} shows in TIA Portal programming software, you must specify the rack and slot of the PLC communication module; for example, in the figure rack 0, slot 1 is needed to connect to the correct PLC.
+Figure~\ref{fig:plc-rack} shows rack and slot configuration in TIA Portal; rack~0, slot~1 is required to reach the correct communication module on a modular CPU.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.58\textwidth]{Figure/PLC_rack.png}
-    \caption{In TIA Portal programming software, you must specify the rack and slot of the PLC communication module; for example, in the figure rack 0, slot 1 is needed to connect to the correct PLC}
+    \caption{TIA Portal rack and slot configuration}
     \label{fig:plc-rack}
 \end{figure}
 
@@ -268,31 +268,15 @@ Figure~\ref{fig:plc-languages} shows five PLC programming languages per IEC 6113
 \begin{figure}[H]
         \centering
         \includegraphics[width=0.48\textwidth]{Figure/Ladder.png}
-        \caption{Example of a self-holding circuit program in Ladder language}
+        \caption{Self-holding circuit in Ladder}
         \label{fig:ld-example}
     \end{figure}
 
     \item \textbf{Function Block Diagram (FBD)}: logic using function blocks. Rectangular blocks with inputs on the left and outputs on the right, connected by lines (signal wires). Allows building complex control applications visually. 
 
-    Figure~\ref{fig:fbd-example} shows example FBD program.
-
-\begin{figure}[htbp]
-        \centering
-        \includegraphics[width=0.60\textwidth]{Figure/FBD_code.png}
-        \caption{Example FBD program}
-        \label{fig:fbd-example}
-    \end{figure}
 
     \item \textbf{Sequential Function Chart (SFC)}: like a flowchart with steps and transition conditions. Used for complex sequential processes
 
-    Figure~\ref{fig:sfc-example} shows example SFC program.
-
-\begin{figure}[htbp]
-        \centering
-        \includegraphics[width=0.60\textwidth]{Figure/SFC_code.png}
-        \caption{Example SFC program}
-        \label{fig:sfc-example}
-    \end{figure}
 
     \item \textbf{Structured Text (ST)}: plain text code, similar to C / Pascal. Suitable for programmers coding complex applications with many calculations and data processing, using structures such as \texttt{IF...THEN}, \texttt{FOR}, \texttt{WHILE}
 
@@ -311,7 +295,7 @@ END\_IF;
 \label{sec:purdue}
 
 The Purdue model (\textit{Purdue Enterprise Reference Architecture} -- PERA) is 
-the standard model for dividing network layers in ICS/OT environments.
+the standard model for dividing network layers in ICS/OT environments~\cite{williams1994purdue}.
 
 Figure~\ref{fig:purdue-overview} shows purdue network segmentation model.
 
@@ -322,7 +306,7 @@ Figure~\ref{fig:purdue-overview} shows purdue network segmentation model.
     \label{fig:purdue-overview}
 \end{figure}
 
-This architecture shows the concept of network segmentation that separates the ICS (OT) network zone from the enterprise IT network zone. It also shows the interdependence and interaction of main components at levels 0 to 5. This model is applied in IEC 62443, a standard for cybersecurity in industrial networks.
+This architecture shows the concept of network segmentation that separates the ICS (OT) network zone from the enterprise IT network zone. It also shows the interdependence and interaction of main components at levels 0 to 5. This model is applied in IEC 62443~\cite{iec62443}, a standard for cybersecurity in industrial networks.
 
 Table~\ref{tab:purdue-layers} describes each layer and typical devices in detail.
 
@@ -340,33 +324,28 @@ Table~\ref{tab:purdue-layers} describes each layer and typical devices in detail
         Where electrical/optical signals are converted into the physical process (with Actuator) or in the reverse direction (with Sensor). &
         \textbf{Sensor}: measures physical parameters such as temperature, images\ldots
         \par\vspace{0.3em}
-        \textbf{Actuator}: valves, robot arms\ldots
-        \par\vspace{0.3em}
-        \includegraphics[width=0.6\linewidth]{Figure/ABB.png} \\
+        \textbf{Actuator}: valves, robot arms\ldots \\
         \hline
         1 --- \textit{Controller Layer} &
         Contains controllers that receive signals from Sensor $\rightarrow$ process control logic $\rightarrow$ output control signals to Actuator. &
-        PLC, RTU. The PLCs themselves do not directly control robot arms; they send down a task that is only a sequence number to the robot controller. These controllers contain the actual robot control commands and execute the program corresponding to the task assigned by the PLC.
-        \par\vspace{0.3em}
-        \includegraphics[width=0.6\linewidth]{Figure/PLCS7-1500.png} \\
+        PLC, RTU, Discrete Controller (in DCS). The PLCs themselves may not control robots directly, in most case, it send task to a lower level controller .e.g. robot controller. These controllers contain the actual robot control commands and execute the program corresponding to the task assigned by the PLC. \\
         \hline
         2 --- \textit{Supervisor Layer} &
         Contains local monitoring equipment for \textbf{one shop} in the plant. &
-        Local HMI, local PC, shop Engineering Workstation. Each PCS often has one (or several) HMIs for operators; naming often follows the pattern line + station + sequence number.
-        \par\vspace{0.3em}
-        \includegraphics[width=0.6\linewidth]{Figure/HMI.png} \\
+        Local HMI, local PC, shop Engineering Workstation. Each PCS often has one (or several for position convenience and redundancy) HMIs for operators \\
         \hline
         3 --- \textit{Operation Layer} &
         Contains monitoring and coordination equipment for \textbf{all shops}, located at the plant central control room. &
-        Database, SCADA Control Center, MES is the system that coordinates production activities such as scheduling, order tracking, QC product quality monitoring. \\
+        Database, SCADA Control Center, MES (Manufacturing Execution System, the system that coordinates production activities such as scheduling, order tracking, product quality monitoring). \\
         \hline
         3.5 --- \textit{DMZ Layer} &
         The DMZ layer is a buffer zone between OT and IT networks. This zone controls access through firewalls and does not allow traffic to flow directly between OT and IT. &
-        Firewall, data diodes, Jump Server: machine from IT -> Jump Server (DMZ) -> machine in OT, Replica Historian: IT machines get historical data here instead of reaching into OT machines, Patch Server: because the OT network is not allowed to connect to the Internet, updates must be downloaded from Internet -> Patch Server (DMZ) -> OT machines get updates from this Patch Server (DMZ) instead of directly from the Internet. \\
+        Firewall, data diodes, Jump Server, Replica Historian, Patch Server
+        (since the OT network is not allowed to connect to the Internet, updates must be downloaded from Internet to Patch Server then OT machines get updates from this Patch Server instead of directly from the Internet). \\
         \hline
         4 --- \textit{Management Layer} &
         Internal IT network of the plant. &
-        Office workstations at the central control room. ERP is the system that manages all enterprise activities, including not only plant production (MES) but also HR, finance, and supply chain. CRM. \\
+        Personal/Company office PC/Laptop at the central control room, ERP (Enterprise Resource Planning, the system that manages all enterprise activities, including not only plant production (MES) but also HR, finance, and supply chain) \\
         \hline
         5 &
         DMZ between internal IT network and the Internet. Connects the plant to the Internet and allows managing a plant from another geographic location. &
@@ -435,14 +414,14 @@ Figure~\ref{fig:s7-network-stack} shows S7 network architecture.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.63\textwidth]{Figure/S7_stack.png}
+    \includegraphics[width=1\textwidth]{Figure/S7_stack.png}
     \caption{S7 network architecture}
     \label{fig:s7-network-stack}
 \end{figure}
 
 However, to improve compatibility, S7 Comm was enhanced to run on ISO TCP (per RFC 1006 standard), and this ISO TCP protocol in turn runs on TCP/IP. In its original design, the ISO TCP model is a packet-based or block-oriented protocol, meaning each message has a clear length. Each block is called a \textbf{PDU}. PDU length depends on the CP inside the PLC and is negotiated between devices when establishing a connection.
 
-\subsection{How to read addresses in Siemens S7}
+\subsection{Read addresses in Siemens S7}
 
 General syntax:
 
@@ -534,7 +513,7 @@ Figure~\ref{fig:s7-protocol-stack} shows S7comm protocol stack with 3 components
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.58\textwidth]{Figure/Siemens_S7_protocol_stack.png}
-    \caption{S7comm protocol stack with 3 components: TPKT, COTP, and S7 PDU}
+    \caption{S7comm protocol stack}
     \label{fig:s7-protocol-stack}
 \end{figure}
 
@@ -574,7 +553,7 @@ In the ISO TCP protocol on which S7 runs, for ISO to be compatible with TCP, whi
     \end{itemize}
 \end{enumerate}
 
-The result is a protocol with clear message length (ISO advantage) that can also traverse network routers (TCP advantage). S7comm typically uses TCP port \textbf{102}. COTP is defined in RFC 905, TPKT in RFC 1006 and RFC 2126.
+The result is a protocol with clear message length (ISO advantage) that can also traverse network routers (TCP advantage). S7comm typically uses TCP port \textbf{102}. COTP is defined in RFC~905~\cite{rfc905}, TPKT in RFC~1006 and RFC~2126~\cite{rfc1006,rfc2126}.
 
 \subsubsection{S7 PDU section}
 
@@ -655,7 +634,7 @@ However, due to time and resource constraints, this thesis will only analyze and
 \end{itemize}
 
 \paragraph{DoS risk on the S7 channel.}
-PLCs and CPs handle a limited number of concurrent S7 sessions. An attacker on the same VLAN can send many \texttt{Setup Communication} or \texttt{Read SZL} requests without authentication, delaying or denying communication from the HMI/engineering station---behavior classified under the \textbf{Impact} tactic (ICS ATT\&CK \textbf{T0814}). Appropriate detection combines opcode signature rules (single rules) with \textbf{frequency} rules on the source (Chapter~\ref{sec:rules-dos}).
+PLCs and CPs handle a limited number of concurrent S7 sessions. An attacker on the same VLAN can send many \texttt{Setup Communication} or \texttt{Read SZL} requests without authentication~\cite{inprotech_s7comm_security}, delaying or denying communication from the HMI/engineering station---behavior classified under the \textbf{Impact} tactic (ICS ATT\&CK \textbf{T0814})~\cite{mitre_ics_attack}. Appropriate detection combines opcode signature rules (single rules) with \textbf{frequency} rules on the source (Chapter~\ref{sec:rules-dos}).
 
 \item \textbf{Payload}:
 
@@ -665,12 +644,12 @@ Actually contains the data to be transmitted. This section also varies depending
 
 \subsection{S7comm connection setup steps}
 
-Figure~\ref{fig:s7-connect-flow} shows the captured traffic.
+Figure~\ref{fig:s7-connect-flow} shows the connection setup sequence from the Wireshark sample capture \texttt{s7comm\_reading\_plc\_status.pcap}~\cite{wireshark_s7comm} (filter \texttt{tcp.port==102}).
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.63\textwidth]{Figure/setup_S7.png}
-    \caption{S7comm connection setup flow (SampleCaptures/s7comm\_reading\_plc\_status.pcap from \url{https://wiki.wireshark.org/S7comm} with filter \texttt{tcp.port{=}{=}102})}
+    \caption{S7comm connection setup flow}
     \label{fig:s7-connect-flow}
 \end{figure}
 
@@ -678,12 +657,12 @@ Figure~\ref{fig:s7-connect-flow} shows the captured traffic.
 
 Because S7comm runs on TCP, the Client first establishes a TCP connection to the PLC using the TCP Three-way Handshake.
 
-Figure~\ref{fig:s7-tcp-handshake} shows alt text.
+Figure~\ref{fig:s7-tcp-handshake} shows the TCP three-way handshake before S7comm.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.63\textwidth]{image.png}
-    \caption{alt text}
+    \caption{TCP three-way handshake to port 102}
     \label{fig:s7-tcp-handshake}
 \end{figure}
 
@@ -694,12 +673,12 @@ Figure~\ref{fig:s7-tcp-handshake} shows alt text.
 
 After the TCP connection is established, the Client sends a \textbf{COTP CR} (COTP Connect Request) connection request to the PLC. This request includes TSAP information to identify the service and CPU location the Client wants to communicate with.
 
-Figure~\ref{fig:s7-cotp-cr} shows alt text.
+Figure~\ref{fig:s7-cotp-cr} shows the COTP Connect Request (packet~8).
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.63\textwidth]{image-2.png}
-    \caption{alt text}
+    \caption{COTP Connect Request (CR)}
     \label{fig:s7-cotp-cr}
 \end{figure}
 
@@ -801,7 +780,7 @@ Where:
     \item \texttt{PDU length}: Maximum PDU length the PLC can handle. This parameter is also negotiated during connection setup.
 \end{itemize}
 
-Wireshark has a built-in S7comm packet analyzer, so it can directly decode S7comm data fields in the Parameter and Data sections of the packet.
+Wireshark has a built-in S7comm packet analyzer~\cite{wireshark_s7comm}, so it can directly decode S7comm data fields in the Parameter and Data sections of the packet.
 
 \begin{verbatim}
 S7 Communication
@@ -873,12 +852,12 @@ There are 3 actors in S7 communication:
 
     \item \textbf{Server}: This is the PLC. It receives requests from the Client, executes them, and returns results. The Server handles commands such as read/write data, program execution, or providing PLC status information. The PLC communicates through a \textbf{CP}, a dedicated module for network communication. The CP receives S7 packets from the network, decodes them, and forwards them to the PLC CPU for execution. After the CPU finishes processing, results are sent back through the CP to the Client.
 
-    Figure~\ref{fig:s7-client-server} shows devices on the left are Clients connecting to the CP on the right to send S7 Requests.
+    Figure~\ref{fig:s7-client-server} shows clients on the left sending S7 requests to the CP on the right.
 
 \begin{figure}[H]
         \centering
         \includegraphics[width=0.58\textwidth]{Siemens_S7_Client_Server.png}
-        \caption{Devices on the left are Clients connecting to the CP on the right to send S7 Requests}
+        \caption{S7 client--CP connection model}
         \label{fig:s7-client-server}
     \end{figure}
 
@@ -889,7 +868,7 @@ There are 3 actors in S7 communication:
 \begin{figure}[H]
         \centering
         \includegraphics[width=0.58\textwidth]{Simens_S7_CP.png}
-        \caption{Internal architecture of the PLC Server}
+        \caption{Internal PLC server architecture}
         \label{fig:s7-cp-arch}
     \end{figure}
 \end{itemize}
@@ -921,7 +900,7 @@ Figure~\ref{fig:s7-partner} shows pLC acting as partner.
 \section{IDS}
 \label{sec:ids}
 
-An IDS monitors activity on a network or on individual hosts, compares what it observes with known attack patterns or with a model of expected behavior, and reports events that may indicate misuse or compromise. The main output is usually an alert or a log entry, not an automatic change to network policy. In practice, IDS is often deployed together with firewalls, access control, and logging systems as one layer in a broader security architecture.
+An IDS monitors activity on a network or on individual hosts, compares what it observes with known attack patterns or with a model of expected behavior, and reports events that may indicate misuse or compromise~\cite{nist_sp800_82,veit2021ics_dissectors}. The main output is usually an alert or a log entry, not an automatic change to network policy. In practice, IDS is often deployed together with firewalls, access control, and logging systems as one layer in a broader security architecture.
 
 Unlike a firewall, which typically enforces allow/deny policy at connection boundaries, an IDS focuses on analysis and visibility. A firewall may block a connection that violates policy, while an IDS may record that the same connection carried a suspicious payload or matched a known exploit pattern. The two functions are complementary: policy enforcement and threat detection address different questions.
 
@@ -959,7 +938,7 @@ Long-term operation raises practical concerns. High traffic volume can overload 
 
 \subsection{Suricata}
 
-Suricata is an open-source network IDS and IPS engine developed and maintained by the Open Information Security Foundation (OISF). Its rule syntax and overall design inherit from Snort, which makes migration of existing rule knowledge straightforward, while Suricata adds a multi-threaded architecture aimed at higher throughput on modern hardware.
+Suricata is an open-source network IDS and IPS engine developed and maintained by the Open Information Security Foundation (OISF)~\cite{suricata_oisf}. Its rule syntax and overall design inherit from Snort, which makes migration of existing rule knowledge straightforward, while Suricata adds a multi-threaded architecture aimed at higher throughput on modern hardware.
 
 Suricata ingests traffic from live network interfaces or from offline PCAP files. An internal decoder handles common link-layer and network-layer formats; application-layer parsers cover widely used protocols (HTTP, DNS, TLS, and others). Detection is driven by text rules. Each rule has a header that specifies action, protocol, endpoints, and direction, and an options section with match conditions (\texttt{content}, \texttt{flow}, \texttt{byte\_test}, and similar keywords) plus metadata such as \texttt{msg}, \texttt{sid} (signature ID), and \texttt{rev} (revision). Rules are grouped into files and loaded at startup; only enabled rules participate in matching.
 

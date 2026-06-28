@@ -17,11 +17,13 @@ S7comm trên TCP/102 có cấu trúc TCP $\rightarrow$ TPKT $\rightarrow$ COTP $
     \centering
     \caption{Offset byte trong payload TCP/102 (S7comm Data TPDU)}
     \label{tab:s7-payload-offsets}
-    \begin{tabular}{|c|c|p{7.2cm}|}
+    \begin{tabular}{|c|c|p{6.8cm}|}
         \hline
-        \textbf{Offset} & \textbf{Giá trị} & \textbf{Trường} \\
+        \textbf{Offset} & \textbf{Giá trị cố định / ví dụ} & \textbf{Trường} \\
         \hline
         0--1 & \texttt{03 00} & TPKT \\
+        \hline
+        2--3 & \emph{thay đổi} & Độ dài TPKT (big-endian; phải khớp payload TCP trên PDU hợp lệ) \\
         \hline
         4--6 & \texttt{02 F0 80} & COTP Data TPDU \\
         \hline
@@ -29,12 +31,14 @@ S7comm trên TCP/102 có cấu trúc TCP $\rightarrow$ TPKT $\rightarrow$ COTP $
         \hline
         8 & \texttt{01}/\texttt{03}/\texttt{07} & \texttt{ROSCTR}: Job / Ack\_Data / Userdata \\
         \hline
-        17 & --- & Function code (Job, Userdata) \\
+        17 & \texttt{0xF0}, \texttt{0x05}, \texttt{0x28}, \ldots & Mã chức năng trên PDU Job hoặc Userdata (tùy lệnh) \\
         \hline
-        19 & --- & Function code (Ack\_Data) \\
+        19 & \texttt{0x04}, \texttt{0x1B}, \ldots & Mã chức năng trên PDU Ack\_Data (cùng vai trò offset~17, lệch 2 byte lỗi) \\
         \hline
     \end{tabular}
 \end{table}
+
+Hai dòng cuối không có một byte cố định cho mọi gói tin như TPKT/COTP: mỗi lệnh S7comm mang opcode riêng tại vị trí đó. Luật trong chương khớp giá trị cụ thể quan sát ở Chương~3 (ví dụ \texttt{0xF0} Setup, \texttt{0x05} Write Var). Byte 2--3 mã hóa độ dài TPKT; luật malformed so sánh trường này với kích thước segment TCP qua \texttt{byte\_test} và \texttt{dsize}.
 
 \subsection{Điều kiện về chiều truyền và loại PDU}
 \label{sec:rule-flow-pdu}
@@ -421,7 +425,7 @@ Mục tiêu: bão PDU Job (\texttt{ROSCTR=0x01}) tổng quát---bao gồm Setup,
 \subsection{Gói tin malformed và PDU bất thường}
 \label{sec:rules-malformed}
 
-Các luật trong \texttt{s7comm\_malformed.rules} bổ sung lớp phát hiện \textbf{không dựa trên opcode nguy hiểm} mà dựa trên \textbf{cấu trúc payload} bất thường trên TCP/102. Thiết kế ghép với script \texttt{s7comm\_malformed.py} (Mục~\ref{sec:malformed_plc}): mỗi \texttt{--mode} tạo một dạng lỗi cụ thể; luật tương ứng dùng \texttt{content}, \texttt{byte\_test} hoặc \texttt{dsize} tại offset đã thống nhất ở Bảng~\ref{tab:s7-payload-offsets}.
+Các luật trong \texttt{s7comm\_malformed.rules} bổ sung lớp phát hiện \textbf{không dựa trên opcode nguy hiểm} mà dựa trên \textbf{cấu trúc payload} bất thường trên TCP/102. Thiết kế ghép với script \texttt{s7comm\_malformed.py} (Phụ lục~\ref{app:malformed-script-deploy}): mỗi \texttt{--mode} tạo một dạng lỗi cụ thể; luật tương ứng dùng \texttt{content}, \texttt{byte\_test} hoặc \texttt{dsize} tại offset đã thống nhất ở Bảng~\ref{tab:s7-payload-offsets}.
 
 \paragraph{Nhóm 1 --- TPKT / COTP (\texttt{sid:1000050}, \texttt{1000051}, \texttt{1000058}, \texttt{1000056}).}
 

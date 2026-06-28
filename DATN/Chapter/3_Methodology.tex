@@ -862,39 +862,10 @@ Khác với DoS ứng dụng web (HTTP flood), DoS trên PLC Siemens qua Etherne
 \begin{enumerate}
     \item \textbf{Cạn tài nguyên kết nối}: mở/đóng TCP tới cổng 102 với tần suất cao (connection churn), hoặc gửi nhiều gói SYN, làm đầy bảng phiên trên PLC/stack S7.
     \item \textbf{Flood lệnh S7 hợp lệ}: lặp \texttt{Setup Communication} (\texttt{0xF0}), \texttt{Read SZL} (userdata CPU services) hoặc \texttt{Read/Write Var} --- không cần payload sai cú pháp vẫn gây tải CPU và hàng đợi xử lý.
-    \item \textbf{Lạm dụng trinh sát như vũ khí}: Read SZL / List Blocks ở tần suất cực cao vừa là recon vừa là DoS dịch vụ (tương tự quét SCADA quá mức).
+    \item \textbf{Truy vấn trinh sát tần suất cao}: lặp lệnh \texttt{Read SZL} hoặc \texttt{List Blocks} ở tần suất vượt ngưỡng vừa thu thập thông tin hệ thống vừa gây suy giảm khả năng phục vụ của PLC, tương tự hiện tượng quét SCADA hoặc quét tài sản OT quá mức.
 \end{enumerate}
 
-Ba kiểu trên được gói trong \textbf{một script duy nhất} \texttt{attacks/dos/s7comm\_dos.py}. Mặc định chế độ \texttt{--mode all} chạy tuần tự ba phase (\texttt{setup\_flood} $\rightarrow$ \texttt{tcp\_connect} $\rightarrow$ \texttt{szl\_flood}), mỗi phase khoảng 10\,s và nghỉ 8\,s giữa các phase để Suricata kịp ghi nhận alert trước khi chuyển kiểu flood tiếp theo (đủ cho cửa sổ \texttt{threshold} 10\,s trong \texttt{ics\_dos.rules}).
-
-\begin{table}[H]
-    \centering
-    \footnotesize
-    \begin{tabular}{|l|l|l|l|}
-        \hline
-        \textbf{Phase (--mode all)} & \textbf{Mô tả} & \textbf{Luật Suricata} & \textbf{Workers mặc định} \\
-        \hline
-        1 -- \texttt{setup\_flood} & PDU Setup Communication lặp trên phiên TCP mới & \texttt{1000041}, \texttt{1000043} & 4 \\
-        \hline
-        2 -- \texttt{tcp\_connect} & Connect/disconnect nhanh :102 & \texttt{1000040} & 6 \\
-        \hline
-        3 -- \texttt{szl\_flood} & \texttt{read\_szl(0x0011)} qua Snap7 & \texttt{1000042} & 2 \\
-        \hline
-    \end{tabular}
-    \caption{Chuỗi DoS S7comm trong một lần chạy script (mặc định)}
-    \label{tab:dos-modes}
-\end{table}
-
-Triển khai lab (một lệnh):
-
-\begin{verbatim}
-python3 attacks/dos/s7comm_dos.py <IP_PLC>
-# tuong duong: --mode all --duration 10 --pause 8
-\end{verbatim}
-
-Có thể chạy riêng từng kiểu bằng \texttt{--mode setup\_flood} (hoặc \texttt{tcp\_connect}, \texttt{szl\_flood}) khi cần phân tích PCAP từng kịch bản.
-
-Lưu lượng được Suricata trên IDS bắt tại interface mirror. Phát hiện dùng \texttt{ics\_dos.rules} (\texttt{sid:1000040}--\texttt{1000043}): \texttt{threshold} với \texttt{track by\_src}, đếm gói hợp lệ S7 trong 10\,s---không cần payload malformed. Ngưỡng cần hiệu chỉnh theo baseline HMI để tránh báo nhầm.
+Các luật phát hiện cho ba kiểu trên được trình bày ở Mục~\ref{sec:rules-dos}.
 
 \subsection{Upload và Download chương trình PLC}
 \label{sec:down_up_program}
@@ -938,26 +909,20 @@ Mã nguồn của chương trình điều khiển và hầu như các dữ liệ
 
 \subsubsection{Upload}
 
+\input{s7_sequence_diagrams.tex}
 
-\begin{verbatim}
-%%{init: {'sequence': {'messageMargin': 60}} }%%
-sequenceDiagram
-    participant Workstation
-    participant PLC
+Hình~\ref{fig:s7-upload-sequence} tóm tắt trình tự trao đổi bản tin Upload S7comm giữa máy trạm kỹ thuật và PLC.
 
-    Workstation->>PLC: Job - Start Upload: Block Address
-    PLC->>Workstation: Ack Data - Start Upload: Block Length
-
-    Workstation-->>PLC: Job - Upload Block
-    PLC-->>Workstation: Ack Data - Upload Block: Block Data
-
-    Workstation->>PLC: Job - End Upload
-    PLC->>Workstation: Ack Data - End Upload
-\end{verbatim}
+\begin{figure}[htbp]
+    \centering
+    \SSevenUploadSequence
+    \caption{Trình tự Upload S7comm (các pha Job và Ack Data)}
+    \label{fig:s7-upload-sequence}
+\end{figure}
 
 
 \begin{enumerate}
-    \item \textbf{Start Upload}: Máy client gửi lệnh để yêu cầu PLC trả về chương trình điều khiển nó đang chạy (\textcolor{blue}{Job} Start Upload) và PLC phản hồi lại yêu cầu đó (\textcolor{green}{ACK} Start Upload) . Command này bao gồm các trường theo thứ tự:
+    \item \textbf{Start Upload}: Máy client gửi lệnh để yêu cầu PLC trả về chương trình điều khiển nó đang chạy (Job Start Upload) và PLC phản hồi lại yêu cầu đó (Ack Data Start Upload). Command này bao gồm các trường theo thứ tự:
 \end{enumerate}
 
 
@@ -966,7 +931,7 @@ sequenceDiagram
     \footnotesize
     \begin{tabular}{|l|l|l|}
         \hline
-        \textbf{Trường} & \textbf{<span style="color: blue;">Job</span > Start Upload} & \textbf{<span style="color: green;">ACK</span> Start Upload} \\
+        \textbf{Trường} & \textbf{Job Start Upload} & \textbf{Ack Data Start Upload} \\
         \hline
         `Function Code` (1 byte) & Cố định `0x1d` & Same \\
         \hline
@@ -1045,7 +1010,7 @@ sequenceDiagram
     \footnotesize
     \begin{tabular}{|l|l|l|}
         \hline
-        \textbf{Trường} & \textbf{<span style="color: blue;">Job</span > Upload Block} & \textbf{<span style="color: green;">ACK</span> Upload Block} \\
+        \textbf{Trường} & \textbf{Job Upload Block} & \textbf{Ack Data Upload Block} \\
         \hline
         `Function Code` (1 byte) & Cố định `0x1e` & Same \\
         \hline
@@ -1071,7 +1036,7 @@ sequenceDiagram
     \footnotesize
     \begin{tabular}{|l|l|l|}
         \hline
-        \textbf{Trường} & \textbf{<span style="color: blue;">Job</span > End Upload} & \textbf{<span style="color: green;">ACK</span> End Upload} \\
+        \textbf{Trường} & \textbf{Job End Upload} & \textbf{Ack Data End Upload} \\
         \hline
         `Function Code` (1 byte) & Cố định `0x1f` & Same \\
         \hline
@@ -1081,27 +1046,18 @@ sequenceDiagram
 
 \subsubsection{Download}
 
+Hình~\ref{fig:s7-download-sequence} tóm tắt trình tự trao đổi bản tin Download S7comm.
 
-\begin{verbatim}
-%%{init: {'sequence': {'messageMargin': 60}} }%%
-sequenceDiagram
-    participant Workstation
-    participant PLC
-
-    Workstation->>PLC: Job - Request Download: Block Address, Length
-    PLC->>Workstation: Ack Data - Request Download
-    
-  
-    PLC-->>Workstation: Job - Download Block: Block Address
-    Workstation-->>PLC: Ack Data - Download Block: Block Data
-
-    Workstation->>PLC: Job - Download Ended
-    PLC->>Workstation: Ack Data - Download Ended
-\end{verbatim}
+\begin{figure}[htbp]
+    \centering
+    \SSevenDownloadSequence
+    \caption{Trình tự Download S7comm (các pha Job và Ack Data)}
+    \label{fig:s7-download-sequence}
+\end{figure}
 
 
 \begin{enumerate}
-    \item \textbf{Start Download}: Máy client gửi lệnh để yêu cầu PLC chuẩn bị nhận chương trình điều khiển mới (\textcolor{blue}{Job} Request Download) và PLC phản hồi lại yêu cầu đó (\textcolor{green}{ACK} Request Download) . Gói tin \textcolor{blue}{Job} Request Download có 2 trường mới là \texttt{Block Length} cho biết độ dài của block dữ liệu mà máy client sẽ gửi, \texttt{Payload Length} cũng thể nhưng không tính độ dài của block header
+    \item \textbf{Start Download}: Máy client gửi lệnh để yêu cầu PLC chuẩn bị nhận chương trình điều khiển mới (Job Request Download) và PLC phản hồi lại yêu cầu đó (Ack Data Request Download). Gói tin Job Request Download có 2 trường mới là \texttt{Block Length} cho biết độ dài của block dữ liệu mà máy client sẽ gửi, \texttt{Payload Length} cũng thể nhưng không tính độ dài của block header
 \end{enumerate}
 
 
@@ -1113,120 +1069,16 @@ sequenceDiagram
 
 Các trường thông tin còn lại y hệt như trong phần Upload. Chỉ có lưu ý trong quá trình Download, \texttt{Session ID} luôn là \texttt{0x00000000}, nó không được sử dụng, thay vào đó, trong Download thì sử dụng \texttt{Filename} để định danh trong một session Download.
 
+Lưu lượng chuyển block trực tiếp không thu được trong lab do giới hạn môi trường mô phỏng (OpenPLC nạp qua REST, S7-1500 dùng S7comm-plus trên PLCSIM Advanced). Các lần thử, quan sát trên Wireshark và nguồn PCAP tham chiếu dùng cho luật phát hiện được trình bày ở Phụ lục~\ref{app:upload-download-traffic}.
 
-\subsection{Mô phỏng traffic}
-
-
-Ở phần này đã thử mô phỏng việc download và upload chương trình điều khiển PLC nhưng không thành công do giới hạn phần mềm mô phỏng.
-
-
-Khi upload code chương trình từ OpenPLC Editor vào OpenPLC Runtime thì chương trình được gửi thông qua RESTful API của OpenPLC Runtime thay vì bằng cách gửi thông qua cấu trúc chuẩn của S7comm.
-
-
-Hình~\ref{fig:ksdownupprogramimage5png} minh họa upload chương trình từ OpenPLC Editor lên OpenPLC Runtime qua RESTful API.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-5.png}
-    \caption{Upload chương trình từ OpenPLC Editor lên OpenPLC Runtime qua RESTful API}
-    \label{fig:ksdownupprogramimage5png}
-\end{figure}
-
-
-OpenPLC Runtime không hỗ trợ việc nạp chương tình theo cách thông thường của Siemens S7comm.
-
-
-Một cách khác là thử mô phỏng việc upload chương trình trên một PLC Siemens thông qua PLC Sim Advance. Cách này thì chương trình được gửi thông qua cấu trúc chuẩn của S7comm. 
-
-
-Bước 1: Set up một Switch ảo để các thiết bị ảo của Siemens sử dụng:
-
-
-Hình~\ref{fig:ksdownupprogramimage2png} minh họa thiết lập virtual switch cho thiết bị ảo Siemens.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-2.png}
-    \caption{Thiết lập virtual switch cho thiết bị ảo Siemens}
-    \label{fig:ksdownupprogramimage2png}
-\end{figure}
-
-
-Bước 2: Chạy một PLC Siemens trong PLC Sim Advance sử dụng cùng giải mạng với Switch ảo. Tuy nhiên PLC Sim Advance chỉ hỗ trợ mô phỏng PLC Simens S7-1500.
-
-
-Hình~\ref{fig:cksdownupprogramimagepng} minh họa pLC Siemens chạy trên PLC Sim Advance.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image.png}
-    \caption{PLC Siemens chạy trên PLC Sim Advance}
-    \label{fig:cksdownupprogramimagepng}
-\end{figure}
-
-
-Bước 3: Kết nối PLC với HMI WinCC thông qua card kết nối IE general
-
-
-Hình~\ref{fig:ksdownupprogramimage1png} minh họa pLC kết nối HMI WinCC qua card IE general.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-1.png}
-    \caption{PLC kết nối HMI WinCC qua card IE general}
-    \label{fig:ksdownupprogramimage1png}
-\end{figure}
-
-
-Bước 4: Tạo một chương trình PLC, nạp vào PLC vào chạy thử:
-
-
-Hình~\ref{fig:ksdownupprogramimage3png} minh họa chương trình PLC ở chế độ RUN với PLC Sim Advance và HMI WinCC.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-3.png}
-    \caption{Chương trình PLC ở chế độ RUN với PLC Sim Advance và HMI WinCC}
-    \label{fig:ksdownupprogramimage3png}
-\end{figure}
-
-
-Ảnh chụp bao gồm chương trình PLC đang ở running mode, PLC đang chạy trong PLC Sim Advance và HMI WinCC đang hiển thị giá trị của các biến PLC.
-
-
-Tuy nhiên khi quan sát các gói tin trên Wireshark thì thấy Wireshark không Parse được gói tin S7comm. Sau khi tìm hiểu thì là do S7-1500 sử dụng giao thức S7 comm plus và không có cách nào ép S7-1500 sử dụng giao thức S7 comm thông thường (Theo như bài viết này text (\url{https://industrialmonitordirect.com/blogs/knowledgebase/s7comm-vs-s7comm-plus-switching-protocol-in-s7-1500-hmi-communication}) thì bật Option \texttt{Permit access with PUT/GET communication from remote partners} chỉ giúp tạo tính tương thích, các máy khác lấy thông tin từ S7 comm plus như thể chúng đang lấy thông tin từ S7 comm thông thường chứ Wireshark thì vẫn không thể Parse được gói tin S7comm plus.
-
-
-Hình~\ref{fig:ksdownupprogramimage6png} minh họa wireshark không parse được gói S7comm plus.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-6.png}
-    \caption{Wireshark không parse được gói S7comm plus}
-    \label{fig:ksdownupprogramimage6png}
-\end{figure}
-
-
-Hình~\ref{fig:ksdownupprogramimage4png} minh họa wireshark chỉ nhận diện lớp COTP bên ngoài gói S7comm plus.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../attacks/down_up_program/image-4.png}
-    \caption{Wireshark chỉ nhận diện lớp COTP bên ngoài gói S7comm plus}
-    \label{fig:ksdownupprogramimage4png}
-\end{figure}
-
-
-Wireshark chỉ có thể nhận diện được lớp COTP ở bên ngoài gói tin S7comm plus chứ không thể parse sâu hơn gói tin S7comm plus được gói trong gói tin COTP này.
-
-
-
-Vì thế nên trong dự án này chúng tôi sẽ sử dụng traffic mô phỏng từ trang sau: https://wiki.wireshark.org/S7comm
 \subsection{Mô phỏng tấn công Stuxnet (Man-in-the-Middle)}
 \label{sec:stuxnet_mitm_sim}
 
-Quá trình tấn công:
+Stuxnet, được công bố rộng rãi từ năm 2010, là một trong các sự cố malware nhắm vào hệ thống điều khiển công nghiệp được biết đến nhiều nhất. Mã độc lây lan trên mạng máy trạm kỹ thuật Windows, sửa logic trên PLC Siemens S7-300 điều khiển máy ly tâm khí tốc độ cao, đồng thời gửi dữ liệu giả mạo tới WinCC khiến vận hành viên vẫn thấy thông số bình thường trong khi quy trình vật lý đã bị tổn hại.
 
+Trong chiến dịch thực tế, Stuxnet đạt được điều này bằng cách hook thư viện giao tiếp Step~7 trên máy trạm kỹ thuật. Đồ án tái hiện cùng hậu quả vận hành ở tầng giao thức S7comm trên lab ở Hình~\ref{fig:lab-topology}: kẻ tấn công ghi đè setpoint trên PLC, đồng thời man-in-the-middle khôi phục giá trị hiển thị trên HMI. Các đoạn dưới tóm tắt chuỗi tấn công lịch sử theo tài liệu công khai; phần cấu hình lab OpenPLC/FUXA và các ảnh chụp gói tin trình bày ngay sau đó.
+
+\paragraph{Chuỗi tấn công lịch sử.}
 
 \begin{enumerate}
     \item \textbf{Lây nhiễm trong windows}: Được lây nhiễm vào một máy tính trong mạng nội bộ thông qua USB do một gián điệp để lại. Sau đó, nó lan tiếp trong mạng nội bộ thông qua 4 lỗ hổng Zero-day  của Windows và gửi thông tin về các máy chủ Command and Control (C\&C) của kẻ tấn công [[1]].
@@ -1304,10 +1156,6 @@ Tuy nhiên điều tinh vi ở đây là Stuxnet chọn lọc các mục tiêu r
 
 
 Khi đủ điều kiện, Stuxnet thay đổi tần số đầu ra trong các giai đoạn ngắn để làm rối loạn hoạt động của hệ thống, với các mức thường được nhắc đến là 1410 Hz, 2 Hz và 1064 Hz. Với cách này, nó làm thay đổi tốc độ quay của máy ly tâm và có thể gây hư hại vật lý, trong khi dữ liệu giám sát vẫn bị che giấu.
-
-
-Sự tồn tại của Stuxnet chỉ được phát hiện rộng rãi vào năm 2010, khi phiên bản thứ 3 của nó  đã lan rộng ra toàn thế giới. Một công ty an ninh mạng Belarus phát hiện ra nó trên một máy tính ở Iran. Sau đó, các nhà nghiên cứu bảo mật đã phân tích và xác định rằng Stuxnet là một phần của một chiến dịch tấn công mạng tinh vi nhằm vào chương trình hạt nhân của Iran.
-
 
 \textit{Trong mô phỏng tấn công của đồ án này, để phù hợp với giới hạn về thời gian và nguồn lực, chúng tôi sẽ mô phỏng đơn giản hóa kịch bản tấn công man-in-the-middle ở trên tầng giao thức mạng thay vì tại dll như thực tế Stuxnet đã làm.}
 
@@ -2040,51 +1888,41 @@ Tốc độ chỉnh sửa gói tin và gửi lại cần phải nhanh hơn tần
     \item \textbf{Nhóm 4 --- Cắt cụt (truncation)}: gửi chỉ phần đầu PDU (ví dụ Setup Communication) mà không đủ byte tới offset function (\texttt{17}). Đây là dạng malformed ``thiếu byte'' hay gặp khi fuzz ngẫu nhiên hoặc proxy cắt gói.
 \end{enumerate}
 
-\paragraph{Các mẫu đại diện được chọn trong lab.}
+\paragraph{Các sửa đổi gói tin đại diện.}
 
-Bảng~\ref{tab:malformed-phases} liệt kê mẫu payload, script và \texttt{sid} Suricata. Mỗi mẫu xuất phát từ một PDU \textbf{Setup Communication hợp lệ} (cùng hex với \texttt{s7comm\_dos.py}), chỉ \textbf{sửa một trường} (hoặc cắt) để sinh viên đối chiếu dễ trong Wireshark.
+Mỗi mẫu lab xuất phát từ một PDU Setup Communication hợp lệ (cùng mẫu hex với script DoS), chỉ sửa một trường hoặc cắt gói để dễ đối chiếu trong Wireshark. Bảng~\ref{tab:malformed-changes} tóm tắt các sửa đổi dùng trong đồ án. Các cờ \texttt{--mode} của script và ánh xạ SID Suricata nằm ở Phụ lục~\ref{app:malformed-script-deploy} (Bảng~\ref{tab:malformed-phases}).
 
 \begin{table}[H]
     \centering
     \footnotesize
-    \begin{tabular}{|l|l|l|l|}
+    \begin{tabular}{|l|l|}
         \hline
-        \textbf{Nhóm} & \textbf{--mode script} & \textbf{Thay đổi so với Setup hợp lệ} & \textbf{SID} \\
+        \textbf{Nhóm} & \textbf{Sửa đổi so với Setup hợp lệ} \\
         \hline
-        1 & \texttt{tpkt\_bad\_version} & Byte 0 TPKT = \texttt{0x02} & 1000050 \\
+        1 & Byte 0 TPKT = \texttt{0x02} (version không hợp lệ) \\
         \hline
-        1 & \texttt{tpkt\_len\_gt\_payload} & Length TPKT = \texttt{0x0100}, body $\approx$ 36 B & 1000051 \\
+        1 & Length TPKT = \texttt{0x0100}, payload TCP $\approx$ 36 B (length lớn hơn body) \\
         \hline
-        1 & \texttt{tpkt\_len\_lt\_payload} & Length TPKT = \texttt{0x0008}, body đủ Setup & 1000058 \\
+        1 & Length TPKT = \texttt{0x0008}, vẫn gửi đủ body Setup (length nhỏ hơn body) \\
         \hline
-        1 & \texttt{cotp\_invalid} & Thay \texttt{02 F0 80} bằng \texttt{01 00 00} & 1000056 \\
+        1 & Thay COTP \texttt{02 F0 80} bằng \texttt{01 00 00} \\
         \hline
-        2 & \texttt{s7\_bad\_protocol\_id} & Byte 7 = \texttt{0x31} & 1000052 \\
+        2 & Protocol ID S7 tại byte 7 = \texttt{0x31} (thay \texttt{0x32}) \\
         \hline
-        2 & \texttt{s7\_bad\_rosctr} & Byte 8 = \texttt{0xFF} & 1000053 \\
+        2 & \texttt{ROSCTR} tại byte 8 = \texttt{0xFF} \\
         \hline
-        3 & \texttt{job\_bad\_opcode} & Byte 17 = \texttt{0xFF} (thay \texttt{0xF0}) & 1000054 \\
+        3 & Byte chức năng tại offset 17 = \texttt{0xFF} (thay \texttt{0xF0}) \\
         \hline
-        3 & \texttt{write\_var\_malformed} & Job \texttt{0x05}, PDU 20 B (thiếu item) & 1000057 \\
+        3 & Job \texttt{0x05} (Write Var), PDU 20 B thiếu cấu trúc item \\
         \hline
-        4 & \texttt{setup\_truncated} & Chỉ gửi 14 byte đầu & 1000055 \\
+        4 & Chỉ gửi 14 byte đầu (cắt trước offset 17) \\
         \hline
     \end{tabular}
-    \caption{Mẫu malformed tiêu biểu và ánh xạ luật phát hiện}
-    \label{tab:malformed-phases}
+    \caption{Các sửa đổi gói tin malformed đại diện trong lab}
+    \label{tab:malformed-changes}
 \end{table}
 
-\paragraph{Triển khai script.}
-
-Toàn bộ kịch bản nằm trong \texttt{attacks/malformed/s7comm\_malformed.py}. Mặc định \texttt{--mode all} chạy tuần tự 9 phase, mỗi phase gửi \texttt{--repeats} lần (mặc định 3) trên phiên TCP mới tới cổng 102, rồi nghỉ \texttt{--pause} giây (mặc định 6) trước phase kế tiếp---tương tự DoS nhưng \textbf{không flood}: mục tiêu là tạo từng alert malformed rõ ràng trên \texttt{fast.log}.
-
-\begin{verbatim}
-python3 attacks/malformed/s7comm_malformed.py <IP_PLC>
-# tuong duong: --mode all --repeats 3 --pause 6
-python3 attacks/malformed/s7comm_malformed.py <IP_PLC> --mode s7_bad_rosctr
-\end{verbatim}
-
-Luồng xử lý trên wire: máy tấn công $\rightarrow$ TCP/102 $\rightarrow$ mirror $\rightarrow$ Suricata. Khác \texttt{ics\_dos.rules}, luật malformed \textbf{không dùng threshold}: mỗi gói khớp chữ ký bất thường có thể sinh một alert (\texttt{sid:1000050}--\texttt{1000058}).
+Lệnh lab và luồng xử lý cho \texttt{s7comm\_malformed.py} được ghi trong Phụ lục~\ref{app:malformed-script-deploy}.
 
 \paragraph{Kỳ vọng trên PLC lab và giới hạn.}
 
