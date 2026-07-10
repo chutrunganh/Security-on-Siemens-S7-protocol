@@ -6,8 +6,8 @@
 #   !$SUPERVISOR_NET any -> $CONTROL_NET 102
 # so legitimate S7comm from SUPERVISOR_NET is not flagged.
 #
-# Exception — block upload/download (SID 1000020–1000026): any/any with $HOME_NET
-# so offline PCAP replay (reference Siemens captures, arbitrary IPs) still matches.
+# Exception — block upload/download (SID 1000020–1000026): any -> any :102
+# for offline PCAP replay (reference captures may use IPs outside HOME_NET).
 #
 # S7comm over TCP payload layout used by most rules:
 #   0      : TPKT version 0x03
@@ -33,21 +33,21 @@ alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM Write Var to
 
 alert tcp $CONTROL_NET 102 -> $SUPERVISOR_NET any (msg:"ICS S7COMM suspicious Ack_Data response to HMI/engineering station"; flow:from_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 03|"; offset:4; depth:5; sid:1000013; rev:2; metadata:service iso-tsap, protocol s7comm, attack possible_mitm_observation; threshold:type both, track by_src, count 60, seconds 10; priority:3;)
 
-# --- Block upload/download: any/any + $HOME_NET for PCAP replay (SID 1000020–1000026) ---
+# --- Block upload/download: any/any for offline PCAP replay (SID 1000020–1000026) ---
 
-alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Request Download block to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1A|"; offset:17; depth:1; sid:1000020; rev:2; metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+alert tcp any any -> any 102 (msg:"ICS S7COMM Request Download block to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1A|"; offset:17; depth:1; sid:1000020; rev:3; metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
 
-alert tcp $HOME_NET 102 -> any any (msg:"ICS S7COMM PLC requests Download Block data"; flow:from_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1B|"; offset:17; depth:1; sid:1000021; rev:2; metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+alert tcp any 102 -> any any (msg:"ICS S7COMM PLC requests Download Block data"; flow:from_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1B|"; offset:17; depth:1; sid:1000021; rev:3; metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
 
-alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Download Ended"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1C|"; offset:17; depth:1; sid:1000022; rev:2; metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+alert tcp any any -> any 102 (msg:"ICS S7COMM Download Ended"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1C|"; offset:17; depth:1; sid:1000022; rev:3; metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
 
-alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Start Upload block from PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1D|"; offset:17; depth:1; sid:1000023; rev:2; metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
+alert tcp any any -> any 102 (msg:"ICS S7COMM Start Upload block from PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1D|"; offset:17; depth:1; sid:1000023; rev:3; metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
 
-alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM Upload Block request"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1E|"; offset:17; depth:1; sid:1000024; rev:2; metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
+alert tcp any any -> any 102 (msg:"ICS S7COMM Upload Block request"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1E|"; offset:17; depth:1; sid:1000024; rev:3; metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
 
-alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM End Upload"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1F|"; offset:17; depth:1; sid:1000025; rev:2; metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
+alert tcp any any -> any 102 (msg:"ICS S7COMM End Upload"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|1F|"; offset:17; depth:1; sid:1000025; rev:3; metadata:service iso-tsap, protocol s7comm, attack program_upload; priority:1;)
 
-alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM client sends Download Block data to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 03|"; offset:4; depth:5; content:"|1B|"; offset:19; depth:1; sid:1000026; rev:2; metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
+alert tcp any any -> any 102 (msg:"ICS S7COMM client sends Download Block data to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 03|"; offset:4; depth:5; content:"|1B|"; offset:19; depth:1; sid:1000026; rev:3; metadata:service iso-tsap, protocol s7comm, attack program_download; priority:1;)
 
 alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM PLC Control command"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|28|"; offset:17; depth:1; sid:1000030; rev:2; metadata:service iso-tsap, protocol s7comm, attack plc_control; priority:1;)
 
