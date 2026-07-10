@@ -57,10 +57,13 @@ class SuricataMonitor:
             ssh.connect(self.host, username=self.user, password=self.password, timeout=15)
 
             grep = ' | grep --line-buffered "ICS S7COMM"' if filter_s7 else ""
-            # tail -n 0: only new lines after Start (skip stale alerts). -F: survive log rotation.
-            cmd = f"tail -n {self.tail_lines} -F {self.log_path}{grep}"
+            # sudo: fast.log is usually root-only; docs use sudo tail on the IDS VM.
+            cmd = (
+                f"echo {self.password} | sudo -S tail -n {self.tail_lines} -F {self.log_path}"
+                f"{grep} 2>&1"
+            )
             self.on_line(f"[IDS] tail {self.log_path} on {self.user}@{self.host}")
-            self.on_line(f"[IDS] $ {cmd}")
+            self.on_line(f"[IDS] $ sudo tail -n {self.tail_lines} -F {self.log_path}{grep}")
 
             transport = ssh.get_transport()
             if transport is None:
@@ -76,8 +79,9 @@ class SuricataMonitor:
                     buf += data
                     while "\n" in buf:
                         line, buf = buf.split("\n", 1)
-                        if line.strip():
-                            self.on_line(line.rstrip())
+                        text = line.rstrip()
+                        if text and "password for" not in text.lower():
+                            self.on_line(text)
                 elif channel.exit_status_ready():
                     code = channel.recv_exit_status()
                     if code != 0 and buf.strip():

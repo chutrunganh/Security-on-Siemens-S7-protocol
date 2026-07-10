@@ -2,12 +2,12 @@
 """Patch /etc/suricata/suricata.yaml for the thesis lab.
 
 Usage:
-    patch_suricata_yaml.py CONTROL_NET SUPERVISOR_NET EXTERNAL_NET IFACE
+    patch_suricata_yaml.py CONTROL_NET SUPERVISOR_NET EXTERNAL_NET IFACE [HOME_NET]
 
 Sets:
-  - HOME_NET        = [CONTROL_NET, SUPERVISOR_NET]   (protected segments)
+  - HOME_NET        = protected segments (default [CONTROL_NET,SUPERVISOR_NET members])
   - CONTROL_NET     = PLC / controller segment
-  - SUPERVISOR_NET  = authorized HMI / engineering segment
+  - SUPERVISOR_NET  = authorized HMI / engineering (+ optional infra hosts)
   - EXTERNAL_NET    = attacker segment
   - capture interface
 and ensures the thesis rule-files are referenced.
@@ -23,7 +23,7 @@ external = sys.argv[3]
 iface = sys.argv[4]
 text = cfg_path.read_text()
 
-home = f"[{control},{supervisor}]"
+home = sys.argv[5] if len(sys.argv) > 5 else f"[{control},{supervisor}]"
 
 
 def set_group(text: str, name: str, value: str) -> str:

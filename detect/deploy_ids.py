@@ -8,23 +8,27 @@ import textwrap
 
 import paramiko
 
-HOST = "172.16.16.7"
-USER = "lubuntu"
-PASSWORD = "lubuntu"
+from lab_config import (
+    CAPTURE_IFACE,
+    CONTROL_NET,
+    EXTERNAL_NET,
+    HOME_NET,
+    HOME_NET_SURICATA,
+    IDS_HOST,
+    IDS_PASSWORD,
+    IDS_USER,
+    SUPERVISOR_NET,
+    SUPERVISOR_NET_SURICATA,
+)
+
 RULES_DIR = os.path.join(os.path.dirname(__file__), "rules")
 RULE_FILES = ("s7comm.rules", "ics_dos.rules", "s7comm_malformed.rules")
-CAPTURE_IFACE = "ens33"
-# Lab network segments (see Chapter 3 topology).
-CONTROL_NET = "192.168.50.0/24"
-SUPERVISOR_NET = "192.168.60.0/24"
-EXTERNAL_NET = "192.168.70.0/24"
-HOME_NET = f"[{CONTROL_NET},{SUPERVISOR_NET}]"
 
 
 def connect() -> paramiko.SSHClient:
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(HOST, username=USER, password=PASSWORD, timeout=15)
+    ssh.connect(IDS_HOST, username=IDS_USER, password=IDS_PASSWORD, timeout=15)
     return ssh
 
 
@@ -85,7 +89,8 @@ def configure_suricata(ssh: paramiko.SSHClient) -> None:
     run(
         ssh,
         f"sudo cp /etc/suricata/suricata.yaml /etc/suricata/suricata.yaml.bak.$(date +%Y%m%d%H%M%S) && "
-        f"sudo python3 /tmp/patch_suricata_yaml.py '{CONTROL_NET}' '{SUPERVISOR_NET}' '{EXTERNAL_NET}' '{CAPTURE_IFACE}' && "
+        f"sudo python3 /tmp/patch_suricata_yaml.py '{CONTROL_NET}' '{SUPERVISOR_NET_SURICATA}' "
+        f"'{EXTERNAL_NET}' '{CAPTURE_IFACE}' '{HOME_NET_SURICATA}' && "
         "grep -n 'HOME_NET\\|CONTROL_NET\\|SUPERVISOR_NET\\|EXTERNAL_NET\\|rule-files\\|s7comm\\|interface:' /etc/suricata/suricata.yaml | head -30",
     )
 
@@ -107,7 +112,7 @@ def main() -> int:
 
     ssh = connect()
     try:
-        print(f"Connected to {HOST}")
+        print(f"Connected to {IDS_HOST}")
         install_suricata(ssh)
         upload_rules(ssh)
         configure_suricata(ssh)
@@ -115,8 +120,11 @@ def main() -> int:
         print("\nDeployment complete.")
         print(f"Rules: /etc/suricata/rules/{{{', '.join(RULE_FILES)}}}")
         print(f"Capture interface: {CAPTURE_IFACE}")
-        print(f"HOME_NET: {HOME_NET}")
-        print(f"CONTROL_NET: {CONTROL_NET}  SUPERVISOR_NET: {SUPERVISOR_NET}  EXTERNAL_NET: {EXTERNAL_NET}")
+        print(f"HOME_NET (docs): {HOME_NET}")
+        print(f"HOME_NET (Suricata): {HOME_NET_SURICATA}")
+        print(f"SUPERVISOR_NET (GUI): {SUPERVISOR_NET}")
+        print(f"SUPERVISOR_NET (Suricata): {SUPERVISOR_NET_SURICATA}")
+        print(f"CONTROL_NET: {CONTROL_NET}  EXTERNAL_NET: {EXTERNAL_NET}")
         print("Alerts: /var/log/suricata/eve.json")
         return 0
     finally:
