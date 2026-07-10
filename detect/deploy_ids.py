@@ -14,7 +14,11 @@ PASSWORD = "lubuntu"
 RULES_DIR = os.path.join(os.path.dirname(__file__), "rules")
 RULE_FILES = ("s7comm.rules", "ics_dos.rules", "s7comm_malformed.rules")
 CAPTURE_IFACE = "ens33"
-HOME_NET = "[192.168.50.0/24,192.168.60.0/24]"
+# Lab network segments (see Chapter 3 topology).
+CONTROL_NET = "192.168.50.0/24"
+SUPERVISOR_NET = "192.168.60.0/24"
+EXTERNAL_NET = "192.168.70.0/24"
+HOME_NET = f"[{CONTROL_NET},{SUPERVISOR_NET}]"
 
 
 def connect() -> paramiko.SSHClient:
@@ -81,8 +85,8 @@ def configure_suricata(ssh: paramiko.SSHClient) -> None:
     run(
         ssh,
         f"sudo cp /etc/suricata/suricata.yaml /etc/suricata/suricata.yaml.bak.$(date +%Y%m%d%H%M%S) && "
-        f"sudo python3 /tmp/patch_suricata_yaml.py '{HOME_NET}' '{CAPTURE_IFACE}' && "
-        "grep -n 'HOME_NET\\|rule-files\\|s7comm\\|interface:' /etc/suricata/suricata.yaml | head -25",
+        f"sudo python3 /tmp/patch_suricata_yaml.py '{CONTROL_NET}' '{SUPERVISOR_NET}' '{EXTERNAL_NET}' '{CAPTURE_IFACE}' && "
+        "grep -n 'HOME_NET\\|CONTROL_NET\\|SUPERVISOR_NET\\|EXTERNAL_NET\\|rule-files\\|s7comm\\|interface:' /etc/suricata/suricata.yaml | head -30",
     )
 
 
@@ -112,6 +116,7 @@ def main() -> int:
         print(f"Rules: /etc/suricata/rules/{{{', '.join(RULE_FILES)}}}")
         print(f"Capture interface: {CAPTURE_IFACE}")
         print(f"HOME_NET: {HOME_NET}")
+        print(f"CONTROL_NET: {CONTROL_NET}  SUPERVISOR_NET: {SUPERVISOR_NET}  EXTERNAL_NET: {EXTERNAL_NET}")
         print("Alerts: /var/log/suricata/eve.json")
         return 0
     finally:

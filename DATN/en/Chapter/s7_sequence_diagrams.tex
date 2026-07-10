@@ -1,0 +1,42 @@
+% Shared S7comm Upload/Download sequence diagrams (TikZ).
+% Include from Chapter 3 via \input; captions and labels stay in the chapter file.
+
+\newcommand{\SSevenUploadSequence}{%
+\begin{tikzpicture}[
+    font=\small,
+    >=Stealth,
+    msg/.style={midway, fill=white, inner sep=1.5pt, align=center, font=\scriptsize}
+]
+    \node[draw, rounded corners=2pt, minimum width=2.4cm, minimum height=0.6cm] (ws) at (0,0) {Workstation};
+    \node[draw, rounded corners=2pt, minimum width=2.4cm, minimum height=0.6cm] (plc) at (8.2,0) {PLC};
+    \draw[dashed, gray!70] (0,-0.35) -- ++(0,-5.6);
+    \draw[dashed, gray!70] (8.2,-0.35) -- ++(0,-5.6);
+
+    \draw[->, thick] (0,-0.9) -- node[msg, above] {Job -- Start Upload:\\Block Address} (8.2,-0.9);
+    \draw[->, thick] (8.2,-1.75) -- node[msg, above] {Ack Data -- Start Upload:\\Block Length} (0,-1.75);
+    \draw[->, thick, dashed] (0,-2.6) -- node[msg, above] {Job -- Upload Block} (8.2,-2.6);
+    \draw[->, thick, dashed] (8.2,-3.45) -- node[msg, above] {Ack Data -- Upload Block:\\Block Data} (0,-3.45);
+    \draw[->, thick] (0,-4.3) -- node[msg, above] {Job -- End Upload} (8.2,-4.3);
+    \draw[->, thick] (8.2,-5.15) -- node[msg, above] {Ack Data -- End Upload} (0,-5.15);
+\end{tikzpicture}%
+}
+
+\newcommand{\SSevenDownloadSequence}{%
+\begin{tikzpicture}[
+    font=\small,
+    >=Stealth,
+    msg/.style={midway, fill=white, inner sep=1.5pt, align=center, font=\scriptsize}
+]
+    \node[draw, rounded corners=2pt, minimum width=2.4cm, minimum height=0.6cm] (ws) at (0,0) {Workstation};
+    \node[draw, rounded corners=2pt, minimum width=2.4cm, minimum height=0.6cm] (plc) at (8.2,0) {PLC};
+    \draw[dashed, gray!70] (0,-0.35) -- ++(0,-5.6);
+    \draw[dashed, gray!70] (8.2,-0.35) -- ++(0,-5.6);
+
+    \draw[->, thick] (0,-0.9) -- node[msg, above] {Job -- Request Download:\\Block Address, Length} (8.2,-0.9);
+    \draw[->, thick] (8.2,-1.75) -- node[msg, above] {Ack Data -- Request Download} (0,-1.75);
+    \draw[->, thick, dashed] (8.2,-2.6) -- node[msg, above] {Job -- Download Block:\\Block Address} (0,-2.6);
+    \draw[->, thick, dashed] (0,-3.45) -- node[msg, above] {Ack Data -- Download Block:\\Block Data} (8.2,-3.45);
+    \draw[->, thick] (0,-4.3) -- node[msg, above] {Job -- Download Ended} (8.2,-4.3);
+    \draw[->, thick] (8.2,-5.15) -- node[msg, above] {Ack Data -- Download Ended} (0,-5.15);
+\end{tikzpicture}%
+}

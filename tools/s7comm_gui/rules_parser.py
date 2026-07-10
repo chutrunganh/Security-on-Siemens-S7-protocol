@@ -104,4 +104,4 @@ def read_file_content(name: str) -> str:
 def rule_stats(rules_by_file: dict[str, list[SuricataRule]]) -> str:
     total = sum(len(v) for v in rules_by_file.values())
     parts = [f"{name}: {len(rules_by_file[name])}" for name in RULE_FILES]
-    return f"Tổng {total} luật ({', '.join(parts)})"
+    return f"{total} rules ({', '.join(parts)})"

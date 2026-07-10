@@ -40,7 +40,7 @@ SCENARIOS: tuple[AttackScenario, ...] = (
     AttackScenario(
         "recon_nmap",
         "Recon — Nmap s7-info",
-        "Quét cổng 102, Setup Communication + Read SZL",
+        "",
         (),
         ("1000001", "1000002", "1000003"),
         lambda plc, _r, _s, _repo: f"nmap -p 102 --script s7-info {plc} 2>&1",
@@ -49,7 +49,7 @@ SCENARIOS: tuple[AttackScenario, ...] = (
     AttackScenario(
         "recon_blocks",
         "Recon — List blocks",
-        "Snap7 list_blocks (OpenPLC)",
+        "",
         ("attacks/reconnaissance/scanBlock.py",),
         ("1000001", "1000005"),
         lambda plc, rack, slot, repo: _run_py(
@@ -64,8 +64,8 @@ SCENARIOS: tuple[AttackScenario, ...] = (
     ),
     AttackScenario(
         "write_db",
-        "Write Var — ghi DB",
-        "Ghi setpoint DB1.DBW2 (lab Stuxnet)",
+        "Write Var — DB",
+        "",
         ("attacks/stuxnet_mitm_sim/attacker/test_readwrite_db_via_snap7.py",),
         ("1000010", "1000011"),
         _remote_write,
@@ -73,8 +73,8 @@ SCENARIOS: tuple[AttackScenario, ...] = (
     ),
     AttackScenario(
         "dos_all",
-        "DoS — full (3 phase)",
-        "setup_flood → tcp_connect → szl_flood",
+        "DoS — full (3 phases)",
+        "",
         ("attacks/dos/s7comm_dos.py",),
         ("1000040", "1000041", "1000042", "1000043"),
         lambda plc, _r, _s, repo: _run_py(
@@ -87,8 +87,8 @@ SCENARIOS: tuple[AttackScenario, ...] = (
     ),
     AttackScenario(
         "malformed_all",
-        "Malformed — full (9 mẫu)",
-        "TPKT/COTP, header S7, function, truncation",
+        "Malformed — full (9 variants)",
+        "",
         ("attacks/malformed/s7comm_malformed.py",),
         ("1000050", "1000051", "1000052", "1000053", "1000054", "1000055", "1000056", "1000057", "1000058"),
         lambda plc, _r, _s, repo: _run_py(
@@ -103,8 +103,8 @@ SCENARIOS: tuple[AttackScenario, ...] = (
     ),
     AttackScenario(
         "plc_stop",
-        "PLC Stop (replay)",
-        "Phát lại gói Stop CPU",
+        "PLC Stop (command injection)",
+        "",
         (
             "attacks/start_stop_plc/start_stop_plc.py",
             "attacks/start_stop_plc/payloads.py",
@@ -122,8 +122,8 @@ SCENARIOS: tuple[AttackScenario, ...] = (
     ),
     AttackScenario(
         "plc_start",
-        "PLC Start (replay)",
-        "Khôi phục CPU sau Stop",
+        "PLC Start (command injection)",
+        "",
         (
             "attacks/start_stop_plc/start_stop_plc.py",
             "attacks/start_stop_plc/payloads.py",

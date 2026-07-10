@@ -245,7 +245,7 @@ Figure~\ref{fig:plc-rack} shows rack and slot configuration in TIA Portal; rack~
 
 \subsection{PLC programming languages}
 
-PLC control programs are written in five programming languages according to \textbf{IEC 61131-3}:
+PLC control programs are written in five programming languages according to \textbf{IEC 61131-3}~\cite{iec61131_3}:
 
 Figure~\ref{fig:plc-languages} shows five PLC programming languages per IEC 61131-3.
 
@@ -265,9 +265,9 @@ Figure~\ref{fig:plc-languages} shows five PLC programming languages per IEC 6113
     
     Figure~\ref{fig:ld-example} shows example of a self-holding circuit program in Ladder language.
 
-\begin{figure}[H]
+\begin{figure}
         \centering
-        \includegraphics[width=0.48\textwidth]{Figure/Ladder.png}
+        \includegraphics[width=0.8\textwidth]{Figure/Ladder.png}
         \caption{Self-holding circuit in Ladder}
         \label{fig:ld-example}
     \end{figure}
@@ -301,7 +301,7 @@ Figure~\ref{fig:purdue-overview} shows purdue network segmentation model.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.58\textwidth]{Figure/Purdue.png}
+    \includegraphics[width=1\textwidth]{Figure/Purdue.png}
     \caption{Purdue network segmentation model}
     \label{fig:purdue-overview}
 \end{figure}
@@ -310,7 +310,7 @@ This architecture shows the concept of network segmentation that separates the I
 
 Table~\ref{tab:purdue-layers} describes each layer and typical devices in detail.
 
-\begin{table}[H]
+\begin{table}[htbp]
     \centering
     \caption{Purdue network layers (levels 0--5)}
     \label{tab:purdue-layers}
@@ -599,7 +599,7 @@ Where
 
 \begin{table}[H]
     \centering
-    \caption{S7comm packet types by ROSCTR}
+    \caption{S7comm packet types by ROSCTR~\cite{snap7_s7protocol,gmiru_s7comm_part1}}
     \label{tab:rosctr}
     \footnotesize
     \begin{tabular}{|c|l|p{8.5cm}|}
@@ -621,7 +621,7 @@ Where
 
 The \textbf{parameter} section (parameter names and their values if any). Depending on the command type (determined by the \textit{S7 Header Function Code} field), the set of parameters in this section differs. Commands are grouped into: Data Read/Write, Cyclic Data Read/Write, Directory info, System Info, Blocks move, PLC Control, Date and Time, Security, Programming,\ldots
 
-However, due to time and resource constraints, this thesis will only analyze and present the following command types:
+However, due to time and resource constraints, this thesis will only analyze and present the following command types~\cite{gmiru_s7comm_part2}:
 
 \begin{itemize}
 
@@ -632,9 +632,6 @@ However, due to time and resource constraints, this thesis will only analyze and
 \item PLC Control/PLC Stop \texttt{0x28}/\texttt{0x29} presented in the attack experiment section
 
 \end{itemize}
-
-\paragraph{DoS risk on the S7 channel.}
-PLCs and CPs handle a limited number of concurrent S7 sessions. An attacker on the same VLAN can send many \texttt{Setup Communication} or \texttt{Read SZL} requests without authentication~\cite{inprotech_s7comm_security}, delaying or denying communication from the HMI/engineering station---behavior classified under the \textbf{Impact} tactic (ICS ATT\&CK \textbf{T0814})~\cite{mitre_ics_attack}. Appropriate detection combines opcode signature rules (single rules) with \textbf{frequency} rules on the source (Chapter~\ref{sec:rules-dos}).
 
 \item \textbf{Payload}:
 
@@ -648,7 +645,7 @@ Figure~\ref{fig:s7-connect-flow} shows the connection setup sequence from the Wi
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.63\textwidth]{Figure/setup_S7.png}
+    \includegraphics[width=1\textwidth]{Figure/setup_S7.png}
     \caption{S7comm connection setup flow}
     \label{fig:s7-connect-flow}
 \end{figure}
@@ -661,7 +658,7 @@ Figure~\ref{fig:s7-tcp-handshake} shows the TCP three-way handshake before S7com
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.63\textwidth]{image.png}
+    \includegraphics[width=1\textwidth]{image.png}
     \caption{TCP three-way handshake to port 102}
     \label{fig:s7-tcp-handshake}
 \end{figure}
@@ -677,19 +674,19 @@ Figure~\ref{fig:s7-cotp-cr} shows the COTP Connect Request (packet~8).
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.63\textwidth]{image-2.png}
+    \includegraphics[width=1\textwidth]{image-2.png}
     \caption{COTP Connect Request (CR)}
     \label{fig:s7-cotp-cr}
 \end{figure}
 
 \textit{Packet 8 contains a TPKT request in the upper stack and COTP CR in the lower stack}
 
-\begin{verbatim}
+\begin{packetdump}
 TPKT, Version: 3, Length: 22
     Version: 3
     Reserved: 0
     Length: 22
-\end{verbatim}
+\end{packetdump}
 
 \begin{itemize}
     \item \texttt{Version: 3} is the TPKT version, always 3 per RFC 1006 standard. This is a fixed value that simply signals that the packet follows the TPKT format.
@@ -697,7 +694,7 @@ TPKT, Version: 3, Length: 22
     \item \texttt{Length: 22} is the total length of the TPKT packet, including the TPKT header (4 bytes) and the COTP CR payload (18 bytes). When the PLC receives this packet, it reads the first 4 bytes to determine that the total packet length is 22 bytes. It then waits until it has received all 22 bytes before processing the COTP CR data below. If the packet is truncated or there is a transmission error, the PLC will not receive enough bytes and may discard the packet or resend the connection request.
 \end{itemize}
 
-\begin{verbatim}
+\begin{packetdump}
 ISO 8073/X.224 COTP Connection-Oriented Transport Protocol
     Length: 17
     PDU Type: CR Connect Request (0x0e)
@@ -715,7 +712,7 @@ ISO 8073/X.224 COTP Connection-Oriented Transport Protocol
     Parameter code: tpdu-size (0xc0)
     Parameter length: 1
     TPDU size: 1024
-\end{verbatim}
+\end{packetdump}
 
 Where:
 
@@ -733,7 +730,7 @@ Where:
 
 The Server responds with a COTP CC (Connect Confirm) packet in packet 9
 
-\begin{verbatim}
+\begin{packetdump}
 ISO 8073/X.224 COTP Connection-Oriented Transport Protocol
     Length: 17
     PDU Type: CC Connect Confirm (0x0d)
@@ -751,7 +748,7 @@ ISO 8073/X.224 COTP Connection-Oriented Transport Protocol
     Parameter code: dst-tsap (0xc2)
     Parameter length: 2
     Destination TSAP: 0102
-\end{verbatim}
+\end{packetdump}
 
 \begin{itemize}
     \item \texttt{Source reference: 0x0003} is the value the PLC creates to identify itself in this session. The Client will use this value as the Destination reference in subsequent packets to send data to the PLC.
@@ -780,9 +777,9 @@ Where:
     \item \texttt{PDU length}: Maximum PDU length the PLC can handle. This parameter is also negotiated during connection setup.
 \end{itemize}
 
-Wireshark has a built-in S7comm packet analyzer~\cite{wireshark_s7comm}, so it can directly decode S7comm data fields in the Parameter and Data sections of the packet.
+Wireshark has a built-in S7comm packet analyzer, so it can directly decode S7comm data fields in the Parameter and Data sections of the packet.
 
-\begin{verbatim}
+\begin{packetdump}
 S7 Communication
     Header: (Job)
         Protocol Id: 0x32
@@ -797,7 +794,7 @@ S7 Communication
         Max AmQ (parallel jobs with ack) calling: 1
         Max AmQ (parallel jobs with ack) called: 1
         PDU length: 480
-\end{verbatim}
+\end{packetdump}
 
 Where:
 
@@ -818,7 +815,7 @@ Where:
 
 Upon receiving the packet, the PLC responds in packet 11:
 
-\begin{verbatim}
+\begin{packetdump}
 S7 Communication
     Header: (Ack_Data)
         Protocol Id: 0x32
@@ -835,7 +832,7 @@ S7 Communication
         Max AmQ (parallel jobs with ack) calling: 1
         Max AmQ (parallel jobs with ack) called: 1
         PDU length: 240
-\end{verbatim}
+\end{packetdump}
 
 With \texttt{Protocol Data Unit Reference: 512} referring to the id of the previous request packet, \texttt{ROSCTR: Ack\_Data (3)} confirms the communication setup request was accepted with no errors (\texttt{Error class: No error (0x00)}, \texttt{Error code: 0x00}). The PLC accepts the connection parameters proposed by the Client, except PDU length which the PLC reduces to \texttt{240} bytes.
 
@@ -900,7 +897,7 @@ Figure~\ref{fig:s7-partner} shows pLC acting as partner.
 \section{IDS}
 \label{sec:ids}
 
-An IDS monitors activity on a network or on individual hosts, compares what it observes with known attack patterns or with a model of expected behavior, and reports events that may indicate misuse or compromise~\cite{nist_sp800_82,veit2021ics_dissectors}. The main output is usually an alert or a log entry, not an automatic change to network policy. In practice, IDS is often deployed together with firewalls, access control, and logging systems as one layer in a broader security architecture.
+An IDS monitors activity on a network or on individual hosts, compares what it observes with known attack patterns or with a model of expected behavior, and reports events that may indicate misuse or compromise~\cite{nist_sp800_82}. The main output is usually an alert or a log entry, not an automatic change to network policy. In practice, IDS is often deployed together with firewalls, access control, and logging systems as one layer in a broader security architecture.
 
 Unlike a firewall, which typically enforces allow/deny policy at connection boundaries, an IDS focuses on analysis and visibility. A firewall may block a connection that violates policy, while an IDS may record that the same connection carried a suspicious payload or matched a known exploit pattern. The two functions are complementary: policy enforcement and threat detection address different questions.
 
@@ -920,7 +917,7 @@ Some deployments also distinguish between knowledge-based systems (signatures, r
 
 Most commercial and open-source IDS engines rely on one or a combination of the following methods.
 
-Signature-based detection compares observed data against predefined rules. A rule may describe a byte sequence in a payload, a value in a protocol header, a URL path, or a sequence of commands associated with a known attack. Matching is deterministic and easy to audit: given a rule and a packet capture, an analyst can usually reproduce the alert. The limitation is coverage---only attacks that have been described in advance will match.
+Signature-based detection compares observed data against predefined rules. A rule may describe a byte sequence in a payload, a value in a protocol header, a URL path, or a sequence of commands associated with a known attack. For ICS protocols, Veit compares rules that match raw TCP payload bytes with rules that use protocol-specific dissectors and reports trade-offs in accuracy and performance~\cite{veit2021ics_dissectors}. Matching is deterministic and easy to audit: given a rule and a packet capture, an analyst can usually reproduce the alert. The limitation is coverage---only attacks that have been described in advance will match.
 
 Anomaly-based detection first establishes a baseline of normal activity (traffic volume, connection patterns, resource usage, login times, and similar metrics), then flags statistically unusual events. This approach can highlight novel or customized attacks that have no public signature, but it is sensitive to baseline quality. Seasonal changes, new applications, or misconfigured training data can increase false alarms.
 
@@ -938,7 +935,7 @@ Long-term operation raises practical concerns. High traffic volume can overload 
 
 \subsection{Suricata}
 
-Suricata is an open-source network IDS and IPS engine developed and maintained by the Open Information Security Foundation (OISF)~\cite{suricata_oisf}. Its rule syntax and overall design inherit from Snort, which makes migration of existing rule knowledge straightforward, while Suricata adds a multi-threaded architecture aimed at higher throughput on modern hardware.
+Suricata is an open-source network IDS and IPS engine developed and maintained by the Open Information Security Foundation (OISF). Its rule syntax and overall design inherit from Snort, which makes migration of existing rule knowledge straightforward, while Suricata adds a multi-threaded architecture aimed at higher throughput on modern hardware.
 
 Suricata ingests traffic from live network interfaces or from offline PCAP files. An internal decoder handles common link-layer and network-layer formats; application-layer parsers cover widely used protocols (HTTP, DNS, TLS, and others). Detection is driven by text rules. Each rule has a header that specifies action, protocol, endpoints, and direction, and an options section with match conditions (\texttt{content}, \texttt{flow}, \texttt{byte\_test}, and similar keywords) plus metadata such as \texttt{msg}, \texttt{sid} (signature ID), and \texttt{rev} (revision). Rules are grouped into files and loaded at startup; only enabled rules participate in matching.
 

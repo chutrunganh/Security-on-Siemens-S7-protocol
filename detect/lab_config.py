@@ -10,6 +10,8 @@ ATTACKER_HOST = "172.16.16.5"
 ATTACKER_USER = "ubuntu"
 ATTACKER_PASSWORD = "ubuntu"
 ATTACKER_REPO = "/home/ubuntu/Thesis"
+# Attacker lab-segment address (own LAN, separate from the supervisory zone)
+ATTACKER_LAB_IP = "192.168.70.20"
 
 HMI_HOST = "172.16.16.6"
 
@@ -18,7 +20,12 @@ PLC_IP = "192.168.50.10"
 PLC_RACK = 0
 PLC_SLOT = 2
 
-HOME_NET = "[192.168.50.0/24,192.168.60.0/24]"
+# Lab network segments (see Chapter 3 topology).
+CONTROL_NET = "192.168.50.0/24"      # PLC / controller segment (TCP/102)
+SUPERVISOR_NET = "192.168.60.0/24"   # authorized HMI / engineering (legitimate clients)
+EXTERNAL_NET = "192.168.70.0/24"     # attacker segment
+# HOME_NET = protected control + supervisory segments (Suricata builtin).
+HOME_NET = f"[{CONTROL_NET},{SUPERVISOR_NET}]"
 CAPTURE_IFACE = "ens33"
 
 SURICATA_FAST_LOG = "/var/log/suricata/fast.log"

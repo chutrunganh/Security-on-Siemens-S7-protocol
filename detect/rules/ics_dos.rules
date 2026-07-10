@@ -1,11 +1,15 @@
 # ICS / OT denial-of-service detection (rate-based thresholds).
+# Network model: CONTROL_NET = PLC segment, SUPERVISOR_NET = authorized HMI/engineering,
+# EXTERNAL_NET = attacker segment (see s7comm.rules header and suricata.yaml).
+# Source policy: legitimate polling comes from SUPERVISOR_NET, so these rules use
+# source !$SUPERVISOR_NET; only floods from outside the supervisory zone are counted.
 # Tune count/seconds for your lab; legitimate HMI polling should stay below these limits.
 # Deploy together with s7comm.rules (see detect/patch_suricata_yaml.py).
 
-alert tcp any any -> $HOME_NET 102 (msg:"ICS possible TCP SYN flood to ISO-TSAP port 102"; flow:to_server; flags:S; threshold:type both, track by_src, count 40, seconds 10; sid:1000040; rev:1; metadata:service iso-tsap, protocol tcp, attack dos_connection_flood; priority:1;)
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS possible TCP SYN flood to ISO-TSAP port 102"; flow:to_server; flags:S; threshold:type both, track by_src, count 40, seconds 10; sid:1000040; rev:1; metadata:service iso-tsap, protocol tcp, attack dos_connection_flood; priority:1;)
 
-alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM possible Setup Communication flood to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|F0|"; offset:17; depth:1; threshold:type both, track by_src, count 25, seconds 10; sid:1000041; rev:1; metadata:service iso-tsap, protocol s7comm, attack dos_s7comm_setup_flood; priority:1;)
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM possible Setup Communication flood to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|F0|"; offset:17; depth:1; threshold:type both, track by_src, count 25, seconds 10; sid:1000041; rev:1; metadata:service iso-tsap, protocol s7comm, attack dos_s7comm_setup_flood; priority:1;)
 
-alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM possible Read SZL flood - PLC service load"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:4; depth:5; content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8; threshold:type both, track by_src, count 25, seconds 10; sid:1000042; rev:1; metadata:service iso-tsap, protocol s7comm, attack dos_s7comm_szl_flood; priority:1;)
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM possible Read SZL flood - PLC service load"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:4; depth:5; content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8; threshold:type both, track by_src, count 25, seconds 10; sid:1000042; rev:1; metadata:service iso-tsap, protocol s7comm, attack dos_s7comm_szl_flood; priority:1;)
 
-alert tcp any any -> $HOME_NET 102 (msg:"ICS S7COMM possible S7 Job request flood to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; threshold:type both, track by_src, count 80, seconds 10; sid:1000043; rev:1; metadata:service iso-tsap, protocol s7comm, attack dos_s7comm_job_flood; priority:1;)
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM possible S7 Job request flood to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; threshold:type both, track by_src, count 80, seconds 10; sid:1000043; rev:1; metadata:service iso-tsap, protocol s7comm, attack dos_s7comm_job_flood; priority:1;)

@@ -8,11 +8,13 @@ import paramiko
 
 from .config import (
     CAPTURE_IFACE,
-    HOME_NET,
+    CONTROL_NET,
+    EXTERNAL_NET,
     PATCH_SCRIPT,
     REPO_ROOT,
     RULE_FILES,
     RULES_DIR,
+    SUPERVISOR_NET,
 )
 
 LogFn = Callable[[str], None]
@@ -86,7 +88,14 @@ class SuricataDeployer:
             if own:
                 ssh.close()
 
-    def patch_yaml(self, home_net: str, iface: str, ssh: paramiko.SSHClient | None = None) -> int:
+    def patch_yaml(
+        self,
+        control_net: str,
+        supervisor_net: str,
+        external_net: str,
+        iface: str,
+        ssh: paramiko.SSHClient | None = None,
+    ) -> int:
         own = ssh is None
         if own:
             ssh = self._connect()
@@ -98,7 +107,8 @@ class SuricataDeployer:
                 ssh,
                 f"sudo cp /etc/suricata/suricata.yaml "
                 f"/etc/suricata/suricata.yaml.bak.gui && "
-                f"sudo python3 /tmp/patch_suricata_yaml.py '{home_net}' '{iface}'",
+                f"sudo python3 /tmp/patch_suricata_yaml.py "
+                f"'{control_net}' '{supervisor_net}' '{external_net}' '{iface}'",
                 timeout=60,
             )
             return code
@@ -116,13 +126,19 @@ class SuricataDeployer:
         finally:
             ssh.close()
 
-    def deploy_full(self, home_net: str = HOME_NET, iface: str = CAPTURE_IFACE) -> int:
+    def deploy_full(
+        self,
+        control_net: str = CONTROL_NET,
+        supervisor_net: str = SUPERVISOR_NET,
+        external_net: str = EXTERNAL_NET,
+        iface: str = CAPTURE_IFACE,
+    ) -> int:
         self.log(f"[Deploy] Full (rules + suricata.yaml) → {self.host}")
         ssh = self._connect()
         try:
             if self.upload_rules(ssh) != 0:
                 return 1
-            if self.patch_yaml(home_net, iface, ssh) != 0:
+            if self.patch_yaml(control_net, supervisor_net, external_net, iface, ssh) != 0:
                 return 1
             return self.validate_and_restart(ssh)
         finally:
@@ -142,8 +158,8 @@ class SuricataDeployer:
             self._run(ssh, "systemctl is-active suricata", timeout=20)
             self._run(
                 ssh,
-                "grep -n 'HOME_NET\\|rule-files\\|s7comm\\|- interface:' "
-                "/etc/suricata/suricata.yaml | head -20",
+                "grep -n 'HOME_NET\\|CONTROL_NET\\|SUPERVISOR_NET\\|EXTERNAL_NET\\|rule-files\\|s7comm\\|- interface:' "
+                "/etc/suricata/suricata.yaml | head -25",
                 timeout=20,
             )
             self._run(ssh, "ls -la /etc/suricata/rules/*.rules 2>/dev/null | tail -10", timeout=20)

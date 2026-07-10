@@ -1,8 +1,0 @@
-scenario_id,title,category,detected,new_alerts,expected_sids,observed_sids,missing_sids,exit_code,duration_sec
-recon_nmap,Reconnaissance — nmap s7-info,reconnaissance,True,6,1000001;1000002;1000003;1000004;1000005,1000001;1000002;1000003,1000004;1000005,0,4.3
-recon_blocks,Reconnaissance — list blocks (Snap7),reconnaissance,True,1,1000001;1000005,1000001,1000005,0,4.1
-write_db,Modify process — Write Var DB,modify,True,5,1000010;1000011,1000001;1000010;1000011,,0,11.2
-dos_all,DoS — setup / tcp / szl (all phases),dos,True,5850,1000040;1000041;1000042;1000043,1000001;1000002;1000040;1000042,1000041;1000043,0,52.6
-malformed_all,Malformed S7comm — all phases,malformed,True,14,1000050;1000051;1000052;1000053;1000054;1000055;1000056;1000057;1000058,1000001;1000053;1000054,1000050;1000051;1000052;1000055;1000056;1000057;1000058,0,75.4
-plc_stop,Start/Stop replay — PLC Stop,plc_control,True,3,1000032;1000033,1000001;1000032;1000033,,0,4.1
-plc_start,Start/Stop replay — PLC Start,plc_control,True,3,1000030;1000031,1000001;1000030;1000031,,0,4.1

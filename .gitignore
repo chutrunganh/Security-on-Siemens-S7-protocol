@@ -16,3 +16,12 @@ wheels/
 .cursorrules/
 .cursorrules/
 
+# Regenerated evaluation artifacts
+detect/eval_results/eval_report.md
+detect/eval_results/eval_detection.csv
+detect/eval_results/eval_tables.tex
+
+# Duplicate export / build
+SourceCode/
+attacks/stuxnet_mitm_sim/plc_server_code/build/
+

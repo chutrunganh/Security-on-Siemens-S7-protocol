@@ -2,8 +2,6 @@
 
 Tài liệu này tóm tắt **cách chạy lab**, **từng kịch bản tấn công** và **lệnh xem alert** trên IDS. Chi tiết kỹ thuật từng byte luật xem thêm `detect/README.md`.
 
-**Copy-paste demo buổi trình bày:** xem [`DEMO_LENH_DAY_DU.md`](DEMO_LENH_DAY_DU.md) — đủ lệnh Windows + IDS + từng kịch bản.
-
 ---
 
 ## 1. Tổng quan
@@ -345,7 +343,7 @@ PLC mặc định: tự quét `PLC_CANDIDATES` trong script (hiện `.152`, `.14
 |---|---|
 | Nmap thành công, không alert | Traffic không đi qua `ens33`/`ens37` của IDS; cần SPAN hoặc chạy tấn công qua đường IDS nhìn thấy |
 | Không alert trên `192.168.50.10` | Trước đây Suricata chỉ bắt `ens37`; đã thêm `ens33` — restart: `sudo systemctl restart suricata` |
-| Quá nhiều Setup Communication | HMI poll liên tục; có thể bỏ qua hoặc thu hẹp `HOME_NET` |
+| Quá nhiều Setup Communication | HMI poll liên tục; đảm bảo HMI nằm trong `SUPERVISOR_NET` để không bị tính là tấn công |
 | Upload/Download không báo | Chưa có traffic thật/PCAP; luật chỉ kích hoạt khi có gói `0x1a`–`0x1f` |
 
 ---
@@ -361,7 +359,7 @@ detect/
   run_attack_tests.py
   README.md
   HUONG_DAN_CHAY_KICH_BAN.md
-  DEMO_LENH_DAY_DU.md          # Lệnh demo copy-paste đầy đủ
+  eval_rules.py
 
 attacks/
   malformed/s7comm_malformed.py

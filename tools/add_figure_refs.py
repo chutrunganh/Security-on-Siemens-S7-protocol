@@ -95,8 +95,6 @@ def main() -> int:
         (root / "DATN/en/Chapter/2_Literature_review.tex", "en"),
         (root / "DATN/en/Chapter/3_Methodology.tex", "en"),
         (root / "DATN/en/Chapter/stuxnet_mitm_body.tex", "en"),
-        (root / "DATN/Chapter/2_Literature_review.tex", "vi"),
-        (root / "DATN/Chapter/3_Methodology.tex", "vi"),
     ]
     total = 0
     for path, lang in jobs:

@@ -103,10 +103,10 @@ class RemoteRunner:
         return code, "".join(chunks)
 
     def probe_plc(self, plc_ip: str) -> bool:
-        _, out = self.run_shell(
-            f"nc -z -w2 {plc_ip} 102 && echo OPEN || echo CLOSED",
-            timeout=20,
-        )
+        cmd = f"nc -z -w2 {plc_ip} 102 && echo OPEN || echo CLOSED"
+        self.log(f"[Attacker VM] {self.user}@{self.host} $")
+        self.log(cmd)
+        _, out = self.run_shell(cmd, timeout=20, log_cmd=False)
         return "OPEN" in out
 
     def _check_remote(self, cmd: str, timeout: int = 30) -> bool:
@@ -120,11 +120,13 @@ class RemoteRunner:
             self._nmap_ready = True
             return
         self.log("[Attacker] Installing nmap ...")
-        self.run_shell(
+        install_cmd = (
             "sudo DEBIAN_FRONTEND=noninteractive apt-get update -qq && "
-            "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq nmap netcat-openbsd 2>&1",
-            timeout=300,
+            "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq nmap netcat-openbsd 2>&1"
         )
+        self.log(f"[Attacker VM] {self.user}@{self.host} $")
+        self.log(install_cmd)
+        self.run_shell(install_cmd, timeout=300, log_cmd=False)
         self._nmap_ready = True
 
     def ensure_python_env(self, need_snap7: bool = False) -> None:
@@ -133,15 +135,15 @@ class RemoteRunner:
         venv_py = f"{self.repo}/.venv/bin/python"
         if not self._check_remote(f'test -x "{venv_py}" && echo OK'):
             raise RuntimeError(
-                f"Chưa có {venv_py} trên Attacker. "
-                "Chạy một lần từ máy Windows: python tools/s7comm_gui/deploy_attacker.py"
+                f"Missing {venv_py} on Attacker. "
+                "Run once from Windows: python tools/s7comm_gui/deploy_attacker.py"
             )
         if need_snap7:
             ok = self._check_remote(
                 f'cd "{self.repo}" && .venv/bin/python -c "import snap7" && echo OK'
             )
             if not ok:
-                raise RuntimeError("snap7 chưa có trong .venv trên Attacker.")
+                raise RuntimeError("snap7 is not installed in .venv on Attacker.")
         self._env_ready = True
 
     def deploy_rules(self) -> int:
@@ -161,7 +163,13 @@ class RemoteRunner:
         else:
             self.ensure_python_env(need_snap7=scenario.id in SNAP7_SCENARIOS)
         cmd = scenario.build_remote_cmd(plc_ip, rack, slot, self.repo)
+        self.log(f"=== {scenario.name} ({scenario.id}) ===")
+        if scenario.expected_sids:
+            self.log(f"Expected SID: {', '.join(scenario.expected_sids)}")
+        self.log(f"[Attacker VM] {self.user}@{self.host} $")
+        self.log(cmd)
         code, _ = self.run_shell(cmd, cancel=cancel, log_cmd=False)
+        self.log(f"=== Finished ({scenario.id}) exit={code} ===")
         return code
 
 
@@ -219,9 +227,11 @@ class LocalRunner:
         cancel: threading.Event | None = None,
     ) -> int:
         cmd = scenario.build_local_cmd(plc_ip, self.repo, rack, slot)
-        self.log(f"=== {scenario.name} ===")
+        self.log(f"=== {scenario.name} ({scenario.id}) ===")
         if scenario.expected_sids:
             self.log(f"Expected SID: {', '.join(scenario.expected_sids)}")
-        code, _ = self.run_shell(cmd, cancel=cancel)
+        self.log("[Local shell] $")
+        self.log(cmd)
+        code, _ = self.run_shell(cmd, cancel=cancel, log_cmd=False)
         self.log(f"=== Finished ({scenario.id}) exit={code} ===")
         return code

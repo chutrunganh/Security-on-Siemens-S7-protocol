@@ -1,6 +1,6 @@
 # Phát hiện tấn công S7comm bằng Suricata
 
-**Hướng dẫn chạy lab (ngắn gọn):** xem [`HUONG_DAN_CHAY_KICH_BAN.md`](HUONG_DAN_CHAY_KICH_BAN.md) — cách chạy từng kịch bản, lệnh xem alert, và phần Upload/Download (luật có sẵn, chờ PCAP).
+**Chạy lab và đánh giá:** xem [`HUONG_DAN_CHAY_KICH_BAN.md`](HUONG_DAN_CHAY_KICH_BAN.md). Tự động hóa: `python detect/eval_rules.py` hoặc `python detect/run_attack_tests.py`.
 
 Thư mục này chứa các luật Suricata để phát hiện các hành vi S7comm đã mô phỏng trong phần `attacks`:
 
@@ -48,15 +48,28 @@ Sau đó chạy kiểm tra cú pháp:
 suricata -T -c /etc/suricata/suricata.yaml
 ```
 
-Khi chạy trong lab, nên cấu hình `HOME_NET` trỏ đúng tới IP PLC hoặc dải PLC, ví dụ:
+Tập luật phân biệt lưu lượng tấn công với lưu lượng thường dựa trên **nguồn gói tin** theo
+phân vùng mạng của lab (xem Chương 3):
+
+- `CONTROL_NET` = `192.168.50.0/24` — phân vùng PLC (lắng nghe TCP/102).
+- `SUPERVISOR_NET` = `192.168.60.0/24` — HMI/kỹ thuật hợp lệ; là nguồn duy nhất của lưu lượng quản lý S7comm bình thường.
+- `EXTERNAL_NET` = `192.168.70.0/24` — phân vùng attacker (nằm ngoài vùng supervisory).
+
+Các luật tấn công dùng nguồn `!$SUPERVISOR_NET` (mọi host không thuộc vùng supervisory) tới
+`$CONTROL_NET`, nên lưu lượng kỹ thuật hợp lệ từ `SUPERVISOR_NET` không sinh cảnh báo, còn cùng
+một lệnh phát từ attacker trong `EXTERNAL_NET` sẽ bị bắt. Script `patch_suricata_yaml.py` tự động
+khai báo các address-group này, ví dụ kết quả trong `suricata.yaml`:
 
 ```yaml
 vars:
   address-groups:
-    HOME_NET: "[192.168.50.10,172.16.16.44,172.16.16.136]"
+    HOME_NET: "[192.168.50.0/24,192.168.60.0/24]"
+    CONTROL_NET: "192.168.50.0/24"
+    SUPERVISOR_NET: "192.168.60.0/24"
+    EXTERNAL_NET: "192.168.70.0/24"
 ```
 
-Nếu để `HOME_NET` quá rộng, các lệnh đọc hợp lệ từ HMI cũng có thể sinh nhiều cảnh báo.
+Nếu để `SUPERVISOR_NET` quá hẹp (bỏ sót host kỹ thuật hợp lệ), các lệnh đọc hợp lệ từ HMI cũng có thể sinh cảnh báo.
 
 ## Nền tảng giao thức dùng để viết luật
 

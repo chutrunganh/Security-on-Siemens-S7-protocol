@@ -7,6 +7,8 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 # PLC — IP local trên mạng lab (Attacker gửi gói tới địa chỉ này)
 DEFAULT_PLC_IP = "192.168.50.10"
+# Attacker lab-segment address (own LAN, tách khỏi vùng supervisory)
+DEFAULT_ATTACKER_LAB_IP = "192.168.70.20"
 DEFAULT_ATTACKER_HOST = "172.16.16.5"
 DEFAULT_HMI_IP = "172.16.16.6"
 DEFAULT_IDS_HOST = "172.16.16.7"
@@ -26,8 +28,12 @@ DEFAULT_SLOT = 2
 RULES_DIR = os.path.join(REPO_ROOT, "detect", "rules")
 PATCH_SCRIPT = os.path.join(REPO_ROOT, "detect", "patch_suricata_yaml.py")
 RULE_FILES = ("s7comm.rules", "ics_dos.rules", "s7comm_malformed.rules")
-# Suricata — mạng PLC local (Controller 50.x, Superuser 60.x qua mirror ens33)
-HOME_NET = "[192.168.50.0/24,192.168.60.0/24]"
+# Suricata — các phân vùng mạng lab (xem topology Chương 3)
+CONTROL_NET = "192.168.50.0/24"      # PLC / controller segment (TCP/102)
+SUPERVISOR_NET = "192.168.60.0/24"   # HMI / engineering hợp lệ
+EXTERNAL_NET = "192.168.70.0/24"     # vùng attacker
+# HOME_NET = vùng control + supervisory được bảo vệ (biến builtin của Suricata)
+HOME_NET = f"[{CONTROL_NET},{SUPERVISOR_NET}]"
 # ens33: mirror traffic tới PLC 192.168.50.x | ens37: NAT quản lý 172.16.16.x
 CAPTURE_IFACE = "ens33"
 CAPTURE_IFACE_MGMT = "ens37"

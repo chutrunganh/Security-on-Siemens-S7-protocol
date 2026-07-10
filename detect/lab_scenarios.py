@@ -102,7 +102,7 @@ def all_scenarios() -> tuple[EvalScenario, ...]:
         ),
         EvalScenario(
             "plc_stop",
-            "Start/Stop replay — PLC Stop",
+            "Start/Stop command injection — PLC Stop",
             "plc_control",
             ("1000032", "1000033"),
             cmd(
@@ -115,7 +115,7 @@ def all_scenarios() -> tuple[EvalScenario, ...]:
         ),
         EvalScenario(
             "plc_start",
-            "Start/Stop replay — PLC Start",
+            "Start/Stop command injection — PLC Start",
             "plc_control",
             ("1000030", "1000031"),
             cmd(

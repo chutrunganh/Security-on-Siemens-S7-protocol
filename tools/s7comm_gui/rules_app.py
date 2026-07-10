@@ -1,9 +1,8 @@
-"""Suricata rules management GUI (standalone app)."""
+"""Suricata rules viewer GUI (standalone app)."""
 from __future__ import annotations
 
-import threading
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import ttk
 
 from .config import DEFAULT_IDS_HOST, DEFAULT_IDS_PASSWORD, DEFAULT_IDS_USER, DEFAULT_PLC_IP
 from .rules_panel import RulesPanel
@@ -19,9 +18,8 @@ class RulesApp(tk.Tk):
 
         apply_theme(self)
 
-        self.worker: threading.Thread | None = None
         self._build_header()
-        self.status = tk.StringVar(value="")
+        self.status = tk.StringVar(value="Ready")
         ttk.Label(self, textvariable=self.status, style="Status.TLabel", anchor=tk.W).pack(
             fill=tk.X, side=tk.BOTTOM, padx=12, pady=(0, 8)
         )
@@ -31,11 +29,8 @@ class RulesApp(tk.Tk):
             get_ids_host=lambda: self.ids_host.get().strip(),
             get_ids_user=lambda: self.ids_user.get().strip(),
             get_ids_pass=self.ids_pass.get,
-            get_plc_ip=lambda: self.plc_ip.get().strip(),
             on_log=self._noop_log,
             on_status=self._set_status,
-            is_busy=self._busy,
-            run_bg=self._run_bg,
         )
         self.panel.pack(fill=tk.BOTH, expand=True, padx=12, pady=4)
 
@@ -65,27 +60,8 @@ class RulesApp(tk.Tk):
     def _noop_log(self, _msg: str) -> None:
         pass
 
-    def _busy(self) -> bool:
-        return self.worker is not None and self.worker.is_alive()
-
     def _set_status(self, text: str) -> None:
         self.status.set(text)
-
-    def _run_bg(self, fn) -> None:
-        if self._busy():
-            messagebox.showwarning("Đang chạy", "Đợi tác vụ deploy/validate kết thúc.")
-            return
-
-        def wrapper() -> None:
-            try:
-                fn()
-            except Exception as e:
-                self.panel._log_deploy(f"ERROR: {e!r}")
-            finally:
-                self._set_status("")
-
-        self.worker = threading.Thread(target=wrapper, daemon=True)
-        self.worker.start()
 
 
 def main() -> None:

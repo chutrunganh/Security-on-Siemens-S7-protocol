@@ -22,13 +22,15 @@ class SuricataMonitor:
         on_line: TrafficFn,
         on_status: TrafficFn,
         *,
-        tail_lines: int = 30,
+        log_path: str = SURICATA_FAST_LOG,
+        tail_lines: int = 0,
     ) -> None:
         self.host = host
         self.user = user
         self.password = password
         self.on_line = on_line
         self.on_status = on_status
+        self.log_path = log_path
         self.tail_lines = tail_lines
         self._stop = threading.Event()
         self._thread: threading.Thread | None = None
@@ -49,15 +51,16 @@ class SuricataMonitor:
 
     def _run(self, filter_s7: bool) -> None:
         try:
-            self.on_status(f"[IDS] Kết nối {self.user}@{self.host} ...")
+            self.on_status(f"[IDS] Connecting to {self.user}@{self.host} ...")
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(self.host, username=self.user, password=self.password, timeout=15)
 
             grep = ' | grep --line-buffered "ICS S7COMM"' if filter_s7 else ""
-            # Không dùng sudo — lubuntu thường đọc được fast.log; hiện N dòng gần nhất rồi follow
-            cmd = f"tail -n {self.tail_lines} -f {SURICATA_FAST_LOG}{grep}"
-            self.on_line(f"[IDS] {cmd}")
+            # tail -n 0: only new lines after Start (skip stale alerts). -F: survive log rotation.
+            cmd = f"tail -n {self.tail_lines} -F {self.log_path}{grep}"
+            self.on_line(f"[IDS] tail {self.log_path} on {self.user}@{self.host}")
+            self.on_line(f"[IDS] $ {cmd}")
 
             transport = ssh.get_transport()
             if transport is None:
@@ -84,10 +87,10 @@ class SuricataMonitor:
                     threading.Event().wait(0.1)
             channel.close()
             ssh.close()
-            self.on_status("[IDS] Dừng đọc alert.")
+            self.on_status("[IDS] Stopped reading alerts.")
         except Exception as e:
-            self.on_line(f"[IDS] Lỗi: {e!r}")
-            self.on_status(f"[IDS] Lỗi: {e!r}")
+            self.on_line(f"[IDS] Error: {e!r}")
+            self.on_status(f"[IDS] Error: {e!r}")
 
 
 class TcpdumpMonitor:
@@ -133,7 +136,7 @@ class TcpdumpMonitor:
 
     def _run(self, count: int) -> None:
         try:
-            self.on_line(f"[Tcpdump] {self.iface} host {self.plc_ip} port 102 (max {count} gói)")
+            self.on_line(f"[Tcpdump] {self.iface} host {self.plc_ip} port 102 (max {count} packets)")
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(self.host, username=self.user, password=self.password, timeout=15)
@@ -149,6 +152,6 @@ class TcpdumpMonitor:
                 if text and "password for" not in text.lower():
                     self.on_line(text)
             ssh.close()
-            self.on_line("[Tcpdump] Xong.")
+            self.on_line("[Tcpdump] Done.")
         except Exception as e:
-            self.on_line(f"[Tcpdump] Lỗi: {e!r}")
+            self.on_line(f"[Tcpdump] Error: {e!r}")
