@@ -25,7 +25,8 @@ alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM Read SZL mod
 
 alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM Read SZL communication status 0x001c"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:4; depth:5; content:"|00 01 12 04 11 44 01 00|"; offset:17; depth:8; content:"|00 1C 00 00|"; distance:0; within:12; sid:1000004; rev:2; metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
 
-alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM List Blocks request - PLC block inventory enumeration"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:4; depth:5; content:"|00 01 12 04 11 13 01 00|"; offset:17; depth:8; sid:1000005; rev:2; metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
+# Snap7 list_blocks / list_blocks_of_type use Tg=0x43 (grBlocksInfo), not 0x13.
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM List Blocks request - PLC block inventory enumeration"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 07|"; offset:4; depth:5; content:"|00 01 12 04 11 43|"; offset:17; depth:6; sid:1000005; rev:3; metadata:service iso-tsap, protocol s7comm, attack reconnaissance; priority:2;)
 
 alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM Write Var request to PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|05|"; offset:17; depth:1; sid:1000010; rev:2; metadata:service iso-tsap, protocol s7comm, attack modify_process_variable; priority:1;)
 

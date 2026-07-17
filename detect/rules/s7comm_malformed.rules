@@ -16,7 +16,9 @@ alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM TPKT length 
 
 alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM TPKT length smaller than TCP payload"; flow:to_server,established; content:"|03 00 00 08|"; offset:0; depth:4; dsize:>16; sid:1000058; rev:3; metadata:service iso-tsap, protocol s7comm, attack malformed_tpkt_length_short; priority:2;)
 
-alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM invalid COTP DT header toward PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; dsize:>7; content:!"|02 F0 80|"; offset:4; depth:3; sid:1000056; rev:2; metadata:service iso-tsap, protocol s7comm, attack malformed_cotp; priority:2;)
+# Match lab malformed cotp_invalid only (01 00 00). Do not use broad "not 02 F0 80":
+# legitimate ISO-on-TCP also sends CR (11 E0), CC (11 D0), DR (11 80) on port 102.
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM invalid COTP DT header toward PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|01 00 00|"; offset:4; depth:3; sid:1000056; rev:4; metadata:service iso-tsap, protocol s7comm, attack malformed_cotp; priority:2;)
 
 alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM invalid S7 protocol id"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80|"; offset:4; depth:3; content:!"|32|"; offset:7; depth:1; sid:1000052; rev:2; metadata:service iso-tsap, protocol s7comm, attack malformed_s7_protocol_id; priority:2;)
 
