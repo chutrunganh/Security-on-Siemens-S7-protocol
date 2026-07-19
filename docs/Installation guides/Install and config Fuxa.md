@@ -12,30 +12,30 @@ docker run -d -p 1881:1881 frangoteam/fuxa:snap7
 
 2. Thiết lập kết nối đến PLC runtime: Setting Icon > `Connections` > `+` :
 
-![alt text](image-2.png)
+![alt text](./assets/./assets/image-2.png)
 
 Lựa chọn giao thức `Siemens S7` và nhập thông tin kết nối:
 
-![alt text](image-12.png)
+![alt text](./assets/image-12.png)
 
-![alt text](image-14.png)
+![alt text](./assets/image-14.png)
 
 > [!NOTE]
 > Nếu gặp lỗi không thể kết nối, kiểm tra lại trạng thái của PLC qua OpenPLC Editor để đảm bảo PLC đang trong trạng thái Running
 
-![alt text](image-13.png)
+![alt text](./assets/image-13.png)
 
 3. Khai báo các HMI tags. Bấm vào `(-)`:
 
-![alt text](image-15.png)
+![alt text](./assets/image-15.png)
 
 4. Quay lại Editor và chạy thử HMI:
 
-![alt text](image-16.png)
+![alt text](./assets/image-16.png)
 
 Sau đó bấm Lauch Icon để chạy HMI:
 
-![alt text](DebugFuxa.gif)
+![alt text](./assets/DebugFuxa.gif)
 
 # Refernces
 

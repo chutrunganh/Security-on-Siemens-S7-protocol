@@ -141,17 +141,71 @@ Using **Snap 7** and tools to build attack scenarios:
 | Command injection | Abuse PLC control functions by sending Start/Stop commands| Halt or restart production without authorization| [See here](./src/attacks/start_stop_plc/)
 |Denial of Service | Overload PLC communication using TCP SYN flooding and high-rate S7 specific functions | Disrupt monitoring and control communication | [See here](./src/attacks/dos/)
 | Program transfer | Unauthorized upload and download of PLC program blocks | Steal or replace PLC control logic | Due to the simulation limitation of OpenPLC, can not generate payload for this attack. Using [this PCAP](./src/attacks/down_up_program/s7comm_downloading_block_db1.pcap) found on Internet instead|
-| Process manipulation | Modify process variables using unauthorized WriteVar and spoofed ReadVar operations | Alter process values and mislead operators | Tried to simulate this attack under a well-known, realistic event: [Stuxnet]() attack. Spent most of my time working on this scenario|
-| Malformed S7comm packets | Crafts structurally invalid TPKT/COTP/S7 packets | Destabilize PLC communication and cause service interruption |
+| Process manipulation | Modify process variables using unauthorized WriteVar and spoofed ReadVar operations | Alter process values and mislead operators | Tried to simulate this attack under a well-known, realistic event: [Stuxnet](./src/attacks/stuxnet_mitm_sim/README.pdf) attack. Spent most of my time working on this scenario|
+| Malformed S7comm packets | Crafts structurally invalid TPKT/COTP/S7 packets | Destabilize PLC communication and cause service interruption | [See here](./src/attacks/malformed/s7comm_malformed.py)|
 
 ## 3.3 Traffic collection and analysis
 
-Capture network traffic with Wireshark, analyze S7comm packet structure.
+Capture network traffic with Wireshark, analyze S7comm packet structure. In general, communicate on S7comm protocol requires these phases:
+
+![alt text](./assets/setup_S7.png)
+
+1. TCP connection setup on port 102 using TCP Three-way Handshake
+2. COTP connection setup
+3. Initial S7comm connection setup
+4. S7 data exchange
 
 ## 3.4 Detection rule development
 
-Convert observed indicators into Suricata signatures based on byte offsets, function codes, frequency thresholds, and abnormal syntax.
+Convert observed indicators into Suricata signatures based on byte offsets, function codes, frequency thresholds, and abnormal syntax. For example traffic capture on reading SZL:
+
+![alt text](./assets/example_capture.png)
+
+Can be converted into Suricata signature like this based on bytes offsets of each protocol field and specific S7comm function code.
+
+> alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"Read SZL . . ."; flow:to_server,established; content:"|<span style="color: yellow;">03 00</span>|"; offset:0; depth:2; content:"|<span style="color: green;">02 F0 80 32 07</span>|"; offset:4; depth:5; content:"|<span style="color: red;">00 01 12 04 11 44 01 00</span>|"; offset:17; depth:8; sid:1000002; rev:1; priority:2;)
+
+Rule are grouped in to respective attack categories:
+
+- `100000x`: session setup and reconnaissance
+- `100001x`: read/write variables
+- `100002x`: block upload/download
+- `100003x`: Start/Stop control commands
+- `100004x`: DoS and rate-based floods
+- `100005x`: malformed S7comm PDUs
+
+Details of each rule can be found [here](./src/rules/).
 
 ## 3.5 IDS testing
 
-Run Suricata on traffic copies and compare alerts with each simulated scenario.
+Rules are assessed along two aspects: 
+
+- **Detection coverage**: whether the rules react when attack traffic is present. Run representative attack scenarios and link each one to an expected group of signatures defined beforehand. A scenario counts as detected if at least one of those expected rules fires during the attack window. 
+
+
+- **Sensor capacity**: whether the sensor itself can keep up with mirrored traffic. 
+
+Result tables:
+
+| Scenario | Detection Objective | Alerts | Expected SIDs | Observed Attack SIDs | Outcome |
+|----------|----------------------|-------:|---------------|----------------------|---------|
+| Reconnaissance (scan) | Device / SZL enumeration | 6 | 1000001–1000005 | 1000001, 1000002, 1000003 | Met |
+| Reconnaissance (blocks) | Block inventory | 1 | 1000001, 1000005 | 1000001 | Met |
+| Process write | Unauthorized WriteVar | 5 | 1000010, 1000011 | 1000010, 1000011 | Met |
+| Block upload | Logic exfiltration sequence | 12 | 1000023–1000025 | 1000023, 1000024, 1000025 | Met |
+| Block download | Program push sequence | 16 | 1000020–1000022, 1000026 | 1000020, 1000021, 1000022, 1000026 | Met |
+| Denial of service | Rate-based floods | 5850 | 1000040–1000043 | 1000040, 1000042 | Met |
+| Malformed PDUs | Abnormal PDU structure | 14 | 1000050–1000058 | 1000053, 1000054 | Met |
+| PLC Stop injection | Fixed Stop command | 3 | 1000032, 1000033 | 1000032, 1000033 | Met |
+| PLC Start injection | Fixed Start command | 3 | 1000030, 1000031 | 1000030, 1000031 | Met |
+| MITM (write + intercept) | Write plus elevated Ack Data | 47 | 1000010, 1000011, 1000013 | 1000010, 1000011, 1000013 | Met |
+
+
+| Measurement Phase | Packets Decoded | Kernel Drops | Cumulative Alerts |
+|-------------------|----------------:|-------------:|------------------:|
+| Baseline start | 112,212 | 0 | 11,580 |
+| Baseline end | 112,864 | 0 | 11,583 |
+| Before attack batch | 112,864 | 0 | 11,583 |
+| During DoS scenario | 155,583 | 0 | 17,446 |
+| After all scenarios | 158,412 | 0 | 17,452 |
+

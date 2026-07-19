@@ -59,18 +59,18 @@ Cài đặt OpenPLC Editor v4 tại: https://autonomylogic.com/editor
 2. Kết nối với PLC runtime `Devies` > `Configuration` > `OpenPLC Runtime v4`:
 
 
-![alt text](image.png)
+![alt text](./assets/image.png)
 
 
 Như này là đã kết nối xong với PLC rumtime
 
 3. Muốn PLC sẽ chạy như một server để chờ client kết nối tới `+` > `Server` > Thêm tên và chọn giao thức `Siemens S7comm`:
 
-![alt text](image-1.png)
+![alt text](./assets/image-1.png)
 
 Xác nhận PLC đã chạy Siemens S7 thành công trên port 102.
 
-![alt text](image-11.png)
+![alt text](./assets/image-11.png)
 
 > [!CAUTION]
 > Đảm bảo port 102 không bị sử dụng bởi các tiến trình khác. Thông thường khi trên máy đã cài các phần mềm của Siemens như TIA Portal, S7-PLCSIM thì port 102 sẽ bị chiếm dụng. Kiểm tra bằng lệnh `netstat -ano | findstr :102` trên Windows hoặc `sudo netstat -tuln | grep :102` trên Linux.
@@ -105,13 +105,13 @@ Khi tạo dự án chọn tạo với ngoonnguwx lập trình **Ladder**. Sau kh
 
 1. Khai báo một datablock `DB1`. OpenPLC runtime không hỗ trợ trực tiếp tạo datablock như Siemen PLC mà nó chỉ có thể khai báo datablock rồi map địa chỉ đó vào một vùng nhớ được hỗ trợ khác. `Server` > `PLC_Server` vừa tạo > `+ Add Data Block`: 
 
-  ![alt text](image-3.png)
+  ![alt text](./assets/image-3.png)
 
   Khi này, việc đọc các vùng nhớ tại `%MW` sẽ tương đương với việc đọc dữ liệu từ datablock `DB1` như trong Siemens.
 
 2. Viết chương trình PLC tại `Program` > `main`:
 
-  ![alt text](image-5.png)
+  ![alt text](./assets/image-5.png)
 
   Phần phía trên là khai báo các **tag** (hoặc gọi là variables trong IT), phần phía dưới là logic PLC. Ở đây chúng ta khai báo 3 biến là `CoolingPumpSatus` kiểu bool tại vị trí `%QX0.0`, `CurrentTemp` và `MaxLimitTemp` kiểu int tại vị trí `%MW0` và `%MW1`. 
 
@@ -125,28 +125,28 @@ Khi tạo dự án chọn tạo với ngoonnguwx lập trình **Ladder**. Sau kh
 
   Với code chương trình: `Library` > `Comparison` > `GT` > Enable [`Execution Control`](https://openplc.discussion.community/post/openplc-v4-data-type-incompatibility-error-when-connecting-analog-input-to-ltgt-blocks-13778902) để cho phép so sánh 2 biến số nguyên. Sau đó điền các biến vào đầu vào, ra của block so sánh:
 
-  ![alt text](image-6.png)
+  ![alt text](./assets/image-6.png)
 
   Chương trình này nếu viết tương tự bên Siemens TIA Portal sẽ như sau:
 
   - Block DB1 [DB1]:
 
-  ![alt text](image-8.png)
+  ![alt text](./assets/image-8.png)
 
   - PLC tags:
 
-  ![alt text](image-9.png)
+  ![alt text](./assets/image-9.png)
 
   - Main [OB1]:
 
-  ![alt text](image-7.png)
+  ![alt text](./assets/image-7.png)
 
 
 Sau đó bấm **(1)** để Complie chương trình, **(2)** để chạy PLC runtime, **(3)** để bật debug, giám sát giá trị các biến:
 
-![alt text](image-4.png)
+![alt text](./assets/image-4.png)
 
-![alt text](DebugCode.gif)
+![alt text](./assets/DebugCode.gif)
 
 Đồng thời chạy một chương trình Python Snap7 để kết nối từ bên ngoài tới PLC runtime:
 
@@ -212,7 +212,7 @@ Max Limit Temp: 50
 
 Với track và slot thường sẽ là 0,2 cho Siemens S7-300/400 và 0,1 cho Siemens S7-1200/1500. OpenPLC Runtime mô phỏng lại giống như một PLC Siemens S7-300/400 nên track sẽ là 0, slot sẽ là 2.
 
-![alt text](image-10.png)
+![alt text](./assets/image-10.png)
 
 *Module giao tiếp của PLC S7-1200/1500 nằm trên Rack 0, slot 1.*
 

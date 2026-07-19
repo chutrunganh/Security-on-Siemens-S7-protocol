@@ -1,9 +1,0 @@
-\babel@toc {english}{}\relax 
-\contentsline {chapter}{\numberline {A}STUXNET MITM SIMULATION DETAILS}{3}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Stuxnet MITM simulation --- supplementary reference}{3}{section.A.1}%
-\contentsline {chapter}{\numberline {B}UPLOAD AND DOWNLOAD TRAFFIC SOURCES}{4}{appendix.B}%
-\contentsline {section}{\numberline {B.1}Upload and Download traffic sources}{4}{section.B.1}%
-\contentsline {chapter}{\numberline {C}MALFORMED ATTACK SCRIPT DEPLOYMENT}{9}{appendix.C}%
-\contentsline {section}{\numberline {C.1}Malformed attack script deployment}{9}{section.C.1}%
-\contentsline {subsection}{\numberline {C.1.1}Script modes and Suricata SID mapping}{9}{subsection.C.1.1}%
-\contentsline {subsection}{\numberline {C.1.2}Running the lab script}{9}{subsection.C.1.2}%

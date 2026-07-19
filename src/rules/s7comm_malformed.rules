@@ -1,0 +1,31 @@
+# Malformed / anomalous S7comm payloads on TCP/102 (thesis lab).
+# Network model: CONTROL_NET = PLC segment, SUPERVISOR_NET = authorized HMI/engineering,
+# EXTERNAL_NET = attacker segment (see s7comm.rules header and suricata.yaml).
+# Source policy: legitimate clients are in SUPERVISOR_NET, so these rules use
+# source !$SUPERVISOR_NET; malformed PDUs from outside the supervisory zone are flagged.
+# Paired with attacks/malformed/s7comm_malformed.py (--mode all).
+# Layout: TPKT@0, COTP DT@4 (02 F0 80), S7@7 (32), ROSCTR@8, Job func@17.
+#
+# Syntax note: Suricata 6.x requires negated content as content:!"..."; only one dsize
+# modifier per rule (use min<>max ranges). byte_test against dsize needs Suricata 7+.
+# 1000051/1000058: lab templates (0x0100 / 0x0008 length fields) — Suricata 6.x has no byte_test vs dsize.
+
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM invalid TPKT version on ISO-TSAP"; flow:to_server,established; dsize:>4; content:!"|03 00|"; offset:0; depth:2; sid:1000050; rev:2; metadata:service iso-tsap, protocol s7comm, attack malformed_tpkt_version; priority:2;)
+
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM TPKT length exceeds TCP payload"; flow:to_server,established; content:"|03 00 01 00|"; offset:0; depth:4; dsize:4<>100; sid:1000051; rev:2; metadata:service iso-tsap, protocol s7comm, attack malformed_tpkt_length; priority:2;)
+
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM TPKT length smaller than TCP payload"; flow:to_server,established; content:"|03 00 00 08|"; offset:0; depth:4; dsize:>16; sid:1000058; rev:3; metadata:service iso-tsap, protocol s7comm, attack malformed_tpkt_length_short; priority:2;)
+
+# Match lab malformed cotp_invalid only (01 00 00). Do not use broad "not 02 F0 80":
+# legitimate ISO-on-TCP also sends CR (11 E0), CC (11 D0), DR (11 80) on port 102.
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM invalid COTP DT header toward PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|01 00 00|"; offset:4; depth:3; sid:1000056; rev:4; metadata:service iso-tsap, protocol s7comm, attack malformed_cotp; priority:2;)
+
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM invalid S7 protocol id"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80|"; offset:4; depth:3; content:!"|32|"; offset:7; depth:1; sid:1000052; rev:2; metadata:service iso-tsap, protocol s7comm, attack malformed_s7_protocol_id; priority:2;)
+
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM invalid ROSCTR value"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 FF|"; offset:4; depth:5; sid:1000053; rev:1; metadata:service iso-tsap, protocol s7comm, attack malformed_s7_rosctr; priority:2;)
+
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM invalid Job function code"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|FF|"; offset:17; depth:1; sid:1000054; rev:1; metadata:service iso-tsap, protocol s7comm, attack malformed_s7_function; priority:2;)
+
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM truncated S7 Job PDU toward PLC"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; dsize:6<>18; sid:1000055; rev:2; metadata:service iso-tsap, protocol s7comm, attack malformed_truncated_pdu; priority:2;)
+
+alert tcp !$SUPERVISOR_NET any -> $CONTROL_NET 102 (msg:"ICS S7COMM malformed Write Var PDU (too short)"; flow:to_server,established; content:"|03 00|"; offset:0; depth:2; content:"|02 F0 80 32 01|"; offset:4; depth:5; content:"|05|"; offset:17; depth:1; dsize:10<>25; sid:1000057; rev:2; metadata:service iso-tsap, protocol s7comm, attack malformed_write_var; priority:1;)
