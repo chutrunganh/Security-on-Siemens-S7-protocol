@@ -120,9 +120,9 @@ Deploy the simulation environment on VMware. Here is the network topology:
 ![alt text](./assets/network_topology.png)
 
 
-- PLCs (Simulated via OpenPLC Runtime v4) run in Control Segment
+- PLCs (Simulated via **OpenPLC Runtime v4**) run in Control Segment
 
-- HMI (Simulated via Fuxa) run in Supervisors Segment
+- HMI (Simulated via **Fuxa**) run in Supervisors Segment
 
 - Suricata IDS run in Supervisors Segment
 
@@ -133,7 +133,16 @@ Deploy the simulation environment on VMware. Here is the network topology:
 
 ## 3.2 Building attack modules
 
-Using **Snap 7** and tools to build attack scenarios.
+Using **Snap 7** and tools to build attack scenarios:
+
+| Category | Details | Risk | Payload |
+|----------|---------|------|------|
+| Reconnaissance | Discover PLC devices through Nmap NSE scripts, DCP, enumatate program blocks | Expose PLC assets and support later exploitation | [See here](./src/attacks/reconnaissance/)
+| Command injection | Abuse PLC control functions by sending Start/Stop commands| Halt or restart production without authorization| [See here](./src/attacks/start_stop_plc/)
+|Denial of Service | Overload PLC communication using TCP SYN flooding and high-rate S7 specific functions | Disrupt monitoring and control communication | [See here](./src/attacks/dos/)
+| Program transfer | Unauthorized upload and download of PLC program blocks | Steal or replace PLC control logic | Due to the simulation limitation of OpenPLC, can not generate payload for this attack. Using [this PCAP](./src/attacks/down_up_program/s7comm_downloading_block_db1.pcap) found on Internet instead|
+| Process manipulation | Modify process variables using unauthorized WriteVar and spoofed ReadVar operations | Alter process values and mislead operators | Tried to simulate this attack under a well-known, realistic event: [Stuxnet]() attack. Spent most of my time working on this scenario|
+| Malformed S7comm packets | Crafts structurally invalid TPKT/COTP/S7 packets | Destabilize PLC communication and cause service interruption |
 
 ## 3.3 Traffic collection and analysis
 
