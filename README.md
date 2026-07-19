@@ -4,7 +4,7 @@
 >
 > *This may be the last work of mine under the lecture halls of Hanoi University of Science and Technology. For the past four years (2022–2026), from the first project commit to GitHub on October 14, 2023 (Optimization Project) till this last one, it was a truly remarkable journey. There were challenges, there were mistakes, there were failures. It was a tough time, enough to make someone give up. But not someone whom HUST taught me to become. After all, the feeling of success and growing up can only come from those things. Sending the greatest thanks from my heart to all my lecturers, my friends, colleagues, and my family for being a part of this unforgettable journey. ❤️*
 >
-> *Four years of labor that is wrapped in just one graduation project monitoring project. Cannot remember how challenging it was to both do this thesis and do my internship at Vingroup. Really surprised when it still got 8.8 8.8 (the second highest score in the committee ATKGS01), more than I could even expect. Closing the last paper of this chapter to start a new chapter in my life. Even if I know that I have to face these challenges again, if you ask me to choose again, I will still choose UET 🐧."*
+> *Four years of labor that is wrapped in just one graduation project monitoring project. Cannot remember how challenging it was to both do this thesis and do my internship at Vingroup. Closing the last paper of this chapter to start a new chapter in my life. Even if I know that I have to face these challenges again, if you ask me to choose again, I will still choose UET 🐧."*
 
 # 1. Introduction
 
@@ -209,3 +209,8 @@ Result tables:
 | During DoS scenario | 155,583 | 0 | 17,446 |
 | After all scenarios | 158,412 | 0 | 17,452 |
 
+# The end
+
+Really surprised that it still received an 8.8 8.8 (the second-highest score in the ATKGS01 committee; the highest was 9.2). That's more than I could have expected for a thesis conducted in less than half a semester.
+
+![alt text](./assets/end.png)
